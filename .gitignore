@@ -9,5 +9,9 @@ Thumbs.db
 .idea/
 .vscode/
 
+# Editor backups
+*.po~
+*~
+
 # Logs
 *.log
