@@ -1,0 +1,105 @@
+.eventadmin-dashboard-summary {
+    display: flex;
+    gap: 2rem;
+    margin: 2rem 0;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.eventadmin-dashboard-box {
+    background: #fff;
+    padding: 1rem 1.5rem;
+    border-left: 5px solid #0073aa;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+.eventadmin-dashboard-chart {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+    background: #fff;
+    padding: 1rem;
+    border: 1px solid #ccd0d4;
+    margin: 2rem 0;
+    box-sizing: border-box;
+}
+
+.chart-box {
+    flex: 1 1 300px; /* min 300px, wächst flexibel */
+    height: 300px;
+    position: relative; /* wichtig für Chart.js */
+}
+
+.chart-box.double {
+    flex: 2 1 0;
+}
+
+.chart-box.single {
+    flex: 1 1 0;
+}
+
+.chart-box canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.export-form {
+    float: right;
+    margin-top: -1rem;
+    margin-right: 1rem;
+}
+
+.form-filters {
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.shift-entry {
+    border-left: 5px solid;
+    padding: 1rem;
+}
+
+.shift-entry-open {
+    background: #fdecea;
+    border-left: #e53935;
+}
+
+.shift-entry-almost-full {
+    background: #fff8e1;
+    border-left: #ffb300;
+}
+
+.shift-entry-full {
+    background: #dff0d8;
+    border-left: #4caf50;
+}
+
+.form-export-shift {
+    float: right;
+}
+
+.toggle-volunteer-form {
+    float: right;
+    margin-top: -2rem;
+}
+
+.add-volunteer-firstname, add-volunteer-lastname {
+    width: 120px;
+}
+
+.add-volunteer-email {
+    width: 400px;
+}
+
+.add-volunteer-phone {
+    width: 140px;
+}
+
+.manual-volunteer-form {
+    margin-bottom: 1rem;
+}

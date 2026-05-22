@@ -1,0 +1,31 @@
+.inner-wrap {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.plugin-settings-left, .plugin-settings-right {
+    flex: 1;
+}
+
+.plugin-placeholders-info {
+    background: #f9f9f9;
+    border-left: 4px solid #2271b1;
+    padding: 10px 15px;
+    margin-bottom: 30px;
+}
+
+.plugin-placeholders-info ul {
+    margin-left: 20px;
+}
+
+.preview-block {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ccc;
+    background: #fafafa;
+}
+
+.preview-body {
+    padding:10px; background:#fff; border:1px dashed #999;
+}

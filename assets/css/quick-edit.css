@@ -1,0 +1,9 @@
+.max_volunteers_field {
+    width:80px;
+}
+
+th.column-shift_start, td.column-shift_start,
+th.column-shift_end, td.column-shift_end,
+th.column-max_volunteers, td.column-max_volunteers {
+    display: none;
+}
