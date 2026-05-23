@@ -384,13 +384,13 @@ function eventadmin_admin_overview_page(): void
             }
         }
 
-if (
-    ($selected_state === 'empty' && !empty($users)) ||
-    ($selected_state === 'understaffed' && !(count($users) < $max)) ||
-    ($selected_state === 'heavilyunderstaffed' && !($min > 0 && count($users) < $min))
-) {
-    continue;
-}
+        if (
+            ($selected_state === 'empty' && !empty($users)) ||
+            ($selected_state === 'understaffed' && !(count($users) < $max)) ||
+            ($selected_state === 'heavilyunderstaffed' && !($min > 0 && count($users) < $min))
+        ) {
+            continue;
+        }
 
         $filled = count($users);
         $shift_entry_type = $filled < $max - 1
