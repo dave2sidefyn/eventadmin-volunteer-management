@@ -247,7 +247,9 @@ function eventadmin_admin_overview_page(): void
 
 
     $selected_cat = $filter_valid && isset($_GET['filter_cat']) ? sanitize_text_field(wp_unslash($_GET['filter_cat'])) : '';
+    $selected_state = $filter_valid && isset($_GET['filter_state']) ? sanitize_text_field(wp_unslash($_GET['filter_state'])) : '';
     $categories = get_terms(['taxonomy' => 'eventadmin_shift_category', 'hide_empty' => false]);
+    $states = ['empty' => esc_html__('Empty', 'eventadmin-volunteer-management'), 'understaffed' => esc_html__('Understaffed', 'eventadmin-volunteer-management'), 'heavilyunderstaffed' => esc_html__('Heavily understaffed', 'eventadmin-volunteer-management')];
 
     // Prepare list (exclude offline volunteers — they have no meaningful profile to filter by)
     $volunteers = get_users([
@@ -281,6 +283,15 @@ function eventadmin_admin_overview_page(): void
     foreach ($categories as $cat) {
         $sel = $selected_cat === $cat->slug ? 'selected' : '';
         echo '<option value="' . esc_attr($cat->slug) . '" ' . esc_attr($sel) . '>' . esc_html($cat->name) . '</option>';
+    }
+    echo '</select></label>';
+
+    // State filter
+    echo '<label>' . esc_html__('State:', 'eventadmin-volunteer-management') . '<select name="filter_state">';
+    echo '<option value="">' . esc_html__('All', 'eventadmin-volunteer-management') . '</option>';
+    foreach ($states as $key => $val) {
+        $sel = $selected_state === $key ? 'selected' : '';
+        echo '<option value="' . esc_attr($key) . '" ' . esc_attr($sel) . '>' . esc_html($val) . '</option>';
     }
     echo '</select></label>';
 
@@ -352,6 +363,7 @@ function eventadmin_admin_overview_page(): void
         $title = esc_html($shift->post_title);
         $start = esc_html(get_post_meta($shift->ID, 'shift_start', true));
         $end = esc_html(get_post_meta($shift->ID, 'shift_end', true));
+        $min = (int)get_post_meta($shift->ID, 'min_volunteers', true);
         $max = (int)get_post_meta($shift->ID, 'max_volunteers', true);
         $meta = get_post_meta($shift->ID);
         $users = [];
@@ -372,6 +384,14 @@ function eventadmin_admin_overview_page(): void
             }
         }
 
+if (
+    ($selected_state === 'empty' && !empty($users)) ||
+    ($selected_state === 'understaffed' && !(count($users) < $max)) ||
+    ($selected_state === 'heavilyunderstaffed' && !($min > 0 && count($users) < $min))
+) {
+    continue;
+}
+
         $filled = count($users);
         $shift_entry_type = $filled < $max - 1
             ? 'shift-entry-open'
@@ -389,7 +409,6 @@ function eventadmin_admin_overview_page(): void
 
         echo '<h2>' . esc_html($title) . '</h2>';
         echo '<p><strong>' . esc_html__('Period:', 'eventadmin-volunteer-management') . '</strong> ' . esc_html(eventadmin_get_formatted_zeitraum($start, $end)) . '</p>';
-        $min = (int)get_post_meta($shift->ID, 'min_volunteers', true);
         echo '<p><strong>' . esc_html__('Filled:', 'eventadmin-volunteer-management') . '</strong> ' . esc_html($filled) . '/' . esc_html($max);
         if ($min > 0) {
             echo ' &nbsp;<strong>' . esc_html__('Min.:', 'eventadmin-volunteer-management') . '</strong> ' . esc_html($min);
@@ -475,7 +494,6 @@ function eventadmin_admin_overview_page(): void
             echo '<p><em>' . esc_html__('No volunteers assigned.', 'eventadmin-volunteer-management') . '</em></p>';
         }
 
-
         echo '</div><hr>';
     }
 
@@ -487,6 +505,7 @@ function eventadmin_admin_overview_page(): void
             'post_type'                       => 'eventadmin_shift',
             'page'                            => 'eventadmin-overview',
             'filter_cat'                      => $selected_cat ?: null,
+            'filter_state'                    => $selected_state ?: null,
             'filter_volunteer'                => $selected_volunteer ?: null,
             'filter_date'                     => $selected_date ?: null,
             'filter_time'                     => $time_filter !== 'future' ? $time_filter : null,
