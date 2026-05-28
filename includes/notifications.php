@@ -51,6 +51,9 @@ function eventadmin_get_shift_email_context(int $user_id, int $shift_id, array $
     $notification_email = $organizer_email ?: ($linked_email ?: get_option('eventadmin_notification_email', get_bloginfo('admin_email')));
     $notification_name  = $organizer_name ?: ($linked_name ?: get_option('eventadmin_notification_email_name', ''));
 
+    $actual_from_email = get_option('eventadmin_notification_email', get_bloginfo('admin_email'));
+    $actual_from_name = get_option('eventadmin_notification_email_name', '');
+
     // Compute {days} from the shift start date so the placeholder works in all email types
     // (assign, unassign, reminder). For reminders, $extra_replacements overrides this with
     // the scheduled reminder day, which equals the computed value anyway.
@@ -79,7 +82,8 @@ function eventadmin_get_shift_email_context(int $user_id, int $shift_id, array $
         'notification_name' => $notification_name,
         'notification_email'=> $notification_email,
         'headers'           => [
-            'From: ' . $notification_name . ' <' . $notification_email . '>',
+            'From: ' . $actual_from_name . ' <' . $actual_from_email . '>',
+            'Reply-To: ' . $notification_name . ' <' . $notification_email . '>',
             'Content-Type: text/html; charset=UTF-8',
         ],
     ];
