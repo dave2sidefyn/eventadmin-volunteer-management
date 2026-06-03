@@ -2066,3 +2066,15 @@ msgstr "CAPTCHA-Geheimschlüssel"
 #: includes/registration.php
 msgid "CAPTCHA verification failed. Please try again."
 msgstr "CAPTCHA-Überprüfung fehlgeschlagen. Bitte versuche es erneut."
+
+#: includes/admin/dashboard.php
+msgid "State:"
+msgstr "Status:"
+
+#: includes/admin/dashboard.php
+msgid "Empty"
+msgstr "Leer"
+
+#: includes/admin/dashboard.php
+msgid "Heavily understaffed"
+msgstr "Stark unterbesetzt"

@@ -1854,3 +1854,15 @@ msgstr ""
 #: includes/registration.php
 msgid "CAPTCHA verification failed. Please try again."
 msgstr ""
+
+#: includes/admin/dashboard.php
+msgid "State:"
+msgstr ""
+
+#: includes/admin/dashboard.php
+msgid "Empty"
+msgstr ""
+
+#: includes/admin/dashboard.php
+msgid "Heavily understaffed"
+msgstr ""

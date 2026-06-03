@@ -2032,3 +2032,15 @@ msgstr "CAPTCHA-geheime sleutel"
 #: includes/registration.php
 msgid "CAPTCHA verification failed. Please try again."
 msgstr "CAPTCHA-verificatie mislukt. Probeer het opnieuw."
+
+#: includes/admin/dashboard.php
+msgid "State:"
+msgstr "Status:"
+
+#: includes/admin/dashboard.php
+msgid "Empty"
+msgstr "Leeg"
+
+#: includes/admin/dashboard.php
+msgid "Heavily understaffed"
+msgstr "Sterk onderbezet"
