@@ -312,6 +312,69 @@ function eventadmin_plugin_register_settings(): void
         'eventadmin_general_rules'
     );
 
+    register_setting('eventadmin_plugin_settings_general', 'eventadmin_captcha_provider', [
+        'sanitize_callback' => static function ($val) {
+            return in_array($val, ['none', 'recaptcha_v2', 'hcaptcha'], true) ? $val : 'none';
+        },
+    ]);
+
+    register_setting('eventadmin_plugin_settings_general', 'eventadmin_captcha_site_key', [
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+
+    register_setting('eventadmin_plugin_settings_general', 'eventadmin_captcha_secret_key', [
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+
+    add_settings_section(
+        'eventadmin_general_security',
+        esc_html__('Security', 'eventadmin-volunteer-management'),
+        null,
+        'eventadmin-settings-general'
+    );
+
+    add_settings_field(
+        'eventadmin_captcha_provider',
+        esc_html__('CAPTCHA provider', 'eventadmin-volunteer-management'),
+        static function () {
+            $val     = get_option('eventadmin_captcha_provider', 'none');
+            $options = [
+                'none'         => esc_html__('None', 'eventadmin-volunteer-management'),
+                'recaptcha_v2' => 'Google reCAPTCHA v2',
+                'hcaptcha'     => 'hCaptcha',
+            ];
+            echo '<select name="eventadmin_captcha_provider">';
+            foreach ($options as $k => $label) {
+                echo '<option value="' . esc_attr($k) . '" ' . selected($val, $k, false) . '>' . esc_html($label) . '</option>';
+            }
+            echo '</select>';
+            echo '<p class="description">' . esc_html__('Adds a CAPTCHA challenge to the volunteer registration form to block automated spam registrations.', 'eventadmin-volunteer-management') . '</p>';
+        },
+        'eventadmin-settings-general',
+        'eventadmin_general_security'
+    );
+
+    add_settings_field(
+        'eventadmin_captcha_site_key',
+        esc_html__('CAPTCHA site key', 'eventadmin-volunteer-management'),
+        static function () {
+            echo '<input type="text" name="eventadmin_captcha_site_key" value="' . esc_attr(get_option('eventadmin_captcha_site_key', '')) . '" class="regular-text">';
+            echo '<p class="description">' . esc_html__('Get your keys from the provider\'s admin console.', 'eventadmin-volunteer-management') . '</p>';
+        },
+        'eventadmin-settings-general',
+        'eventadmin_general_security'
+    );
+
+    add_settings_field(
+        'eventadmin_captcha_secret_key',
+        esc_html__('CAPTCHA secret key', 'eventadmin-volunteer-management'),
+        static function () {
+            echo '<input type="text" name="eventadmin_captcha_secret_key" value="' . esc_attr(get_option('eventadmin_captcha_secret_key', '')) . '" class="regular-text">';
+        },
+        'eventadmin-settings-general',
+        'eventadmin_general_security'
+    );
+
     add_settings_section(
         'eventadmin_display_shift_selector',
         esc_html__('Volunteer Shift Selector', 'eventadmin-volunteer-management'),

@@ -1822,3 +1822,35 @@ msgstr ""
 #: includes/shiftselector.php:286
 msgid "You are not signed up for this shift."
 msgstr ""
+
+#: includes/admin/settings.php
+msgid "Security"
+msgstr ""
+
+#: includes/admin/settings.php
+msgid "CAPTCHA provider"
+msgstr ""
+
+#: includes/admin/settings.php
+msgid "None"
+msgstr ""
+
+#: includes/admin/settings.php
+msgid "Adds a CAPTCHA challenge to the volunteer registration form to block automated spam registrations."
+msgstr ""
+
+#: includes/admin/settings.php
+msgid "CAPTCHA site key"
+msgstr ""
+
+#: includes/admin/settings.php
+msgid "Get your keys from the provider's admin console."
+msgstr ""
+
+#: includes/admin/settings.php
+msgid "CAPTCHA secret key"
+msgstr ""
+
+#: includes/registration.php
+msgid "CAPTCHA verification failed. Please try again."
+msgstr ""

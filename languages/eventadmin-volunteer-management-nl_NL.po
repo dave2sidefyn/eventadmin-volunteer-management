@@ -2000,3 +2000,35 @@ msgstr "%d verweesde toewijzing(en) verwijderd."
 
 #~ msgid "PHP date format string for the shift end time."
 #~ msgstr "PHP-datumnotatie voor het tijdstip van het einde van de dienst."
+
+#: includes/admin/settings.php
+msgid "Security"
+msgstr "Beveiliging"
+
+#: includes/admin/settings.php
+msgid "CAPTCHA provider"
+msgstr "CAPTCHA-aanbieder"
+
+#: includes/admin/settings.php
+msgid "None"
+msgstr "Geen"
+
+#: includes/admin/settings.php
+msgid "Adds a CAPTCHA challenge to the volunteer registration form to block automated spam registrations."
+msgstr "Voegt een CAPTCHA-uitdaging toe aan het registratieformulier om geautomatiseerde spamregistraties te blokkeren."
+
+#: includes/admin/settings.php
+msgid "CAPTCHA site key"
+msgstr "CAPTCHA-sitesleutel"
+
+#: includes/admin/settings.php
+msgid "Get your keys from the provider's admin console."
+msgstr "Haal uw sleutels op uit de beheerconsole van de aanbieder."
+
+#: includes/admin/settings.php
+msgid "CAPTCHA secret key"
+msgstr "CAPTCHA-geheime sleutel"
+
+#: includes/registration.php
+msgid "CAPTCHA verification failed. Please try again."
+msgstr "CAPTCHA-verificatie mislukt. Probeer het opnieuw."

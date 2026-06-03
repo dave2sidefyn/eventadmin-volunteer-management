@@ -28,6 +28,68 @@ function eventadmin_normalize_email(string $email): string
     return $email;
 }
 
+/**
+ * Returns true when a CAPTCHA provider is selected and a site key is configured.
+ */
+function eventadmin_captcha_is_enabled(): bool
+{
+    return get_option('eventadmin_captcha_provider', 'none') !== 'none'
+        && !empty(get_option('eventadmin_captcha_site_key', ''));
+}
+
+function eventadmin_enqueue_captcha_script(): void
+{
+    if (!eventadmin_captcha_is_enabled()) {
+        return;
+    }
+    $provider   = get_option('eventadmin_captcha_provider', 'none');
+    $script_url = $provider === 'recaptcha_v2'
+        ? 'https://www.google.com/recaptcha/api.js'
+        : 'https://js.hcaptcha.com/1/api.js';
+    wp_enqueue_script('eventadmin-captcha', $script_url, [], null, true);
+}
+
+/**
+ * Renders the CAPTCHA widget div if a provider is configured.
+ */
+function eventadmin_render_captcha_widget(): void
+{
+    if (!eventadmin_captcha_is_enabled()) {
+        return;
+    }
+    $provider = get_option('eventadmin_captcha_provider', 'none');
+    $site_key = get_option('eventadmin_captcha_site_key', '');
+    $class    = $provider === 'recaptcha_v2' ? 'g-recaptcha' : 'h-captcha';
+    echo '<div class="' . esc_attr($class) . '" data-sitekey="' . esc_attr($site_key) . '"></div>';
+}
+
+/**
+ * Verifies the CAPTCHA token server-side. Returns true when CAPTCHA is disabled.
+ */
+function eventadmin_verify_captcha_response(): bool
+{
+    if (!eventadmin_captcha_is_enabled()) {
+        return true;
+    }
+    $provider   = get_option('eventadmin_captcha_provider', 'none');
+    $secret     = get_option('eventadmin_captcha_secret_key', '');
+    $field      = $provider === 'recaptcha_v2' ? 'g-recaptcha-response' : 'h-captcha-response';
+    $token      = sanitize_text_field(wp_unslash($_POST[$field] ?? ''));
+    $verify_url = $provider === 'recaptcha_v2'
+        ? 'https://www.google.com/recaptcha/api/siteverify'
+        : 'https://hcaptcha.com/siteverify';
+
+    if (empty($token)) {
+        return false;
+    }
+    $result = wp_remote_post($verify_url, ['body' => ['secret' => $secret, 'response' => $token]]);
+    if (is_wp_error($result)) {
+        return true; // Fail open: don't block registrations if the CAPTCHA API is unreachable
+    }
+    $data = json_decode(wp_remote_retrieve_body($result), true);
+    return !empty($data['success']);
+}
+
 function eventadmin_main_shortcode(): string
 {
 
@@ -65,6 +127,8 @@ function eventadmin_registration_form_shortcode(): bool|string
     // Save transient for server-side (optional for extra security)
     set_transient('eventadmin_token_' . $token, $nonce, HOUR_IN_SECONDS);
 
+    eventadmin_enqueue_captcha_script();
+
     ob_start(); ?>
     <div class="eventadmin-form-wrapper">
         <?php
@@ -88,6 +152,10 @@ function eventadmin_registration_form_shortcode(): bool|string
                 <input type="email" name="eventadmin_email" required/>
             </label>
             <input type="hidden" name="eventadmin_redirect_to" value="<?php echo esc_url(get_permalink()); ?>"/>
+            <?php eventadmin_render_captcha_widget(); ?>
+            <div style="display:none !important;visibility:hidden" aria-hidden="true">
+                <input type="text" name="eventadmin_website" tabindex="-1" autocomplete="off">
+            </div>
             <input type="submit" name="eventadmin_register_submit" value="Register"/>
         </form>
 
@@ -133,23 +201,33 @@ function eventadmin_handle_registration(): void
         wp_die(esc_html__('Invalid form submission.', 'eventadmin-volunteer-management'));
     }
 
-    // 3. Check fields
+    // 3. Honeypot – bots fill hidden fields; humans don't
+    if (!empty($_POST['eventadmin_website'])) {
+        return;
+    }
+
+    // 4. CAPTCHA verification
+    if (!eventadmin_verify_captcha_response()) {
+        wp_die(esc_html__('CAPTCHA verification failed. Please try again.', 'eventadmin-volunteer-management'));
+    }
+
+    // 5. Check fields
     $email = isset($_POST['eventadmin_email']) ? eventadmin_normalize_email(sanitize_email(wp_unslash($_POST['eventadmin_email']))) : '';
     $first = isset($_POST['eventadmin_firstname']) ? sanitize_text_field(wp_unslash($_POST['eventadmin_firstname'])) : '';
     $last = isset($_POST['eventadmin_lastname']) ? sanitize_text_field(wp_unslash($_POST['eventadmin_lastname'])) : '';
     $phone = isset($_POST['eventadmin_phone']) ? sanitize_text_field(wp_unslash($_POST['eventadmin_phone'])) : '';
 
-    // 4. Email validation
+    // 6. Email validation
     if (!is_email($email)) {
         wp_die(esc_html__('Please enter a valid email address.', 'eventadmin-volunteer-management'));
     }
 
-    // 5. Check required fields (optional)
+    // 7. Check required fields (optional)
     if (empty($first) || empty($last) || empty($phone)) {
         wp_die(esc_html__('Please fill in all required fields.', 'eventadmin-volunteer-management'));
     }
 
-    // 6. Check if email already exists, if so, send new magic link
+    // 8. Check if email already exists, if so, send new magic link
     $referer_url = isset($_POST['eventadmin_redirect_to']) ? esc_url_raw(wp_unslash($_POST['eventadmin_redirect_to'])) : site_url();
     if (email_exists($email)) {
         $existing_user = get_user_by('email', $email);
@@ -174,7 +252,7 @@ function eventadmin_handle_registration(): void
         exit;
     }
 
-    // 7. Create user
+    // 9. Create user
     $userdata = [
         'user_login' => $email,
         'user_email' => $email,
@@ -203,13 +281,13 @@ function eventadmin_handle_registration(): void
         wp_die(esc_html__('Registration error. Please try again later.', 'eventadmin-volunteer-management'));
     }
 
-    // 8. Save additional metadata
+    // 10. Save additional metadata
     update_user_meta($user_id, 'eventadmin_phone', $phone);
 
-    // 9. Generate login link
+    // 11. Generate login link
     $login_url = eventadmin_create_login_url($user_id, $referer_url);
 
-    //10. Send email to new user
+    // 12. Send email to new user
     $site_name = get_bloginfo('name');
     $site_url = home_url();
 
@@ -225,7 +303,7 @@ function eventadmin_handle_registration(): void
             $login_url
         ));
 
-    // 11. Redirect with success
+    // 13. Redirect with success
     wp_safe_redirect(add_query_arg([
         'registration' => 'success',
         'eventadmin_register_nonce' => wp_create_nonce('eventadmin_register_action')

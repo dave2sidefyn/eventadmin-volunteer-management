@@ -2034,3 +2034,35 @@ msgstr "%d verwaiste Zuweisung(en) entfernt."
 
 #~ msgid "PHP date format string for the shift end time."
 #~ msgstr "PHP-Datumsformat für die Uhrzeit des Schichtendes."
+
+#: includes/admin/settings.php
+msgid "Security"
+msgstr "Sicherheit"
+
+#: includes/admin/settings.php
+msgid "CAPTCHA provider"
+msgstr "CAPTCHA-Anbieter"
+
+#: includes/admin/settings.php
+msgid "None"
+msgstr "Keiner"
+
+#: includes/admin/settings.php
+msgid "Adds a CAPTCHA challenge to the volunteer registration form to block automated spam registrations."
+msgstr "Fügt dem Registrierungsformular eine CAPTCHA-Prüfung hinzu, um automatisierte Spam-Registrierungen zu blockieren."
+
+#: includes/admin/settings.php
+msgid "CAPTCHA site key"
+msgstr "CAPTCHA-Website-Schlüssel"
+
+#: includes/admin/settings.php
+msgid "Get your keys from the provider's admin console."
+msgstr "Schlüssel im Admin-Bereich des Anbieters abrufen."
+
+#: includes/admin/settings.php
+msgid "CAPTCHA secret key"
+msgstr "CAPTCHA-Geheimschlüssel"
+
+#: includes/registration.php
+msgid "CAPTCHA verification failed. Please try again."
+msgstr "CAPTCHA-Überprüfung fehlgeschlagen. Bitte versuche es erneut."

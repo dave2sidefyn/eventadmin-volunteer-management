@@ -2011,3 +2011,35 @@ msgstr "%d affectation(s) orpheline(s) supprimée(s)."
 
 #~ msgid "PHP date format string for the shift end time."
 #~ msgstr "Format de date PHP pour l'heure de fin du créneau."
+
+#: includes/admin/settings.php
+msgid "Security"
+msgstr "Sécurité"
+
+#: includes/admin/settings.php
+msgid "CAPTCHA provider"
+msgstr "Fournisseur CAPTCHA"
+
+#: includes/admin/settings.php
+msgid "None"
+msgstr "Aucun"
+
+#: includes/admin/settings.php
+msgid "Adds a CAPTCHA challenge to the volunteer registration form to block automated spam registrations."
+msgstr "Ajoute un défi CAPTCHA au formulaire d'inscription des bénévoles pour bloquer les inscriptions automatiques indésirables."
+
+#: includes/admin/settings.php
+msgid "CAPTCHA site key"
+msgstr "Clé de site CAPTCHA"
+
+#: includes/admin/settings.php
+msgid "Get your keys from the provider's admin console."
+msgstr "Obtenez vos clés depuis la console d'administration du fournisseur."
+
+#: includes/admin/settings.php
+msgid "CAPTCHA secret key"
+msgstr "Clé secrète CAPTCHA"
+
+#: includes/registration.php
+msgid "CAPTCHA verification failed. Please try again."
+msgstr "La vérification CAPTCHA a échoué. Veuillez réessayer."
