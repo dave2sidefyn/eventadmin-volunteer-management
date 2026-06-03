@@ -161,7 +161,7 @@ function eventadmin_verify_captcha_response(): bool
     $body = wp_remote_retrieve_body($result);
     $data = json_decode($body, true);
     if (empty($data['success'])) {
-        error_log('[EventAdmin] CAPTCHA verification failed. Provider: ' . $provider . ', Token (first 20): ' . substr($token, 0, 20) . ', Response: ' . $body);
+        error_log('[EventAdmin] CAPTCHA verification failed. Provider: ' . $provider . ', Response: ' . $body);
     }
     return !empty($data['success']);
 }
