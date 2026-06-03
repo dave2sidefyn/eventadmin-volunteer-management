@@ -71,13 +71,21 @@ function eventadmin_log_blocked_registration(string $email, string $reason): voi
     $provider = get_option('eventadmin_captcha_provider', 'none');
     $ip       = sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'] ?? ''));
 
-    error_log(sprintf(
+    $message = sprintf(
         '[EventAdmin] Registration blocked (%s / %s) — email: %s, IP: %s',
         $reason,
         $provider,
         $email ?: '(unknown)',
         $ip
-    ));
+    );
+
+    // Write to WordPress debug log (respects WP_DEBUG_LOG path)
+    wp_debug_log($message);
+
+    // Also write to a dedicated plugin log file as a reliable fallback
+    $log_file = WP_CONTENT_DIR . '/eventadmin.log';
+    // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+    file_put_contents($log_file, '[' . current_time('Y-m-d H:i:s') . '] ' . $message . PHP_EOL, FILE_APPEND | LOCK_EX);
 
     $log   = get_option('eventadmin_blocked_log', []);
     $log[] = [

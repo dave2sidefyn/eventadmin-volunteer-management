@@ -12,6 +12,8 @@
                 grecaptcha.execute(eventadminCaptchaV3.siteKey, { action: 'register' }).then(function (token) {
                     tokenField.value = token;
                     form.submit();
+                }).catch(function () {
+                    form.submit(); // fail open — server handles the missing token
                 });
             });
         });
