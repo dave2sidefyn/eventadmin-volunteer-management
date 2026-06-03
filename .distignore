@@ -2,5 +2,9 @@
 .github
 .gitignore
 .distignore
+.wordpress-org
+.claude
+.idea
+CLAUDE.md
 CONTRIBUTING.md
 README.md
