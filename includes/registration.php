@@ -64,6 +64,33 @@ function eventadmin_enqueue_captcha_script(): void
 }
 
 /**
+ * Logs a blocked registration attempt to error_log and the admin-visible blocked log.
+ */
+function eventadmin_log_blocked_registration(string $email, string $reason): void
+{
+    $provider = get_option('eventadmin_captcha_provider', 'none');
+    $ip       = sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'] ?? ''));
+
+    error_log(sprintf(
+        '[EventAdmin] Registration blocked (%s / %s) — email: %s, IP: %s',
+        $reason,
+        $provider,
+        $email ?: '(unknown)',
+        $ip
+    ));
+
+    $log   = get_option('eventadmin_blocked_log', []);
+    $log[] = [
+        'time'     => time(),
+        'email'    => $email,
+        'ip'       => $ip,
+        'provider' => $provider,
+        'reason'   => $reason,
+    ];
+    update_option('eventadmin_blocked_log', array_slice($log, -100), false);
+}
+
+/**
  * Renders the CAPTCHA widget div if a provider is configured.
  */
 function eventadmin_render_captcha_widget(): void
@@ -190,10 +217,9 @@ function eventadmin_registration_form_shortcode(): bool|string
             </label>
             <input type="hidden" name="eventadmin_redirect_to" value="<?php echo esc_url(get_permalink()); ?>"/>
             <?php eventadmin_render_captcha_widget(); ?>
-            <div style="display:none !important;visibility:hidden" aria-hidden="true">
-                <input type="text" name="eventadmin_website" tabindex="-1" autocomplete="off">
-            </div>
+            <input type="hidden" name="eventadmin_hp" id="eventadmin_hp" value="">
             <input type="submit" name="eventadmin_register_submit" value="Register"/>
+            <script>document.getElementById('eventadmin_hp').value='1';</script>
         </form>
 
         <?php if (isset($_GET['registration'], $_GET['eventadmin_register_nonce']) && $_GET['registration'] === 'success' && wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['eventadmin_register_nonce'])), 'eventadmin_register_action')) : ?>
@@ -238,13 +264,15 @@ function eventadmin_handle_registration(): void
         wp_die(esc_html__('Invalid form submission.', 'eventadmin-volunteer-management'));
     }
 
-    // 3. Honeypot – bots fill hidden fields; humans don't
-    if (!empty($_POST['eventadmin_website'])) {
+    // 3. JS-based bot check — JS sets this to '1' on page load; bots that skip JS submit empty
+    if (($_POST['eventadmin_hp'] ?? '') !== '1') {
         return;
     }
 
     // 4. CAPTCHA verification
     if (!eventadmin_verify_captcha_response()) {
+        $attempted_email = isset($_POST['eventadmin_email']) ? sanitize_email(wp_unslash($_POST['eventadmin_email'])) : '';
+        eventadmin_log_blocked_registration($attempted_email, 'captcha');
         wp_die(esc_html__('CAPTCHA verification failed. Please try again.', 'eventadmin-volunteer-management'));
     }
 

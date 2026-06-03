@@ -2121,3 +2121,19 @@ msgstr "reCAPTCHA-v3-Schwellenwert"
 #: includes/admin/settings.php
 msgid "Scores below this value are treated as bots (0.0 = all pass, 1.0 = all blocked). Default: 0.5. Only applies to reCAPTCHA v3."
 msgstr "Werte unter diesem Schwellenwert werden als Bot behandelt (0.0 = alle durch, 1.0 = alle blockiert). Standard: 0.5. Gilt nur für reCAPTCHA v3."
+
+#: includes/admin/volunteer-list.php
+msgid "Blocked registration attempts"
+msgstr "Blockierte Registrierungsversuche"
+
+#: includes/admin/volunteer-list.php
+msgid "IP"
+msgstr "IP"
+
+#: includes/admin/volunteer-list.php
+msgid "Provider"
+msgstr "Anbieter"
+
+#: includes/admin/volunteer-list.php
+msgid "Reason"
+msgstr "Grund"

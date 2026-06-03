@@ -2052,3 +2052,19 @@ msgstr "reCAPTCHA v3 scoredrempel"
 #: includes/admin/settings.php
 msgid "Scores below this value are treated as bots (0.0 = all pass, 1.0 = all blocked). Default: 0.5. Only applies to reCAPTCHA v3."
 msgstr "Scores onder deze waarde worden als bots beschouwd (0.0 = alles door, 1.0 = alles geblokkeerd). Standaard: 0.5. Geldt alleen voor reCAPTCHA v3."
+
+#: includes/admin/volunteer-list.php
+msgid "Blocked registration attempts"
+msgstr "Geblokkeerde registratiepogingen"
+
+#: includes/admin/volunteer-list.php
+msgid "IP"
+msgstr "IP"
+
+#: includes/admin/volunteer-list.php
+msgid "Provider"
+msgstr "Aanbieder"
+
+#: includes/admin/volunteer-list.php
+msgid "Reason"
+msgstr "Reden"

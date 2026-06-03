@@ -1874,3 +1874,19 @@ msgstr ""
 #: includes/admin/settings.php
 msgid "Scores below this value are treated as bots (0.0 = all pass, 1.0 = all blocked). Default: 0.5. Only applies to reCAPTCHA v3."
 msgstr ""
+
+#: includes/admin/volunteer-list.php
+msgid "Blocked registration attempts"
+msgstr ""
+
+#: includes/admin/volunteer-list.php
+msgid "IP"
+msgstr ""
+
+#: includes/admin/volunteer-list.php
+msgid "Provider"
+msgstr ""
+
+#: includes/admin/volunteer-list.php
+msgid "Reason"
+msgstr ""

@@ -270,6 +270,30 @@ function eventadmin_volunteer_list_page(): void
 
     echo '</tbody></table>';
 
+    // Blocked registration log
+    $blocked_log = get_option('eventadmin_blocked_log', []);
+    if (!empty($blocked_log)) {
+        echo '<h3 style="margin-top:2rem;">' . esc_html__('Blocked registration attempts', 'eventadmin-volunteer-management') . '</h3>';
+        echo '<table class="widefat striped" style="max-width:800px;">';
+        echo '<thead><tr>';
+        echo '<th>' . esc_html__('Date', 'eventadmin-volunteer-management') . '</th>';
+        echo '<th>' . esc_html__('E-Mail', 'eventadmin-volunteer-management') . '</th>';
+        echo '<th>' . esc_html__('IP', 'eventadmin-volunteer-management') . '</th>';
+        echo '<th>' . esc_html__('Provider', 'eventadmin-volunteer-management') . '</th>';
+        echo '<th>' . esc_html__('Reason', 'eventadmin-volunteer-management') . '</th>';
+        echo '</tr></thead><tbody>';
+        foreach (array_reverse($blocked_log) as $entry) {
+            echo '<tr>';
+            echo '<td>' . esc_html(wp_date(get_option('date_format') . ' ' . get_option('time_format'), $entry['time'])) . '</td>';
+            echo '<td>' . esc_html($entry['email'] ?: '—') . '</td>';
+            echo '<td>' . esc_html($entry['ip'] ?: '—') . '</td>';
+            echo '<td>' . esc_html($entry['provider'] ?: '—') . '</td>';
+            echo '<td>' . esc_html($entry['reason'] ?: '—') . '</td>';
+            echo '</tr>';
+        }
+        echo '</tbody></table>';
+    }
+
     // Auto-cleanup log
     $cleanup_log = get_option('eventadmin_cleanup_log', []);
     if (!empty($cleanup_log)) {

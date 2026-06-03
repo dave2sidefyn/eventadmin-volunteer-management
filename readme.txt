@@ -2,7 +2,7 @@
 Contributors: davesidefyn
 Tags: volunteer, shift, planning, event
 Requires at least: 5.8
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 8.0
 Stable tag: 1.5.1
 License: GPLv2 or later
@@ -174,7 +174,7 @@ You can set a minimum number of volunteers per shift. The admin dashboard will h
 * Bugfix release
 
 = Version 0.7.1 =
-* Tested up to WP 6.9
+* Tested up to WP 7.0
 
 = Version 0.7 =
 * restrict access to shifts and departments for non-logged in users (and SEO)
