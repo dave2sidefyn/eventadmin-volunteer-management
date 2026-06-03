@@ -135,7 +135,8 @@ function eventadmin_verify_captcha_response(): bool
             return false;
         }
         $result = wp_remote_post('https://www.google.com/recaptcha/api/siteverify', [
-            'body' => ['secret' => $secret, 'response' => $token],
+            'body'    => 'secret=' . rawurlencode($secret) . '&response=' . rawurlencode($token),
+            'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
         ]);
         if (is_wp_error($result)) {
             return true; // Fail open: don't block registrations if the CAPTCHA API is unreachable
@@ -154,7 +155,10 @@ function eventadmin_verify_captcha_response(): bool
     if (empty($token)) {
         return false;
     }
-    $result = wp_remote_post($verify_url, ['body' => ['secret' => $secret, 'response' => $token]]);
+    $result = wp_remote_post($verify_url, [
+        'body'    => 'secret=' . rawurlencode($secret) . '&response=' . rawurlencode($token),
+        'headers' => ['Content-Type' => 'application/x-www-form-urlencoded'],
+    ]);
     if (is_wp_error($result)) {
         return true; // Fail open: don't block registrations if the CAPTCHA API is unreachable
     }
