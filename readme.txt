@@ -4,7 +4,7 @@ Tags: volunteer, shift, planning, event
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 1.5.1
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,14 @@ You can set a minimum number of volunteers per shift. The admin dashboard will h
 3. Statistics & charts in the backend
 
 == Changelog ==
+
+= Version 1.6.0 =
+* New: CAPTCHA support on the volunteer registration form — choose between Google reCAPTCHA v2, Google reCAPTCHA v3 (invisible), or hCaptcha via Settings → General → Security
+* New: Honeypot bot detection on the registration form (always active, no configuration needed)
+* New: Blocked registration attempts are logged with timestamp, email, IP, provider, and reason — visible in WP Admin → Volunteers
+* New: State filter on the admin shift overview — filter by Empty, Understaffed, or Heavily understaffed
+* Fix: Registration form handler now guards on the nonce field instead of the submit button, ensuring JavaScript-submitted forms (reCAPTCHA v3) are processed correctly
+* Tested up to WordPress 7.0
 
 = Version 1.5.1 =
 * Fix: Department color picker circle turned black after adding the first department in the same session — it now correctly resets to the default grey after each addition
@@ -175,6 +183,7 @@ You can set a minimum number of volunteers per shift. The admin dashboard will h
 
 = Version 0.7.1 =
 * Tested up to WP 7.0
+* 1.6.0: CAPTCHA support, state filter, registration logging
 
 = Version 0.7 =
 * restrict access to shifts and departments for non-logged in users (and SEO)
