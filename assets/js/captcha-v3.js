@@ -8,14 +8,35 @@
             if (!tokenField || tokenField.value) return;
 
             e.preventDefault();
-            grecaptcha.ready(function () {
-                grecaptcha.execute(eventadminCaptchaV3.siteKey, { action: 'register' }).then(function (token) {
-                    tokenField.value = token;
+
+            var done = false;
+            var submitOnce = function () {
+                if (!done) {
+                    done = true;
                     form.submit();
-                }).catch(function () {
-                    form.submit(); // fail open — server handles the missing token
+                }
+            };
+
+            // Safety net: submit after 5 s even if reCAPTCHA never responds
+            var timeout = setTimeout(submitOnce, 5000);
+
+            try {
+                grecaptcha.ready(function () {
+                    grecaptcha.execute(eventadminCaptchaV3.siteKey, { action: 'register' })
+                        .then(function (token) {
+                            clearTimeout(timeout);
+                            tokenField.value = token;
+                            submitOnce();
+                        })
+                        .catch(function () {
+                            clearTimeout(timeout);
+                            submitOnce();
+                        });
                 });
-            });
+            } catch (err) {
+                clearTimeout(timeout);
+                submitOnce();
+            }
         });
     });
 }());

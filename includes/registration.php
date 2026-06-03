@@ -79,8 +79,8 @@ function eventadmin_log_blocked_registration(string $email, string $reason): voi
         $ip
     );
 
-    // Write to WordPress debug log (respects WP_DEBUG_LOG path)
-    wp_debug_log($message);
+    // Write to PHP error log (routes to WP_DEBUG_LOG path when WP_DEBUG_LOG is set)
+    error_log($message);
 
     // Also write to a dedicated plugin log file as a reliable fallback
     $log_file = WP_CONTENT_DIR . '/eventadmin.log';
@@ -260,7 +260,7 @@ if (!function_exists('is_plugin_active')) {
 function eventadmin_handle_registration(): void
 {
     // 1. Only run on form submit
-    if (empty($_POST['eventadmin_register_submit'])) {
+    if (empty($_POST['eventadmin_register_nonce'])) {
         return;
     }
 
@@ -280,7 +280,11 @@ function eventadmin_handle_registration(): void
     // 4. CAPTCHA verification
     if (!eventadmin_verify_captcha_response()) {
         $attempted_email = isset($_POST['eventadmin_email']) ? sanitize_email(wp_unslash($_POST['eventadmin_email'])) : '';
-        eventadmin_log_blocked_registration($attempted_email, 'captcha');
+        $captcha_provider = get_option('eventadmin_captcha_provider', 'none');
+        $token_field      = $captcha_provider === 'hcaptcha' ? 'h-captcha-response' : 'g-recaptcha-response';
+        $captcha_token    = sanitize_text_field(wp_unslash($_POST[$token_field] ?? ''));
+        $reason           = empty($captcha_token) ? 'captcha_token_missing' : 'captcha_score_failed';
+        eventadmin_log_blocked_registration($attempted_email, $reason);
         wp_die(esc_html__('CAPTCHA verification failed. Please try again.', 'eventadmin-volunteer-management'));
     }
 
