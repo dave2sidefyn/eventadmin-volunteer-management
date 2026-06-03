@@ -51,8 +51,19 @@ function eventadmin_get_shift_email_context(int $user_id, int $shift_id, array $
     $notification_email = $organizer_email ?: ($linked_email ?: get_option('eventadmin_notification_email', get_bloginfo('admin_email')));
     $notification_name  = $organizer_name ?: ($linked_name ?: get_option('eventadmin_notification_email_name', ''));
 
-    $actual_from_email = get_option('eventadmin_notification_email', get_bloginfo('admin_email'));
-    $actual_from_name = get_option('eventadmin_notification_email_name', '');
+    // Only fall back to the admin-controlled From when the organizer email is on an
+    // external domain — avoids SPF/DKIM failures (e.g. organizer has a gmail.com address)
+    // without silently overriding same-domain organizer addresses.
+    $site_domain      = strtolower(parse_url(home_url(), PHP_URL_HOST) ?: '');
+    $organizer_domain = strtolower(ltrim(strrchr($notification_email, '@'), '@'));
+    $use_admin_from   = $organizer_domain && $organizer_domain !== $site_domain;
+
+    $actual_from_email = $use_admin_from
+        ? get_option('eventadmin_notification_email', get_bloginfo('admin_email'))
+        : $notification_email;
+    $actual_from_name  = $use_admin_from
+        ? get_option('eventadmin_notification_email_name', '')
+        : $notification_name;
 
     // Compute {days} from the shift start date so the placeholder works in all email types
     // (assign, unassign, reminder). For reminders, $extra_replacements overrides this with
