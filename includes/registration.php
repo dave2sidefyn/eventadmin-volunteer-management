@@ -130,7 +130,7 @@ function eventadmin_verify_captcha_response(): bool
     $secret   = get_option('eventadmin_captcha_secret_key', '');
 
     if ($provider === 'recaptcha_v3') {
-        $token = sanitize_text_field(wp_unslash($_POST['g-recaptcha-response'] ?? ''));
+        $token = trim(wp_unslash($_POST['g-recaptcha-response'] ?? ''));
         if (empty($token)) {
             return false;
         }
@@ -146,7 +146,7 @@ function eventadmin_verify_captcha_response(): bool
     }
 
     $field      = $provider === 'recaptcha_v2' ? 'g-recaptcha-response' : 'h-captcha-response';
-    $token      = sanitize_text_field(wp_unslash($_POST[$field] ?? ''));
+    $token      = trim(wp_unslash($_POST[$field] ?? ''));
     $verify_url = $provider === 'recaptcha_v2'
         ? 'https://www.google.com/recaptcha/api/siteverify'
         : 'https://hcaptcha.com/siteverify';
@@ -158,7 +158,11 @@ function eventadmin_verify_captcha_response(): bool
     if (is_wp_error($result)) {
         return true; // Fail open: don't block registrations if the CAPTCHA API is unreachable
     }
-    $data = json_decode(wp_remote_retrieve_body($result), true);
+    $body = wp_remote_retrieve_body($result);
+    $data = json_decode($body, true);
+    if (empty($data['success'])) {
+        error_log('[EventAdmin] CAPTCHA verification failed. Provider: ' . $provider . ', Token (first 20): ' . substr($token, 0, 20) . ', Response: ' . $body);
+    }
     return !empty($data['success']);
 }
 
