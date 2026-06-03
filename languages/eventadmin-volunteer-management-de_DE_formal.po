@@ -2113,3 +2113,11 @@ msgstr "Leer"
 #: includes/admin/dashboard.php
 msgid "Heavily understaffed"
 msgstr "Stark unterbesetzt"
+
+#: includes/admin/settings.php
+msgid "reCAPTCHA v3 score threshold"
+msgstr "reCAPTCHA-v3-Schwellenwert"
+
+#: includes/admin/settings.php
+msgid "Scores below this value are treated as bots (0.0 = all pass, 1.0 = all blocked). Default: 0.5. Only applies to reCAPTCHA v3."
+msgstr "Werte unter diesem Schwellenwert werden als Bot behandelt (0.0 = alle durch, 1.0 = alle blockiert). Standard: 0.5. Gilt nur für reCAPTCHA v3."

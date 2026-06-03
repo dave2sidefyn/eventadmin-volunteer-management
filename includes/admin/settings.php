@@ -314,7 +314,14 @@ function eventadmin_plugin_register_settings(): void
 
     register_setting('eventadmin_plugin_settings_general', 'eventadmin_captcha_provider', [
         'sanitize_callback' => static function ($val) {
-            return in_array($val, ['none', 'recaptcha_v2', 'hcaptcha'], true) ? $val : 'none';
+            return in_array($val, ['none', 'recaptcha_v2', 'recaptcha_v3', 'hcaptcha'], true) ? $val : 'none';
+        },
+    ]);
+
+    register_setting('eventadmin_plugin_settings_general', 'eventadmin_captcha_v3_threshold', [
+        'sanitize_callback' => static function ($val) {
+            $f = (float) $val;
+            return ($f >= 0.0 && $f <= 1.0) ? $f : 0.5;
         },
     ]);
 
@@ -341,6 +348,7 @@ function eventadmin_plugin_register_settings(): void
             $options = [
                 'none'         => esc_html__('None', 'eventadmin-volunteer-management'),
                 'recaptcha_v2' => 'Google reCAPTCHA v2',
+                'recaptcha_v3' => 'Google reCAPTCHA v3',
                 'hcaptcha'     => 'hCaptcha',
             ];
             echo '<select name="eventadmin_captcha_provider">';
@@ -370,6 +378,18 @@ function eventadmin_plugin_register_settings(): void
         esc_html__('CAPTCHA secret key', 'eventadmin-volunteer-management'),
         static function () {
             echo '<input type="text" name="eventadmin_captcha_secret_key" value="' . esc_attr(get_option('eventadmin_captcha_secret_key', '')) . '" class="regular-text">';
+        },
+        'eventadmin-settings-general',
+        'eventadmin_general_security'
+    );
+
+    add_settings_field(
+        'eventadmin_captcha_v3_threshold',
+        esc_html__('reCAPTCHA v3 score threshold', 'eventadmin-volunteer-management'),
+        static function () {
+            $val = get_option('eventadmin_captcha_v3_threshold', 0.5);
+            echo '<input type="number" name="eventadmin_captcha_v3_threshold" value="' . esc_attr($val) . '" min="0" max="1" step="0.1" style="width:70px">';
+            echo '<p class="description">' . esc_html__('Scores below this value are treated as bots (0.0 = all pass, 1.0 = all blocked). Default: 0.5. Only applies to reCAPTCHA v3.', 'eventadmin-volunteer-management') . '</p>';
         },
         'eventadmin-settings-general',
         'eventadmin_general_security'

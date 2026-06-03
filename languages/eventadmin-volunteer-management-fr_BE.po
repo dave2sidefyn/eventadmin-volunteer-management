@@ -2055,3 +2055,11 @@ msgstr "Vide"
 #: includes/admin/dashboard.php
 msgid "Heavily understaffed"
 msgstr "Très en sous-effectif"
+
+#: includes/admin/settings.php
+msgid "reCAPTCHA v3 score threshold"
+msgstr "Seuil de score reCAPTCHA v3"
+
+#: includes/admin/settings.php
+msgid "Scores below this value are treated as bots (0.0 = all pass, 1.0 = all blocked). Default: 0.5. Only applies to reCAPTCHA v3."
+msgstr "Les scores inférieurs à cette valeur sont traités comme des bots (0.0 = tous passent, 1.0 = tous bloqués). Par défaut : 0.5. S'applique uniquement à reCAPTCHA v3."

@@ -42,11 +42,25 @@ function eventadmin_enqueue_captcha_script(): void
     if (!eventadmin_captcha_is_enabled()) {
         return;
     }
-    $provider   = get_option('eventadmin_captcha_provider', 'none');
-    $script_url = $provider === 'recaptcha_v2'
-        ? 'https://www.google.com/recaptcha/api.js'
-        : 'https://js.hcaptcha.com/1/api.js';
-    wp_enqueue_script('eventadmin-captcha', $script_url, [], null, true);
+    $provider = get_option('eventadmin_captcha_provider', 'none');
+    $site_key = get_option('eventadmin_captcha_site_key', '');
+
+    if ($provider === 'recaptcha_v2') {
+        wp_enqueue_script('eventadmin-captcha', 'https://www.google.com/recaptcha/api.js', [], null, true);
+    } elseif ($provider === 'hcaptcha') {
+        wp_enqueue_script('eventadmin-captcha', 'https://js.hcaptcha.com/1/api.js', [], null, true);
+    } elseif ($provider === 'recaptcha_v3') {
+        wp_enqueue_script('eventadmin-captcha', 'https://www.google.com/recaptcha/api.js?render=' . urlencode($site_key), [], null, true);
+        $js_path = plugin_dir_path(__FILE__) . '../assets/js/captcha-v3.js';
+        wp_enqueue_script(
+            'eventadmin-captcha-v3',
+            plugin_dir_url(__FILE__) . '../assets/js/captcha-v3.js',
+            ['eventadmin-captcha'],
+            file_exists($js_path) ? filemtime($js_path) : null,
+            true
+        );
+        wp_localize_script('eventadmin-captcha-v3', 'eventadminCaptchaV3', ['siteKey' => $site_key]);
+    }
 }
 
 /**
@@ -59,8 +73,14 @@ function eventadmin_render_captcha_widget(): void
     }
     $provider = get_option('eventadmin_captcha_provider', 'none');
     $site_key = get_option('eventadmin_captcha_site_key', '');
-    $class    = $provider === 'recaptcha_v2' ? 'g-recaptcha' : 'h-captcha';
-    echo '<div class="' . esc_attr($class) . '" data-sitekey="' . esc_attr($site_key) . '"></div>';
+
+    if ($provider === 'recaptcha_v3') {
+        // v3 is invisible — JS populates this hidden field before submit
+        echo '<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response-v3">';
+    } else {
+        $class = $provider === 'recaptcha_v2' ? 'g-recaptcha' : 'h-captcha';
+        echo '<div class="' . esc_attr($class) . '" data-sitekey="' . esc_attr($site_key) . '"></div>';
+    }
 }
 
 /**
@@ -71,8 +91,25 @@ function eventadmin_verify_captcha_response(): bool
     if (!eventadmin_captcha_is_enabled()) {
         return true;
     }
-    $provider   = get_option('eventadmin_captcha_provider', 'none');
-    $secret     = get_option('eventadmin_captcha_secret_key', '');
+    $provider = get_option('eventadmin_captcha_provider', 'none');
+    $secret   = get_option('eventadmin_captcha_secret_key', '');
+
+    if ($provider === 'recaptcha_v3') {
+        $token = sanitize_text_field(wp_unslash($_POST['g-recaptcha-response'] ?? ''));
+        if (empty($token)) {
+            return false;
+        }
+        $result = wp_remote_post('https://www.google.com/recaptcha/api/siteverify', [
+            'body' => ['secret' => $secret, 'response' => $token],
+        ]);
+        if (is_wp_error($result)) {
+            return true; // Fail open: don't block registrations if the CAPTCHA API is unreachable
+        }
+        $data      = json_decode(wp_remote_retrieve_body($result), true);
+        $threshold = (float) get_option('eventadmin_captcha_v3_threshold', 0.5);
+        return !empty($data['success']) && isset($data['score']) && (float) $data['score'] >= $threshold;
+    }
+
     $field      = $provider === 'recaptcha_v2' ? 'g-recaptcha-response' : 'h-captcha-response';
     $token      = sanitize_text_field(wp_unslash($_POST[$field] ?? ''));
     $verify_url = $provider === 'recaptcha_v2'
