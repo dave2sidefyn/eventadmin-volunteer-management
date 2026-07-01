@@ -4,7 +4,7 @@ Tags: volunteer, shift, planning, event
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 1.6.0
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,15 @@ You can set a minimum number of volunteers per shift. The admin dashboard will h
 3. Statistics & charts in the backend
 
 == Changelog ==
+
+= Version 1.7.0 =
+* New: Selecting a parent department in the volunteer shift filter now also shows shifts tagged only with one of its child departments
+* New: "Hide from volunteers" option on shift categories — hides the department from the frontend filter and labels; shifts are also hidden from volunteers when every department they're assigned to is hidden (shifts a volunteer is already signed up for are never hidden this way)
+* New: Volunteer shift filter dropdown shows open/total slot counts per department and indents child departments under their parent
+* New: "Category filter" toggle under Settings → Display → Volunteer shift filters, to hide the department dropdown if it's not needed
+* New: Tools → EventAdmin Data explains how to use WordPress's native Export/Import to bring over a department & shift setup from another site (volunteer sign-ups are excluded from the export)
+* Fix: Registration form is now hidden after a successful or duplicate registration — only the confirmation message is shown
+* Fix: Assigning/unassigning a shift now updates the open-slots count live, without needing a page reload
 
 = Version 1.6.0 =
 * New: CAPTCHA support on the volunteer registration form — choose between Google reCAPTCHA v2, Google reCAPTCHA v3 (invisible), or hCaptcha via Settings → General → Security

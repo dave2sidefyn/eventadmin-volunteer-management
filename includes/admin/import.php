@@ -37,6 +37,24 @@ function eventadmin_render_import_page(): void
 {
     ?>
     <div class="wrap">
+        <h1><?php esc_attr_e('Import a setup from another site', 'eventadmin-volunteer-management'); ?></h1>
+        <p><?php esc_html_e('Shifts and departments are regular WordPress posts and taxonomy terms, so you can bring over another site\'s setup using WordPress\'s own export/import tools:', 'eventadmin-volunteer-management'); ?></p>
+        <ol>
+            <li><?php echo wp_kses(sprintf(
+                /* translators: %s: link to the Tools > Export screen */
+                __('On the source site, go to %s, choose "Shifts" and download the file.', 'eventadmin-volunteer-management'),
+                '<a href="' . esc_url(admin_url('export.php')) . '">' . esc_html__('Tools > Export', 'eventadmin-volunteer-management') . '</a>'
+            ), ['a' => ['href' => []]]); ?></li>
+            <li><?php echo wp_kses(sprintf(
+                /* translators: %s: link to the Tools > Import screen */
+                __('On this site, make sure this plugin is active, then go to %s, install the "WordPress" importer if needed, and upload the file.', 'eventadmin-volunteer-management'),
+                '<a href="' . esc_url(admin_url('import.php')) . '">' . esc_html__('Tools > Import', 'eventadmin-volunteer-management') . '</a>'
+            ), ['a' => ['href' => []]]); ?></li>
+        </ol>
+        <p><?php esc_html_e('Departments (with their color and hierarchy) are carried over automatically for any department that has at least one shift. Volunteer sign-ups are not included in the export, since another site\'s user IDs would be meaningless here.', 'eventadmin-volunteer-management'); ?></p>
+    </div>
+
+    <div class="wrap">
         <h1><?php esc_attr_e('Import demo data', 'eventadmin-volunteer-management'); ?></h1>
         <form method="post" action="">
             <?php wp_nonce_field('eventadmin_import_shift_cats', 'eventadmin_import_nonce'); ?>

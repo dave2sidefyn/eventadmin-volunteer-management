@@ -93,7 +93,7 @@ jQuery(document).ready(function ($) {
                         }
 
                         // Update assigned row
-                        shiftBox.find('.shift-count').text(response.data.count);
+                        shiftBox.find('.shift-open').text(response.data.open);
                         shiftBox.find('.shift-names').text(response.data.names);
 
 

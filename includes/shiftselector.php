@@ -25,6 +25,78 @@ function eventadmin_sort_shifts_by_start($a, $b): int
     return $startA <=> $startB;
 }
 
+/**
+ * Formats a "still open" slot count, e.g. "3/7 slots open".
+ *
+ * @param int $open Number of open (unfilled) slots
+ * @param int $total Total number of slots
+ * @return string
+ */
+function eventadmin_format_slots_open(int $open, int $total): string
+{
+    // A shift can end up over-assigned (e.g. max_volunteers lowered after volunteers already
+    // signed up), which would otherwise show a confusing negative count.
+    $open = max(0, $open);
+
+    /* translators: 1: number of open volunteer slots remaining, 2: total number of volunteer slots offered */
+    return sprintf(__('%1$d/%2$d slots open', 'eventadmin-volunteer-management'), $open, $total);
+}
+
+/**
+ * Flattens a list of (possibly nested) category terms into parent-first,
+ * depth-first order, setting an `eventadmin_depth` property on each term
+ * so callers can indent child departments under their parent.
+ *
+ * @param WP_Term[] $categories
+ * @param int $parent
+ * @param int $depth
+ * @return WP_Term[]
+ */
+function eventadmin_order_categories_hierarchically(array $categories, int $parent = 0, int $depth = 0): array
+{
+    // A valid tree can't be deeper than its number of nodes; bail out instead of recursing
+    // forever if term data is ever corrupted into a parent cycle.
+    if ($depth > count($categories)) {
+        return [];
+    }
+
+    // A parent may be missing from $categories (e.g. hidden). Treat such orphans as top-level
+    // instead of silently dropping them.
+    $existing_ids = wp_list_pluck($categories, 'term_id');
+
+    $ordered = [];
+    foreach ($categories as $cat) {
+        $effective_parent = in_array((int) $cat->parent, $existing_ids, true) ? (int) $cat->parent : 0;
+        if ($effective_parent === $parent) {
+            $cat->eventadmin_depth = $depth;
+            $ordered[] = $cat;
+            $ordered = array_merge($ordered, eventadmin_order_categories_hierarchically($categories, $cat->term_id, $depth + 1));
+        }
+    }
+    return $ordered;
+}
+
+/**
+ * A shift is hidden from volunteers when every department it's assigned to is hidden.
+ * A shift with no department, or with at least one visible department, is never hidden.
+ *
+ * @param int $shift_id
+ * @return bool
+ */
+function eventadmin_shift_is_hidden_from_volunteers(int $shift_id): bool
+{
+    $term_ids = wp_get_post_terms($shift_id, 'eventadmin_shift_category', ['fields' => 'ids']);
+    if (empty($term_ids)) {
+        return false;
+    }
+    foreach ($term_ids as $term_id) {
+        if (!eventadmin_is_shift_category_hidden($term_id)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 function eventadmin_shiftselector_shortcode(): bool|string
 {
     if (!is_user_logged_in()) return esc_html__('Please log in first.', 'eventadmin-volunteer-management');
@@ -35,14 +107,18 @@ function eventadmin_shiftselector_shortcode(): bool|string
     $my_shifts = [];
     $available_shifts = [];
     $full_shifts = [];
+    $shift_slots = [];
 
     foreach ($shifts as $shift) {
         $is_assigned = get_post_meta($shift->ID, 'assigned_user_' . $current_user_id, true);
         $max = (int)get_post_meta($shift->ID, 'max_volunteers', true);
         $current = eventadmin_count_assignments($shift->ID);
+        $shift_slots[$shift->ID] = ['max' => $max, 'current' => $current];
 
         if ($is_assigned) {
             $my_shifts[] = $shift;
+        } elseif (eventadmin_shift_is_hidden_from_volunteers($shift->ID)) {
+            continue; // not signed up, and every department it's in is hidden — don't offer it
         } elseif ($current < $max) {
             $available_shifts[] = $shift;
         } else {
@@ -71,15 +147,49 @@ function eventadmin_shiftselector_shortcode(): bool|string
     echo '<h2>' . esc_html__('Available shifts', 'eventadmin-volunteer-management') . '</h2>';
     if (!empty($available_shifts)) {
         $categories     = get_terms(['taxonomy' => 'eventadmin_shift_category', 'hide_empty' => false]);
-        $enabled_filters = (array) get_option('eventadmin_enabled_filters', ['text_search', 'date_filter']);
+        $categories     = array_filter($categories, fn($cat) => !eventadmin_is_shift_category_hidden($cat->term_id));
+        $categories     = eventadmin_order_categories_hierarchically($categories);
+        $enabled_filters = (array) get_option('eventadmin_enabled_filters', ['text_search', 'date_filter', 'category_filter']);
 
         echo '<div class="shift-filter">';
 
-        if (!empty($categories)) {
+        if (!empty($categories) && in_array('category_filter', $enabled_filters, true)) {
+            $shift_term_ids = [];
+            foreach (array_merge($available_shifts, $full_shifts) as $shift) {
+                $shift_term_ids[$shift->ID] = wp_get_post_terms($shift->ID, 'eventadmin_shift_category', ['fields' => 'ids']);
+            }
+
             echo '<select id="shift-category-filter">';
-            echo '<option value="all">' . esc_html__('All departments', 'eventadmin-volunteer-management') . '</option>';
+
+            $all_open = 0;
+            $all_total = 0;
+            foreach (array_merge($available_shifts, $full_shifts) as $shift) {
+                $all_open += $shift_slots[$shift->ID]['max'] - $shift_slots[$shift->ID]['current'];
+                $all_total += $shift_slots[$shift->ID]['max'];
+            }
+            echo '<option value="all">' . esc_html__('All departments', 'eventadmin-volunteer-management') .
+                ' (' . esc_html(eventadmin_format_slots_open($all_open, $all_total)) . ')</option>';
+
             foreach ($categories as $cat) {
-                echo '<option value="' . esc_attr($cat->slug) . '">' . esc_html($cat->name) . '</option>';
+                // Don't attribute a hidden child's shifts to its (visible) parent's count.
+                $visible_descendant_ids = array_filter(
+                    (array) get_term_children($cat->term_id, 'eventadmin_shift_category'),
+                    fn($id) => !eventadmin_is_shift_category_hidden($id)
+                );
+                $cat_ids = array_merge([$cat->term_id], $visible_descendant_ids);
+
+                $open = 0;
+                $total = 0;
+                foreach (array_merge($available_shifts, $full_shifts) as $shift) {
+                    if (array_intersect($cat_ids, $shift_term_ids[$shift->ID] ?? [])) {
+                        $open += $shift_slots[$shift->ID]['max'] - $shift_slots[$shift->ID]['current'];
+                        $total += $shift_slots[$shift->ID]['max'];
+                    }
+                }
+
+                $indent = str_repeat('— ', $cat->eventadmin_depth);
+                echo '<option value="' . esc_attr($cat->slug) . '">' . esc_html($indent . $cat->name) .
+                    ' (' . esc_html(eventadmin_format_slots_open($open, $total)) . ')</option>';
             }
             echo '</select>';
         }
@@ -134,7 +244,22 @@ function eventadmin_render_shift($shift, $user_id, $is_full = false): void
     $current = eventadmin_count_assignments($shift->ID);
     $is_assigned = get_post_meta($shift->ID, 'assigned_user_' . $user_id, true);
     $terms = wp_get_post_terms($shift->ID, 'eventadmin_shift_category');
-    $cat_classes = array_map(fn($t) => $t->slug, $terms);
+    $cat_classes = [];
+    foreach ($terms as $term) {
+        if (!eventadmin_is_shift_category_hidden($term->term_id)) {
+            $cat_classes[] = $term->slug;
+        }
+        foreach (get_ancestors($term->term_id, 'eventadmin_shift_category') as $ancestor_id) {
+            if (eventadmin_is_shift_category_hidden($ancestor_id)) {
+                continue;
+            }
+            $ancestor = get_term($ancestor_id, 'eventadmin_shift_category');
+            if ($ancestor && !is_wp_error($ancestor)) {
+                $cat_classes[] = $ancestor->slug;
+            }
+        }
+    }
+    $cat_classes = array_unique($cat_classes);
     $data_attr = implode(' ', $cat_classes);
     $names = eventadmin_get_user_display_names($shift->ID);
 
@@ -144,9 +269,11 @@ function eventadmin_render_shift($shift, $user_id, $is_full = false): void
     echo '<div class="shift-card-header">';
     echo '<div class="shift-datetime" data-start="' . esc_attr($start) . '">' . esc_html(eventadmin_get_formatted_zeitraum($start, $end)) . '</div>';
 
-    if (!empty($terms)) {
+    $visible_terms = array_filter($terms, fn($term) => !eventadmin_is_shift_category_hidden($term->term_id));
+
+    if (!empty($visible_terms)) {
         echo '<div class="shift-categories">';
-        foreach ($terms as $term) {
+        foreach ($visible_terms as $term) {
             $color = get_term_meta($term->term_id, 'term_color', true);
 
             // If not set → generate, save and use one
@@ -165,7 +292,7 @@ function eventadmin_render_shift($shift, $user_id, $is_full = false): void
     echo '<div class="shift-header"><strong>' . esc_html($shift->post_title) . '</strong></div>';
     echo '<div class="shift-meta">';
     echo '<div class="shift-people">';
-    echo esc_html__('Filled: ', 'eventadmin-volunteer-management') . '<span class="shift-count">' . esc_html($current) . '</span>/' . esc_html($max) . '<br>';
+    echo '<span class="shift-open">' . esc_html(eventadmin_format_slots_open($max - $current, $max)) . '</span><br>';
     echo '<span class="shift-names">' . esc_html(!empty($names) ? implode(', ', $names) : '') . '</span>';
     echo '</div>';
     echo '<div class="shift-description">' . wp_kses_post($shift->post_content) . '</div>';
@@ -215,10 +342,12 @@ function eventadmin_assign_ajax(): void
 
     $names = eventadmin_get_user_display_names($shift_id);
     $count = eventadmin_count_assignments($shift_id);
+    $max = (int) get_post_meta($shift_id, 'max_volunteers', true);
 
     wp_send_json_success([
         'message' => esc_html__('You have been successfully signed up.', 'eventadmin-volunteer-management'),
         'count' => $count,
+        'open' => eventadmin_format_slots_open($max - $count, $max),
         'names' => implode(', ', $names)
     ]);
 }
@@ -276,10 +405,12 @@ function eventadmin_unassign_ajax(): void
 
         $names = eventadmin_get_user_display_names($shift_id);
         $count = eventadmin_count_assignments($shift_id);
+        $max = (int) get_post_meta($shift_id, 'max_volunteers', true);
 
         wp_send_json_success([
             'message' => esc_html__('You have been successfully removed.', 'eventadmin-volunteer-management'),
             'count' => $count,
+            'open' => eventadmin_format_slots_open($max - $count, $max),
             'names' => implode(', ', $names)
         ]);
     } else {

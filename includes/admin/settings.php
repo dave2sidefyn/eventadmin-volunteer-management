@@ -237,7 +237,7 @@ function eventadmin_plugin_register_settings(): void
 
     register_setting('eventadmin_plugin_settings_display', 'eventadmin_enabled_filters', [
         'sanitize_callback' => static function ($val) {
-            $allowed = ['text_search', 'date_filter'];
+            $allowed = ['text_search', 'date_filter', 'category_filter'];
             return is_array($val) ? array_values(array_filter($val, static fn($v) => in_array($v, $allowed, true))) : [];
         },
     ]);
@@ -418,10 +418,11 @@ function eventadmin_plugin_register_settings(): void
         'eventadmin_enabled_filters',
         esc_html__('Volunteer shift filters', 'eventadmin-volunteer-management'),
         static function () {
-            $enabled = (array) get_option('eventadmin_enabled_filters', ['text_search', 'date_filter']);
+            $enabled = (array) get_option('eventadmin_enabled_filters', ['text_search', 'date_filter', 'category_filter']);
             $options = [
-                'text_search' => esc_html__('Text search', 'eventadmin-volunteer-management'),
-                'date_filter' => esc_html__('Date filter', 'eventadmin-volunteer-management'),
+                'text_search'     => esc_html__('Text search', 'eventadmin-volunteer-management'),
+                'date_filter'     => esc_html__('Date filter', 'eventadmin-volunteer-management'),
+                'category_filter' => esc_html__('Category filter', 'eventadmin-volunteer-management'),
             ];
 
             foreach ($options as $key => $label) {

@@ -75,3 +75,16 @@ add_action('template_redirect', function () {
         exit;
     }
 });
+
+/**
+ * Shifts are a standard custom post type, so WordPress's native Tools > Export
+ * already includes them (with their departments and shift meta) in the WXR file,
+ * and Tools > Import > WordPress can recreate them on another site.
+ *
+ * The one thing that export shouldn't carry across sites is who signed up for a
+ * shift: assigned_user_* meta holds another site's user IDs, which are meaningless
+ * (or, worse, coincidentally valid) on the target site. Strip it from the export.
+ */
+add_filter('wxr_export_skip_postmeta', function (bool $skip, string $meta_key): bool {
+    return $skip || str_starts_with($meta_key, 'assigned_user_');
+}, 10, 2);

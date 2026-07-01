@@ -209,43 +209,48 @@ function eventadmin_registration_form_shortcode(): bool|string
 
     eventadmin_enqueue_captcha_script();
 
+    $registration_nonce_valid = isset($_GET['registration'], $_GET['eventadmin_register_nonce'])
+        && wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['eventadmin_register_nonce'])), 'eventadmin_register_action');
+    $registration_success = $registration_nonce_valid && $_GET['registration'] === 'success';
+    $registration_exists   = $registration_nonce_valid && $_GET['registration'] === 'exists';
+
     ob_start(); ?>
     <div class="eventadmin-form-wrapper">
-        <?php
-        if (shortcode_exists('nextend_social_login')) {
-            echo do_shortcode('[nextend_social_login]');
-            echo '<hr />';
-        }
-        ?>
-        <form method="post" class="eventadmin-form">
-            <?php wp_nonce_field('eventadmin_register_action', 'eventadmin_register_nonce'); ?>
-            <label><?php esc_html_e('First name', 'eventadmin-volunteer-management'); ?>
-                <input type="text" name="eventadmin_firstname" required/>
-            </label>
-            <label><?php esc_html_e('Last name', 'eventadmin-volunteer-management'); ?>
-                <input type="text" name="eventadmin_lastname" required/>
-            </label>
-            <label><?php esc_html_e('Phone number', 'eventadmin-volunteer-management'); ?>
-                <input type="tel" name="eventadmin_phone" required/>
-            </label>
-            <label><?php esc_html_e('E-Mail', 'eventadmin-volunteer-management'); ?>
-                <input type="email" name="eventadmin_email" required/>
-            </label>
-            <input type="hidden" name="eventadmin_redirect_to" value="<?php echo esc_url(get_permalink()); ?>"/>
-            <?php eventadmin_render_captcha_widget(); ?>
-            <input type="hidden" name="eventadmin_hp" id="eventadmin_hp" value="">
-            <input type="submit" name="eventadmin_register_submit" value="Register"/>
-            <script>document.getElementById('eventadmin_hp').value='1';</script>
-        </form>
-
-        <?php if (isset($_GET['registration'], $_GET['eventadmin_register_nonce']) && $_GET['registration'] === 'success' && wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['eventadmin_register_nonce'])), 'eventadmin_register_action')) : ?>
+        <?php if ($registration_success) : ?>
             <div class="eventadmin-success">
                 <?php esc_html_e('Thank you for your registration. You will receive an email with your login link shortly.', 'eventadmin-volunteer-management'); ?>
             </div>
-        <?php elseif (isset($_GET['registration'], $_GET['eventadmin_register_nonce']) && $_GET['registration'] === 'exists' && wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['eventadmin_register_nonce'])), 'eventadmin_register_action')) : ?>
+        <?php elseif ($registration_exists) : ?>
             <div class="eventadmin-info">
                 <?php esc_html_e('This email is already registered. We have resent your login link.', 'eventadmin-volunteer-management'); ?>
             </div>
+        <?php else : ?>
+            <?php
+            if (shortcode_exists('nextend_social_login')) {
+                echo do_shortcode('[nextend_social_login]');
+                echo '<hr />';
+            }
+            ?>
+            <form method="post" class="eventadmin-form">
+                <?php wp_nonce_field('eventadmin_register_action', 'eventadmin_register_nonce'); ?>
+                <label><?php esc_html_e('First name', 'eventadmin-volunteer-management'); ?>
+                    <input type="text" name="eventadmin_firstname" required/>
+                </label>
+                <label><?php esc_html_e('Last name', 'eventadmin-volunteer-management'); ?>
+                    <input type="text" name="eventadmin_lastname" required/>
+                </label>
+                <label><?php esc_html_e('Phone number', 'eventadmin-volunteer-management'); ?>
+                    <input type="tel" name="eventadmin_phone" required/>
+                </label>
+                <label><?php esc_html_e('E-Mail', 'eventadmin-volunteer-management'); ?>
+                    <input type="email" name="eventadmin_email" required/>
+                </label>
+                <input type="hidden" name="eventadmin_redirect_to" value="<?php echo esc_url(get_permalink()); ?>"/>
+                <?php eventadmin_render_captcha_widget(); ?>
+                <input type="hidden" name="eventadmin_hp" id="eventadmin_hp" value="">
+                <input type="submit" name="eventadmin_register_submit" value="Register"/>
+                <script>document.getElementById('eventadmin_hp').value='1';</script>
+            </form>
         <?php endif; ?>
     </div>
     <?php

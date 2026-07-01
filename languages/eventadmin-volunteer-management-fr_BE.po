@@ -2079,3 +2079,37 @@ msgstr "Fournisseur"
 #: includes/admin/volunteer-list.php
 msgid "Reason"
 msgstr "Raison"
+
+msgid "Hide from volunteers"
+msgstr "Masquer aux bénévoles"
+
+msgid "Hidden departments no longer appear in the frontend filter or as a category label, but shifts already assigned to them remain visible."
+msgstr "Les départements masqués n'apparaissent plus dans le filtre du sélecteur de créneaux ni comme label de catégorie, mais les créneaux déjà assignés restent visibles."
+
+msgid "Category filter"
+msgstr "Filtre par catégorie"
+
+msgid "%1$d/%2$d slots open"
+msgstr "%1$d/%2$d places disponibles"
+
+msgid "Import a setup from another site"
+msgstr "Importer une configuration depuis un autre site"
+
+msgid "Shifts and departments are regular WordPress posts and taxonomy terms, so you can bring over another site's setup using WordPress's own export/import tools:"
+msgstr "Les créneaux et les départements sont de simples articles WordPress et termes de taxonomie. Vous pouvez donc reprendre la configuration d'un autre site à l'aide des propres outils d'export/import de WordPress :"
+
+msgid "On the source site, go to %s, choose \"Shifts\" and download the file."
+msgstr "Sur le site source, allez dans %s, choisissez « Créneaux » et téléchargez le fichier."
+
+msgid "Tools > Export"
+msgstr "Outils > Exporter"
+
+msgid "On this site, make sure this plugin is active, then go to %s, install the \"WordPress\" importer if needed, and upload the file."
+msgstr "Sur ce site, assurez-vous que cette extension est active, puis allez dans %s, installez si nécessaire l'importateur « WordPress » et téléversez le fichier."
+
+msgid "Tools > Import"
+msgstr "Outils > Importer"
+
+msgid "Departments (with their color and hierarchy) are carried over automatically for any department that has at least one shift. Volunteer sign-ups are not included in the export, since another site's user IDs would be meaningless here."
+msgstr "Les départements (avec leur couleur et leur hiérarchie) sont automatiquement repris pour chaque département comportant au moins un créneau. Les inscriptions des bénévoles ne sont pas incluses dans l'export, car les ID utilisateur d'un autre site n'auraient ici aucune signification."
+

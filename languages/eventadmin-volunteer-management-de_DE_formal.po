@@ -2137,3 +2137,37 @@ msgstr "Anbieter"
 #: includes/admin/volunteer-list.php
 msgid "Reason"
 msgstr "Grund"
+
+msgid "Hide from volunteers"
+msgstr "Vor Volunteers verbergen"
+
+msgid "Hidden departments no longer appear in the frontend filter or as a category label, but shifts already assigned to them remain visible."
+msgstr "Ausgeblendete Abteilungen erscheinen nicht mehr im Filter der Schichtauswahl oder als Kategorielabel, bereits zugewiesene Schichten bleiben aber weiterhin sichtbar."
+
+msgid "Category filter"
+msgstr "Kategoriefilter"
+
+msgid "%1$d/%2$d slots open"
+msgstr "%1$d/%2$d Plätze frei"
+
+msgid "Import a setup from another site"
+msgstr "Ein Setup von einer anderen Website importieren"
+
+msgid "Shifts and departments are regular WordPress posts and taxonomy terms, so you can bring over another site's setup using WordPress's own export/import tools:"
+msgstr "Schichten und Abteilungen sind normale WordPress-Beiträge und Taxonomie-Begriffe. Sie können das Setup einer anderen Website daher mit den eigenen Export-/Import-Werkzeugen von WordPress übernehmen:"
+
+msgid "On the source site, go to %s, choose \"Shifts\" and download the file."
+msgstr "Gehen Sie auf der Quell-Website zu %s, wählen Sie „Schichten“ aus und laden Sie die Datei herunter."
+
+msgid "Tools > Export"
+msgstr "Werkzeuge > Exportieren"
+
+msgid "On this site, make sure this plugin is active, then go to %s, install the \"WordPress\" importer if needed, and upload the file."
+msgstr "Stellen Sie auf dieser Website sicher, dass dieses Plugin aktiv ist, gehen Sie dann zu %s, installieren Sie bei Bedarf den „WordPress“-Importer und laden Sie die Datei hoch."
+
+msgid "Tools > Import"
+msgstr "Werkzeuge > Importieren"
+
+msgid "Departments (with their color and hierarchy) are carried over automatically for any department that has at least one shift. Volunteer sign-ups are not included in the export, since another site's user IDs would be meaningless here."
+msgstr "Abteilungen (mit Farbe und Hierarchie) werden für jede Abteilung mit mindestens einer Schicht automatisch mit übernommen. Anmeldungen von Volunteers sind im Export nicht enthalten, da die Benutzer-IDs einer anderen Website hier keine Bedeutung hätten."
+

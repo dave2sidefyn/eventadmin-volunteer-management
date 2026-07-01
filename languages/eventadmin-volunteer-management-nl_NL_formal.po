@@ -2068,3 +2068,37 @@ msgstr "Aanbieder"
 #: includes/admin/volunteer-list.php
 msgid "Reason"
 msgstr "Reden"
+
+msgid "Hide from volunteers"
+msgstr "Verbergen voor vrijwilligers"
+
+msgid "Hidden departments no longer appear in the frontend filter or as a category label, but shifts already assigned to them remain visible."
+msgstr "Verborgen afdelingen verschijnen niet meer in het filter van de dienstkiezer of als categorielabel, maar diensten die er al aan zijn toegewezen blijven zichtbaar."
+
+msgid "Category filter"
+msgstr "Categoriefilter"
+
+msgid "%1$d/%2$d slots open"
+msgstr "%1$d/%2$d plekken vrij"
+
+msgid "Import a setup from another site"
+msgstr "Een opzet van een andere site importeren"
+
+msgid "Shifts and departments are regular WordPress posts and taxonomy terms, so you can bring over another site's setup using WordPress's own export/import tools:"
+msgstr "Diensten en afdelingen zijn gewone WordPress-berichten en taxonomietermen. U kunt de opzet van een andere site daarom overnemen met de eigen export-/importtools van WordPress:"
+
+msgid "On the source site, go to %s, choose \"Shifts\" and download the file."
+msgstr "Ga op de bronsite naar %s, kies \"Diensten\" en download het bestand."
+
+msgid "Tools > Export"
+msgstr "Gereedschap > Exporteren"
+
+msgid "On this site, make sure this plugin is active, then go to %s, install the \"WordPress\" importer if needed, and upload the file."
+msgstr "Zorg er op deze site voor dat deze plugin actief is, ga dan naar %s, installeer indien nodig de \"WordPress\"-importer en upload het bestand."
+
+msgid "Tools > Import"
+msgstr "Gereedschap > Importeren"
+
+msgid "Departments (with their color and hierarchy) are carried over automatically for any department that has at least one shift. Volunteer sign-ups are not included in the export, since another site's user IDs would be meaningless here."
+msgstr "Afdelingen (met kleur en hiërarchie) worden automatisch meegenomen voor elke afdeling met minstens één dienst. Aanmeldingen van vrijwilligers zijn niet opgenomen in de export, omdat de gebruikers-ID's van een andere site hier geen betekenis hebben."
+
