@@ -297,7 +297,9 @@ function eventadmin_volunteer_list_page(): void
     // Auto-cleanup log
     $cleanup_log = get_option('eventadmin_cleanup_log', []);
     if (!empty($cleanup_log)) {
+        echo '<div id="eventadmin-cleanup-log-section">';
         echo '<h3 style="margin-top:2rem;">' . esc_html__('Auto-deleted unverified accounts', 'eventadmin-volunteer-management') . '</h3>';
+        echo '<p><button type="button" id="eventadmin-clear-cleanup-log" class="button">' . esc_html__('Clear log', 'eventadmin-volunteer-management') . '</button></p>';
         echo '<table class="widefat striped" style="max-width:640px;">';
         echo '<thead><tr>';
         echo '<th>' . esc_html__('Date', 'eventadmin-volunteer-management') . '</th>';
@@ -312,6 +314,7 @@ function eventadmin_volunteer_list_page(): void
             echo '</tr>';
         }
         echo '</tbody></table>';
+        echo '</div>';
     }
 
     // JS for the group email form
@@ -325,6 +328,7 @@ function eventadmin_volunteer_list_page(): void
     wp_localize_script('eventadmin-volunteer-list', 'EVENTADMIN_VOL', [
         'ajax_url'      => admin_url('admin-ajax.php'),
         'nonce_remove'  => wp_create_nonce('eventadmin_remove_volunteer_role'),
+        'nonce_clear_cleanup_log' => wp_create_nonce('eventadmin_clear_cleanup_log'),
         'i18n'          => [
             'volunteers'              => esc_html__('volunteers', 'eventadmin-volunteer-management'),
             'error'                   => esc_html__('An error occurred. Please try again.', 'eventadmin-volunteer-management'),
@@ -333,6 +337,7 @@ function eventadmin_volunteer_list_page(): void
             'volunteer_created'       => esc_html__('Volunteer created. Reloading…', 'eventadmin-volunteer-management'),
             'remove_confirm'          => esc_html__('Remove the volunteer role from {name}? They still have {shifts} upcoming shift(s).', 'eventadmin-volunteer-management'),
             'remove_confirm_no_shifts' => esc_html__('Remove the volunteer role from {name}?', 'eventadmin-volunteer-management'),
+            'clear_cleanup_log_confirm' => esc_html__('Clear the auto-deleted unverified accounts log? This cannot be undone.', 'eventadmin-volunteer-management'),
         ],
     ]);
 
@@ -465,3 +470,25 @@ function eventadmin_create_volunteer_handler(): void
 }
 
 add_action('wp_ajax_eventadmin_create_volunteer', 'eventadmin_create_volunteer_handler');
+
+/**
+ * AJAX: clear the auto-deleted unverified accounts log.
+ */
+function eventadmin_clear_cleanup_log_handler(): void
+{
+    if (
+        !isset($_POST['_ajax_nonce']) ||
+        !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_ajax_nonce'])), 'eventadmin_clear_cleanup_log')
+    ) {
+        wp_send_json_error(['message' => esc_html__('Security check failed.', 'eventadmin-volunteer-management')]);
+    }
+
+    if (!current_user_can('edit_posts')) {
+        wp_send_json_error(['message' => esc_html__('Insufficient permissions.', 'eventadmin-volunteer-management')]);
+    }
+
+    delete_option('eventadmin_cleanup_log');
+    wp_send_json_success(['message' => esc_html__('Log cleared.', 'eventadmin-volunteer-management')]);
+}
+
+add_action('wp_ajax_eventadmin_clear_cleanup_log', 'eventadmin_clear_cleanup_log_handler');

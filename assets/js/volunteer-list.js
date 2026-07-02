@@ -142,4 +142,30 @@ jQuery(function ($) {
         });
     });
 
+    // Clear auto-deleted unverified accounts log
+    $(document).on('click', '#eventadmin-clear-cleanup-log', function () {
+        const $btn = $(this);
+
+        if (!window.confirm(cfg.i18n.clear_cleanup_log_confirm)) return;
+
+        $btn.prop('disabled', true);
+
+        $.post(cfg.ajax_url, {
+            action:      'eventadmin_clear_cleanup_log',
+            _ajax_nonce: cfg.nonce_clear_cleanup_log,
+        })
+        .done(function (res) {
+            if (res.success) {
+                $('#eventadmin-cleanup-log-section').remove();
+            } else {
+                alert(res.data && res.data.message ? res.data.message : cfg.i18n.error);
+                $btn.prop('disabled', false);
+            }
+        })
+        .fail(function () {
+            alert(cfg.i18n.error);
+            $btn.prop('disabled', false);
+        });
+    });
+
 });

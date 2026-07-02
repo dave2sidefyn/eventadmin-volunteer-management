@@ -4,7 +4,7 @@ Tags: volunteer, shift, planning, event
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 1.7.0
+Stable tag: 1.7.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,11 @@ You can set a minimum number of volunteers per shift. The admin dashboard will h
 3. Statistics & charts in the backend
 
 == Changelog ==
+
+= Version 1.7.1 =
+* New: "Clear log" button on the Volunteers page to clear the auto-deleted unverified accounts log
+* Fix: Administrators who also held the Volunteer role could lose access to wp-admin menu items on sites using a non-default database table prefix or in multisite — the previous fix for this wrote to the wrong option name and never actually took effect on those sites
+* Fix: Completed missing and corrected several inaccurate French and Dutch translations
 
 = Version 1.7.0 =
 * New: Selecting a parent department in the volunteer shift filter now also shows shifts tagged only with one of its child departments

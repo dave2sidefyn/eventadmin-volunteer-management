@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: EventAdmin – Volunteer Management 1.7.0\n"
+"Project-Id-Version: EventAdmin – Volunteer Management 1.7.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-01T11:18:15+00:00\n"
+"POT-Creation-Date: 2026-07-02T09:54:25+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: eventadmin-volunteer-management\n"
@@ -55,7 +55,7 @@ msgid "EventAdmin %s is here!"
 msgstr ""
 
 #: eventadmin-volunteer-management.php:281
-msgid "New in this release: settings save confirmation, email placeholder fixes ({start}, {end}, {days}), and a safer upgrade routine that protects settings across updates."
+msgid "New in this release: fixed a bug where Administrators who also held the Volunteer role could lose access to wp-admin menu items on sites using a custom database table prefix, plus completed French and Dutch translations."
 msgstr ""
 
 #: eventadmin-volunteer-management.php:287
@@ -166,7 +166,7 @@ msgid "({failed} could not be delivered)"
 msgstr ""
 
 #: includes/admin/bulk-email.php:178
-#: includes/admin/volunteer-list.php:330
+#: includes/admin/volunteer-list.php:334
 msgid "An error occurred. Please try again."
 msgstr ""
 
@@ -192,7 +192,7 @@ msgstr ""
 #: includes/admin/bulk-email.php:204
 #: includes/admin/dashboard.php:328
 #: includes/admin/volunteer-list.php:279
-#: includes/admin/volunteer-list.php:303
+#: includes/admin/volunteer-list.php:305
 msgid "Date"
 msgstr ""
 
@@ -249,9 +249,10 @@ msgstr ""
 #: includes/admin/import.php:146
 #: includes/admin/import.php:163
 #: includes/admin/import.php:174
-#: includes/admin/volunteer-list.php:351
-#: includes/admin/volunteer-list.php:381
-#: includes/admin/volunteer-list.php:410
+#: includes/admin/volunteer-list.php:356
+#: includes/admin/volunteer-list.php:386
+#: includes/admin/volunteer-list.php:415
+#: includes/admin/volunteer-list.php:483
 #: includes/shiftselector.php:325
 #: includes/shiftselector.php:373
 msgid "Security check failed."
@@ -259,9 +260,10 @@ msgstr ""
 
 #: includes/admin/bulk-email.php:287
 #: includes/admin/bulk-email.php:421
-#: includes/admin/volunteer-list.php:355
-#: includes/admin/volunteer-list.php:385
-#: includes/admin/volunteer-list.php:414
+#: includes/admin/volunteer-list.php:360
+#: includes/admin/volunteer-list.php:390
+#: includes/admin/volunteer-list.php:419
+#: includes/admin/volunteer-list.php:487
 msgid "Insufficient permissions."
 msgstr ""
 
@@ -441,7 +443,7 @@ msgstr ""
 #: includes/admin/dashboard.php:771
 #: includes/admin/settings.php:503
 #: includes/admin/volunteer-list.php:173
-#: includes/admin/volunteer-list.php:304
+#: includes/admin/volunteer-list.php:306
 msgid "Name"
 msgstr ""
 
@@ -547,7 +549,7 @@ msgstr ""
 #: includes/admin/settings.php:513
 #: includes/admin/volunteer-list.php:174
 #: includes/admin/volunteer-list.php:280
-#: includes/admin/volunteer-list.php:305
+#: includes/admin/volunteer-list.php:307
 #: includes/profile.php:62
 #: includes/registration.php:245
 msgid "E-Mail"
@@ -1571,51 +1573,63 @@ msgstr ""
 msgid "Reason"
 msgstr ""
 
-#: includes/admin/volunteer-list.php:300
+#: includes/admin/volunteer-list.php:301
 msgid "Auto-deleted unverified accounts"
 msgstr ""
 
-#: includes/admin/volunteer-list.php:329
-msgid "volunteers"
-msgstr ""
-
-#: includes/admin/volunteer-list.php:331
-msgid "Role granted. Reloading…"
-msgstr ""
-
-#: includes/admin/volunteer-list.php:332
-#: includes/admin/volunteer-list.php:396
-msgid "Role removed."
+#: includes/admin/volunteer-list.php:302
+msgid "Clear log"
 msgstr ""
 
 #: includes/admin/volunteer-list.php:333
-#: includes/admin/volunteer-list.php:464
-msgid "Volunteer created. Reloading…"
-msgstr ""
-
-#: includes/admin/volunteer-list.php:334
-msgid "Remove the volunteer role from {name}? They still have {shifts} upcoming shift(s)."
+msgid "volunteers"
 msgstr ""
 
 #: includes/admin/volunteer-list.php:335
+msgid "Role granted. Reloading…"
+msgstr ""
+
+#: includes/admin/volunteer-list.php:336
+#: includes/admin/volunteer-list.php:401
+msgid "Role removed."
+msgstr ""
+
+#: includes/admin/volunteer-list.php:337
+#: includes/admin/volunteer-list.php:469
+msgid "Volunteer created. Reloading…"
+msgstr ""
+
+#: includes/admin/volunteer-list.php:338
+msgid "Remove the volunteer role from {name}? They still have {shifts} upcoming shift(s)."
+msgstr ""
+
+#: includes/admin/volunteer-list.php:339
 msgid "Remove the volunteer role from {name}?"
 msgstr ""
 
-#: includes/admin/volunteer-list.php:362
-#: includes/admin/volunteer-list.php:392
-msgid "User not found."
+#: includes/admin/volunteer-list.php:340
+msgid "Clear the auto-deleted unverified accounts log? This cannot be undone."
 msgstr ""
 
 #: includes/admin/volunteer-list.php:367
+#: includes/admin/volunteer-list.php:397
+msgid "User not found."
+msgstr ""
+
+#: includes/admin/volunteer-list.php:372
 msgid "Role granted."
 msgstr ""
 
-#: includes/admin/volunteer-list.php:423
+#: includes/admin/volunteer-list.php:428
 msgid "First name is required."
 msgstr ""
 
-#: includes/admin/volunteer-list.php:430
+#: includes/admin/volunteer-list.php:435
 msgid "A user with this e-mail already exists."
+msgstr ""
+
+#: includes/admin/volunteer-list.php:491
+msgid "Log cleared."
 msgstr ""
 
 #: includes/cockpit.php:22
@@ -1662,37 +1676,37 @@ msgstr ""
 msgid "Volunteer"
 msgstr ""
 
-#: includes/helpers.php:171
+#: includes/helpers.php:173
 msgid "This volunteer is already assigned to this shift."
 msgstr ""
 
-#: includes/helpers.php:206
+#: includes/helpers.php:208
 msgid "year"
 msgstr ""
 
-#: includes/helpers.php:207
+#: includes/helpers.php:209
 msgid "month"
 msgstr ""
 
-#: includes/helpers.php:208
+#: includes/helpers.php:210
 msgid "week"
 msgstr ""
 
-#: includes/helpers.php:209
+#: includes/helpers.php:211
 msgid "day"
 msgstr ""
 
 #. translators: %1$d = max number, %2$s = period (year/month/week/day)
-#: includes/helpers.php:217
+#: includes/helpers.php:219
 #, php-format
 msgid "You may only take %1$d shifts per %2$s."
 msgstr ""
 
-#: includes/helpers.php:230
+#: includes/helpers.php:232
 msgid "This shift overlaps with one you have already taken."
 msgstr ""
 
-#: includes/helpers.php:266
+#: includes/helpers.php:268
 msgid "Login link has expired or is invalid."
 msgstr ""
 

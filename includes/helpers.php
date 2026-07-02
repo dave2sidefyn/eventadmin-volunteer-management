@@ -137,20 +137,22 @@ function eventadmin_register_custom_role(): void
     if (null === $role) {
         $existing = wp_roles()->get_role('eventadmin_volunteer');
         if ($existing) {
-            $dirty = false;
             if ($existing->name !== $display_name) {
+                $existing->name                                   = $display_name;
                 wp_roles()->roles['eventadmin_volunteer']['name'] = $display_name;
-                $dirty = true;
+                wp_roles()->role_names['eventadmin_volunteer']    = $display_name;
+                update_option(wp_roles()->role_key, wp_roles()->roles);
             }
-            // Remove any explicit false caps that would override capabilities from other roles.
+            // Remove any explicit false caps (left over from older plugin versions) that would
+            // silently override capabilities granted by a user's other roles, e.g. an
+            // Administrator who is also a Volunteer losing access to wp-admin menus.
+            // WP_Role::remove_cap() updates both the live role object (so it takes effect
+            // immediately) and the persisted option, using the site's actual role option key
+            // instead of a hardcoded name — required for custom table prefixes and multisite.
             foreach (['edit_posts', 'delete_posts'] as $cap) {
-                if (isset(wp_roles()->roles['eventadmin_volunteer']['capabilities'][$cap])) {
-                    unset(wp_roles()->roles['eventadmin_volunteer']['capabilities'][$cap]);
-                    $dirty = true;
+                if (isset($existing->capabilities[$cap])) {
+                    $existing->remove_cap($cap);
                 }
-            }
-            if ($dirty) {
-                update_option('wp_user_roles', wp_roles()->roles);
             }
         }
     }
