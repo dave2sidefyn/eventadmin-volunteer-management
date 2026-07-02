@@ -7,8 +7,8 @@
  * Author URI:        https://profiles.wordpress.org/davesidefyn/
  * Requires at least: 5.8
  * Requires PHP:      8.0
- * License:           GPLv2 or later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * License:           GPLv3 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain:       eventadmin-volunteer-management
  * Domain Path:        /languages
  * Contributors:      davesidefyn

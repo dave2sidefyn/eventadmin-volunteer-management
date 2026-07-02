@@ -5,8 +5,8 @@ Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 8.0
 Stable tag: 1.7.1
-License: GPLv2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+License: GPLv3 or later
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Manage volunteers for events. Shift planning, self-registration, limits, CSV export, statistics, bulk announcements, and dashboard.
 
@@ -223,4 +223,4 @@ You can set a minimum number of volunteers per shift. The admin dashboard will h
 
 == License ==
 
-This plugin is free software under the GPLv2 or later.
+This plugin is free software under the GPLv3 or later.
