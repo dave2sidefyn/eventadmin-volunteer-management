@@ -30,11 +30,19 @@ function eventadmin_normalize_email(string $email): string
 
 /**
  * Returns true when a CAPTCHA provider is selected and a site key is configured.
+ * Cloudflare Turnstile is configured via the Simple Cloudflare Turnstile plugin instead,
+ * so it only needs that plugin to be active.
  */
 function eventadmin_captcha_is_enabled(): bool
 {
-    return get_option('eventadmin_captcha_provider', 'none') !== 'none'
-        && !empty(get_option('eventadmin_captcha_site_key', ''));
+    $provider = get_option('eventadmin_captcha_provider', 'none');
+    if ($provider === 'cf_turnstile') {
+        return function_exists('cfturnstile_field_show')
+            && function_exists('cfturnstile_check')
+            && !empty(get_option('cfturnstile_key', ''))
+            && !empty(get_option('cfturnstile_secret', ''));
+    }
+    return $provider !== 'none' && !empty(get_option('eventadmin_captcha_site_key', ''));
 }
 
 function eventadmin_enqueue_captcha_script(): void
@@ -45,7 +53,10 @@ function eventadmin_enqueue_captcha_script(): void
     $provider = get_option('eventadmin_captcha_provider', 'none');
     $site_key = get_option('eventadmin_captcha_site_key', '');
 
-    if ($provider === 'recaptcha_v2') {
+    if ($provider === 'cf_turnstile') {
+        // The Simple Cloudflare Turnstile plugin enqueues its own script when the widget renders.
+        return;
+    } elseif ($provider === 'recaptcha_v2') {
         wp_enqueue_script('eventadmin-captcha', 'https://www.google.com/recaptcha/api.js', [], null, true);
     } elseif ($provider === 'hcaptcha') {
         wp_enqueue_script('eventadmin-captcha', 'https://js.hcaptcha.com/1/api.js', [], null, true);
@@ -109,7 +120,9 @@ function eventadmin_render_captcha_widget(): void
     $provider = get_option('eventadmin_captcha_provider', 'none');
     $site_key = get_option('eventadmin_captcha_site_key', '');
 
-    if ($provider === 'recaptcha_v3') {
+    if ($provider === 'cf_turnstile') {
+        cfturnstile_field_show('', '', 'eventadmin_register', '-eventadmin-register');
+    } elseif ($provider === 'recaptcha_v3') {
         // v3 is invisible — JS populates this hidden field before submit
         echo '<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response-v3">';
     } else {
@@ -128,6 +141,11 @@ function eventadmin_verify_captcha_response(): bool
     }
     $provider = get_option('eventadmin_captcha_provider', 'none');
     $secret   = get_option('eventadmin_captcha_secret_key', '');
+
+    if ($provider === 'cf_turnstile') {
+        $result = cfturnstile_check();
+        return !empty($result['success']);
+    }
 
     if ($provider === 'recaptcha_v3') {
         $token = trim(wp_unslash($_POST['g-recaptcha-response'] ?? ''));
@@ -294,7 +312,11 @@ function eventadmin_handle_registration(): void
     if (!eventadmin_verify_captcha_response()) {
         $attempted_email = isset($_POST['eventadmin_email']) ? sanitize_email(wp_unslash($_POST['eventadmin_email'])) : '';
         $captcha_provider = get_option('eventadmin_captcha_provider', 'none');
-        $token_field      = $captcha_provider === 'hcaptcha' ? 'h-captcha-response' : 'g-recaptcha-response';
+        $token_field      = match ($captcha_provider) {
+            'hcaptcha'     => 'h-captcha-response',
+            'cf_turnstile' => 'cf-turnstile-response',
+            default        => 'g-recaptcha-response',
+        };
         $captcha_token    = sanitize_text_field(wp_unslash($_POST[$token_field] ?? ''));
         $reason           = empty($captcha_token) ? 'captcha_token_missing' : 'captcha_score_failed';
         eventadmin_log_blocked_registration($attempted_email, $reason);

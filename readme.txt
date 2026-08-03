@@ -4,7 +4,7 @@ Tags: volunteer, shift, planning, event
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 1.7.1
+Stable tag: 1.8.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -63,6 +63,9 @@ You can set a minimum number of volunteers per shift. The admin dashboard will h
 3. Statistics & charts in the backend
 
 == Changelog ==
+
+= Version 1.8.0 =
+* New: Cloudflare Turnstile added as a CAPTCHA provider option (Settings → General → Security) — reuses the site key and secret key already configured in the Simple Cloudflare Turnstile plugin, no separate keys needed
 
 = Version 1.7.1 =
 * New: "Clear log" button on the Volunteers page to clear the auto-deleted unverified accounts log

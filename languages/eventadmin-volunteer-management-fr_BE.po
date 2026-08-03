@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-07-02T09:54:25+00:00\n"
+"POT-Creation-Date: 2026-08-03T19:21:47+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: fr_BE\n"
 "MIME-Version: 1.0\n"
@@ -66,15 +66,13 @@ msgstr "EventAdmin %s est disponible !"
 
 #: eventadmin-volunteer-management.php:281
 msgid ""
-"New in this release: fixed a bug where Administrators who also held the "
-"Volunteer role could lose access to wp-admin menu items on sites using a "
-"custom database table prefix, plus completed French and Dutch translations."
+"New in this release: Cloudflare Turnstile is now available as a CAPTCHA "
+"provider for the volunteer registration form, via the Simple Cloudflare "
+"Turnstile plugin."
 msgstr ""
-"Nouveau dans cette version : correction d'un bug empêchant les "
-"administrateurs ayant également le rôle Bénévole d'accéder à certains "
-"éléments du menu wp-admin sur les sites utilisant un préfixe de table de "
-"base de données personnalisé ; les traductions françaises et néerlandaises "
-"ont également été complétées."
+"Nouveau dans cette version : Cloudflare Turnstile est désormais disponible "
+"comme fournisseur CAPTCHA pour le formulaire d'inscription des bénévoles, "
+"via le plugin Simple Cloudflare Turnstile."
 
 #: eventadmin-volunteer-management.php:287
 msgid "Dismiss"
@@ -160,7 +158,7 @@ msgstr "Aperçu (données exemple)"
 msgid "From:"
 msgstr "De :"
 
-#: includes/admin/bulk-email.php:150 includes/admin/settings.php:632
+#: includes/admin/bulk-email.php:150 includes/admin/settings.php:644
 msgid "Subject:"
 msgstr "Objet :"
 
@@ -439,7 +437,7 @@ msgstr "Trier par :"
 
 #: includes/admin/dashboard.php:329 includes/admin/dashboard.php:475
 #: includes/admin/dashboard.php:680 includes/admin/dashboard.php:771
-#: includes/admin/settings.php:503 includes/admin/volunteer-list.php:173
+#: includes/admin/settings.php:515 includes/admin/volunteer-list.php:173
 #: includes/admin/volunteer-list.php:306
 msgid "Name"
 msgstr "Nom"
@@ -501,12 +499,12 @@ msgid "or add a new volunteer below"
 msgstr "ou ajoutez un nouveau bénévole ci-dessous"
 
 #: includes/admin/dashboard.php:463 includes/admin/volunteer-list.php:130
-#: includes/profile.php:50 includes/registration.php:236
+#: includes/profile.php:50 includes/registration.php:254
 msgid "First name"
 msgstr "Prénom"
 
 #: includes/admin/dashboard.php:464 includes/admin/volunteer-list.php:131
-#: includes/profile.php:55 includes/registration.php:239
+#: includes/profile.php:55 includes/registration.php:257
 msgid "Last name"
 msgstr "Nom de famille"
 
@@ -529,10 +527,10 @@ msgid "Add"
 msgstr "Ajouter"
 
 #: includes/admin/dashboard.php:475 includes/admin/dashboard.php:681
-#: includes/admin/dashboard.php:772 includes/admin/settings.php:513
+#: includes/admin/dashboard.php:772 includes/admin/settings.php:525
 #: includes/admin/volunteer-list.php:174 includes/admin/volunteer-list.php:280
 #: includes/admin/volunteer-list.php:307 includes/profile.php:62
-#: includes/registration.php:245
+#: includes/registration.php:263
 msgid "E-Mail"
 msgstr "E-Mail"
 
@@ -1414,7 +1412,7 @@ msgid "Suppress WordPress password email"
 msgstr "Supprimer l'e-mail de mot de passe WordPress"
 
 #: includes/admin/settings.php:257 includes/admin/settings.php:299
-#: includes/admin/settings.php:410
+#: includes/admin/settings.php:422
 msgid "Yes"
 msgstr "Oui"
 
@@ -1470,7 +1468,7 @@ msgstr "Fournisseur CAPTCHA"
 msgid "None"
 msgstr "Aucun"
 
-#: includes/admin/settings.php:359
+#: includes/admin/settings.php:360
 msgid ""
 "Adds a CAPTCHA challenge to the volunteer registration form to block "
 "automated spam registrations."
@@ -1478,23 +1476,54 @@ msgstr ""
 "Ajoute un défi CAPTCHA au formulaire d'inscription des bénévoles pour "
 "bloquer les inscriptions automatiques indésirables."
 
-#: includes/admin/settings.php:367
+#. translators: %s = link to the Simple Cloudflare Turnstile plugin on
+#. WordPress.org
+#: includes/admin/settings.php:365
+#, php-format
+msgid "Requires the free %s plugin to be installed and activated."
+msgstr "Nécessite que le plugin gratuit %s soit installé et activé."
+
+#: includes/admin/settings.php:369
+msgid ""
+"The Simple Cloudflare Turnstile plugin is active but has no site key/secret "
+"key configured yet. Until it is configured, registration is blocked for "
+"everyone."
+msgstr ""
+"Le plugin Simple Cloudflare Turnstile est actif, mais aucune clé de site/clé"
+" secrète n'est encore configurée. Tant qu'il n'est pas configuré, "
+"l'inscription est bloquée pour tout le monde."
+
+#: includes/admin/settings.php:378
 msgid "CAPTCHA site key"
 msgstr "Clé de site CAPTCHA"
 
-#: includes/admin/settings.php:370
-msgid "Get your keys from the provider's admin console."
-msgstr "Obtenez vos clés depuis la console d'administration du fournisseur."
+#: includes/admin/settings.php:381
+msgid ""
+"Get your keys from the provider's admin console. Not used for Cloudflare "
+"Turnstile — configure its site key in the Simple Cloudflare Turnstile plugin"
+" settings instead."
+msgstr ""
+"Obtenez vos clés depuis la console d'administration du fournisseur. Non "
+"utilisé pour Cloudflare Turnstile — configurez plutôt sa clé de site dans "
+"les paramètres du plugin Simple Cloudflare Turnstile."
 
-#: includes/admin/settings.php:378
+#: includes/admin/settings.php:389
 msgid "CAPTCHA secret key"
 msgstr "Clé secrète CAPTCHA"
 
-#: includes/admin/settings.php:388
+#: includes/admin/settings.php:392
+msgid ""
+"Not used for Cloudflare Turnstile — configure its secret key in the Simple "
+"Cloudflare Turnstile plugin settings instead."
+msgstr ""
+"Non utilisé pour Cloudflare Turnstile — configurez plutôt sa clé secrète "
+"dans les paramètres du plugin Simple Cloudflare Turnstile."
+
+#: includes/admin/settings.php:400
 msgid "reCAPTCHA v3 score threshold"
 msgstr "Seuil de score reCAPTCHA v3"
 
-#: includes/admin/settings.php:392
+#: includes/admin/settings.php:404
 msgid ""
 "Scores below this value are treated as bots (0.0 = all pass, 1.0 = all "
 "blocked). Default: 0.5. Only applies to reCAPTCHA v3."
@@ -1503,15 +1532,15 @@ msgstr ""
 " passent, 1.0 = tous bloqués). Par défaut : 0.5. S'applique uniquement à "
 "reCAPTCHA v3."
 
-#: includes/admin/settings.php:400
+#: includes/admin/settings.php:412
 msgid "Volunteer Shift Selector"
 msgstr "Sélecteur de créneaux bénévoles"
 
-#: includes/admin/settings.php:407
+#: includes/admin/settings.php:419
 msgid "Show full shifts to volunteers"
 msgstr "Afficher les créneaux complets aux bénévoles"
 
-#: includes/admin/settings.php:411
+#: includes/admin/settings.php:423
 msgid ""
 "If enabled, a \"Full shifts\" section is shown on the volunteer shift "
 "selector page."
@@ -1519,57 +1548,57 @@ msgstr ""
 "Si activé, une section « Créneaux complets » est affichée sur la page de "
 "sélection des créneaux."
 
-#: includes/admin/settings.php:419
+#: includes/admin/settings.php:431
 msgid "Volunteer shift filters"
 msgstr "Filtres de créneaux bénévoles"
 
-#: includes/admin/settings.php:423
+#: includes/admin/settings.php:435
 msgid "Text search"
 msgstr "Recherche textuelle"
 
-#: includes/admin/settings.php:424
+#: includes/admin/settings.php:436
 msgid "Date filter"
 msgstr "Filtre par date"
 
-#: includes/admin/settings.php:425
+#: includes/admin/settings.php:437
 msgid "Category filter"
 msgstr "Filtre par catégorie"
 
-#: includes/admin/settings.php:433
+#: includes/admin/settings.php:445
 msgid "Choose which filter controls appear on the volunteer shift selector."
 msgstr ""
 "Choisissez les filtres affichés sur le sélecteur de créneaux pour les "
 "bénévoles."
 
-#: includes/admin/settings.php:441
+#: includes/admin/settings.php:453
 msgid "Formatting"
 msgstr "Mise en forme"
 
-#: includes/admin/settings.php:448
+#: includes/admin/settings.php:460
 msgid "Date format (shift start)"
 msgstr "Format de date (début du créneau)"
 
-#: includes/admin/settings.php:454 includes/admin/settings.php:472
+#: includes/admin/settings.php:466 includes/admin/settings.php:484
 msgid "Example:"
 msgstr "Exemple :"
 
-#: includes/admin/settings.php:455 includes/admin/settings.php:473
+#: includes/admin/settings.php:467 includes/admin/settings.php:485
 msgid "Default:"
 msgstr "Par défaut :"
 
-#: includes/admin/settings.php:456 includes/admin/settings.php:474
+#: includes/admin/settings.php:468 includes/admin/settings.php:486
 msgid "Common tokens"
 msgstr "Codes courants"
 
-#: includes/admin/settings.php:466
+#: includes/admin/settings.php:478
 msgid "Time format (shift end)"
 msgstr "Format d'heure (fin du créneau)"
 
-#: includes/admin/settings.php:484
+#: includes/admin/settings.php:496
 msgid "Custom CSS"
 msgstr "CSS personnalisé"
 
-#: includes/admin/settings.php:488
+#: includes/admin/settings.php:500
 msgid ""
 "Additional CSS injected on the frontend. Use this for theme-specific "
 "adjustments without modifying your theme files."
@@ -1577,63 +1606,63 @@ msgstr ""
 "CSS supplémentaire injecté sur le frontend. Utilisez-le pour des ajustements"
 " spécifiques au thème sans modifier vos fichiers de thème."
 
-#: includes/admin/settings.php:496
+#: includes/admin/settings.php:508
 msgid "Sender"
 msgstr "Expéditeur"
 
-#: includes/admin/settings.php:523
+#: includes/admin/settings.php:535
 msgid "Volunteer Notifications"
 msgstr "Notifications aux bénévoles"
 
-#: includes/admin/settings.php:530
+#: includes/admin/settings.php:542
 msgid "Email Subject (Sign up)"
 msgstr "Objet de l'e-mail (Inscription)"
 
-#: includes/admin/settings.php:541
+#: includes/admin/settings.php:553
 msgid "Email Text (Sign up)"
 msgstr "Texte de l'e-mail (Inscription)"
 
-#: includes/admin/settings.php:552
+#: includes/admin/settings.php:564
 msgid "Email Subject (Sign out)"
 msgstr "Objet de l'e-mail (Désinscription)"
 
-#: includes/admin/settings.php:563
+#: includes/admin/settings.php:575
 msgid "Email Text (Sign out)"
 msgstr "Texte de l'e-mail (Désinscription)"
 
-#: includes/admin/settings.php:574
+#: includes/admin/settings.php:586
 msgid "Shift Reminders"
 msgstr "Rappels de créneau"
 
-#: includes/admin/settings.php:581
+#: includes/admin/settings.php:593
 msgid "Send reminder X days before start"
 msgstr "Envoyer un rappel X jours avant le début"
 
-#: includes/admin/settings.php:585
+#: includes/admin/settings.php:597
 msgid "Comma-separated whole days, e.g. 7, 1"
 msgstr "Jours entiers séparés par des virgules, p. ex. 7, 1"
 
-#: includes/admin/settings.php:593
+#: includes/admin/settings.php:605
 msgid "Email Subject (Reminder)"
 msgstr "Objet de l'e-mail (Rappel)"
 
-#: includes/admin/settings.php:604
+#: includes/admin/settings.php:616
 msgid "Email Text (Reminder)"
 msgstr "Texte de l'e-mail (Rappel)"
 
-#: includes/admin/settings.php:622
+#: includes/admin/settings.php:634
 msgid "Sign up"
 msgstr "S'inscrire"
 
-#: includes/admin/settings.php:623
+#: includes/admin/settings.php:635
 msgid "Sign out"
 msgstr "Se désinscrire"
 
-#: includes/admin/settings.php:624
+#: includes/admin/settings.php:636
 msgid "Reminder"
 msgstr "Rappel"
 
-#: includes/admin/settings.php:627
+#: includes/admin/settings.php:639
 msgid "Live preview of emails (with example values):"
 msgstr "Aperçu en direct des e-mails (avec des valeurs d'exemple) :"
 
@@ -2057,7 +2086,7 @@ msgstr ""
 "téléphone afin que nous puissions vous contacter en cas de changements de "
 "dernière minute."
 
-#: includes/profile.php:59 includes/registration.php:242
+#: includes/profile.php:59 includes/registration.php:260
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
@@ -2073,7 +2102,7 @@ msgstr "Enregistrer"
 msgid "This email address is already used by another user."
 msgstr "Cette adresse e-mail est déjà utilisée par un autre utilisateur."
 
-#: includes/registration.php:221
+#: includes/registration.php:239
 msgid ""
 "Thank you for your registration. You will receive an email with your login "
 "link shortly."
@@ -2081,45 +2110,45 @@ msgstr ""
 "Merci pour votre inscription. Vous recevrez sous peu un e-mail avec votre "
 "lien de connexion."
 
-#: includes/registration.php:225
+#: includes/registration.php:243
 msgid "This email is already registered. We have resent your login link."
 msgstr ""
 "Cette adresse e-mail est déjà enregistrée. Nous vous avons renvoyé votre "
 "lien de connexion."
 
-#: includes/registration.php:285
+#: includes/registration.php:303
 msgid "Invalid form submission."
 msgstr "Soumission de formulaire invalide."
 
-#: includes/registration.php:301
+#: includes/registration.php:323
 msgid "CAPTCHA verification failed. Please try again."
 msgstr "La vérification CAPTCHA a échoué. Veuillez réessayer."
 
-#: includes/registration.php:312
+#: includes/registration.php:334
 msgid "Please enter a valid email address."
 msgstr "Veuillez saisir une adresse e-mail valide."
 
-#: includes/registration.php:317
+#: includes/registration.php:339
 msgid "Please fill in all required fields."
 msgstr "Veuillez remplir tous les champs obligatoires."
 
-#: includes/registration.php:330 includes/registration.php:386
+#: includes/registration.php:352 includes/registration.php:408
 msgid "Your login"
 msgstr "Votre connexion"
 
 #. translators: %1$s = first name, %2$s = login url
-#: includes/registration.php:333
+#: includes/registration.php:355
 #, php-format
 msgid "Hello %1$s,<br><br>Your login link:<br>%2$s"
 msgstr "Bonjour %1$s,<br><br>Votre lien de connexion :<br>%2$s"
 
-#: includes/registration.php:371
+#: includes/registration.php:393
 msgid "Registration error. Please try again later."
 msgstr "Erreur d'inscription. Veuillez réessayer ultérieurement."
 
 #. translators: %1$s = first name, %2$s = site name, %3$s = site url, %4$s =
 #. login url
-#: includes/registration.php:389
+#: includes/registration.php:411
 #, php-format
 msgid ""
 "Hello %1$s,<br><br>Thank you for registering at %2$s (%3$s).<br><br>Here is "
@@ -2200,6 +2229,20 @@ msgstr "Vous avez été désinscrit avec succès."
 #: includes/shiftselector.php:417
 msgid "You are not signed up for this shift."
 msgstr "Vous n'êtes pas inscrit à ce créneau."
+
+#~ msgid ""
+#~ "New in this release: fixed a bug where Administrators who also held the "
+#~ "Volunteer role could lose access to wp-admin menu items on sites using a "
+#~ "custom database table prefix, plus completed French and Dutch translations."
+#~ msgstr ""
+#~ "Nouveau dans cette version : correction d'un bug empêchant les "
+#~ "administrateurs ayant également le rôle Bénévole d'accéder à certains "
+#~ "éléments du menu wp-admin sur les sites utilisant un préfixe de table de "
+#~ "base de données personnalisé ; les traductions françaises et néerlandaises "
+#~ "ont également été complétées."
+
+#~ msgid "Get your keys from the provider's admin console."
+#~ msgstr "Obtenez vos clés depuis la console d'administration du fournisseur."
 
 #~ msgid ""
 #~ "New in this release: assign existing volunteers directly, add offline "

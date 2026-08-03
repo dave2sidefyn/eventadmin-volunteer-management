@@ -314,7 +314,7 @@ function eventadmin_plugin_register_settings(): void
 
     register_setting('eventadmin_plugin_settings_general', 'eventadmin_captcha_provider', [
         'sanitize_callback' => static function ($val) {
-            return in_array($val, ['none', 'recaptcha_v2', 'recaptcha_v3', 'hcaptcha'], true) ? $val : 'none';
+            return in_array($val, ['none', 'recaptcha_v2', 'recaptcha_v3', 'hcaptcha', 'cf_turnstile'], true) ? $val : 'none';
         },
     ]);
 
@@ -347,6 +347,7 @@ function eventadmin_plugin_register_settings(): void
             $val     = get_option('eventadmin_captcha_provider', 'none');
             $options = [
                 'none'         => esc_html__('None', 'eventadmin-volunteer-management'),
+                'cf_turnstile' => 'Cloudflare Turnstile',
                 'recaptcha_v2' => 'Google reCAPTCHA v2',
                 'recaptcha_v3' => 'Google reCAPTCHA v3',
                 'hcaptcha'     => 'hCaptcha',
@@ -357,6 +358,16 @@ function eventadmin_plugin_register_settings(): void
             }
             echo '</select>';
             echo '<p class="description">' . esc_html__('Adds a CAPTCHA challenge to the volunteer registration form to block automated spam registrations.', 'eventadmin-volunteer-management') . '</p>';
+
+            if ($val === 'cf_turnstile' && !function_exists('cfturnstile_field_show')) {
+                echo '<p class="description" style="color:#b32d2e;">' . sprintf(
+                /* translators: %s = link to the Simple Cloudflare Turnstile plugin on WordPress.org */
+                    esc_html__('Requires the free %s plugin to be installed and activated.', 'eventadmin-volunteer-management'),
+                    '<a href="https://wordpress.org/plugins/simple-cloudflare-turnstile/" target="_blank" rel="noopener noreferrer">Simple CAPTCHA with Cloudflare Turnstile</a>'
+                ) . '</p>';
+            } elseif ($val === 'cf_turnstile' && (empty(get_option('cfturnstile_key', '')) || empty(get_option('cfturnstile_secret', '')))) {
+                echo '<p class="description" style="color:#b32d2e;">' . esc_html__('The Simple Cloudflare Turnstile plugin is active but has no site key/secret key configured yet. Until it is configured, registration is blocked for everyone.', 'eventadmin-volunteer-management') . '</p>';
+            }
         },
         'eventadmin-settings-general',
         'eventadmin_general_security'
@@ -367,7 +378,7 @@ function eventadmin_plugin_register_settings(): void
         esc_html__('CAPTCHA site key', 'eventadmin-volunteer-management'),
         static function () {
             echo '<input type="text" name="eventadmin_captcha_site_key" value="' . esc_attr(get_option('eventadmin_captcha_site_key', '')) . '" class="regular-text">';
-            echo '<p class="description">' . esc_html__('Get your keys from the provider\'s admin console.', 'eventadmin-volunteer-management') . '</p>';
+            echo '<p class="description">' . esc_html__('Get your keys from the provider\'s admin console. Not used for Cloudflare Turnstile — configure its site key in the Simple Cloudflare Turnstile plugin settings instead.', 'eventadmin-volunteer-management') . '</p>';
         },
         'eventadmin-settings-general',
         'eventadmin_general_security'
@@ -378,6 +389,7 @@ function eventadmin_plugin_register_settings(): void
         esc_html__('CAPTCHA secret key', 'eventadmin-volunteer-management'),
         static function () {
             echo '<input type="text" name="eventadmin_captcha_secret_key" value="' . esc_attr(get_option('eventadmin_captcha_secret_key', '')) . '" class="regular-text">';
+            echo '<p class="description">' . esc_html__('Not used for Cloudflare Turnstile — configure its secret key in the Simple Cloudflare Turnstile plugin settings instead.', 'eventadmin-volunteer-management') . '</p>';
         },
         'eventadmin-settings-general',
         'eventadmin_general_security'

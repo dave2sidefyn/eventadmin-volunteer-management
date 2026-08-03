@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-07-02T09:54:25+00:00\n"
+"POT-Creation-Date: 2026-08-03T19:21:47+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: nl_NL_formal\n"
 "MIME-Version: 1.0\n"
@@ -66,14 +66,13 @@ msgstr "EventAdmin %s is er!"
 
 #: eventadmin-volunteer-management.php:281
 msgid ""
-"New in this release: fixed a bug where Administrators who also held the "
-"Volunteer role could lose access to wp-admin menu items on sites using a "
-"custom database table prefix, plus completed French and Dutch translations."
+"New in this release: Cloudflare Turnstile is now available as a CAPTCHA "
+"provider for the volunteer registration form, via the Simple Cloudflare "
+"Turnstile plugin."
 msgstr ""
-"Nieuw in deze versie: een bug opgelost waarbij beheerders die ook de rol "
-"Vrijwilliger hadden toegang tot wp-admin-menu-items konden verliezen op "
-"sites met een aangepast databasetabelvoorvoegsel; daarnaast zijn de Franse "
-"en Nederlandse vertalingen aangevuld."
+"Nieuw in deze versie: Cloudflare Turnstile is nu beschikbaar als CAPTCHA-"
+"aanbieder voor het aanmeldformulier voor vrijwilligers, via de plugin Simple"
+" Cloudflare Turnstile."
 
 #: eventadmin-volunteer-management.php:287
 msgid "Dismiss"
@@ -158,7 +157,7 @@ msgstr "Voorbeeld (voorbeelddata)"
 msgid "From:"
 msgstr "Van:"
 
-#: includes/admin/bulk-email.php:150 includes/admin/settings.php:632
+#: includes/admin/bulk-email.php:150 includes/admin/settings.php:644
 msgid "Subject:"
 msgstr "Onderwerp:"
 
@@ -437,7 +436,7 @@ msgstr "Sorteren op:"
 
 #: includes/admin/dashboard.php:329 includes/admin/dashboard.php:475
 #: includes/admin/dashboard.php:680 includes/admin/dashboard.php:771
-#: includes/admin/settings.php:503 includes/admin/volunteer-list.php:173
+#: includes/admin/settings.php:515 includes/admin/volunteer-list.php:173
 #: includes/admin/volunteer-list.php:306
 msgid "Name"
 msgstr "Naam"
@@ -499,12 +498,12 @@ msgid "or add a new volunteer below"
 msgstr "of voeg hieronder een nieuwe vrijwilliger toe"
 
 #: includes/admin/dashboard.php:463 includes/admin/volunteer-list.php:130
-#: includes/profile.php:50 includes/registration.php:236
+#: includes/profile.php:50 includes/registration.php:254
 msgid "First name"
 msgstr "Voornaam"
 
 #: includes/admin/dashboard.php:464 includes/admin/volunteer-list.php:131
-#: includes/profile.php:55 includes/registration.php:239
+#: includes/profile.php:55 includes/registration.php:257
 msgid "Last name"
 msgstr "Achternaam"
 
@@ -527,10 +526,10 @@ msgid "Add"
 msgstr "Toevoegen"
 
 #: includes/admin/dashboard.php:475 includes/admin/dashboard.php:681
-#: includes/admin/dashboard.php:772 includes/admin/settings.php:513
+#: includes/admin/dashboard.php:772 includes/admin/settings.php:525
 #: includes/admin/volunteer-list.php:174 includes/admin/volunteer-list.php:280
 #: includes/admin/volunteer-list.php:307 includes/profile.php:62
-#: includes/registration.php:245
+#: includes/registration.php:263
 msgid "E-Mail"
 msgstr "E-mailadres"
 
@@ -1402,7 +1401,7 @@ msgid "Suppress WordPress password email"
 msgstr "WordPress wachtwoord-e-mail onderdrukken"
 
 #: includes/admin/settings.php:257 includes/admin/settings.php:299
-#: includes/admin/settings.php:410
+#: includes/admin/settings.php:422
 msgid "Yes"
 msgstr "Ja"
 
@@ -1458,7 +1457,7 @@ msgstr "CAPTCHA-aanbieder"
 msgid "None"
 msgstr "Geen"
 
-#: includes/admin/settings.php:359
+#: includes/admin/settings.php:360
 msgid ""
 "Adds a CAPTCHA challenge to the volunteer registration form to block "
 "automated spam registrations."
@@ -1466,23 +1465,54 @@ msgstr ""
 "Voegt een CAPTCHA-uitdaging toe aan het registratieformulier om "
 "geautomatiseerde spamregistraties te blokkeren."
 
-#: includes/admin/settings.php:367
+#. translators: %s = link to the Simple Cloudflare Turnstile plugin on
+#. WordPress.org
+#: includes/admin/settings.php:365
+#, php-format
+msgid "Requires the free %s plugin to be installed and activated."
+msgstr "Vereist dat de gratis plugin %s is geïnstalleerd en geactiveerd."
+
+#: includes/admin/settings.php:369
+msgid ""
+"The Simple Cloudflare Turnstile plugin is active but has no site key/secret "
+"key configured yet. Until it is configured, registration is blocked for "
+"everyone."
+msgstr ""
+"De plugin Simple Cloudflare Turnstile is actief, maar heeft nog geen "
+"sitesleutel/geheime sleutel geconfigureerd. Zolang dit niet is ingesteld, is"
+" registratie voor iedereen geblokkeerd."
+
+#: includes/admin/settings.php:378
 msgid "CAPTCHA site key"
 msgstr "CAPTCHA-sitesleutel"
 
-#: includes/admin/settings.php:370
-msgid "Get your keys from the provider's admin console."
-msgstr "Haal uw sleutels op uit de beheerconsole van de aanbieder."
+#: includes/admin/settings.php:381
+msgid ""
+"Get your keys from the provider's admin console. Not used for Cloudflare "
+"Turnstile — configure its site key in the Simple Cloudflare Turnstile plugin"
+" settings instead."
+msgstr ""
+"Haal uw sleutels op uit de beheerconsole van de aanbieder. Niet gebruikt "
+"voor Cloudflare Turnstile — configureer de sitesleutel in plaats daarvan in "
+"de instellingen van de Simple Cloudflare Turnstile-plugin."
 
-#: includes/admin/settings.php:378
+#: includes/admin/settings.php:389
 msgid "CAPTCHA secret key"
 msgstr "CAPTCHA-geheime sleutel"
 
-#: includes/admin/settings.php:388
+#: includes/admin/settings.php:392
+msgid ""
+"Not used for Cloudflare Turnstile — configure its secret key in the Simple "
+"Cloudflare Turnstile plugin settings instead."
+msgstr ""
+"Niet gebruikt voor Cloudflare Turnstile — configureer de geheime sleutel in "
+"plaats daarvan in de instellingen van de Simple Cloudflare Turnstile-plugin."
+
+#: includes/admin/settings.php:400
 msgid "reCAPTCHA v3 score threshold"
 msgstr "reCAPTCHA v3 scoredrempel"
 
-#: includes/admin/settings.php:392
+#: includes/admin/settings.php:404
 msgid ""
 "Scores below this value are treated as bots (0.0 = all pass, 1.0 = all "
 "blocked). Default: 0.5. Only applies to reCAPTCHA v3."
@@ -1490,15 +1520,15 @@ msgstr ""
 "Scores onder deze waarde worden als bots beschouwd (0.0 = alles door, 1.0 = "
 "alles geblokkeerd). Standaard: 0.5. Geldt alleen voor reCAPTCHA v3."
 
-#: includes/admin/settings.php:400
+#: includes/admin/settings.php:412
 msgid "Volunteer Shift Selector"
 msgstr "Dienstkiezer voor vrijwilligers"
 
-#: includes/admin/settings.php:407
+#: includes/admin/settings.php:419
 msgid "Show full shifts to volunteers"
 msgstr "Volle diensten tonen aan Volunteers"
 
-#: includes/admin/settings.php:411
+#: includes/admin/settings.php:423
 msgid ""
 "If enabled, a \"Full shifts\" section is shown on the volunteer shift "
 "selector page."
@@ -1506,57 +1536,57 @@ msgstr ""
 "Indien ingeschakeld, wordt op de Volunteer­dienstpagina een sectie \"Volle "
 "diensten\" weergegeven."
 
-#: includes/admin/settings.php:419
+#: includes/admin/settings.php:431
 msgid "Volunteer shift filters"
 msgstr "Dienstfilters voor vrijwilligers"
 
-#: includes/admin/settings.php:423
+#: includes/admin/settings.php:435
 msgid "Text search"
 msgstr "Tekstzoekopdracht"
 
-#: includes/admin/settings.php:424
+#: includes/admin/settings.php:436
 msgid "Date filter"
 msgstr "Datumfilter"
 
-#: includes/admin/settings.php:425
+#: includes/admin/settings.php:437
 msgid "Category filter"
 msgstr "Categoriefilter"
 
-#: includes/admin/settings.php:433
+#: includes/admin/settings.php:445
 msgid "Choose which filter controls appear on the volunteer shift selector."
 msgstr ""
 "Kies welke filteropties worden getoond op de dienstkiezer voor "
 "vrijwilligers."
 
-#: includes/admin/settings.php:441
+#: includes/admin/settings.php:453
 msgid "Formatting"
 msgstr "Opmaak"
 
-#: includes/admin/settings.php:448
+#: includes/admin/settings.php:460
 msgid "Date format (shift start)"
 msgstr "Datumnotatie (begin dienst)"
 
-#: includes/admin/settings.php:454 includes/admin/settings.php:472
+#: includes/admin/settings.php:466 includes/admin/settings.php:484
 msgid "Example:"
 msgstr "Voorbeeld:"
 
-#: includes/admin/settings.php:455 includes/admin/settings.php:473
+#: includes/admin/settings.php:467 includes/admin/settings.php:485
 msgid "Default:"
 msgstr "Standaard:"
 
-#: includes/admin/settings.php:456 includes/admin/settings.php:474
+#: includes/admin/settings.php:468 includes/admin/settings.php:486
 msgid "Common tokens"
 msgstr "Veelgebruikte tokens"
 
-#: includes/admin/settings.php:466
+#: includes/admin/settings.php:478
 msgid "Time format (shift end)"
 msgstr "Tijdnotatie (einde dienst)"
 
-#: includes/admin/settings.php:484
+#: includes/admin/settings.php:496
 msgid "Custom CSS"
 msgstr "Aangepaste CSS"
 
-#: includes/admin/settings.php:488
+#: includes/admin/settings.php:500
 msgid ""
 "Additional CSS injected on the frontend. Use this for theme-specific "
 "adjustments without modifying your theme files."
@@ -1564,63 +1594,63 @@ msgstr ""
 "Extra CSS dat op de frontend wordt ingevoegd. Gebruik dit voor thema-"
 "specifieke aanpassingen zonder uw themabestanden te bewerken."
 
-#: includes/admin/settings.php:496
+#: includes/admin/settings.php:508
 msgid "Sender"
 msgstr "Afzender"
 
-#: includes/admin/settings.php:523
+#: includes/admin/settings.php:535
 msgid "Volunteer Notifications"
 msgstr "Vrijwilligersmeldingen"
 
-#: includes/admin/settings.php:530
+#: includes/admin/settings.php:542
 msgid "Email Subject (Sign up)"
 msgstr "E-mailonderwerp (Aanmelden)"
 
-#: includes/admin/settings.php:541
+#: includes/admin/settings.php:553
 msgid "Email Text (Sign up)"
 msgstr "E-mailtekst (Aanmelden)"
 
-#: includes/admin/settings.php:552
+#: includes/admin/settings.php:564
 msgid "Email Subject (Sign out)"
 msgstr "E-mailonderwerp (Afmelden)"
 
-#: includes/admin/settings.php:563
+#: includes/admin/settings.php:575
 msgid "Email Text (Sign out)"
 msgstr "E-mailtekst (Afmelden)"
 
-#: includes/admin/settings.php:574
+#: includes/admin/settings.php:586
 msgid "Shift Reminders"
 msgstr "Dienstherinneringen"
 
-#: includes/admin/settings.php:581
+#: includes/admin/settings.php:593
 msgid "Send reminder X days before start"
 msgstr "Herinnering verzenden X dagen voor aanvang"
 
-#: includes/admin/settings.php:585
+#: includes/admin/settings.php:597
 msgid "Comma-separated whole days, e.g. 7, 1"
 msgstr "Kommagescheiden hele dagen, bijv. 7, 1"
 
-#: includes/admin/settings.php:593
+#: includes/admin/settings.php:605
 msgid "Email Subject (Reminder)"
 msgstr "E-mailonderwerp (Herinnering)"
 
-#: includes/admin/settings.php:604
+#: includes/admin/settings.php:616
 msgid "Email Text (Reminder)"
 msgstr "E-mailtekst (Herinnering)"
 
-#: includes/admin/settings.php:622
+#: includes/admin/settings.php:634
 msgid "Sign up"
 msgstr "Aanmelden"
 
-#: includes/admin/settings.php:623
+#: includes/admin/settings.php:635
 msgid "Sign out"
 msgstr "Afmelden"
 
-#: includes/admin/settings.php:624
+#: includes/admin/settings.php:636
 msgid "Reminder"
 msgstr "Herinnering"
 
-#: includes/admin/settings.php:627
+#: includes/admin/settings.php:639
 msgid "Live preview of emails (with example values):"
 msgstr "Live voorvertoning van e-mails (met voorbeeldwaarden):"
 
@@ -2043,7 +2073,7 @@ msgstr ""
 "<strong>Profiel onvolledig:</strong> Voer uw telefoonnummer in zodat we u "
 "kunnen bereiken bij last-minutewijzigingen."
 
-#: includes/profile.php:59 includes/registration.php:242
+#: includes/profile.php:59 includes/registration.php:260
 msgid "Phone number"
 msgstr "Telefoonnummer"
 
@@ -2059,7 +2089,7 @@ msgstr "Opslaan"
 msgid "This email address is already used by another user."
 msgstr "Dit e-mailadres is al in gebruik door een andere gebruiker."
 
-#: includes/registration.php:221
+#: includes/registration.php:239
 msgid ""
 "Thank you for your registration. You will receive an email with your login "
 "link shortly."
@@ -2067,45 +2097,45 @@ msgstr ""
 "Bedankt voor uw registratie. U ontvangt binnenkort een e-mail met uw "
 "inloglink."
 
-#: includes/registration.php:225
+#: includes/registration.php:243
 msgid "This email is already registered. We have resent your login link."
 msgstr ""
 "Dit e-mailadres is al geregistreerd. We hebben uw inloglink opnieuw "
 "verzonden."
 
-#: includes/registration.php:285
+#: includes/registration.php:303
 msgid "Invalid form submission."
 msgstr "Ongeldige formulierinzending."
 
-#: includes/registration.php:301
+#: includes/registration.php:323
 msgid "CAPTCHA verification failed. Please try again."
 msgstr "CAPTCHA-verificatie mislukt. Probeer het opnieuw."
 
-#: includes/registration.php:312
+#: includes/registration.php:334
 msgid "Please enter a valid email address."
 msgstr "Voer een geldig e-mailadres in."
 
-#: includes/registration.php:317
+#: includes/registration.php:339
 msgid "Please fill in all required fields."
 msgstr "Vul alle verplichte velden in."
 
-#: includes/registration.php:330 includes/registration.php:386
+#: includes/registration.php:352 includes/registration.php:408
 msgid "Your login"
 msgstr "Uw inloggegevens"
 
 #. translators: %1$s = first name, %2$s = login url
-#: includes/registration.php:333
+#: includes/registration.php:355
 #, php-format
 msgid "Hello %1$s,<br><br>Your login link:<br>%2$s"
 msgstr "Beste %1$s,<br><br>Uw inloglink:<br>%2$s"
 
-#: includes/registration.php:371
+#: includes/registration.php:393
 msgid "Registration error. Please try again later."
 msgstr "Registratiefout. Probeer het later opnieuw."
 
 #. translators: %1$s = first name, %2$s = site name, %3$s = site url, %4$s =
 #. login url
-#: includes/registration.php:389
+#: includes/registration.php:411
 #, php-format
 msgid ""
 "Hello %1$s,<br><br>Thank you for registering at %2$s (%3$s).<br><br>Here is "
@@ -2186,6 +2216,19 @@ msgstr "U bent succesvol afgemeld."
 #: includes/shiftselector.php:417
 msgid "You are not signed up for this shift."
 msgstr "U bent niet aangemeld voor deze dienst."
+
+#~ msgid ""
+#~ "New in this release: fixed a bug where Administrators who also held the "
+#~ "Volunteer role could lose access to wp-admin menu items on sites using a "
+#~ "custom database table prefix, plus completed French and Dutch translations."
+#~ msgstr ""
+#~ "Nieuw in deze versie: een bug opgelost waarbij beheerders die ook de rol "
+#~ "Vrijwilliger hadden toegang tot wp-admin-menu-items konden verliezen op "
+#~ "sites met een aangepast databasetabelvoorvoegsel; daarnaast zijn de Franse "
+#~ "en Nederlandse vertalingen aangevuld."
+
+#~ msgid "Get your keys from the provider's admin console."
+#~ msgstr "Haal uw sleutels op uit de beheerconsole van de aanbieder."
 
 #~ msgid ""
 #~ "New in this release: assign existing volunteers directly, add offline "
