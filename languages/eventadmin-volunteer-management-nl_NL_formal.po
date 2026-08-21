@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-08-21T12:51:14+00:00\n"
+"POT-Creation-Date: 2026-08-21T13:05:40+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: nl_NL_formal\n"
 "MIME-Version: 1.0\n"
@@ -119,7 +119,7 @@ msgstr "Bijlage (optioneel)"
 msgid "Select PDF…"
 msgstr "PDF selecteren…"
 
-#: includes/admin/bulk-email.php:69 includes/admin/dashboard.php:566
+#: includes/admin/bulk-email.php:69 includes/admin/dashboard.php:607
 msgid "Remove"
 msgstr "Verwijderen"
 
@@ -472,7 +472,7 @@ msgstr "Vrije plaatsen"
 msgid "Empty"
 msgstr "Leeg"
 
-#: includes/admin/dashboard.php:254 includes/admin/dashboard.php:489
+#: includes/admin/dashboard.php:254 includes/admin/dashboard.php:530
 msgid "Understaffed"
 msgstr "Onderbezet"
 
@@ -512,9 +512,9 @@ msgstr "Verleden"
 msgid "Sort by:"
 msgstr "Sorteren op:"
 
-#: includes/admin/dashboard.php:332 includes/admin/dashboard.php:551
-#: includes/admin/dashboard.php:588 includes/admin/dashboard.php:824
-#: includes/admin/dashboard.php:915 includes/admin/settings.php:517
+#: includes/admin/dashboard.php:332 includes/admin/dashboard.php:592
+#: includes/admin/dashboard.php:630 includes/admin/dashboard.php:870
+#: includes/admin/dashboard.php:961 includes/admin/settings.php:517
 #: includes/admin/volunteer-list.php:175 includes/admin/volunteer-list.php:333
 msgid "Name"
 msgstr "Naam"
@@ -555,132 +555,150 @@ msgstr "Filteren"
 msgid "Reset filter"
 msgstr "Filter resetten"
 
-#: includes/admin/dashboard.php:480
+#. translators: %d is the minimum number of volunteers required
+#: includes/admin/dashboard.php:423 includes/admin/dashboard.php:466
+#, php-format
+msgid "(min %d)"
+msgstr "(min. %d)"
+
+#: includes/admin/dashboard.php:483
+msgid "Open slot"
+msgstr "Open plek"
+
+#: includes/admin/dashboard.php:521
 msgid "CSV for this shift"
 msgstr "CSV voor deze dienst"
 
-#: includes/admin/dashboard.php:484
+#: includes/admin/dashboard.php:525
 msgid "Period:"
 msgstr "Periode:"
 
-#: includes/admin/dashboard.php:485 includes/admin/dashboard.php:910
+#: includes/admin/dashboard.php:526 includes/admin/dashboard.php:956
 msgid "Filled:"
 msgstr "Bezet:"
 
-#: includes/admin/dashboard.php:487
+#: includes/admin/dashboard.php:528
 msgid "Min.:"
 msgstr "Min.:"
 
-#: includes/admin/dashboard.php:496
+#: includes/admin/dashboard.php:537
 msgid "Add volunteers manually"
 msgstr "Volunteers handmatig toevoegen"
 
-#: includes/admin/dashboard.php:522
+#: includes/admin/dashboard.php:563
 msgid "Select existing volunteer…"
 msgstr "Bestaande vrijwilliger selecteren…"
 
-#: includes/admin/dashboard.php:528 includes/admin/dashboard.php:543
+#: includes/admin/dashboard.php:569 includes/admin/dashboard.php:584
 msgid "Send confirmation email"
 msgstr "Bevestigingsmail verzenden"
 
-#: includes/admin/dashboard.php:529
+#: includes/admin/dashboard.php:570
 msgid "Add to shift"
 msgstr "Aan dienst toevoegen"
 
-#: includes/admin/dashboard.php:531
+#: includes/admin/dashboard.php:572
 msgid "or add a new volunteer below"
 msgstr "of voeg hieronder een nieuwe vrijwilliger toe"
 
-#: includes/admin/dashboard.php:539 includes/admin/volunteer-list.php:132
+#: includes/admin/dashboard.php:580 includes/admin/volunteer-list.php:132
 #: includes/profile.php:50 includes/registration.php:254
 msgid "First name"
 msgstr "Voornaam"
 
-#: includes/admin/dashboard.php:540 includes/admin/volunteer-list.php:133
+#: includes/admin/dashboard.php:581 includes/admin/volunteer-list.php:133
 #: includes/profile.php:55 includes/registration.php:257
 msgid "Last name"
 msgstr "Achternaam"
 
-#: includes/admin/dashboard.php:541 includes/admin/volunteer-list.php:136
+#: includes/admin/dashboard.php:582 includes/admin/volunteer-list.php:136
 msgid "E-Mail (optional)"
 msgstr "E-mail (optioneel)"
 
-#: includes/admin/dashboard.php:541 includes/admin/volunteer-list.php:136
+#: includes/admin/dashboard.php:582 includes/admin/volunteer-list.php:136
 msgid "Leave blank for offline volunteers without an email address"
 msgstr "Leeg laten voor offline vrijwilligers zonder e-mailadres"
 
-#: includes/admin/dashboard.php:542 includes/admin/dashboard.php:551
-#: includes/admin/dashboard.php:590 includes/admin/dashboard.php:826
-#: includes/admin/dashboard.php:917 includes/admin/volunteer-list.php:137
+#: includes/admin/dashboard.php:583 includes/admin/dashboard.php:592
+#: includes/admin/dashboard.php:632 includes/admin/dashboard.php:872
+#: includes/admin/dashboard.php:963 includes/admin/volunteer-list.php:137
 #: includes/admin/volunteer-list.php:177
 msgid "Phone"
 msgstr "Telefoon"
 
-#: includes/admin/dashboard.php:544
+#: includes/admin/dashboard.php:585
 msgid "Add"
 msgstr "Toevoegen"
 
-#: includes/admin/dashboard.php:551 includes/admin/dashboard.php:589
-#: includes/admin/dashboard.php:825 includes/admin/dashboard.php:916
+#: includes/admin/dashboard.php:592 includes/admin/dashboard.php:631
+#: includes/admin/dashboard.php:871 includes/admin/dashboard.php:962
 #: includes/admin/settings.php:527 includes/admin/volunteer-list.php:176
 #: includes/admin/volunteer-list.php:307 includes/admin/volunteer-list.php:334
 #: includes/profile.php:62 includes/registration.php:263
 msgid "E-Mail"
 msgstr "E-mailadres"
 
-#: includes/admin/dashboard.php:551
+#: includes/admin/dashboard.php:592
 msgid "Action"
 msgstr "Actie"
 
-#: includes/admin/dashboard.php:555 includes/admin/dashboard.php:930
+#: includes/admin/dashboard.php:596 includes/admin/dashboard.php:976
 #: includes/admin/documentation.php:107 includes/admin/volunteer-list.php:247
 msgid "Offline"
 msgstr "Offline"
 
-#: includes/admin/dashboard.php:565
+#: includes/admin/dashboard.php:606
 msgid "Notify volunteer"
 msgstr "Vrijwilliger op de hoogte stellen"
 
-#: includes/admin/dashboard.php:574
+#: includes/admin/dashboard.php:615
 msgid "No volunteers assigned."
 msgstr "Geen Volunteers toegewezen."
 
-#: includes/admin/dashboard.php:585 includes/admin/dashboard.php:821
+#: includes/admin/dashboard.php:626 includes/admin/dashboard.php:867
 msgid "Category"
 msgstr "Categorie"
 
-#: includes/admin/dashboard.php:586 includes/admin/dashboard.php:640
-#: includes/admin/dashboard.php:822 includes/post-types.php:18
+#: includes/admin/dashboard.php:627 includes/admin/dashboard.php:684
+#: includes/admin/dashboard.php:868 includes/post-types.php:18
 #: includes/post-types.php:29
 msgid "Shift"
 msgstr "Dienst"
 
-#: includes/admin/dashboard.php:587 includes/admin/dashboard.php:641
-#: includes/admin/dashboard.php:823 includes/admin/quick-edit.php:114
+#: includes/admin/dashboard.php:628 includes/admin/dashboard.php:685
+#: includes/admin/dashboard.php:869 includes/admin/quick-edit.php:114
 msgid "Period"
 msgstr "Periode"
 
-#: includes/admin/dashboard.php:596 includes/admin/dashboard.php:617
+#: includes/admin/dashboard.php:629 includes/admin/dashboard.php:686
+msgid "Capacity"
+msgstr "Capaciteit"
+
+#: includes/admin/dashboard.php:638 includes/admin/dashboard.php:660
 msgid "No shifts found."
 msgstr "Geen diensten gevonden."
 
-#: includes/admin/dashboard.php:604
+#: includes/admin/dashboard.php:647
 msgid "Open slot — not yet booked"
 msgstr "Open plek — nog niet ingevuld"
 
-#: includes/admin/dashboard.php:724
+#: includes/admin/dashboard.php:687
+msgid "Selected: {volunteer} — {shift} ({period}, {capacity})"
+msgstr "Geselecteerd: {volunteer} — {shift} ({period}, {capacity})"
+
+#: includes/admin/dashboard.php:770
 msgid "Invalid volunteer selected."
 msgstr "Ongeldige vrijwilliger geselecteerd."
 
-#: includes/admin/dashboard.php:827 includes/admin/quick-edit.php:60
+#: includes/admin/dashboard.php:873 includes/admin/quick-edit.php:60
 msgid "Start"
 msgstr "Start"
 
-#: includes/admin/dashboard.php:828 includes/admin/quick-edit.php:61
+#: includes/admin/dashboard.php:874 includes/admin/quick-edit.php:61
 msgid "End"
 msgstr "Einde"
 
-#: includes/admin/dashboard.php:888
+#: includes/admin/dashboard.php:934
 msgid "Assigned Volunteers"
 msgstr "Toegewezen Volunteers"
 
@@ -2351,6 +2369,9 @@ msgstr "U bent succesvol afgemeld."
 #: includes/shiftselector.php:417
 msgid "You are not signed up for this shift."
 msgstr "U bent niet aangemeld voor deze dienst."
+
+#~ msgid "Selected: {volunteer} — {shift} ({period})"
+#~ msgstr "Geselecteerd: {volunteer} — {shift} ({period})"
 
 #~ msgid "Comma-separated whole days, e.g. 7, 1"
 #~ msgstr "Kommagescheiden hele dagen, bijv. 7, 1"

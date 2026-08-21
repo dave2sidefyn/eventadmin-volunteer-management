@@ -417,11 +417,17 @@ function eventadmin_admin_overview_page(): void
             $shift_categories = wp_get_post_terms($shift->ID, 'eventadmin_shift_category');
             $category_names   = implode(', ', wp_list_pluck($shift_categories, 'name'));
             $period           = eventadmin_get_formatted_zeitraum($start, $end);
+            $capacity_label   = count($users) . '/' . $max;
+            if ($min > 0) {
+                /* translators: %d is the minimum number of volunteers required */
+                $capacity_label .= ' ' . sprintf(esc_html__('(min %d)', 'eventadmin-volunteer-management'), $min);
+            }
             foreach ($users as $u) {
                 $table_rows[] = [
                     'category' => $category_names,
                     'shift'    => $title,
                     'period'   => $period,
+                    'capacity' => $capacity_label,
                     'name'     => $u['name'],
                     'email'    => $u['offline'] ? '' : $u['email'],
                     'phone'    => $u['phone'],
@@ -435,6 +441,7 @@ function eventadmin_admin_overview_page(): void
                     'category' => $category_names,
                     'shift'    => $title,
                     'period'   => $period,
+                    'capacity' => $capacity_label,
                     'name'     => '',
                     'email'    => '',
                     'phone'    => '',
@@ -452,14 +459,48 @@ function eventadmin_admin_overview_page(): void
             $start_ts = strtotime($start);
             $end_ts   = strtotime($end);
             $period   = eventadmin_get_formatted_zeitraum($start, $end);
+            $assigned = count($users);
+            $capacity_label = $assigned . '/' . $max;
+            if ($min > 0) {
+                /* translators: %d is the minimum number of volunteers required */
+                $capacity_label .= ' ' . sprintf(esc_html__('(min %d)', 'eventadmin-volunteer-management'), $min);
+            }
             foreach ($users as $u) {
                 $timeline_rows[] = [
                     'volunteer' => $u['name'],
                     'shift'     => $title,
                     'period'    => $period,
+                    'capacity'  => $capacity_label,
                     'start'     => $start_ts,
                     'end'       => $end_ts,
                     'color'     => $bar_color,
+                ];
+            }
+            // Open slots: the portion still below min_volunteers is critical (red),
+            // the rest up to max_volunteers is nice-to-have extra capacity (grey).
+            $required_open = max(0, $min - $assigned);
+            $optional_open = max(0, $max - $assigned) - $required_open;
+            $open_label    = esc_html__('Open slot', 'eventadmin-volunteer-management');
+            for ($i = 0; $i < $required_open; $i++) {
+                $timeline_rows[] = [
+                    'volunteer' => $open_label,
+                    'shift'     => $title,
+                    'period'    => $period,
+                    'capacity'  => $capacity_label,
+                    'start'     => $start_ts,
+                    'end'       => $end_ts,
+                    'color'     => '#e53935',
+                ];
+            }
+            for ($i = 0; $i < $optional_open; $i++) {
+                $timeline_rows[] = [
+                    'volunteer' => $open_label,
+                    'shift'     => $title,
+                    'period'    => $period,
+                    'capacity'  => $capacity_label,
+                    'start'     => $start_ts,
+                    'end'       => $end_ts,
+                    'color'     => '#9e9e9e',
                 ];
             }
             continue;
@@ -585,6 +626,7 @@ function eventadmin_admin_overview_page(): void
             esc_html__('Category', 'eventadmin-volunteer-management'),
             esc_html__('Shift', 'eventadmin-volunteer-management'),
             esc_html__('Period', 'eventadmin-volunteer-management'),
+            esc_html__('Capacity', 'eventadmin-volunteer-management'),
             esc_html__('Name', 'eventadmin-volunteer-management'),
             esc_html__('E-Mail', 'eventadmin-volunteer-management'),
             esc_html__('Phone', 'eventadmin-volunteer-management'),
@@ -593,13 +635,14 @@ function eventadmin_admin_overview_page(): void
         }
         echo '</tr></thead><tbody>';
         if (empty($table_rows)) {
-            echo '<tr><td colspan="6"><em>' . esc_html__('No shifts found.', 'eventadmin-volunteer-management') . '</em></td></tr>';
+            echo '<tr><td colspan="7"><em>' . esc_html__('No shifts found.', 'eventadmin-volunteer-management') . '</em></td></tr>';
         }
         foreach ($table_rows as $row) {
             echo '<tr' . ($row['open'] ? ' class="eventadmin-open-slot-row"' : '') . '>';
             echo '<td>' . esc_html($row['category']) . '</td>';
             echo '<td>' . esc_html($row['shift']) . '</td>';
             echo '<td>' . esc_html($row['period']) . '</td>';
+            echo '<td>' . esc_html($row['capacity']) . '</td>';
             if ($row['open']) {
                 echo '<td colspan="3"><em>&#9888; ' . esc_html__('Open slot — not yet booked', 'eventadmin-volunteer-management') . '</em></td>';
             } else {
@@ -616,17 +659,18 @@ function eventadmin_admin_overview_page(): void
         if (empty($timeline_rows)) {
             echo '<p><em>' . esc_html__('No shifts found.', 'eventadmin-volunteer-management') . '</em></p>';
         } else {
-            // One row per (volunteer, shift) instance, grouped by volunteer name then
-            // chronologically — repeated labels render as adjacent bands in the chart,
-            // which is how Chart.js draws a simple per-person Gantt without needing a
-            // dedicated timeline/date-scale plugin.
+            // One row per (volunteer, shift) instance, ordered chronologically, then by
+            // shift name, then by volunteer name.
             usort($timeline_rows, function ($a, $b) {
-                return $a['volunteer'] <=> $b['volunteer'] ?: $a['start'] <=> $b['start'];
+                return $a['start'] <=> $b['start']
+                    ?: $a['shift'] <=> $b['shift']
+                    ?: $a['volunteer'] <=> $b['volunteer'];
             });
 
             $row_height = 24;
             $height     = max(200, count($timeline_rows) * $row_height + 60);
 
+            echo '<p id="eventadmin-timeline-selected" style="min-height:1.5em;font-weight:600;"></p>';
             echo '<div style="overflow-x:auto;">';
             echo '<div style="min-width:700px;height:' . esc_attr($height) . 'px;">';
             echo '<canvas id="eventadmin-timeline-chart"></canvas>';
@@ -637,8 +681,10 @@ function eventadmin_admin_overview_page(): void
             echo 'const EVENTADMIN_TIMELINE_DATA = ' . wp_json_encode([
                 'rows' => $timeline_rows,
                 'i18n' => [
-                    'shift' => esc_html__('Shift', 'eventadmin-volunteer-management'),
-                    'period' => esc_html__('Period', 'eventadmin-volunteer-management'),
+                    'shift'    => esc_html__('Shift', 'eventadmin-volunteer-management'),
+                    'period'   => esc_html__('Period', 'eventadmin-volunteer-management'),
+                    'capacity' => esc_html__('Capacity', 'eventadmin-volunteer-management'),
+                    'selected' => esc_html__('Selected: {volunteer} — {shift} ({period}, {capacity})', 'eventadmin-volunteer-management'),
                 ],
             ]);
             echo ';</script>';
