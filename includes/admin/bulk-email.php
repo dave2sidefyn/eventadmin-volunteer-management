@@ -80,6 +80,8 @@ function eventadmin_bulk_email_page(): void
             ],
         ],
     ]));
+    $count_no_shift  = count(eventadmin_bulk_email_get_recipient_users('no_shift', 0, 0, 0));
+    $count_has_shift = count(eventadmin_bulk_email_get_recipient_users('has_shift', 0, 0, 0));
 
     $all_shifts     = get_posts([
         'post_type'   => 'eventadmin_shift',
@@ -110,6 +112,16 @@ function eventadmin_bulk_email_page(): void
     echo ' &nbsp;<span class="bulk-email-count" data-for="all" style="color:#666;font-style:italic;display:none;">';
     echo esc_html(sprintf(_n('%d recipient', '%d recipients', $count_all, 'eventadmin-volunteer-management'), $count_all));
     echo '</span></label><br>';
+    echo '<label><input type="radio" name="bulk_email_recipients" value="no_shift"> ';
+    echo esc_html__('Volunteers without any upcoming shift', 'eventadmin-volunteer-management');
+    echo ' &nbsp;<span class="bulk-email-count" data-for="no_shift" style="color:#666;font-style:italic;display:none;">';
+    echo esc_html(sprintf(_n('%d recipient', '%d recipients', $count_no_shift, 'eventadmin-volunteer-management'), $count_no_shift));
+    echo '</span></label><br>';
+    echo '<label><input type="radio" name="bulk_email_recipients" value="has_shift"> ';
+    echo esc_html__('Volunteers with at least one upcoming shift', 'eventadmin-volunteer-management');
+    echo ' &nbsp;<span class="bulk-email-count" data-for="has_shift" style="color:#666;font-style:italic;display:none;">';
+    echo esc_html(sprintf(_n('%d recipient', '%d recipients', $count_has_shift, 'eventadmin-volunteer-management'), $count_has_shift));
+    echo '</span></label><br>';
     echo '<label><input type="radio" name="bulk_email_recipients" value="shift"> ';
     echo esc_html__('Volunteers of a specific shift', 'eventadmin-volunteer-management');
     echo '</label>';
@@ -122,6 +134,7 @@ function eventadmin_bulk_email_page(): void
         echo '<option value="' . esc_attr($shift->ID) . '">' . $label . '</option>';
     }
     echo '</select>';
+    echo ' <span id="eventadmin-shift-recipient-count" style="color:#666;font-style:italic;"></span>';
     echo '</div>';
     if (!empty($all_categories)) {
         echo '<br><label><input type="radio" name="bulk_email_recipients" value="category"> ';
@@ -134,6 +147,7 @@ function eventadmin_bulk_email_page(): void
             echo '<option value="' . esc_attr($cat->term_id) . '">' . esc_html($cat->name) . '</option>';
         }
         echo '</select>';
+        echo ' <span id="eventadmin-category-recipient-count" style="color:#666;font-style:italic;"></span>';
         echo '</div>';
     }
     echo '</td></tr>';
@@ -173,10 +187,13 @@ function eventadmin_bulk_email_page(): void
         'ajax_url'    => admin_url('admin-ajax.php'),
         'nonce_batch' => wp_create_nonce('eventadmin_bulk_email_batch'),
         'i18n'        => [
-            'done'    => esc_html__('Done! All emails sent.', 'eventadmin-volunteer-management'),
-            'failed'  => esc_html__('({failed} could not be delivered)', 'eventadmin-volunteer-management'),
-            'error'   => esc_html__('An error occurred. Please try again.', 'eventadmin-volunteer-management'),
-            'sending' => esc_html__('Sent {sent} of {total}…', 'eventadmin-volunteer-management'),
+            'done'               => esc_html__('Done! All emails sent.', 'eventadmin-volunteer-management'),
+            'failed'             => esc_html__('({failed} could not be delivered)', 'eventadmin-volunteer-management'),
+            'error'              => esc_html__('An error occurred. Please try again.', 'eventadmin-volunteer-management'),
+            'sending'            => esc_html__('Sent {sent} of {total}…', 'eventadmin-volunteer-management'),
+            'counting'           => esc_html__('Counting…', 'eventadmin-volunteer-management'),
+            'recipientCountOne'  => esc_html__('{n} recipient', 'eventadmin-volunteer-management'),
+            'recipientCountMany' => esc_html__('{n} recipients', 'eventadmin-volunteer-management'),
         ],
     ]);
 
@@ -224,6 +241,10 @@ function eventadmin_bulk_email_page(): void
             $entry_recip = $entry['recipients'] ?? 'all';
             if ($entry_recip === 'subscribed') {
                 $recipients_label = __('Subscribed', 'eventadmin-volunteer-management');
+            } elseif ($entry_recip === 'no_shift') {
+                $recipients_label = __('Without an upcoming shift', 'eventadmin-volunteer-management');
+            } elseif ($entry_recip === 'has_shift') {
+                $recipients_label = __('With an upcoming shift', 'eventadmin-volunteer-management');
             } elseif (str_starts_with($entry_recip, 'shift:')) {
                 /* translators: %s is the shift title */
                 $recipients_label = sprintf(__('Shift: %s', 'eventadmin-volunteer-management'), substr($entry_recip, 6));
@@ -272,6 +293,157 @@ function eventadmin_bulk_email_page(): void
 }
 
 /**
+ * Resolves the WP_User objects for a given recipient selection.
+ * Shared by the job initializer and the live recipient-count lookup.
+ *
+ * @param string $recipients  One of 'all', 'subscribed', 'shift', 'category', 'user'.
+ * @param int    $shift_id    Shift post ID (for 'shift').
+ * @param int    $category_id Term ID (for 'category').
+ * @param int    $target_user_id User ID (for 'user').
+ * @return WP_User[]
+ */
+function eventadmin_bulk_email_get_recipient_users(string $recipients, int $shift_id, int $category_id, int $target_user_id): array
+{
+    $offline_exclude = ['key' => 'eventadmin_offline_volunteer', 'compare' => 'NOT EXISTS'];
+
+    if ($recipients === 'subscribed') {
+        // Users who opted in (meta=1) or have no preference set (meta doesn't exist); never offline
+        return get_users([
+            'role'       => 'eventadmin_volunteer',
+            'meta_query' => [
+                'relation' => 'AND',
+                $offline_exclude,
+                [
+                    'relation' => 'OR',
+                    ['key' => 'eventadmin_announcements', 'compare' => 'NOT EXISTS'],
+                    ['key' => 'eventadmin_announcements', 'value' => '1'],
+                ],
+            ],
+        ]);
+    }
+
+    if ($recipients === 'category') {
+        if (!$category_id) return [];
+        $cat_shifts = get_posts([
+            'post_type'   => 'eventadmin_shift',
+            'numberposts' => -1,
+            'fields'      => 'ids',
+            'tax_query'   => [['taxonomy' => 'eventadmin_shift_category', 'field' => 'term_id', 'terms' => $category_id]],
+        ]);
+        $cat_user_ids = [];
+        foreach ($cat_shifts as $sid) {
+            foreach (get_post_meta($sid) as $key => $val) {
+                if (str_starts_with($key, 'assigned_user_')) {
+                    $cat_user_ids[] = absint($val[0]);
+                }
+            }
+        }
+        $cat_user_ids = array_values(array_unique($cat_user_ids));
+        return empty($cat_user_ids) ? [] : get_users([
+            'include'    => $cat_user_ids,
+            'meta_query' => [$offline_exclude],
+        ]);
+    }
+
+    if ($recipients === 'user') {
+        if (!$target_user_id) return [];
+        $target_user = get_userdata($target_user_id);
+        return $target_user ? [$target_user] : [];
+    }
+
+    if ($recipients === 'shift') {
+        if (!$shift_id) return [];
+        $shift_meta     = get_post_meta($shift_id);
+        $shift_user_ids = [];
+        foreach ($shift_meta as $key => $val) {
+            if (str_starts_with($key, 'assigned_user_')) {
+                $shift_user_ids[] = absint($val[0]);
+            }
+        }
+        return empty($shift_user_ids) ? [] : get_users([
+            'include'    => $shift_user_ids,
+            'meta_query' => [$offline_exclude],
+        ]);
+    }
+
+    if ($recipients === 'has_shift' || $recipients === 'no_shift') {
+        $upcoming_shifts = get_posts([
+            'post_type'   => 'eventadmin_shift',
+            'numberposts' => -1,
+            'fields'      => 'ids',
+            'meta_query'  => [
+                ['key' => 'shift_start', 'value' => current_time('mysql'), 'compare' => '>=', 'type' => 'DATETIME'],
+            ],
+        ]);
+        $assigned_user_ids = [];
+        foreach ($upcoming_shifts as $sid) {
+            foreach (get_post_meta($sid) as $key => $val) {
+                if (str_starts_with($key, 'assigned_user_')) {
+                    $assigned_user_ids[] = absint($val[0]);
+                }
+            }
+        }
+        $assigned_user_ids = array_values(array_unique($assigned_user_ids));
+
+        if ($recipients === 'has_shift') {
+            return empty($assigned_user_ids) ? [] : get_users([
+                'include'    => $assigned_user_ids,
+                'meta_query' => [$offline_exclude],
+            ]);
+        }
+
+        // 'no_shift': every online volunteer not present in the assigned set
+        $all_volunteers = get_users([
+            'role'       => 'eventadmin_volunteer',
+            'meta_query' => [$offline_exclude],
+        ]);
+        return array_values(array_filter(
+            $all_volunteers,
+            fn($u) => !in_array($u->ID, $assigned_user_ids, true)
+        ));
+    }
+
+    // 'all'
+    return get_users([
+        'role'       => 'eventadmin_volunteer',
+        'meta_query' => [$offline_exclude],
+    ]);
+}
+
+/**
+ * AJAX: returns the live recipient count for the currently selected shift or category
+ * in the bulk email form (radio button counts for 'all'/'subscribed' are rendered server-side).
+ */
+function eventadmin_bulk_email_count(): void
+{
+    if (
+        !isset($_POST['_ajax_nonce']) ||
+        !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_ajax_nonce'])), 'eventadmin_bulk_email_batch')
+    ) {
+        wp_send_json_error(['message' => esc_html__('Security check failed.', 'eventadmin-volunteer-management')]);
+    }
+
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error(['message' => esc_html__('Insufficient permissions.', 'eventadmin-volunteer-management')]);
+    }
+
+    $raw_recip   = isset($_POST['bulk_email_recipients']) ? sanitize_text_field(wp_unslash($_POST['bulk_email_recipients'])) : '';
+    $recipients  = in_array($raw_recip, ['shift', 'category'], true) ? $raw_recip : '';
+    $shift_id    = isset($_POST['bulk_email_shift_id'])    ? absint($_POST['bulk_email_shift_id'])    : 0;
+    $category_id = isset($_POST['bulk_email_category_id']) ? absint($_POST['bulk_email_category_id']) : 0;
+
+    if (!$recipients) {
+        wp_send_json_error(['message' => esc_html__('Invalid recipient type.', 'eventadmin-volunteer-management')]);
+    }
+
+    $users = eventadmin_bulk_email_get_recipient_users($recipients, $shift_id, $category_id, 0);
+
+    wp_send_json_success(['count' => count($users)]);
+}
+
+add_action('wp_ajax_eventadmin_bulk_email_count', 'eventadmin_bulk_email_count');
+
+/**
  * Handles the form submit: stores job data in a transient and returns the job key + total.
  */
 function eventadmin_bulk_email_init(): void
@@ -292,7 +464,7 @@ function eventadmin_bulk_email_init(): void
     $from_name  = isset($_POST['bulk_email_from_name'])  ? sanitize_text_field(wp_unslash($_POST['bulk_email_from_name'])) : get_bloginfo('name');
     $from_email = isset($_POST['bulk_email_from_email']) ? sanitize_email(wp_unslash($_POST['bulk_email_from_email'])) : get_option('admin_email');
     $raw_recip  = isset($_POST['bulk_email_recipients']) ? sanitize_text_field(wp_unslash($_POST['bulk_email_recipients'])) : 'subscribed';
-    $recipients  = in_array($raw_recip, ['all', 'subscribed', 'shift', 'user', 'category'], true) ? $raw_recip : 'subscribed';
+    $recipients  = in_array($raw_recip, ['all', 'subscribed', 'shift', 'user', 'category', 'no_shift', 'has_shift'], true) ? $raw_recip : 'subscribed';
     $shift_id    = isset($_POST['bulk_email_shift_id'])    ? absint($_POST['bulk_email_shift_id'])    : 0;
     $category_id = isset($_POST['bulk_email_category_id']) ? absint($_POST['bulk_email_category_id']) : 0;
     $target_user_id = isset($_POST['bulk_email_user_id']) ? absint($_POST['bulk_email_user_id']) : 0;
@@ -313,63 +485,7 @@ function eventadmin_bulk_email_init(): void
         wp_send_json_error(['message' => esc_html__('No recipient specified.', 'eventadmin-volunteer-management')]);
     }
 
-    $offline_exclude = ['key' => 'eventadmin_offline_volunteer', 'compare' => 'NOT EXISTS'];
-    if ($recipients === 'subscribed') {
-        // Users who opted in (meta=1) or have no preference set (meta doesn't exist); never offline
-        $users = get_users([
-            'role'       => 'eventadmin_volunteer',
-            'meta_query' => [
-                'relation' => 'AND',
-                $offline_exclude,
-                [
-                    'relation' => 'OR',
-                    ['key' => 'eventadmin_announcements', 'compare' => 'NOT EXISTS'],
-                    ['key' => 'eventadmin_announcements', 'value' => '1'],
-                ],
-            ],
-        ]);
-    } elseif ($recipients === 'category') {
-        $cat_shifts = get_posts([
-            'post_type'   => 'eventadmin_shift',
-            'numberposts' => -1,
-            'fields'      => 'ids',
-            'tax_query'   => [['taxonomy' => 'eventadmin_shift_category', 'field' => 'term_id', 'terms' => $category_id]],
-        ]);
-        $cat_user_ids = [];
-        foreach ($cat_shifts as $sid) {
-            foreach (get_post_meta($sid) as $key => $val) {
-                if (str_starts_with($key, 'assigned_user_')) {
-                    $cat_user_ids[] = absint($val[0]);
-                }
-            }
-        }
-        $cat_user_ids = array_values(array_unique($cat_user_ids));
-        $users = empty($cat_user_ids) ? [] : get_users([
-            'include'    => $cat_user_ids,
-            'meta_query' => [$offline_exclude],
-        ]);
-    } elseif ($recipients === 'user') {
-        $target_user = get_userdata($target_user_id);
-        $users = $target_user ? [$target_user] : [];
-    } elseif ($recipients === 'shift') {
-        $shift_meta     = get_post_meta($shift_id);
-        $shift_user_ids = [];
-        foreach ($shift_meta as $key => $val) {
-            if (str_starts_with($key, 'assigned_user_')) {
-                $shift_user_ids[] = absint($val[0]);
-            }
-        }
-        $users = empty($shift_user_ids) ? [] : get_users([
-            'include'    => $shift_user_ids,
-            'meta_query' => [$offline_exclude],
-        ]);
-    } else {
-        $users = get_users([
-            'role'       => 'eventadmin_volunteer',
-            'meta_query' => [$offline_exclude],
-        ]);
-    }
-
+    $users    = eventadmin_bulk_email_get_recipient_users($recipients, $shift_id, $category_id, $target_user_id);
     $user_ids = wp_list_pluck($users, 'ID');
     if ($recipients === 'shift') {
         $recipients_meta = 'shift:' . get_the_title($shift_id);

@@ -175,6 +175,8 @@ function eventadmin_volunteer_list_page(): void
         'phone'         => esc_html__('Phone', 'eventadmin-volunteer-management'),
         'announcements' => esc_html__('Announcements', 'eventadmin-volunteer-management'),
         'shifts'        => esc_html__('Upcoming shifts', 'eventadmin-volunteer-management'),
+        'registered'    => esc_html__('Registered', 'eventadmin-volunteer-management'),
+        'last_shift'    => esc_html__('Last shift', 'eventadmin-volunteer-management'),
     ];
     echo '<table id="eventadmin-vol-table" class="widefat striped">';
     echo '<thead><tr>';
@@ -187,7 +189,7 @@ function eventadmin_volunteer_list_page(): void
     echo '</tr></thead><tbody>';
 
     if (empty($volunteers)) {
-        echo '<tr><td colspan="7"><em>' . esc_html__('No volunteers found.', 'eventadmin-volunteer-management') . '</em></td></tr>';
+        echo '<tr><td colspan="9"><em>' . esc_html__('No volunteers found.', 'eventadmin-volunteer-management') . '</em></td></tr>';
     }
 
     // Pre-fetch social login user IDs in one query to avoid N+1.
@@ -199,7 +201,7 @@ function eventadmin_volunteer_list_page(): void
         ? array_map('intval', $wpdb->get_col("SELECT DISTINCT ID FROM `{$social_users_table}`"))
         : [];
 
-    $now = current_time('Y-m-d\TH:i');
+    $now_ts = current_time('timestamp');
 
     foreach ($volunteers as $volunteer) {
         $phone             = get_user_meta($volunteer->ID, 'eventadmin_phone', true);
@@ -207,17 +209,30 @@ function eventadmin_volunteer_list_page(): void
         $subscribed        = ($announcements_raw === '0') ? false : true;
         $is_offline        = (bool) get_user_meta($volunteer->ID, 'eventadmin_offline_volunteer', true) || empty($volunteer->user_email);
 
-        // Count upcoming shifts
-        $upcoming_shifts = get_posts([
+        // Fetch every shift assigned to this volunteer (past and future), newest first, to
+        // derive both the upcoming-shift count and the most recent past shift in one query.
+        $assigned_shift_ids = get_posts([
             'post_type'   => 'eventadmin_shift',
             'numberposts' => -1,
+            'post_status' => 'any',
             'fields'      => 'ids',
+            'meta_key'    => 'shift_start',
+            'orderby'     => 'meta_value',
+            'order'       => 'DESC',
             'meta_query'  => [
-                ['key' => 'shift_start', 'value' => $now, 'compare' => '>=', 'type' => 'DATETIME'],
                 ['key' => 'assigned_user_' . $volunteer->ID, 'compare' => 'EXISTS'],
             ],
         ]);
-        $shift_count = count($upcoming_shifts);
+        $shift_count      = 0;
+        $last_shift_start = '';
+        foreach ($assigned_shift_ids as $assigned_shift_id) {
+            $assigned_start = get_post_meta($assigned_shift_id, 'shift_start', true);
+            if (strtotime($assigned_start) >= $now_ts) {
+                $shift_count++;
+            } elseif ($last_shift_start === '') {
+                $last_shift_start = $assigned_start;
+            }
+        }
 
         $token_set     = (bool) get_user_meta($volunteer->ID, 'magic_login_token', true);
         $is_unverified = $token_set;
@@ -238,6 +253,11 @@ function eventadmin_volunteer_list_page(): void
             $display_name .= ' <span style="background:#2e7d32;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:normal;">' . esc_html__('Manual', 'eventadmin-volunteer-management') . '</span>';
         }
 
+        $registered_ts   = strtotime($volunteer->user_registered . ' UTC') ?: 0;
+        $registered_label = $registered_ts ? mysql2date(get_option('date_format'), $volunteer->user_registered) : '—';
+        $last_shift_ts    = $last_shift_start ? strtotime($last_shift_start) : 0;
+        $last_shift_label = $last_shift_ts ? date_i18n(get_option('date_format'), $last_shift_ts) : '—';
+
         $sort_name = trim($volunteer->first_name . ' ' . $volunteer->last_name) ?: $volunteer->user_login;
         echo '<tr'
             . ' data-name="' . esc_attr(strtolower($sort_name)) . '"'
@@ -245,6 +265,8 @@ function eventadmin_volunteer_list_page(): void
             . ' data-phone="' . esc_attr($phone) . '"'
             . ' data-announcements="' . esc_attr($is_offline ? '-1' : ($subscribed ? '1' : '0')) . '"'
             . ' data-shifts="' . esc_attr($shift_count) . '"'
+            . ' data-registered="' . esc_attr($registered_ts) . '"'
+            . ' data-last_shift="' . esc_attr($last_shift_ts) . '"'
             . '>';
         echo '<td><strong>' . $display_name . '</strong></td>';
         echo '<td>' . ($is_offline ? '—' : esc_html($volunteer->user_email)) . '</td>';
@@ -255,6 +277,8 @@ function eventadmin_volunteer_list_page(): void
                 ? '<span style="color:#00a32a;">&#10003; ' . esc_html__('Subscribed', 'eventadmin-volunteer-management') . '</span>'
                 : '<span style="color:#999;">&#10007; ' . esc_html__('Opted out', 'eventadmin-volunteer-management') . '</span>')) . '</td>';
         echo '<td>' . esc_html($shift_count) . '</td>';
+        echo '<td>' . esc_html($registered_label) . '</td>';
+        echo '<td>' . esc_html($last_shift_label) . '</td>';
         echo '<td>' . ($is_offline
             ? '—'
             : '<a href="' . esc_url(admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-bulk-email&recipient_user_id=' . $volunteer->ID)) . '" class="button button-small">' . esc_html__('Email', 'eventadmin-volunteer-management') . '</a>') . '</td>';

@@ -10,6 +10,41 @@ jQuery(function ($) {
         $('#eventadmin-category-select-wrap').toggle(val === 'category');
     });
 
+    // Live recipient count when a specific shift or category is picked
+    function fetchRecipientCount(recipients, id, $target) {
+        if (!id) {
+            $target.text('');
+            return;
+        }
+        $target.text(cfg.i18n.counting);
+        $.post(cfg.ajax_url, {
+            action:                'eventadmin_bulk_email_count',
+            _ajax_nonce:           cfg.nonce_batch,
+            bulk_email_recipients: recipients,
+            bulk_email_shift_id:   recipients === 'shift'    ? id : '',
+            bulk_email_category_id: recipients === 'category' ? id : '',
+        })
+        .done(function (res) {
+            if (res.success) {
+                const n = res.data.count;
+                const tpl = n === 1 ? cfg.i18n.recipientCountOne : cfg.i18n.recipientCountMany;
+                $target.text(tpl.replace('{n}', n));
+            } else {
+                $target.text('');
+            }
+        })
+        .fail(function () {
+            $target.text('');
+        });
+    }
+
+    $('[name="bulk_email_shift_id"]').on('change', function () {
+        fetchRecipientCount('shift', $(this).val(), $('#eventadmin-shift-recipient-count'));
+    });
+    $('[name="bulk_email_category_id"]').on('change', function () {
+        fetchRecipientCount('category', $(this).val(), $('#eventadmin-category-recipient-count'));
+    });
+
     $('#eventadmin-bulk-email-form').on('submit', function (e) {
         e.preventDefault();
 

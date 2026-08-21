@@ -4,7 +4,7 @@ Tags: volunteer, shift, planning, event
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.8.1
+Stable tag: 1.9.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -63,6 +63,11 @@ You can set a minimum number of volunteers per shift. The admin dashboard will h
 3. Statistics & charts in the backend
 
 == Changelog ==
+
+= Version 1.9.0 =
+* New: Send Announcement now shows a live recipient count for a selected shift or category, not just for "All"/"Subscribed"
+* New: Two more Send Announcement recipient filters — volunteers without any upcoming shift, and volunteers with at least one upcoming shift
+* New: Volunteers list now shows "Registered" and "Last shift" columns, both sortable
 
 = Version 1.8.1 =
 * Tested up to WordPress 7.1
