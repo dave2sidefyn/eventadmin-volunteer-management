@@ -4,7 +4,7 @@ Tags: volunteer, shift, planning, event
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -63,6 +63,9 @@ You can set a minimum number of volunteers per shift. The admin dashboard will h
 3. Statistics & charts in the backend
 
 == Changelog ==
+
+= Version 2.0.1 =
+* Fix: The "What's new" admin notice still described the 1.8.0 Cloudflare Turnstile feature instead of what's new in 2.0.0
 
 = Version 2.0.0 =
 * New: Shift categories (departments) — hidden departments now show a badge and their color swatch in the department list, and Quick Edit gained color, hidden, parent, and description fields so all of this can be changed without opening the full edit screen

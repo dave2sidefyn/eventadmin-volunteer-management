@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: EventAdmin – Volunteer Management 2.0.0\n"
+"Project-Id-Version: EventAdmin – Volunteer Management 2.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-21T21:43:48+00:00\n"
+"POT-Creation-Date: 2026-08-21T21:55:05+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: eventadmin-volunteer-management\n"
@@ -55,7 +55,7 @@ msgid "EventAdmin %s is here!"
 msgstr ""
 
 #: eventadmin-volunteer-management.php:281
-msgid "New in this release: Cloudflare Turnstile is now available as a CAPTCHA provider for the volunteer registration form, via the Simple Cloudflare Turnstile plugin."
+msgid "New in this release: a redesigned shift overview with Dashboard, Cards, Table, and Timeline tabs (drag shifts directly on the Timeline to reschedule them), a reorganized Volunteers page, and richer e-mail design options including header colors, rich-text templates, and custom CSS."
 msgstr ""
 
 #: eventadmin-volunteer-management.php:287
