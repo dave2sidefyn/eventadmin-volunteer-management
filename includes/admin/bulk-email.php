@@ -96,9 +96,8 @@ function eventadmin_bulk_email_page(): void
         'post_type'   => 'eventadmin_shift',
         'numberposts' => -1,
         'meta_key'    => 'shift_start',
-        'orderby'     => 'meta_value',
+        'orderby'     => ['title' => 'ASC', 'meta_value' => 'ASC'],
         'meta_type'   => 'DATETIME',
-        'order'       => 'ASC',
     ]);
     $all_categories = get_terms(['taxonomy' => 'eventadmin_shift_category', 'hide_empty' => false]);
 
