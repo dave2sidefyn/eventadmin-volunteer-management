@@ -276,7 +276,8 @@ function eventadmin_admin_overview_page(): void
     $time_filter = in_array($raw_time, $allowed_time_filters, true)          ? $raw_time              : 'future';
     $sort_by     = in_array($raw_sortby, $allowed_sort_by, true)             ? $raw_sortby            : 'date';
     $order       = in_array(strtoupper($raw_order), $allowed_orders, true)  ? strtoupper($raw_order) : 'ASC';
-    $view        = $raw_view === 'table' ? 'table' : 'cards';
+    $allowed_views = ['cards', 'table', 'timeline'];
+    $view          = in_array($raw_view, $allowed_views, true) ? $raw_view : 'cards';
 
     echo '<form method="get" action="edit.php" class="form-filters">';
     wp_nonce_field('eventadmin_filter_shifts', 'eventadmin_filter_shifts_nonce');
@@ -347,8 +348,9 @@ function eventadmin_admin_overview_page(): void
     // View mode
     echo '<label>' . esc_html__('View:', 'eventadmin-volunteer-management') . '<select name="filter_view">';
     foreach ([
-        'cards' => esc_html__('Cards', 'eventadmin-volunteer-management'),
-        'table' => esc_html__('Table', 'eventadmin-volunteer-management'),
+        'cards'    => esc_html__('Cards', 'eventadmin-volunteer-management'),
+        'table'    => esc_html__('Table', 'eventadmin-volunteer-management'),
+        'timeline' => esc_html__('Timeline', 'eventadmin-volunteer-management'),
     ] as $val => $label) {
         echo '<option value="' . esc_attr($val) . '"' . selected($view, $val, false) . '>' . esc_html($label) . '</option>';
     }
@@ -375,7 +377,8 @@ function eventadmin_admin_overview_page(): void
         $total_found
     );
 
-    $table_rows = [];
+    $table_rows    = [];
+    $timeline_rows = [];
 
     foreach ($shifts as $shift) {
         $title = esc_html($shift->post_title);
@@ -414,19 +417,50 @@ function eventadmin_admin_overview_page(): void
             $shift_categories = wp_get_post_terms($shift->ID, 'eventadmin_shift_category');
             $category_names   = implode(', ', wp_list_pluck($shift_categories, 'name'));
             $period           = eventadmin_get_formatted_zeitraum($start, $end);
-            if (empty($users)) {
-                $table_rows[] = [$category_names, $title, $period, '', '', ''];
-            } else {
-                foreach ($users as $u) {
-                    $table_rows[] = [
-                        $category_names,
-                        $title,
-                        $period,
-                        $u['name'],
-                        $u['offline'] ? '' : $u['email'],
-                        $u['phone'],
-                    ];
-                }
+            foreach ($users as $u) {
+                $table_rows[] = [
+                    'category' => $category_names,
+                    'shift'    => $title,
+                    'period'   => $period,
+                    'name'     => $u['name'],
+                    'email'    => $u['offline'] ? '' : $u['email'],
+                    'phone'    => $u['phone'],
+                    'open'     => false,
+                ];
+            }
+            // One placeholder row per still-open slot, so it's obvious at a glance
+            // how many more volunteers a shift needs — and gives a ready line to fill in.
+            for ($i = count($users); $i < $max; $i++) {
+                $table_rows[] = [
+                    'category' => $category_names,
+                    'shift'    => $title,
+                    'period'   => $period,
+                    'name'     => '',
+                    'email'    => '',
+                    'phone'    => '',
+                    'open'     => true,
+                ];
+            }
+            continue;
+        }
+
+        if ($view === 'timeline') {
+            $shift_categories = wp_get_post_terms($shift->ID, 'eventadmin_shift_category');
+            $bar_color        = !empty($shift_categories)
+                ? (get_term_meta($shift_categories[0]->term_id, 'term_color', true) ?: '#2271b1')
+                : '#2271b1';
+            $start_ts = strtotime($start);
+            $end_ts   = strtotime($end);
+            $period   = eventadmin_get_formatted_zeitraum($start, $end);
+            foreach ($users as $u) {
+                $timeline_rows[] = [
+                    'volunteer' => $u['name'],
+                    'shift'     => $title,
+                    'period'    => $period,
+                    'start'     => $start_ts,
+                    'end'       => $end_ts,
+                    'color'     => $bar_color,
+                ];
             }
             continue;
         }
@@ -562,13 +596,53 @@ function eventadmin_admin_overview_page(): void
             echo '<tr><td colspan="6"><em>' . esc_html__('No shifts found.', 'eventadmin-volunteer-management') . '</em></td></tr>';
         }
         foreach ($table_rows as $row) {
-            echo '<tr>';
-            foreach ($row as $cell) {
-                echo '<td>' . ($cell === '' ? '<em style="color:#aaa;">—</em>' : esc_html($cell)) . '</td>';
+            echo '<tr' . ($row['open'] ? ' class="eventadmin-open-slot-row"' : '') . '>';
+            echo '<td>' . esc_html($row['category']) . '</td>';
+            echo '<td>' . esc_html($row['shift']) . '</td>';
+            echo '<td>' . esc_html($row['period']) . '</td>';
+            if ($row['open']) {
+                echo '<td colspan="3"><em>&#9888; ' . esc_html__('Open slot — not yet booked', 'eventadmin-volunteer-management') . '</em></td>';
+            } else {
+                echo '<td>' . esc_html($row['name']) . '</td>';
+                echo '<td>' . ($row['email'] === '' ? '<em style="color:#aaa;">—</em>' : esc_html($row['email'])) . '</td>';
+                echo '<td>' . ($row['phone'] === '' ? '<em style="color:#aaa;">—</em>' : esc_html($row['phone'])) . '</td>';
             }
             echo '</tr>';
         }
         echo '</tbody></table>';
+    }
+
+    if ($view === 'timeline') {
+        if (empty($timeline_rows)) {
+            echo '<p><em>' . esc_html__('No shifts found.', 'eventadmin-volunteer-management') . '</em></p>';
+        } else {
+            // One row per (volunteer, shift) instance, grouped by volunteer name then
+            // chronologically — repeated labels render as adjacent bands in the chart,
+            // which is how Chart.js draws a simple per-person Gantt without needing a
+            // dedicated timeline/date-scale plugin.
+            usort($timeline_rows, function ($a, $b) {
+                return $a['volunteer'] <=> $b['volunteer'] ?: $a['start'] <=> $b['start'];
+            });
+
+            $row_height = 24;
+            $height     = max(200, count($timeline_rows) * $row_height + 60);
+
+            echo '<div style="overflow-x:auto;">';
+            echo '<div style="min-width:700px;height:' . esc_attr($height) . 'px;">';
+            echo '<canvas id="eventadmin-timeline-chart"></canvas>';
+            echo '</div>';
+            echo '</div>';
+
+            echo '<script>';
+            echo 'const EVENTADMIN_TIMELINE_DATA = ' . wp_json_encode([
+                'rows' => $timeline_rows,
+                'i18n' => [
+                    'shift' => esc_html__('Shift', 'eventadmin-volunteer-management'),
+                    'period' => esc_html__('Period', 'eventadmin-volunteer-management'),
+                ],
+            ]);
+            echo ';</script>';
+        }
     }
 
     // Pagination

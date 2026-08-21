@@ -209,7 +209,9 @@ function eventadmin_get_reminder_days(): array
             continue;
         }
 
-        $day = absint($part);
+        // A plain (int) cast — not absint() — so a negative value like "-1" is
+        // discarded rather than having its sign flipped into a real reminder day.
+        $day = (int) $part;
         if ($day > 0) {
             $days[] = $day;
         }

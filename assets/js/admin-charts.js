@@ -76,4 +76,68 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
+
+    const timelineCtx = document.getElementById('eventadmin-timeline-chart');
+    if (!timelineCtx || typeof EVENTADMIN_TIMELINE_DATA === 'undefined') return;
+
+    const rows = EVENTADMIN_TIMELINE_DATA.rows;
+    const timelineI18n = EVENTADMIN_TIMELINE_DATA.i18n;
+    const dateFormatter = new Intl.DateTimeFormat(document.documentElement.lang || undefined, {
+        weekday: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+
+    // Bar charts default their value axis to include zero, which would compress
+    // these (very large) millisecond timestamps into an invisible sliver — bound
+    // the axis to the actual data range instead, with a small margin either side.
+    const xMin = Math.min(...rows.map(r => r.start * 1000));
+    const xMax = Math.max(...rows.map(r => r.end * 1000));
+    const xPad = (xMax - xMin) * 0.02 || 30 * 60 * 1000;
+
+    new Chart(timelineCtx, {
+        type: 'bar',
+        data: {
+            labels: rows.map(r => r.volunteer),
+            datasets: [{
+                data: rows.map(r => [r.start * 1000, r.end * 1000]),
+                backgroundColor: rows.map(r => r.color),
+                barPercentage: 0.8,
+                categoryPercentage: 0.9,
+            }],
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {display: false},
+                tooltip: {
+                    callbacks: {
+                        title: (items) => rows[items[0].dataIndex].volunteer,
+                        label: (item) => {
+                            const row = rows[item.dataIndex];
+                            return [
+                                timelineI18n.shift + ': ' + row.shift,
+                                timelineI18n.period + ': ' + row.period,
+                            ];
+                        },
+                    },
+                },
+            },
+            scales: {
+                x: {
+                    type: 'linear',
+                    min: xMin - xPad,
+                    max: xMax + xPad,
+                    ticks: {
+                        callback: (value) => dateFormatter.format(new Date(value)),
+                    },
+                },
+                y: {
+                    ticks: {autoSkip: false},
+                },
+            },
+        },
+    });
 });

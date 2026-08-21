@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-08-21T12:36:53+00:00\n"
+"POT-Creation-Date: 2026-08-21T12:51:14+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: fr_BE\n"
 "MIME-Version: 1.0\n"
@@ -120,7 +120,7 @@ msgstr "Pièce jointe (facultatif)"
 msgid "Select PDF…"
 msgstr "Sélectionner un PDF…"
 
-#: includes/admin/bulk-email.php:69 includes/admin/dashboard.php:532
+#: includes/admin/bulk-email.php:69 includes/admin/dashboard.php:566
 msgid "Remove"
 msgstr "Retirer"
 
@@ -186,7 +186,7 @@ msgstr "Aperçu (données exemple)"
 msgid "From:"
 msgstr "De :"
 
-#: includes/admin/bulk-email.php:174 includes/admin/settings.php:644
+#: includes/admin/bulk-email.php:174 includes/admin/settings.php:646
 msgid "Subject:"
 msgstr "Objet :"
 
@@ -249,7 +249,7 @@ msgstr "Aucune annonce envoyée pour l'instant."
 msgid "Filter…"
 msgstr "Filtrer…"
 
-#: includes/admin/bulk-email.php:236 includes/admin/dashboard.php:330
+#: includes/admin/bulk-email.php:236 includes/admin/dashboard.php:331
 #: includes/admin/volunteer-list.php:306 includes/admin/volunteer-list.php:332
 msgid "Date"
 msgstr "Date"
@@ -298,9 +298,9 @@ msgstr "Service : %s"
 msgid "Category: %s"
 msgstr "Catégorie : %s"
 
-#: includes/admin/bulk-email.php:272 includes/admin/dashboard.php:288
-#: includes/admin/dashboard.php:297 includes/admin/dashboard.php:306
-#: includes/admin/dashboard.php:321 includes/admin/volunteer-list.php:106
+#: includes/admin/bulk-email.php:272 includes/admin/dashboard.php:289
+#: includes/admin/dashboard.php:298 includes/admin/dashboard.php:307
+#: includes/admin/dashboard.php:322 includes/admin/volunteer-list.php:106
 msgid "All"
 msgstr "Tous"
 
@@ -473,7 +473,7 @@ msgstr "Places disponibles :"
 msgid "Empty"
 msgstr "Vide"
 
-#: includes/admin/dashboard.php:254 includes/admin/dashboard.php:455
+#: includes/admin/dashboard.php:254 includes/admin/dashboard.php:489
 msgid "Understaffed"
 msgstr "Sous-effectif"
 
@@ -481,198 +481,207 @@ msgstr "Sous-effectif"
 msgid "Heavily understaffed"
 msgstr "Très en sous-effectif"
 
-#: includes/admin/dashboard.php:287
+#: includes/admin/dashboard.php:288
 msgid "Department:"
 msgstr "Département :"
 
-#: includes/admin/dashboard.php:296
+#: includes/admin/dashboard.php:297
 msgid "State:"
 msgstr "État :"
 
-#: includes/admin/dashboard.php:305
+#: includes/admin/dashboard.php:306
 msgid "Volunteers:"
 msgstr "Bénévoles :"
 
-#: includes/admin/dashboard.php:314 includes/shiftselector.php:202
+#: includes/admin/dashboard.php:315 includes/shiftselector.php:202
 msgid "Date:"
 msgstr "Date :"
 
-#: includes/admin/dashboard.php:317
+#: includes/admin/dashboard.php:318
 msgid "Show:"
 msgstr "Afficher :"
 
-#: includes/admin/dashboard.php:319
+#: includes/admin/dashboard.php:320
 msgid "Upcoming"
 msgstr "À venir"
 
-#: includes/admin/dashboard.php:320
+#: includes/admin/dashboard.php:321
 msgid "Past"
 msgstr "Passé"
 
-#: includes/admin/dashboard.php:328
+#: includes/admin/dashboard.php:329
 msgid "Sort by:"
 msgstr "Trier par :"
 
-#: includes/admin/dashboard.php:331 includes/admin/dashboard.php:517
-#: includes/admin/dashboard.php:554 includes/admin/dashboard.php:750
-#: includes/admin/dashboard.php:841 includes/admin/settings.php:515
+#: includes/admin/dashboard.php:332 includes/admin/dashboard.php:551
+#: includes/admin/dashboard.php:588 includes/admin/dashboard.php:824
+#: includes/admin/dashboard.php:915 includes/admin/settings.php:517
 #: includes/admin/volunteer-list.php:175 includes/admin/volunteer-list.php:333
 msgid "Name"
 msgstr "Nom"
 
-#: includes/admin/dashboard.php:338
+#: includes/admin/dashboard.php:339
 msgid "Order:"
 msgstr "Ordre :"
 
-#: includes/admin/dashboard.php:340
+#: includes/admin/dashboard.php:341
 msgid "Ascending"
 msgstr "Croissant"
 
-#: includes/admin/dashboard.php:341
+#: includes/admin/dashboard.php:342
 msgid "Descending"
 msgstr "Décroissant"
 
-#: includes/admin/dashboard.php:348
+#: includes/admin/dashboard.php:349
 msgid "View:"
 msgstr "Affichage :"
 
-#: includes/admin/dashboard.php:350
+#: includes/admin/dashboard.php:351
 msgid "Cards"
 msgstr "Cartes"
 
-#: includes/admin/dashboard.php:351
+#: includes/admin/dashboard.php:352
 msgid "Table"
 msgstr "Tableau"
 
-#: includes/admin/dashboard.php:357 includes/admin/volunteer-list.php:113
+#: includes/admin/dashboard.php:353
+msgid "Timeline"
+msgstr "Chronologie"
+
+#: includes/admin/dashboard.php:359 includes/admin/volunteer-list.php:113
 msgid "Filter"
 msgstr "Filtrer"
 
-#: includes/admin/dashboard.php:358
+#: includes/admin/dashboard.php:360
 msgid "Reset filter"
 msgstr "Réinitialiser le filtre"
 
-#: includes/admin/dashboard.php:446
+#: includes/admin/dashboard.php:480
 msgid "CSV for this shift"
 msgstr "CSV pour ce créneau"
 
-#: includes/admin/dashboard.php:450
+#: includes/admin/dashboard.php:484
 msgid "Period:"
 msgstr "Période :"
 
-#: includes/admin/dashboard.php:451 includes/admin/dashboard.php:836
+#: includes/admin/dashboard.php:485 includes/admin/dashboard.php:910
 msgid "Filled:"
 msgstr "Occupé :"
 
-#: includes/admin/dashboard.php:453
+#: includes/admin/dashboard.php:487
 msgid "Min.:"
 msgstr "Min. :"
 
-#: includes/admin/dashboard.php:462
+#: includes/admin/dashboard.php:496
 msgid "Add volunteers manually"
 msgstr "Ajouter des bénévoles manuellement"
 
-#: includes/admin/dashboard.php:488
+#: includes/admin/dashboard.php:522
 msgid "Select existing volunteer…"
 msgstr "Sélectionner un bénévole existant…"
 
-#: includes/admin/dashboard.php:494 includes/admin/dashboard.php:509
+#: includes/admin/dashboard.php:528 includes/admin/dashboard.php:543
 msgid "Send confirmation email"
 msgstr "Envoyer un e-mail de confirmation"
 
-#: includes/admin/dashboard.php:495
+#: includes/admin/dashboard.php:529
 msgid "Add to shift"
 msgstr "Ajouter au créneau"
 
-#: includes/admin/dashboard.php:497
+#: includes/admin/dashboard.php:531
 msgid "or add a new volunteer below"
 msgstr "ou ajoutez un nouveau bénévole ci-dessous"
 
-#: includes/admin/dashboard.php:505 includes/admin/volunteer-list.php:132
+#: includes/admin/dashboard.php:539 includes/admin/volunteer-list.php:132
 #: includes/profile.php:50 includes/registration.php:254
 msgid "First name"
 msgstr "Prénom"
 
-#: includes/admin/dashboard.php:506 includes/admin/volunteer-list.php:133
+#: includes/admin/dashboard.php:540 includes/admin/volunteer-list.php:133
 #: includes/profile.php:55 includes/registration.php:257
 msgid "Last name"
 msgstr "Nom de famille"
 
-#: includes/admin/dashboard.php:507 includes/admin/volunteer-list.php:136
+#: includes/admin/dashboard.php:541 includes/admin/volunteer-list.php:136
 msgid "E-Mail (optional)"
 msgstr "E-mail (optionnel)"
 
-#: includes/admin/dashboard.php:507 includes/admin/volunteer-list.php:136
+#: includes/admin/dashboard.php:541 includes/admin/volunteer-list.php:136
 msgid "Leave blank for offline volunteers without an email address"
 msgstr "Laisser vide pour les bénévoles hors ligne sans adresse e-mail"
 
-#: includes/admin/dashboard.php:508 includes/admin/dashboard.php:517
-#: includes/admin/dashboard.php:556 includes/admin/dashboard.php:752
-#: includes/admin/dashboard.php:843 includes/admin/volunteer-list.php:137
+#: includes/admin/dashboard.php:542 includes/admin/dashboard.php:551
+#: includes/admin/dashboard.php:590 includes/admin/dashboard.php:826
+#: includes/admin/dashboard.php:917 includes/admin/volunteer-list.php:137
 #: includes/admin/volunteer-list.php:177
 msgid "Phone"
 msgstr "Téléphone"
 
-#: includes/admin/dashboard.php:510
+#: includes/admin/dashboard.php:544
 msgid "Add"
 msgstr "Ajouter"
 
-#: includes/admin/dashboard.php:517 includes/admin/dashboard.php:555
-#: includes/admin/dashboard.php:751 includes/admin/dashboard.php:842
-#: includes/admin/settings.php:525 includes/admin/volunteer-list.php:176
+#: includes/admin/dashboard.php:551 includes/admin/dashboard.php:589
+#: includes/admin/dashboard.php:825 includes/admin/dashboard.php:916
+#: includes/admin/settings.php:527 includes/admin/volunteer-list.php:176
 #: includes/admin/volunteer-list.php:307 includes/admin/volunteer-list.php:334
 #: includes/profile.php:62 includes/registration.php:263
 msgid "E-Mail"
 msgstr "E-Mail"
 
-#: includes/admin/dashboard.php:517
+#: includes/admin/dashboard.php:551
 msgid "Action"
 msgstr "Action"
 
-#: includes/admin/dashboard.php:521 includes/admin/dashboard.php:856
+#: includes/admin/dashboard.php:555 includes/admin/dashboard.php:930
 #: includes/admin/documentation.php:107 includes/admin/volunteer-list.php:247
 msgid "Offline"
 msgstr "Hors ligne"
 
-#: includes/admin/dashboard.php:531
+#: includes/admin/dashboard.php:565
 msgid "Notify volunteer"
 msgstr "Notifier le bénévole"
 
-#: includes/admin/dashboard.php:540
+#: includes/admin/dashboard.php:574
 msgid "No volunteers assigned."
 msgstr "Aucun bénévole assigné."
 
-#: includes/admin/dashboard.php:551 includes/admin/dashboard.php:747
+#: includes/admin/dashboard.php:585 includes/admin/dashboard.php:821
 msgid "Category"
 msgstr "Catégorie"
 
-#: includes/admin/dashboard.php:552 includes/admin/dashboard.php:748
-#: includes/post-types.php:18 includes/post-types.php:29
+#: includes/admin/dashboard.php:586 includes/admin/dashboard.php:640
+#: includes/admin/dashboard.php:822 includes/post-types.php:18
+#: includes/post-types.php:29
 msgid "Shift"
 msgstr "Créneau"
 
-#: includes/admin/dashboard.php:553 includes/admin/dashboard.php:749
-#: includes/admin/quick-edit.php:114
+#: includes/admin/dashboard.php:587 includes/admin/dashboard.php:641
+#: includes/admin/dashboard.php:823 includes/admin/quick-edit.php:114
 msgid "Period"
 msgstr "Période"
 
-#: includes/admin/dashboard.php:562
+#: includes/admin/dashboard.php:596 includes/admin/dashboard.php:617
 msgid "No shifts found."
 msgstr "Aucun créneau trouvé."
 
-#: includes/admin/dashboard.php:650
+#: includes/admin/dashboard.php:604
+msgid "Open slot — not yet booked"
+msgstr "Place libre — pas encore pourvue"
+
+#: includes/admin/dashboard.php:724
 msgid "Invalid volunteer selected."
 msgstr "Bénévole sélectionné invalide."
 
-#: includes/admin/dashboard.php:753 includes/admin/quick-edit.php:60
+#: includes/admin/dashboard.php:827 includes/admin/quick-edit.php:60
 msgid "Start"
 msgstr "Début"
 
-#: includes/admin/dashboard.php:754 includes/admin/quick-edit.php:61
+#: includes/admin/dashboard.php:828 includes/admin/quick-edit.php:61
 msgid "End"
 msgstr "Fin"
 
-#: includes/admin/dashboard.php:814
+#: includes/admin/dashboard.php:888
 msgid "Assigned Volunteers"
 msgstr "Bénévoles assignés"
 
@@ -1518,20 +1527,20 @@ msgstr "Heure de fin du créneau (formatée)"
 msgid "Number of days before the shift starts"
 msgstr "Nombre de jours avant le début du créneau"
 
-#: includes/admin/settings.php:247
+#: includes/admin/settings.php:249
 msgid "Registration"
 msgstr "Inscription"
 
-#: includes/admin/settings.php:254
+#: includes/admin/settings.php:256
 msgid "Suppress WordPress password email"
 msgstr "Supprimer l'e-mail de mot de passe WordPress"
 
-#: includes/admin/settings.php:257 includes/admin/settings.php:299
-#: includes/admin/settings.php:422
+#: includes/admin/settings.php:259 includes/admin/settings.php:301
+#: includes/admin/settings.php:424
 msgid "Yes"
 msgstr "Oui"
 
-#: includes/admin/settings.php:258
+#: includes/admin/settings.php:260
 msgid ""
 "If enabled, WordPress will not send the default \"set your password\" email "
 "to newly registered volunteers."
@@ -1539,51 +1548,51 @@ msgstr ""
 "Si activé, WordPress n'enverra pas l'e-mail « définir votre mot de passe » "
 "aux nouveaux bénévoles inscrits."
 
-#: includes/admin/settings.php:266
+#: includes/admin/settings.php:268
 msgid "Rules"
 msgstr "Règles"
 
-#: includes/admin/settings.php:272
+#: includes/admin/settings.php:274
 msgid "Max. shifts per year"
 msgstr "Créneaux max. par an"
 
-#: includes/admin/settings.php:273
+#: includes/admin/settings.php:275
 msgid "Max. shifts per month"
 msgstr "Créneaux max. par mois"
 
-#: includes/admin/settings.php:274
+#: includes/admin/settings.php:276
 msgid "Max. shifts per week"
 msgstr "Créneaux max. par semaine"
 
-#: includes/admin/settings.php:275
+#: includes/admin/settings.php:277
 msgid "Max. shifts per day"
 msgstr "Créneaux max. par jour"
 
-#: includes/admin/settings.php:296
+#: includes/admin/settings.php:298
 msgid "Allow overlapping shifts"
 msgstr "Autoriser les créneaux qui se chevauchent"
 
-#: includes/admin/settings.php:307
+#: includes/admin/settings.php:309
 msgid "Sign out possible up to X hours before start"
 msgstr "Désinscription possible jusqu'à X heures avant le début"
 
-#: includes/admin/settings.php:309 includes/shiftselector.php:391
+#: includes/admin/settings.php:311 includes/shiftselector.php:391
 msgid "hours"
 msgstr "heures"
 
-#: includes/admin/settings.php:338
+#: includes/admin/settings.php:340
 msgid "Security"
 msgstr "Sécurité"
 
-#: includes/admin/settings.php:345
+#: includes/admin/settings.php:347
 msgid "CAPTCHA provider"
 msgstr "Fournisseur CAPTCHA"
 
-#: includes/admin/settings.php:349
+#: includes/admin/settings.php:351
 msgid "None"
 msgstr "Aucun"
 
-#: includes/admin/settings.php:360
+#: includes/admin/settings.php:362
 msgid ""
 "Adds a CAPTCHA challenge to the volunteer registration form to block "
 "automated spam registrations."
@@ -1593,12 +1602,12 @@ msgstr ""
 
 #. translators: %s = link to the Simple Cloudflare Turnstile plugin on
 #. WordPress.org
-#: includes/admin/settings.php:365
+#: includes/admin/settings.php:367
 #, php-format
 msgid "Requires the free %s plugin to be installed and activated."
 msgstr "Nécessite que le plugin gratuit %s soit installé et activé."
 
-#: includes/admin/settings.php:369
+#: includes/admin/settings.php:371
 msgid ""
 "The Simple Cloudflare Turnstile plugin is active but has no site key/secret "
 "key configured yet. Until it is configured, registration is blocked for "
@@ -1608,11 +1617,11 @@ msgstr ""
 " secrète n'est encore configurée. Tant qu'il n'est pas configuré, "
 "l'inscription est bloquée pour tout le monde."
 
-#: includes/admin/settings.php:378
+#: includes/admin/settings.php:380
 msgid "CAPTCHA site key"
 msgstr "Clé de site CAPTCHA"
 
-#: includes/admin/settings.php:381
+#: includes/admin/settings.php:383
 msgid ""
 "Get your keys from the provider's admin console. Not used for Cloudflare "
 "Turnstile — configure its site key in the Simple Cloudflare Turnstile plugin"
@@ -1622,11 +1631,11 @@ msgstr ""
 "utilisé pour Cloudflare Turnstile — configurez plutôt sa clé de site dans "
 "les paramètres du plugin Simple Cloudflare Turnstile."
 
-#: includes/admin/settings.php:389
+#: includes/admin/settings.php:391
 msgid "CAPTCHA secret key"
 msgstr "Clé secrète CAPTCHA"
 
-#: includes/admin/settings.php:392
+#: includes/admin/settings.php:394
 msgid ""
 "Not used for Cloudflare Turnstile — configure its secret key in the Simple "
 "Cloudflare Turnstile plugin settings instead."
@@ -1634,11 +1643,11 @@ msgstr ""
 "Non utilisé pour Cloudflare Turnstile — configurez plutôt sa clé secrète "
 "dans les paramètres du plugin Simple Cloudflare Turnstile."
 
-#: includes/admin/settings.php:400
+#: includes/admin/settings.php:402
 msgid "reCAPTCHA v3 score threshold"
 msgstr "Seuil de score reCAPTCHA v3"
 
-#: includes/admin/settings.php:404
+#: includes/admin/settings.php:406
 msgid ""
 "Scores below this value are treated as bots (0.0 = all pass, 1.0 = all "
 "blocked). Default: 0.5. Only applies to reCAPTCHA v3."
@@ -1647,15 +1656,15 @@ msgstr ""
 " passent, 1.0 = tous bloqués). Par défaut : 0.5. S'applique uniquement à "
 "reCAPTCHA v3."
 
-#: includes/admin/settings.php:412
+#: includes/admin/settings.php:414
 msgid "Volunteer Shift Selector"
 msgstr "Sélecteur de créneaux bénévoles"
 
-#: includes/admin/settings.php:419
+#: includes/admin/settings.php:421
 msgid "Show full shifts to volunteers"
 msgstr "Afficher les créneaux complets aux bénévoles"
 
-#: includes/admin/settings.php:423
+#: includes/admin/settings.php:425
 msgid ""
 "If enabled, a \"Full shifts\" section is shown on the volunteer shift "
 "selector page."
@@ -1663,57 +1672,57 @@ msgstr ""
 "Si activé, une section « Créneaux complets » est affichée sur la page de "
 "sélection des créneaux."
 
-#: includes/admin/settings.php:431
+#: includes/admin/settings.php:433
 msgid "Volunteer shift filters"
 msgstr "Filtres de créneaux bénévoles"
 
-#: includes/admin/settings.php:435
+#: includes/admin/settings.php:437
 msgid "Text search"
 msgstr "Recherche textuelle"
 
-#: includes/admin/settings.php:436
+#: includes/admin/settings.php:438
 msgid "Date filter"
 msgstr "Filtre par date"
 
-#: includes/admin/settings.php:437
+#: includes/admin/settings.php:439
 msgid "Category filter"
 msgstr "Filtre par catégorie"
 
-#: includes/admin/settings.php:445
+#: includes/admin/settings.php:447
 msgid "Choose which filter controls appear on the volunteer shift selector."
 msgstr ""
 "Choisissez les filtres affichés sur le sélecteur de créneaux pour les "
 "bénévoles."
 
-#: includes/admin/settings.php:453
+#: includes/admin/settings.php:455
 msgid "Formatting"
 msgstr "Mise en forme"
 
-#: includes/admin/settings.php:460
+#: includes/admin/settings.php:462
 msgid "Date format (shift start)"
 msgstr "Format de date (début du créneau)"
 
-#: includes/admin/settings.php:466 includes/admin/settings.php:484
+#: includes/admin/settings.php:468 includes/admin/settings.php:486
 msgid "Example:"
 msgstr "Exemple :"
 
-#: includes/admin/settings.php:467 includes/admin/settings.php:485
+#: includes/admin/settings.php:469 includes/admin/settings.php:487
 msgid "Default:"
 msgstr "Par défaut :"
 
-#: includes/admin/settings.php:468 includes/admin/settings.php:486
+#: includes/admin/settings.php:470 includes/admin/settings.php:488
 msgid "Common tokens"
 msgstr "Codes courants"
 
-#: includes/admin/settings.php:478
+#: includes/admin/settings.php:480
 msgid "Time format (shift end)"
 msgstr "Format d'heure (fin du créneau)"
 
-#: includes/admin/settings.php:496
+#: includes/admin/settings.php:498
 msgid "Custom CSS"
 msgstr "CSS personnalisé"
 
-#: includes/admin/settings.php:500
+#: includes/admin/settings.php:502
 msgid ""
 "Additional CSS injected on the frontend. Use this for theme-specific "
 "adjustments without modifying your theme files."
@@ -1721,63 +1730,68 @@ msgstr ""
 "CSS supplémentaire injecté sur le frontend. Utilisez-le pour des ajustements"
 " spécifiques au thème sans modifier vos fichiers de thème."
 
-#: includes/admin/settings.php:508
+#: includes/admin/settings.php:510
 msgid "Sender"
 msgstr "Expéditeur"
 
-#: includes/admin/settings.php:535
+#: includes/admin/settings.php:537
 msgid "Volunteer Notifications"
 msgstr "Notifications aux bénévoles"
 
-#: includes/admin/settings.php:542
+#: includes/admin/settings.php:544
 msgid "Email Subject (Sign up)"
 msgstr "Objet de l'e-mail (Inscription)"
 
-#: includes/admin/settings.php:553
+#: includes/admin/settings.php:555
 msgid "Email Text (Sign up)"
 msgstr "Texte de l'e-mail (Inscription)"
 
-#: includes/admin/settings.php:564
+#: includes/admin/settings.php:566
 msgid "Email Subject (Sign out)"
 msgstr "Objet de l'e-mail (Désinscription)"
 
-#: includes/admin/settings.php:575
+#: includes/admin/settings.php:577
 msgid "Email Text (Sign out)"
 msgstr "Texte de l'e-mail (Désinscription)"
 
-#: includes/admin/settings.php:586
+#: includes/admin/settings.php:588
 msgid "Shift Reminders"
 msgstr "Rappels de créneau"
 
-#: includes/admin/settings.php:593
+#: includes/admin/settings.php:595
 msgid "Send reminder X days before start"
 msgstr "Envoyer un rappel X jours avant le début"
 
-#: includes/admin/settings.php:597
-msgid "Comma-separated whole days, e.g. 7, 1"
-msgstr "Jours entiers séparés par des virgules, p. ex. 7, 1"
+#: includes/admin/settings.php:599
+msgid ""
+"Comma-separated whole days, e.g. 7, 1. Negative or zero values are ignored. "
+"Leave empty to turn reminder emails off entirely."
+msgstr ""
+"Jours entiers séparés par des virgules, p. ex. 7, 1. Les valeurs négatives "
+"ou nulles sont ignorées. Laissez vide pour désactiver complètement les "
+"e-mails de rappel."
 
-#: includes/admin/settings.php:605
+#: includes/admin/settings.php:607
 msgid "Email Subject (Reminder)"
 msgstr "Objet de l'e-mail (Rappel)"
 
-#: includes/admin/settings.php:616
+#: includes/admin/settings.php:618
 msgid "Email Text (Reminder)"
 msgstr "Texte de l'e-mail (Rappel)"
 
-#: includes/admin/settings.php:634
+#: includes/admin/settings.php:636
 msgid "Sign up"
 msgstr "S'inscrire"
 
-#: includes/admin/settings.php:635
+#: includes/admin/settings.php:637
 msgid "Sign out"
 msgstr "Se désinscrire"
 
-#: includes/admin/settings.php:636
+#: includes/admin/settings.php:638
 msgid "Reminder"
 msgstr "Rappel"
 
-#: includes/admin/settings.php:639
+#: includes/admin/settings.php:641
 msgid "Live preview of emails (with example values):"
 msgstr "Aperçu en direct des e-mails (avec des valeurs d'exemple) :"
 
@@ -2111,7 +2125,7 @@ msgid "The volunteer %1$s, %2$s was %3$s for the shift: %4$s"
 msgstr "Le bénévole %1$s %2$s a été %3$s pour le créneau : %4$s"
 
 #. translators: %s = site name
-#: includes/notifications.php:340
+#: includes/notifications.php:342
 #, php-format
 msgid "This email was sent by %s."
 msgstr "Cet e-mail a été envoyé par %s."
@@ -2352,6 +2366,9 @@ msgstr "Vous avez été désinscrit avec succès."
 #: includes/shiftselector.php:417
 msgid "You are not signed up for this shift."
 msgstr "Vous n'êtes pas inscrit à ce créneau."
+
+#~ msgid "Comma-separated whole days, e.g. 7, 1"
+#~ msgstr "Jours entiers séparés par des virgules, p. ex. 7, 1"
 
 #~ msgid "Use {first_name} and {last_name} as placeholders in the message body."
 #~ msgstr ""

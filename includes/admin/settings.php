@@ -148,7 +148,9 @@ function eventadmin_sanitize_reminder_days($value): string
         if ($part === '') {
             continue;
         }
-        $day = absint($part);
+        // A plain (int) cast — not absint() — so a negative value like "-1" is
+        // discarded rather than having its sign flipped into a real reminder day.
+        $day = (int) $part;
         if ($day > 0) {
             $days[] = $day;
         }
@@ -594,7 +596,7 @@ function eventadmin_plugin_register_settings(): void
         static function () {
             $val = get_option('eventadmin_email_reminder_days', '7, 1');
             echo '<input type="text" name="eventadmin_email_reminder_days" value="' . esc_attr($val) . '" class="regular-text">';
-            echo '<p class="description">' . esc_html__('Comma-separated whole days, e.g. 7, 1', 'eventadmin-volunteer-management') . '</p>';
+            echo '<p class="description">' . esc_html__('Comma-separated whole days, e.g. 7, 1. Negative or zero values are ignored. Leave empty to turn reminder emails off entirely.', 'eventadmin-volunteer-management') . '</p>';
         },
         'eventadmin-settings-communication',
         'eventadmin_communication_reminders'
