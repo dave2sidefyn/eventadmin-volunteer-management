@@ -348,7 +348,7 @@ function eventadmin_admin_overview_page(): void
     echo '</form>';
 
     $current_page = isset($_GET['paged']) ? absint($_GET['paged']) : 1;
-    $per_page     = 20;
+    $per_page     = 200;
     $total_found  = 0;
 
     $shifts = eventadmin_get_shifts(
@@ -433,9 +433,16 @@ function eventadmin_admin_overview_page(): void
         $existing_volunteers = get_users([
             'role'       => 'eventadmin_volunteer',
             'exclude'    => $assigned_ids,
-            'orderby'    => 'display_name',
             'meta_query' => [['key' => 'eventadmin_offline_volunteer', 'compare' => 'NOT EXISTS']],
         ]);
+        // Sort by the same first/last name shown in the option label below — registration
+        // never sets WP's display_name, so sorting by it (as before) put volunteers in
+        // an order unrelated to what the dropdown actually displays.
+        usort($existing_volunteers, function ($a, $b) {
+            $label_a = trim($a->first_name . ' ' . $a->last_name) ?: $a->user_login;
+            $label_b = trim($b->first_name . ' ' . $b->last_name) ?: $b->user_login;
+            return strcasecmp($label_a, $label_b);
+        });
         if (!empty($existing_volunteers)) {
             echo '<form method="post" style="margin-bottom:12px;">';
             wp_nonce_field('eventadmin_add_user', 'eventadmin_add_user_nonce');

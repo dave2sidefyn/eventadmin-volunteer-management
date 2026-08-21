@@ -141,7 +141,7 @@ function eventadmin_volunteer_list_page(): void
     echo '</div>';
 
     // Grant volunteer role section
-    $non_volunteers = get_users(['role__not_in' => ['eventadmin_volunteer'], 'fields' => ['ID', 'display_name', 'user_email']]);
+    $non_volunteers = get_users(['role__not_in' => ['eventadmin_volunteer'], 'orderby' => 'display_name', 'fields' => ['ID', 'display_name', 'user_email']]);
     echo '<div style="background:#f6f7f7;border:1px solid #dcdcde;padding:16px;margin-bottom:24px;max-width:480px;">';
     echo '<h3 style="margin-top:0;">' . esc_html__('Grant volunteer role', 'eventadmin-volunteer-management') . '</h3>';
     if (empty($non_volunteers)) {
