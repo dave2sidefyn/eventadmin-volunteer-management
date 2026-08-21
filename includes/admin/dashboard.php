@@ -278,6 +278,10 @@ function eventadmin_admin_overview_page(): void
     $order       = in_array(strtoupper($raw_order), $allowed_orders, true)  ? strtoupper($raw_order) : 'ASC';
     $allowed_views = ['cards', 'table', 'timeline'];
     $view          = in_array($raw_view, $allowed_views, true) ? $raw_view : 'cards';
+    // Checkboxes submit nothing when unchecked, so a hidden "0" companion field (rendered
+    // just before the checkbox) is what lets us tell "unchecked" apart from "not submitted
+    // yet" — the checkbox's own value overwrites it in the query string only when checked.
+    $show_open = !$filter_valid || (isset($_GET['show_open']) && $_GET['show_open'] === '1');
 
     echo '<form method="get" action="edit.php" class="form-filters">';
     wp_nonce_field('eventadmin_filter_shifts', 'eventadmin_filter_shifts_nonce');
@@ -356,6 +360,10 @@ function eventadmin_admin_overview_page(): void
     }
     echo '</select></label>';
 
+    echo '<label style="margin-left:8px;"><input type="hidden" name="show_open" value="0">';
+    echo '<input type="checkbox" name="show_open" value="1"' . checked($show_open, true, false) . '> ';
+    echo esc_html__('Show open slots in timeline', 'eventadmin-volunteer-management') . '</label>';
+
     echo '<input type="submit" class="button" value="' . esc_attr__('Filter', 'eventadmin-volunteer-management') . '">';
     echo '<a href="' . esc_html(admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-overview')) . '" class="button">' . esc_html__('Reset filter', 'eventadmin-volunteer-management') . '</a>';
 
@@ -377,8 +385,9 @@ function eventadmin_admin_overview_page(): void
         $total_found
     );
 
-    $table_rows    = [];
-    $timeline_rows = [];
+    $table_rows     = [];
+    $timeline_rows  = [];
+    $shift_info_map = [];
 
     foreach ($shifts as $shift) {
         $title = esc_html($shift->post_title);
@@ -403,6 +412,13 @@ function eventadmin_admin_overview_page(): void
                     ];
                 }
             }
+        }
+
+        if ($view !== 'cards') {
+            $shift_info_map[$shift->ID] = [
+                'title'    => $title,
+                'assigned' => array_column($users, 'id'),
+            ];
         }
 
         if (
@@ -440,6 +456,7 @@ function eventadmin_admin_overview_page(): void
                 $table_rows[] = [
                     'category' => $category_names,
                     'shift'    => $title,
+                    'shift_id' => $shift->ID,
                     'period'   => $period,
                     'capacity' => $capacity_label,
                     'name'     => '',
@@ -469,39 +486,48 @@ function eventadmin_admin_overview_page(): void
                 $timeline_rows[] = [
                     'volunteer' => $u['name'],
                     'shift'     => $title,
+                    'shift_id'  => $shift->ID,
                     'period'    => $period,
                     'capacity'  => $capacity_label,
                     'start'     => $start_ts,
                     'end'       => $end_ts,
                     'color'     => $bar_color,
+                    'open'      => false,
                 ];
             }
             // Open slots: the portion still below min_volunteers is critical (red),
             // the rest up to max_volunteers is nice-to-have extra capacity (grey).
-            $required_open = max(0, $min - $assigned);
-            $optional_open = max(0, $max - $assigned) - $required_open;
-            $open_label    = esc_html__('Open slot', 'eventadmin-volunteer-management');
-            for ($i = 0; $i < $required_open; $i++) {
-                $timeline_rows[] = [
-                    'volunteer' => $open_label,
-                    'shift'     => $title,
-                    'period'    => $period,
-                    'capacity'  => $capacity_label,
-                    'start'     => $start_ts,
-                    'end'       => $end_ts,
-                    'color'     => '#e53935',
-                ];
-            }
-            for ($i = 0; $i < $optional_open; $i++) {
-                $timeline_rows[] = [
-                    'volunteer' => $open_label,
-                    'shift'     => $title,
-                    'period'    => $period,
-                    'capacity'  => $capacity_label,
-                    'start'     => $start_ts,
-                    'end'       => $end_ts,
-                    'color'     => '#9e9e9e',
-                ];
+            // Skipped entirely when the "show open slots" filter is off.
+            if ($show_open) {
+                $required_open = max(0, $min - $assigned);
+                $optional_open = max(0, $max - $assigned) - $required_open;
+                $open_label    = esc_html__('Open slot', 'eventadmin-volunteer-management');
+                for ($i = 0; $i < $required_open; $i++) {
+                    $timeline_rows[] = [
+                        'volunteer' => $open_label,
+                        'shift'     => $title,
+                        'shift_id'  => $shift->ID,
+                        'period'    => $period,
+                        'capacity'  => $capacity_label,
+                        'start'     => $start_ts,
+                        'end'       => $end_ts,
+                        'color'     => '#e53935',
+                        'open'      => true,
+                    ];
+                }
+                for ($i = 0; $i < $optional_open; $i++) {
+                    $timeline_rows[] = [
+                        'volunteer' => $open_label,
+                        'shift'     => $title,
+                        'shift_id'  => $shift->ID,
+                        'period'    => $period,
+                        'capacity'  => $capacity_label,
+                        'start'     => $start_ts,
+                        'end'       => $end_ts,
+                        'color'     => '#9e9e9e',
+                        'open'      => true,
+                    ];
+                }
             }
             continue;
         }
@@ -644,7 +670,8 @@ function eventadmin_admin_overview_page(): void
             echo '<td>' . esc_html($row['period']) . '</td>';
             echo '<td>' . esc_html($row['capacity']) . '</td>';
             if ($row['open']) {
-                echo '<td colspan="3"><em>&#9888; ' . esc_html__('Open slot — not yet booked', 'eventadmin-volunteer-management') . '</em></td>';
+                echo '<td colspan="3"><em>&#9888; ' . esc_html__('Open slot — not yet booked', 'eventadmin-volunteer-management') . '</em> ';
+                echo '<button type="button" class="button button-small eventadmin-open-slot-add" data-shift-id="' . esc_attr($row['shift_id']) . '">' . esc_html__('Add volunteer', 'eventadmin-volunteer-management') . '</button></td>';
             } else {
                 echo '<td>' . esc_html($row['name']) . '</td>';
                 echo '<td>' . ($row['email'] === '' ? '<em style="color:#aaa;">—</em>' : esc_html($row['email'])) . '</td>';
@@ -691,6 +718,58 @@ function eventadmin_admin_overview_page(): void
         }
     }
 
+    // Shared "add volunteer" modal for the Table and Timeline views — Cards already has
+    // this same form inline per shift, so this reuses the exact same fields/handler and
+    // just wraps them in a JS-toggled overlay instead of one form per card.
+    if ($view !== 'cards') {
+        echo '<div id="eventadmin-add-volunteer-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100000;">';
+        echo '<div style="background:#fff;max-width:480px;margin:60px auto;padding:20px;border-radius:6px;max-height:80vh;overflow-y:auto;">';
+        echo '<h2 id="eventadmin-modal-shift-title" style="margin-top:0;"></h2>';
+
+        echo '<form method="post" id="eventadmin-modal-existing-form" style="margin-bottom:12px;">';
+        wp_nonce_field('eventadmin_add_user', 'eventadmin_add_user_nonce');
+        echo '<input type="hidden" name="eventadmin_admin_add_user" value="1">';
+        echo '<input type="hidden" name="shift_id" id="eventadmin-modal-shift-id-existing" value="">';
+        echo '<input type="hidden" name="assign_existing" value="1">';
+        echo '<p><select name="existing_user_id" id="eventadmin-modal-existing-select" style="width:100%;">';
+        echo '<option value="">' . esc_html__('Select existing volunteer…', 'eventadmin-volunteer-management') . '</option>';
+        echo '</select></p>';
+        echo '<label><input type="checkbox" name="notify_volunteer" value="1"> ' . esc_html__('Send confirmation email', 'eventadmin-volunteer-management') . '</label>';
+        echo '<p>';
+        submit_button(esc_html__('Add to shift', 'eventadmin-volunteer-management'), 'secondary small', '', false);
+        echo '</p></form>';
+
+        echo '<p style="color:#888;font-size:12px;font-style:italic;">— ' . esc_html__('or add a new volunteer below', 'eventadmin-volunteer-management') . ' —</p>';
+
+        echo '<form method="post" id="eventadmin-modal-new-form">';
+        wp_nonce_field('eventadmin_add_user', 'eventadmin_add_user_nonce');
+        echo '<input type="hidden" name="eventadmin_admin_add_user" value="1">';
+        echo '<input type="hidden" name="shift_id" id="eventadmin-modal-shift-id-new" value="">';
+        echo '<p><input type="text" name="first_name" placeholder="' . esc_attr__('First name', 'eventadmin-volunteer-management') . '" style="width:100%;" required></p>';
+        echo '<p><input type="text" name="last_name" placeholder="' . esc_attr__('Last name', 'eventadmin-volunteer-management') . '" style="width:100%;"></p>';
+        echo '<p><input type="text" name="user_identifier" placeholder="' . esc_attr__('E-Mail (optional)', 'eventadmin-volunteer-management') . '" style="width:100%;" title="' . esc_attr__('Leave blank for offline volunteers without an email address', 'eventadmin-volunteer-management') . '"></p>';
+        echo '<p><input type="text" name="phone" placeholder="' . esc_attr__('Phone', 'eventadmin-volunteer-management') . '" style="width:100%;"></p>';
+        echo '<label><input type="checkbox" name="notify_volunteer" value="1"> ' . esc_html__('Send confirmation email', 'eventadmin-volunteer-management') . '</label>';
+        echo '<p>';
+        submit_button(esc_html__('Add', 'eventadmin-volunteer-management'), 'secondary small', '', false);
+        echo '</p></form>';
+
+        echo '<p><button type="button" id="eventadmin-modal-close" class="button">' . esc_html__('Close', 'eventadmin-volunteer-management') . '</button></p>';
+        echo '</div></div>';
+
+        $all_volunteer_options = array_map(function ($v) {
+            return [
+                'id'    => $v->ID,
+                'label' => trim($v->first_name . ' ' . $v->last_name) ?: $v->user_login,
+            ];
+        }, $volunteers);
+
+        echo '<script>';
+        echo 'const EVENTADMIN_VOLUNTEERS = ' . wp_json_encode($all_volunteer_options) . ';';
+        echo 'const EVENTADMIN_SHIFT_INFO = ' . wp_json_encode($shift_info_map) . ';';
+        echo ';</script>';
+    }
+
     // Pagination
     $total_pages = $total_found > 0 ? (int)ceil($total_found / $per_page) : 1;
     if ($total_pages > 1) {
@@ -706,6 +785,7 @@ function eventadmin_admin_overview_page(): void
             'sort_by'                         => $sort_by !== 'date' ? $sort_by : null,
             'order'                           => $order !== 'ASC' ? $order : null,
             'filter_view'                     => $view !== 'cards' ? $view : null,
+            'show_open'                       => $show_open ? null : '0',
             'eventadmin_filter_shifts_nonce'  => wp_create_nonce('eventadmin_filter_shifts'),
         ]), admin_url('edit.php'));
 

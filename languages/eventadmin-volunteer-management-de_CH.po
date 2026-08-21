@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management - Development (trunk)\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-08-21T13:05:40+00:00\n"
+"POT-Creation-Date: 2026-08-21T13:21:02+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: de_CH\n"
 "MIME-Version: 1.0\n"
@@ -120,7 +120,7 @@ msgstr "Anhang (optional)"
 msgid "Select PDF…"
 msgstr "PDF auswählen…"
 
-#: includes/admin/bulk-email.php:69 includes/admin/dashboard.php:607
+#: includes/admin/bulk-email.php:69 includes/admin/dashboard.php:633
 msgid "Remove"
 msgstr "Entfernen"
 
@@ -249,7 +249,7 @@ msgstr "Noch keine Ankündigungen gesendet."
 msgid "Filter…"
 msgstr "Filtern…"
 
-#: includes/admin/bulk-email.php:236 includes/admin/dashboard.php:331
+#: includes/admin/bulk-email.php:236 includes/admin/dashboard.php:335
 #: includes/admin/volunteer-list.php:306 includes/admin/volunteer-list.php:332
 msgid "Date"
 msgstr "Datum"
@@ -298,9 +298,9 @@ msgstr "Schicht: %s"
 msgid "Category: %s"
 msgstr "Kategorie: %s"
 
-#: includes/admin/bulk-email.php:272 includes/admin/dashboard.php:289
-#: includes/admin/dashboard.php:298 includes/admin/dashboard.php:307
-#: includes/admin/dashboard.php:322 includes/admin/volunteer-list.php:106
+#: includes/admin/bulk-email.php:272 includes/admin/dashboard.php:293
+#: includes/admin/dashboard.php:302 includes/admin/dashboard.php:311
+#: includes/admin/dashboard.php:326 includes/admin/volunteer-list.php:106
 msgid "All"
 msgstr "Alle"
 
@@ -473,7 +473,7 @@ msgstr "Offene Positionen"
 msgid "Empty"
 msgstr "Leer"
 
-#: includes/admin/dashboard.php:254 includes/admin/dashboard.php:530
+#: includes/admin/dashboard.php:254 includes/admin/dashboard.php:556
 msgid "Understaffed"
 msgstr "Unterbesetzt"
 
@@ -481,225 +481,242 @@ msgstr "Unterbesetzt"
 msgid "Heavily understaffed"
 msgstr "Stark unterbesetzt"
 
-#: includes/admin/dashboard.php:288
+#: includes/admin/dashboard.php:292
 msgid "Department:"
 msgstr "Abteilung"
 
-#: includes/admin/dashboard.php:297
+#: includes/admin/dashboard.php:301
 msgid "State:"
 msgstr "Status:"
 
-#: includes/admin/dashboard.php:306
+#: includes/admin/dashboard.php:310
 msgid "Volunteers:"
 msgstr "Volunteers:"
 
-#: includes/admin/dashboard.php:315 includes/shiftselector.php:202
+#: includes/admin/dashboard.php:319 includes/shiftselector.php:202
 msgid "Date:"
 msgstr "Datum:"
 
-#: includes/admin/dashboard.php:318
+#: includes/admin/dashboard.php:322
 msgid "Show:"
 msgstr "Anzeigen:"
 
-#: includes/admin/dashboard.php:320
+#: includes/admin/dashboard.php:324
 msgid "Upcoming"
 msgstr "Bevorstehend"
 
-#: includes/admin/dashboard.php:321
+#: includes/admin/dashboard.php:325
 msgid "Past"
 msgstr "Vergangen"
 
-#: includes/admin/dashboard.php:329
+#: includes/admin/dashboard.php:333
 msgid "Sort by:"
 msgstr "Sortieren nach:"
 
-#: includes/admin/dashboard.php:332 includes/admin/dashboard.php:592
-#: includes/admin/dashboard.php:630 includes/admin/dashboard.php:870
-#: includes/admin/dashboard.php:961 includes/admin/settings.php:517
+#: includes/admin/dashboard.php:336 includes/admin/dashboard.php:618
+#: includes/admin/dashboard.php:656 includes/admin/dashboard.php:950
+#: includes/admin/dashboard.php:1041 includes/admin/settings.php:517
 #: includes/admin/volunteer-list.php:175 includes/admin/volunteer-list.php:333
 msgid "Name"
 msgstr "Name"
 
-#: includes/admin/dashboard.php:339
+#: includes/admin/dashboard.php:343
 msgid "Order:"
 msgstr "Reihenfolge:"
 
-#: includes/admin/dashboard.php:341
+#: includes/admin/dashboard.php:345
 msgid "Ascending"
 msgstr "Aufsteigend"
 
-#: includes/admin/dashboard.php:342
+#: includes/admin/dashboard.php:346
 msgid "Descending"
 msgstr "Absteigend"
 
-#: includes/admin/dashboard.php:349
+#: includes/admin/dashboard.php:353
 msgid "View:"
 msgstr "Ansicht:"
 
-#: includes/admin/dashboard.php:351
+#: includes/admin/dashboard.php:355
 msgid "Cards"
 msgstr "Karten"
 
-#: includes/admin/dashboard.php:352
+#: includes/admin/dashboard.php:356
 msgid "Table"
 msgstr "Tabelle"
 
-#: includes/admin/dashboard.php:353
+#: includes/admin/dashboard.php:357
 msgid "Timeline"
 msgstr "Zeitachse"
 
-#: includes/admin/dashboard.php:359 includes/admin/volunteer-list.php:113
+#: includes/admin/dashboard.php:365
+msgid "Show open slots in timeline"
+msgstr "Offene Stellen in der Zeitachse anzeigen"
+
+#: includes/admin/dashboard.php:367 includes/admin/volunteer-list.php:113
 msgid "Filter"
 msgstr "Filtern"
 
-#: includes/admin/dashboard.php:360
+#: includes/admin/dashboard.php:368
 msgid "Reset filter"
 msgstr "Filter zurücksetzen"
 
 #. translators: %d is the minimum number of volunteers required
-#: includes/admin/dashboard.php:423 includes/admin/dashboard.php:466
+#: includes/admin/dashboard.php:439 includes/admin/dashboard.php:483
 #, php-format
 msgid "(min %d)"
 msgstr "(min %d)"
 
-#: includes/admin/dashboard.php:483
+#: includes/admin/dashboard.php:504
 msgid "Open slot"
 msgstr "Offene Stelle"
 
-#: includes/admin/dashboard.php:521
+#: includes/admin/dashboard.php:547
 msgid "CSV for this shift"
 msgstr "CSV für diese Schicht"
 
-#: includes/admin/dashboard.php:525
+#: includes/admin/dashboard.php:551
 msgid "Period:"
 msgstr "Zeitraum:"
 
-#: includes/admin/dashboard.php:526 includes/admin/dashboard.php:956
+#: includes/admin/dashboard.php:552 includes/admin/dashboard.php:1036
 msgid "Filled:"
 msgstr "Besetzt:"
 
-#: includes/admin/dashboard.php:528
+#: includes/admin/dashboard.php:554
 msgid "Min.:"
 msgstr "Min.:"
 
-#: includes/admin/dashboard.php:537
+#: includes/admin/dashboard.php:563
 msgid "Add volunteers manually"
 msgstr "Volunteer manuell hinzufügen"
 
-#: includes/admin/dashboard.php:563
+#: includes/admin/dashboard.php:589 includes/admin/dashboard.php:735
 msgid "Select existing volunteer…"
 msgstr "Bestehende Person auswählen…"
 
-#: includes/admin/dashboard.php:569 includes/admin/dashboard.php:584
+#: includes/admin/dashboard.php:595 includes/admin/dashboard.php:610
+#: includes/admin/dashboard.php:737 includes/admin/dashboard.php:752
 msgid "Send confirmation email"
 msgstr "Bestätigungs-E-Mail senden"
 
-#: includes/admin/dashboard.php:570
+#: includes/admin/dashboard.php:596 includes/admin/dashboard.php:739
 msgid "Add to shift"
 msgstr "Zur Schicht hinzufügen"
 
-#: includes/admin/dashboard.php:572
+#: includes/admin/dashboard.php:598 includes/admin/dashboard.php:742
 msgid "or add a new volunteer below"
 msgstr "oder neue Person unten hinzufügen"
 
-#: includes/admin/dashboard.php:580 includes/admin/volunteer-list.php:132
-#: includes/profile.php:50 includes/registration.php:254
+#: includes/admin/dashboard.php:606 includes/admin/dashboard.php:748
+#: includes/admin/volunteer-list.php:132 includes/profile.php:50
+#: includes/registration.php:254
 msgid "First name"
 msgstr "Vorname"
 
-#: includes/admin/dashboard.php:581 includes/admin/volunteer-list.php:133
-#: includes/profile.php:55 includes/registration.php:257
+#: includes/admin/dashboard.php:607 includes/admin/dashboard.php:749
+#: includes/admin/volunteer-list.php:133 includes/profile.php:55
+#: includes/registration.php:257
 msgid "Last name"
 msgstr "Nachname"
 
-#: includes/admin/dashboard.php:582 includes/admin/volunteer-list.php:136
+#: includes/admin/dashboard.php:608 includes/admin/dashboard.php:750
+#: includes/admin/volunteer-list.php:136
 msgid "E-Mail (optional)"
 msgstr "E-Mail (optional)"
 
-#: includes/admin/dashboard.php:582 includes/admin/volunteer-list.php:136
+#: includes/admin/dashboard.php:608 includes/admin/dashboard.php:750
+#: includes/admin/volunteer-list.php:136
 msgid "Leave blank for offline volunteers without an email address"
 msgstr "Leer lassen für Offline-Volunteers ohne E-Mail-Adresse"
 
-#: includes/admin/dashboard.php:583 includes/admin/dashboard.php:592
-#: includes/admin/dashboard.php:632 includes/admin/dashboard.php:872
-#: includes/admin/dashboard.php:963 includes/admin/volunteer-list.php:137
-#: includes/admin/volunteer-list.php:177
+#: includes/admin/dashboard.php:609 includes/admin/dashboard.php:618
+#: includes/admin/dashboard.php:658 includes/admin/dashboard.php:751
+#: includes/admin/dashboard.php:952 includes/admin/dashboard.php:1043
+#: includes/admin/volunteer-list.php:137 includes/admin/volunteer-list.php:177
 msgid "Phone"
 msgstr "Telefon"
 
-#: includes/admin/dashboard.php:585
+#: includes/admin/dashboard.php:611 includes/admin/dashboard.php:754
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: includes/admin/dashboard.php:592 includes/admin/dashboard.php:631
-#: includes/admin/dashboard.php:871 includes/admin/dashboard.php:962
+#: includes/admin/dashboard.php:618 includes/admin/dashboard.php:657
+#: includes/admin/dashboard.php:951 includes/admin/dashboard.php:1042
 #: includes/admin/settings.php:527 includes/admin/volunteer-list.php:176
 #: includes/admin/volunteer-list.php:307 includes/admin/volunteer-list.php:334
 #: includes/profile.php:62 includes/registration.php:263
 msgid "E-Mail"
 msgstr "E-Mail-Adresse"
 
-#: includes/admin/dashboard.php:592
+#: includes/admin/dashboard.php:618
 msgid "Action"
 msgstr "Aktion"
 
-#: includes/admin/dashboard.php:596 includes/admin/dashboard.php:976
+#: includes/admin/dashboard.php:622 includes/admin/dashboard.php:1056
 #: includes/admin/documentation.php:107 includes/admin/volunteer-list.php:247
 msgid "Offline"
 msgstr "Offline"
 
-#: includes/admin/dashboard.php:606
+#: includes/admin/dashboard.php:632
 msgid "Notify volunteer"
 msgstr "Volunteer benachrichtigen"
 
-#: includes/admin/dashboard.php:615
+#: includes/admin/dashboard.php:641
 msgid "No volunteers assigned."
 msgstr "Es wurden keine Volunteers eingeteilt."
 
-#: includes/admin/dashboard.php:626 includes/admin/dashboard.php:867
+#: includes/admin/dashboard.php:652 includes/admin/dashboard.php:947
 msgid "Category"
 msgstr "Kategorie"
 
-#: includes/admin/dashboard.php:627 includes/admin/dashboard.php:684
-#: includes/admin/dashboard.php:868 includes/post-types.php:18
+#: includes/admin/dashboard.php:653 includes/admin/dashboard.php:711
+#: includes/admin/dashboard.php:948 includes/post-types.php:18
 #: includes/post-types.php:29
 msgid "Shift"
 msgstr "Schicht"
 
-#: includes/admin/dashboard.php:628 includes/admin/dashboard.php:685
-#: includes/admin/dashboard.php:869 includes/admin/quick-edit.php:114
+#: includes/admin/dashboard.php:654 includes/admin/dashboard.php:712
+#: includes/admin/dashboard.php:949 includes/admin/quick-edit.php:114
 msgid "Period"
 msgstr "Zeitraum"
 
-#: includes/admin/dashboard.php:629 includes/admin/dashboard.php:686
+#: includes/admin/dashboard.php:655 includes/admin/dashboard.php:713
 msgid "Capacity"
 msgstr "Kapazität"
 
-#: includes/admin/dashboard.php:638 includes/admin/dashboard.php:660
+#: includes/admin/dashboard.php:664 includes/admin/dashboard.php:687
 msgid "No shifts found."
 msgstr "Keine Schichten gefunden."
 
-#: includes/admin/dashboard.php:647
+#: includes/admin/dashboard.php:673
 msgid "Open slot — not yet booked"
 msgstr "Offene Stelle — noch nicht besetzt"
 
-#: includes/admin/dashboard.php:687
+#: includes/admin/dashboard.php:674
+msgid "Add volunteer"
+msgstr "Volunteer hinzufügen"
+
+#: includes/admin/dashboard.php:714
 msgid "Selected: {volunteer} — {shift} ({period}, {capacity})"
 msgstr "Ausgewählt: {volunteer} — {shift} ({period}, {capacity})"
 
-#: includes/admin/dashboard.php:770
+#: includes/admin/dashboard.php:757
+msgid "Close"
+msgstr "Schliessen"
+
+#: includes/admin/dashboard.php:850
 msgid "Invalid volunteer selected."
 msgstr "Ungültige Person ausgewählt."
 
-#: includes/admin/dashboard.php:873 includes/admin/quick-edit.php:60
+#: includes/admin/dashboard.php:953 includes/admin/quick-edit.php:60
 msgid "Start"
 msgstr "Start"
 
-#: includes/admin/dashboard.php:874 includes/admin/quick-edit.php:61
+#: includes/admin/dashboard.php:954 includes/admin/quick-edit.php:61
 msgid "End"
 msgstr "Ende"
 
-#: includes/admin/dashboard.php:934
+#: includes/admin/dashboard.php:1014
 msgid "Assigned Volunteers"
 msgstr "Zugewiesene Volunteers"
 

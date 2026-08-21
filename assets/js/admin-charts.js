@@ -10,6 +10,59 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Shared "add volunteer" modal for the Table and Timeline views.
+    const addVolunteerModal = document.getElementById('eventadmin-add-volunteer-modal');
+    if (addVolunteerModal && typeof EVENTADMIN_VOLUNTEERS !== 'undefined' && typeof EVENTADMIN_SHIFT_INFO !== 'undefined') {
+        const modalShiftTitle    = document.getElementById('eventadmin-modal-shift-title');
+        const modalExistingSelect = document.getElementById('eventadmin-modal-existing-select');
+        const modalShiftIdExisting = document.getElementById('eventadmin-modal-shift-id-existing');
+        const modalShiftIdNew    = document.getElementById('eventadmin-modal-shift-id-new');
+        const modalCloseBtn      = document.getElementById('eventadmin-modal-close');
+        const modalPlaceholderText = modalExistingSelect.options.length ? modalExistingSelect.options[0].textContent : '';
+
+        window.eventadminOpenAddVolunteerModal = function (shiftId) {
+            const info = EVENTADMIN_SHIFT_INFO[shiftId];
+            if (!info) return;
+
+            modalShiftTitle.textContent = info.title;
+            modalShiftIdExisting.value = shiftId;
+            modalShiftIdNew.value = shiftId;
+
+            modalExistingSelect.innerHTML = '';
+            const placeholder = document.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = modalPlaceholderText;
+            modalExistingSelect.appendChild(placeholder);
+
+            EVENTADMIN_VOLUNTEERS
+                .filter(v => !info.assigned.includes(v.id))
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .forEach(v => {
+                    const opt = document.createElement('option');
+                    opt.value = v.id;
+                    opt.textContent = v.label;
+                    modalExistingSelect.appendChild(opt);
+                });
+
+            addVolunteerModal.style.display = 'block';
+        };
+
+        function closeAddVolunteerModal() {
+            addVolunteerModal.style.display = 'none';
+        }
+
+        if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeAddVolunteerModal);
+        addVolunteerModal.addEventListener('click', (e) => {
+            if (e.target === addVolunteerModal) closeAddVolunteerModal();
+        });
+
+        document.querySelectorAll('.eventadmin-open-slot-add').forEach(btn => {
+            btn.addEventListener('click', () => {
+                window.eventadminOpenAddVolunteerModal(parseInt(btn.dataset.shiftId, 10));
+            });
+        });
+    }
+
     const ctx = document.getElementById('eventadmin-chart');
     if (!ctx || typeof EVENTADMIN_VOLUNTEER_STATS === 'undefined') return;
 
@@ -175,7 +228,19 @@ document.addEventListener('DOMContentLoaded', function () {
             responsive: true,
             maintainAspectRatio: false,
             onClick: (evt, elements, chart) => {
-                selectedIndex = elements.length ? elements[0].index : null;
+                if (!elements.length) {
+                    selectedIndex = null;
+                    updateSelectedInfo();
+                    chart.update();
+                    return;
+                }
+                const index = elements[0].index;
+                const row = rows[index];
+                if (row.open && typeof window.eventadminOpenAddVolunteerModal === 'function') {
+                    window.eventadminOpenAddVolunteerModal(row.shift_id);
+                    return;
+                }
+                selectedIndex = index;
                 updateSelectedInfo();
                 chart.update();
             },
@@ -221,7 +286,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 y: {
                     ticks: {
                         autoSkip: false,
-                        color: (context) => context.index === selectedIndex ? '#d63638' : undefined,
+                        color: (context) => {
+                            if (context.index === selectedIndex) return '#d63638';
+                            if (rows[context.index] && rows[context.index].open) return '#bbb';
+                            return undefined;
+                        },
                     },
                 },
             },
