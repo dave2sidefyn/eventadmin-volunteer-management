@@ -38,6 +38,7 @@ function eventadmin_volunteer_list_page(): void
         'numberposts' => -1,
         'meta_key'    => 'shift_start',
         'orderby'     => 'meta_value',
+        'meta_type'   => 'DATETIME',
         'order'       => 'ASC',
     ]);
     $all_categories = get_terms(['taxonomy' => 'eventadmin_shift_category', 'hide_empty' => false]);
@@ -218,6 +219,7 @@ function eventadmin_volunteer_list_page(): void
             'fields'      => 'ids',
             'meta_key'    => 'shift_start',
             'orderby'     => 'meta_value',
+            'meta_type'   => 'DATETIME',
             'order'       => 'DESC',
             'meta_query'  => [
                 ['key' => 'assigned_user_' . $volunteer->ID, 'compare' => 'EXISTS'],

@@ -126,10 +126,10 @@ function eventadmin_save_shift_meta(int $post_id): void
     $old_end   = (string) get_post_meta($post_id, 'shift_end', true);
 
     if (isset($_POST['shift_start'])) {
-        update_post_meta($post_id, 'shift_start', sanitize_text_field(wp_unslash($_POST['shift_start'])));
+        update_post_meta($post_id, 'shift_start', eventadmin_normalize_datetime_input(sanitize_text_field(wp_unslash($_POST['shift_start']))));
     }
     if (isset($_POST['shift_end'])) {
-        update_post_meta($post_id, 'shift_end', sanitize_text_field(wp_unslash($_POST['shift_end'])));
+        update_post_meta($post_id, 'shift_end', eventadmin_normalize_datetime_input(sanitize_text_field(wp_unslash($_POST['shift_end']))));
     }
     if (isset($_POST['shift_organizer_name'])) {
         $org_name = sanitize_text_field(wp_unslash($_POST['shift_organizer_name']));

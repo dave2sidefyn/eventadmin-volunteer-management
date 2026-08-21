@@ -361,7 +361,35 @@ function eventadmin_get_formatted_zeitraum(string $start, string $end): string
 
     // date_i18n automatically translates weekday, month, etc. based on WP language
     $start_fmt = date_i18n($start_format, strtotime($start));
-    $end_fmt   = date_i18n($end_format, strtotime($end));
+
+    // An empty $end means "start only" — bail out before strtotime('') / date_i18n(false)
+    // silently fall back to the current time instead of a real end time.
+    if ($end === '') {
+        return $start_fmt;
+    }
+
+    $end_fmt = date_i18n($end_format, strtotime($end));
 
     return $start_fmt . ' – ' . $end_fmt;
+}
+
+/**
+ * Normalizes a shift_start/shift_end datetime value to the canonical 'Y-m-d H:i:s' format.
+ *
+ * The `<input type="datetime-local">` fields in the shift editor submit
+ * 'Y-m-d\TH:i' (no seconds, 'T' separator), while other write paths (e.g. the demo
+ * data importer) already use 'Y-m-d H:i:s'. Left un-normalized, this format drift
+ * breaks any `orderby => 'meta_value'` sort on shift_start, since it compares the
+ * stored strings byte-for-byte rather than as dates.
+ *
+ * @param string $raw Raw datetime string from the client.
+ * @return string Canonical 'Y-m-d H:i:s', or '' if $raw is empty/unparseable.
+ */
+function eventadmin_normalize_datetime_input(string $raw): string
+{
+    if ($raw === '') {
+        return '';
+    }
+    $ts = strtotime($raw);
+    return $ts ? date('Y-m-d H:i:s', $ts) : '';
 }

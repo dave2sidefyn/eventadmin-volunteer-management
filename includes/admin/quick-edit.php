@@ -147,10 +147,10 @@ function eventadmin_save_quick_edit_post_shift(int $post_id): void
     $old_end   = (string) get_post_meta($post_id, 'shift_end', true);
 
     if (isset($_POST['shift_start'])) {
-        update_post_meta($post_id, 'shift_start', sanitize_text_field(wp_unslash($_POST['shift_start'])));
+        update_post_meta($post_id, 'shift_start', eventadmin_normalize_datetime_input(sanitize_text_field(wp_unslash($_POST['shift_start']))));
     }
     if (isset($_POST['shift_end'])) {
-        update_post_meta($post_id, 'shift_end', sanitize_text_field(wp_unslash($_POST['shift_end'])));
+        update_post_meta($post_id, 'shift_end', eventadmin_normalize_datetime_input(sanitize_text_field(wp_unslash($_POST['shift_end']))));
     }
     if (isset($_POST['min_volunteers'])) {
         update_post_meta($post_id, 'min_volunteers', absint(wp_unslash($_POST['min_volunteers'])));
@@ -230,6 +230,7 @@ function eventadmin_sort_by_shift_start(WP_Query $query): void
     if ($query->get('orderby') === 'shift_start') {
         $query->set('meta_key', 'shift_start');
         $query->set('orderby', 'meta_value');
+        $query->set('meta_type', 'DATETIME');
     }
 }
 

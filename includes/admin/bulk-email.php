@@ -97,6 +97,7 @@ function eventadmin_bulk_email_page(): void
         'numberposts' => -1,
         'meta_key'    => 'shift_start',
         'orderby'     => 'meta_value',
+        'meta_type'   => 'DATETIME',
         'order'       => 'ASC',
     ]);
     $all_categories = get_terms(['taxonomy' => 'eventadmin_shift_category', 'hide_empty' => false]);
@@ -441,6 +442,7 @@ function eventadmin_bulk_email_format_upcoming_shifts(int $user_id): string
         'numberposts' => -1,
         'meta_key'    => 'shift_start',
         'orderby'     => 'meta_value',
+        'meta_type'   => 'DATETIME',
         'order'       => 'ASC',
         'meta_query'  => [
             ['key' => 'shift_start', 'value' => current_time('mysql'), 'compare' => '>=', 'type' => 'DATETIME'],

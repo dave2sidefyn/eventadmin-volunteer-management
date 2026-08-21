@@ -242,6 +242,7 @@ function eventadmin_send_scheduled_shift_reminders(): void
         'numberposts' => -1,
         'meta_key'    => 'shift_start',
         'orderby'     => 'meta_value',
+        'meta_type'   => 'DATETIME',
         'order'       => 'ASC',
         'meta_query'  => [[
             'key'     => 'shift_start',
