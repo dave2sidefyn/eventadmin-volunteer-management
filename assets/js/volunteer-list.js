@@ -1,6 +1,17 @@
 jQuery(function ($) {
     const cfg = EVENTADMIN_VOL;
 
+    // Create volunteer / Grant role modals
+    $(document).on('click', '.eventadmin-modal-open', function () {
+        $($(this).data('target')).css('display', 'block');
+    });
+    $(document).on('click', '.eventadmin-modal-close', function () {
+        $(this).closest('.eventadmin-modal-overlay').hide();
+    });
+    $(document).on('click', '.eventadmin-modal-overlay', function (e) {
+        if (e.target === this) $(this).hide();
+    });
+
     // Volunteer table: search
     function updateCount() {
         const visible = $('#eventadmin-vol-table tbody tr:visible').length;

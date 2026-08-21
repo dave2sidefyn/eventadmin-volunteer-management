@@ -68,6 +68,93 @@ function eventadmin_get_current_settings_tab(): ?array
 }
 
 /**
+ * Renders the Communication tab's settings sections grouped into sub-tabs (General / Shift
+ * Confirmations / Reminders), navigated via a WP-native "subsubsub" link row — the same
+ * style as the "All | Mine | Trash" links above a post list — instead of one long page.
+ * All fields still live in the same single form/settings group, so switching sub-tabs never
+ * risks losing edits made on another one: this only changes which section is *visible*.
+ *
+ * @param string $page The settings page slug (do_settings_sections()'s own $page argument).
+ * @return void
+ */
+function eventadmin_render_communication_subtabs(string $page): void
+{
+    global $wp_settings_sections, $wp_settings_fields;
+
+    $groups = [
+        'general' => [
+            'label'    => esc_html__('General', 'eventadmin-volunteer-management'),
+            'sections' => ['eventadmin_communication_sender', 'eventadmin_communication_design'],
+        ],
+        'confirmations' => [
+            'label'    => esc_html__('Shift Confirmations', 'eventadmin-volunteer-management'),
+            'sections' => ['eventadmin_communication_templates'],
+        ],
+        'reminders' => [
+            'label'    => esc_html__('Reminders', 'eventadmin-volunteer-management'),
+            'sections' => ['eventadmin_communication_reminders'],
+        ],
+    ];
+
+    $active = isset($_GET['subtab']) && array_key_exists(sanitize_key(wp_unslash($_GET['subtab'])), $groups)
+        ? sanitize_key(wp_unslash($_GET['subtab']))
+        : 'general';
+
+    $slugs = array_keys($groups);
+    $last  = end($slugs);
+
+    echo '<ul class="subsubsub" id="eventadmin-communication-subtabs">';
+    foreach ($groups as $slug => $group) {
+        $url = add_query_arg('subtab', $slug);
+        echo '<li><a href="' . esc_url($url) . '" data-subtab="' . esc_attr($slug) . '"' . ($slug === $active ? ' class="current"' : '') . '>' . $group['label'] . '</a>' . ($slug !== $last ? ' |' : '') . '</li>';
+    }
+    echo '</ul>';
+    echo '<br class="clear">';
+
+    foreach ($groups as $slug => $group) {
+        $hidden = $slug !== $active;
+        echo '<div class="eventadmin-subtab-panel" data-subtab-panel="' . esc_attr($slug) . '"' . ($hidden ? ' style="display:none;"' : '') . '>';
+        foreach ($group['sections'] as $section_id) {
+            if (!isset($wp_settings_sections[$page][$section_id])) {
+                continue;
+            }
+            $section = $wp_settings_sections[$page][$section_id];
+            if ($section['title']) {
+                echo '<h2>' . esc_html($section['title']) . '</h2>';
+            }
+            if ($section['callback']) {
+                call_user_func($section['callback'], $section);
+            }
+            if (isset($wp_settings_fields[$page][$section_id])) {
+                echo '<table class="form-table" role="presentation">';
+                do_settings_fields($page, $section_id);
+                echo '</table>';
+            }
+        }
+        echo '</div>';
+    }
+
+    echo '<script>
+        document.querySelectorAll("#eventadmin-communication-subtabs a").forEach(function (link) {
+            link.addEventListener("click", function (e) {
+                e.preventDefault();
+                var target = link.dataset.subtab;
+                document.querySelectorAll("#eventadmin-communication-subtabs a").forEach(function (l) {
+                    l.classList.toggle("current", l === link);
+                });
+                document.querySelectorAll(".eventadmin-subtab-panel").forEach(function (panel) {
+                    panel.style.display = panel.dataset.subtabPanel === target ? "" : "none";
+                });
+                document.querySelectorAll("[data-subtab-preview]").forEach(function (preview) {
+                    preview.style.display = preview.dataset.subtabPreview.split(" ").includes(target) ? "" : "none";
+                });
+                history.replaceState(null, "", link.href);
+            });
+        });
+    </script>';
+}
+
+/**
  * Renders the settings page for the EventAdmin plugin.
  */
 function eventadmin_plugin_settings_page(): void
@@ -98,7 +185,11 @@ function eventadmin_plugin_settings_page(): void
             <form method="post" action="options.php" class="plugin-settings-left">
                 <?php
                 settings_fields($current['group']);
-                do_settings_sections($current['page']);
+                if ($current['page'] === 'eventadmin-settings-communication') {
+                    eventadmin_render_communication_subtabs($current['page']);
+                } else {
+                    do_settings_sections($current['page']);
+                }
                 submit_button();
                 ?>
             </form>
@@ -191,6 +282,41 @@ function eventadmin_plugin_register_settings(): void
 
     register_setting('eventadmin_plugin_settings_communication', 'eventadmin_notification_email', [
         'sanitize_callback' => 'sanitize_email',
+    ]);
+
+    register_setting('eventadmin_plugin_settings_communication', 'eventadmin_email_header_logo_id', [
+        'sanitize_callback' => 'absint',
+    ]);
+
+    register_setting('eventadmin_plugin_settings_communication', 'eventadmin_email_header_color', [
+        'sanitize_callback' => static function ($val) {
+            if (empty($_POST['eventadmin_email_header_color_enabled'])) {
+                return '';
+            }
+            return sanitize_hex_color($val) ?: '';
+        },
+    ]);
+
+    register_setting('eventadmin_plugin_settings_communication', 'eventadmin_email_header_text_color', [
+        'sanitize_callback' => static function ($val) {
+            return sanitize_hex_color($val) ?: '#ffffff';
+        },
+    ]);
+
+    register_setting('eventadmin_plugin_settings_communication', 'eventadmin_email_header_title', [
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+
+    register_setting('eventadmin_plugin_settings_communication', 'eventadmin_email_header_subtitle', [
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+
+    register_setting('eventadmin_plugin_settings_communication', 'eventadmin_email_footer_html', [
+        'sanitize_callback' => 'wp_kses_post',
+    ]);
+
+    register_setting('eventadmin_plugin_settings_communication', 'eventadmin_email_custom_css', [
+        'sanitize_callback' => 'wp_strip_all_tags',
     ]);
 
     register_setting('eventadmin_plugin_settings_communication', 'eventadmin_notification_email_name', [
@@ -533,6 +659,93 @@ function eventadmin_plugin_register_settings(): void
     );
 
     add_settings_section(
+        'eventadmin_communication_design',
+        esc_html__('Email Design', 'eventadmin-volunteer-management'),
+        static function () {
+            echo '<p>' . esc_html__('These apply to every email the plugin sends — sign-up confirmations, reminders, and announcements.', 'eventadmin-volunteer-management') . '</p>';
+        },
+        'eventadmin-settings-communication'
+    );
+
+    add_settings_field(
+        'eventadmin_email_header_color',
+        esc_html__('Header color', 'eventadmin-volunteer-management'),
+        static function () {
+            $val     = get_option('eventadmin_email_header_color', '');
+            $checked = $val !== '';
+            echo '<label><input type="checkbox" name="eventadmin_email_header_color_enabled" value="1" id="eventadmin-email-header-color-toggle"' . checked($checked, true, false) . '> ' . esc_html__('Use a custom color', 'eventadmin-volunteer-management') . '</label><br>';
+            echo '<input type="color" name="eventadmin_email_header_color" value="' . esc_attr($val ?: '#1d4e78') . '" id="eventadmin-email-header-color-input"' . ($checked ? '' : ' disabled') . '>';
+            echo '<p class="description">' . esc_html__('Default is a dark blue gradient.', 'eventadmin-volunteer-management') . '</p>';
+        },
+        'eventadmin-settings-communication',
+        'eventadmin_communication_design'
+    );
+
+    add_settings_field(
+        'eventadmin_email_header_text_color',
+        esc_html__('Header text color', 'eventadmin-volunteer-management'),
+        static function () {
+            $val = get_option('eventadmin_email_header_text_color', '#ffffff');
+            echo '<input type="color" name="eventadmin_email_header_text_color" value="' . esc_attr($val) . '">';
+            echo '<p class="description">' . esc_html__('Choose a color that stays readable against your header color/logo.', 'eventadmin-volunteer-management') . '</p>';
+        },
+        'eventadmin-settings-communication',
+        'eventadmin_communication_design'
+    );
+
+    add_settings_field(
+        'eventadmin_email_header_title',
+        esc_html__('Header title', 'eventadmin-volunteer-management'),
+        static function () {
+            $val = get_option('eventadmin_email_header_title', get_bloginfo('name'));
+            echo '<input type="text" name="eventadmin_email_header_title" value="' . esc_attr($val) . '" class="regular-text">';
+            echo '<p class="description">' . esc_html__('Leave empty to hide this line.', 'eventadmin-volunteer-management') . '</p>';
+        },
+        'eventadmin-settings-communication',
+        'eventadmin_communication_design'
+    );
+
+    add_settings_field(
+        'eventadmin_email_header_subtitle',
+        esc_html__('Header subtitle', 'eventadmin-volunteer-management'),
+        static function () {
+            $val = get_option('eventadmin_email_header_subtitle', get_bloginfo('description'));
+            echo '<input type="text" name="eventadmin_email_header_subtitle" value="' . esc_attr($val) . '" class="regular-text">';
+            echo '<p class="description">' . esc_html__('Leave empty to hide this line.', 'eventadmin-volunteer-management') . '</p>';
+        },
+        'eventadmin-settings-communication',
+        'eventadmin_communication_design'
+    );
+
+    add_settings_field(
+        'eventadmin_email_header_logo_id',
+        esc_html__('Header logo', 'eventadmin-volunteer-management'),
+        'eventadmin_render_email_logo_field',
+        'eventadmin-settings-communication',
+        'eventadmin_communication_design'
+    );
+
+    add_settings_field(
+        'eventadmin_email_footer_html',
+        esc_html__('Footer', 'eventadmin-volunteer-management'),
+        'eventadmin_render_email_footer_field',
+        'eventadmin-settings-communication',
+        'eventadmin_communication_design'
+    );
+
+    add_settings_field(
+        'eventadmin_email_custom_css',
+        esc_html__('Custom CSS', 'eventadmin-volunteer-management'),
+        static function () {
+            $val = get_option('eventadmin_email_custom_css', '');
+            echo '<textarea name="eventadmin_email_custom_css" id="eventadmin_email_custom_css" rows="6" class="large-text code">' . esc_textarea($val) . '</textarea>';
+            echo '<p class="description">' . esc_html__('Advanced: extra CSS added to every email. Support varies a lot by email client (e.g. Outlook ignores it entirely) — use it for minor tweaks, not anything essential.', 'eventadmin-volunteer-management') . '</p>';
+        },
+        'eventadmin-settings-communication',
+        'eventadmin_communication_design'
+    );
+
+    add_settings_section(
         'eventadmin_communication_templates',
         esc_html__('Volunteer Notifications', 'eventadmin-volunteer-management'),
         null,
@@ -554,8 +767,10 @@ function eventadmin_plugin_register_settings(): void
         'eventadmin_email_text_assign',
         esc_html__('Email Text (Sign up)', 'eventadmin-volunteer-management'),
         static function () {
-            $val = get_option('eventadmin_email_text_assign', "Dear {first},\n\nThank you for volunteering at the event.\nYour shift:\n\n<b>{title}</b>\n<i>{start} – {end}</i>\n{desc}\n\nPlease arrive 20 minutes early.");
-            echo '<textarea name="eventadmin_email_text_assign" rows="6" class="large-text code">' . esc_textarea($val) . '</textarea>';
+            eventadmin_render_email_text_field(
+                'eventadmin_email_text_assign',
+                "Dear {first},\n\nThank you for volunteering at the event.\nYour shift:\n\n<b>{title}</b>\n<i>{start} – {end}</i>\n{desc}\n\nPlease arrive 20 minutes early."
+            );
         },
         'eventadmin-settings-communication',
         'eventadmin_communication_templates'
@@ -576,8 +791,10 @@ function eventadmin_plugin_register_settings(): void
         'eventadmin_email_text_unassign',
         esc_html__('Email Text (Sign out)', 'eventadmin-volunteer-management'),
         static function () {
-            $val = get_option('eventadmin_email_text_unassign', "Dear {first},\n\nYou have successfully signed out from:\n\n<b>{title}</b>\n<i>{start} – {end}</i>\n{desc}\n\nThank you for your update!");
-            echo '<textarea name="eventadmin_email_text_unassign" rows="6" class="large-text code">' . esc_textarea($val) . '</textarea>';
+            eventadmin_render_email_text_field(
+                'eventadmin_email_text_unassign',
+                "Dear {first},\n\nYou have successfully signed out from:\n\n<b>{title}</b>\n<i>{start} – {end}</i>\n{desc}\n\nThank you for your update!"
+            );
         },
         'eventadmin-settings-communication',
         'eventadmin_communication_templates'
@@ -617,8 +834,10 @@ function eventadmin_plugin_register_settings(): void
         'eventadmin_email_text_reminder',
         esc_html__('Email Text (Reminder)', 'eventadmin-volunteer-management'),
         static function () {
-            $val = get_option('eventadmin_email_text_reminder', "Dear {first},\n\nThis is a reminder that your shift starts in {days} day(s).\n\n<b>{title}</b>\n<i>{start} – {end}</i>\n{desc}\n\nThank you for your support.");
-            echo '<textarea name="eventadmin_email_text_reminder" rows="6" class="large-text code">' . esc_textarea($val) . '</textarea>';
+            eventadmin_render_email_text_field(
+                'eventadmin_email_text_reminder',
+                "Dear {first},\n\nThis is a reminder that your shift starts in {days} day(s).\n\n<b>{title}</b>\n<i>{start} – {end}</i>\n{desc}\n\nThank you for your support."
+            );
         },
         'eventadmin-settings-communication',
         'eventadmin_communication_reminders'
@@ -628,23 +847,95 @@ function eventadmin_plugin_register_settings(): void
 add_action('admin_init', 'eventadmin_plugin_register_settings');
 
 /**
+ * Renders the email header logo picker (media library, restricted to images).
+ */
+function eventadmin_render_email_logo_field(): void
+{
+    $logo_id  = (int) get_option('eventadmin_email_header_logo_id', 0);
+    $logo_url = $logo_id ? wp_get_attachment_image_url($logo_id, 'medium') : '';
+
+    echo '<div id="eventadmin-email-logo-preview" style="margin-bottom:8px;' . ($logo_url ? '' : 'display:none;') . '">';
+    echo '<img src="' . esc_url($logo_url) . '" alt="" style="max-width:220px;max-height:80px;display:block;border:1px solid #dcdcde;padding:4px;background:#fff;">';
+    echo '</div>';
+    echo '<input type="hidden" id="eventadmin_email_header_logo_id" name="eventadmin_email_header_logo_id" value="' . esc_attr($logo_id) . '">';
+    echo '<button type="button" id="eventadmin-email-logo-button" class="button">' . esc_html__('Select logo…', 'eventadmin-volunteer-management') . '</button> ';
+    echo '<button type="button" id="eventadmin-email-logo-remove" class="button" style="' . ($logo_id ? '' : 'display:none;') . '">' . esc_html__('Remove', 'eventadmin-volunteer-management') . '</button>';
+    echo '<p class="description">' . esc_html__('Shown at the top of every email instead of the site name. Recommended: a wide image with a transparent background, under 200px tall.', 'eventadmin-volunteer-management') . '</p>';
+}
+
+/**
+ * Renders the email footer rich-text field (bold/links/images, no raw HTML required).
+ */
+function eventadmin_render_email_footer_field(): void
+{
+    $default_footer = sprintf(
+        /* translators: %s = site name */
+        esc_html__('This email was sent by %s.', 'eventadmin-volunteer-management'),
+        wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES)
+    );
+
+    wp_editor(get_option('eventadmin_email_footer_html', ''), 'eventadmin_email_footer_html', [
+        'textarea_name' => 'eventadmin_email_footer_html',
+        'textarea_rows' => 6,
+        'media_buttons' => true,
+        'teeny'         => true,
+        'quicktags'     => false,
+    ]);
+    echo '<p class="description">' . sprintf(
+        /* translators: %s is the default footer text that will be used if this field is left empty */
+        esc_html__('Shown at the bottom of every email. Leave empty to use the default: "%s"', 'eventadmin-volunteer-management'),
+        esc_html($default_footer)
+    ) . '</p>';
+}
+
+/**
+ * Renders a rich-text editor for an email body template (bold/links/images, no raw HTML
+ * required), shared by the Sign up / Sign out / Reminder text fields.
+ *
+ * @param string $option_name
+ * @param string $default
+ * @return void
+ */
+function eventadmin_render_email_text_field(string $option_name, string $default): void
+{
+    wp_editor(get_option($option_name, $default), $option_name, [
+        'textarea_name' => $option_name,
+        'textarea_rows' => 8,
+        'media_buttons' => true,
+        'teeny'         => true,
+        'quicktags'     => false,
+    ]);
+}
+
+/**
  * Renders the live preview of email notifications.
  */
 function eventadmin_plugin_preview_field(): void
 {
+    // Each preview belongs to one Communication sub-tab (see
+    // eventadmin_render_communication_subtabs()) — only that sub-tab's own preview(s) are
+    // relevant, so only they're shown, kept in sync via the same JS that toggles the
+    // sub-tab panels themselves.
     $actions = [
-        'assign'   => esc_html__('Sign up', 'eventadmin-volunteer-management'),
-        'unassign' => esc_html__('Sign out', 'eventadmin-volunteer-management'),
-        'reminder' => esc_html__('Reminder', 'eventadmin-volunteer-management'),
+        // "Sign up" doubles as General's one example preview, since General has no email
+        // template of its own but does control the shared header/footer/logo/colors.
+        'assign'   => ['label' => esc_html__('Sign up', 'eventadmin-volunteer-management'), 'subtabs' => ['general', 'confirmations']],
+        'unassign' => ['label' => esc_html__('Sign out', 'eventadmin-volunteer-management'), 'subtabs' => ['confirmations']],
+        'reminder' => ['label' => esc_html__('Reminder', 'eventadmin-volunteer-management'), 'subtabs' => ['reminders']],
     ];
+
+    $active_subtab = isset($_GET['subtab']) && in_array(sanitize_key(wp_unslash($_GET['subtab'])), ['general', 'confirmations', 'reminders'], true)
+        ? sanitize_key(wp_unslash($_GET['subtab']))
+        : 'general';
 
     echo '<p><strong>' . esc_html__('Live preview of emails (with example values):', 'eventadmin-volunteer-management') . '</strong></p>';
 
-    foreach ($actions as $key => $label) {
-        echo '<div class="preview-block">';
-        echo '<h4>' . esc_html($label) . '</h4>';
+    foreach ($actions as $key => $action) {
+        $hidden = !in_array($active_subtab, $action['subtabs'], true);
+        echo '<div class="preview-block" data-subtab-preview="' . esc_attr(implode(' ', $action['subtabs'])) . '"' . ($hidden ? ' style="display:none;"' : '') . '>';
+        echo '<h4>' . esc_html($action['label']) . '</h4>';
         echo '<p><strong>' . esc_html__('Subject:', 'eventadmin-volunteer-management') . '</strong> <span id="preview-subject-' . esc_attr($key) . '"></span></p>';
-        echo '<div id="preview-body-' . esc_attr($key) . '" class="preview-body"></div>';
+        echo '<iframe id="preview-body-' . esc_attr($key) . '" class="preview-body" title="' . esc_attr($action['label']) . '"></iframe>';
         echo '</div>';
     }
 }
@@ -669,7 +960,7 @@ function eventadmin_admin_enqueue_settings_scripts(): void
     wp_enqueue_script(
         'eventadmin-admin-settings',
         plugin_dir_url(__FILE__) . '../../assets/js/settings.js',
-        [],
+        ['media-editor'],
         '1.0',
         true
     );
@@ -677,10 +968,17 @@ function eventadmin_admin_enqueue_settings_scripts(): void
     $example_ts     = mktime(8, 0, 0, 6, 16, 2026);
     $example_end_ts = mktime(22, 0, 0, 6, 16, 2026);
 
+    wp_enqueue_media();
+
     $defaults = eventadmin_get_option_defaults();
     wp_localize_script('eventadmin-admin-settings', 'EVENTADMIN_SETTINGS', [
-        'ajax_url'    => admin_url('admin-ajax.php'),
-        'nonce'       => wp_create_nonce('eventadmin_preview_date_format'),
+        'ajax_url'          => admin_url('admin-ajax.php'),
+        'nonce'             => wp_create_nonce('eventadmin_preview_date_format'),
+        'preview_nonce'     => wp_create_nonce('eventadmin_email_preview'),
+        'i18n'              => [
+            'selectLogoTitle'  => esc_html__('Select a logo image', 'eventadmin-volunteer-management'),
+            'selectLogoButton' => esc_html__('Use this image', 'eventadmin-volunteer-management'),
+        ],
         'start_label' => date_i18n(
             get_option('eventadmin_shift_date_format', $defaults['eventadmin_shift_date_format']) ?: $defaults['eventadmin_shift_date_format'],
             $example_ts

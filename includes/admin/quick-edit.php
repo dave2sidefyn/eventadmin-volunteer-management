@@ -84,6 +84,18 @@ function eventadmin_manage_shift_posts_custom_column(string $column, int $post_i
         $end = get_post_meta($post_id, 'shift_end', true);
         echo esc_html(eventadmin_get_formatted_zeitraum($start, $end));
     }
+    if ($column === 'shift_category') {
+        $terms = wp_get_post_terms($post_id, 'eventadmin_shift_category');
+        if (empty($terms) || is_wp_error($terms)) {
+            echo '&#8212;';
+        } else {
+            $badges = array_map(function (WP_Term $term): string {
+                $color = get_term_meta($term->term_id, 'term_color', true) ?: '#2271b1';
+                return '<span class="eventadmin-department-badge" style="background-color:' . esc_attr($color) . '">' . esc_html($term->name) . '</span>';
+            }, $terms);
+            echo implode(' ', $badges);
+        }
+    }
     // Hidden columns used by quick-edit JS to pre-populate fields
     if ($column === 'shift_start') {
         echo esc_html(get_post_meta($post_id, 'shift_start', true));
@@ -111,10 +123,17 @@ add_action('manage_eventadmin_shift_posts_custom_column', 'eventadmin_manage_shi
  */
 function eventadmin_manage_shift_posts_columns(array $columns): array
 {
-    $columns['shift_zeitraum'] = esc_html__('Period', 'eventadmin-volunteer-management');
-    $columns['shift_belegt'] = esc_html__('Filled', 'eventadmin-volunteer-management');
-    unset($columns['date']);
-    return $columns;
+    $new_columns = [];
+    foreach ($columns as $key => $label) {
+        $new_columns[$key] = $label;
+        if ($key === 'title') {
+            $new_columns['shift_category'] = esc_html__('Department', 'eventadmin-volunteer-management');
+        }
+    }
+    $new_columns['shift_zeitraum'] = esc_html__('Period', 'eventadmin-volunteer-management');
+    $new_columns['shift_belegt'] = esc_html__('Filled', 'eventadmin-volunteer-management');
+    unset($new_columns['date']);
+    return $new_columns;
 }
 
 // Add columns
@@ -215,6 +234,7 @@ add_filter('default_hidden_columns', 'eventadmin_default_hidden_columns', 10, 2)
 function eventadmin_sortable_columns(array $columns): array
 {
     $columns['shift_zeitraum'] = 'shift_start';
+    $columns['shift_category'] = 'shift_category';
     return $columns;
 }
 
@@ -235,3 +255,80 @@ function eventadmin_sort_by_shift_start(WP_Query $query): void
 }
 
 add_action('pre_get_posts', 'eventadmin_sort_by_shift_start');
+
+/**
+ * Joins in the department taxonomy tables so shifts can be sorted by department name.
+ * WP_Query has no built-in "sort by taxonomy term name" support, so the ORDER BY clause
+ * is added directly onto the query's SQL clauses.
+ *
+ * @param array    $clauses
+ * @param WP_Query $query
+ * @return array
+ */
+function eventadmin_sort_by_shift_category(array $clauses, WP_Query $query): array
+{
+    if (!is_admin() || !$query->is_main_query()) {
+        return $clauses;
+    }
+    if ($query->get('post_type') !== 'eventadmin_shift' || $query->get('orderby') !== 'shift_category') {
+        return $clauses;
+    }
+
+    global $wpdb;
+    $order = strtoupper($query->get('order')) === 'DESC' ? 'DESC' : 'ASC';
+
+    $clauses['join'] .= " LEFT JOIN {$wpdb->term_relationships} AS eventadmin_tr ON ({$wpdb->posts}.ID = eventadmin_tr.object_id)"
+        . " LEFT JOIN {$wpdb->term_taxonomy} AS eventadmin_tt ON (eventadmin_tr.term_taxonomy_id = eventadmin_tt.term_taxonomy_id AND eventadmin_tt.taxonomy = 'eventadmin_shift_category')"
+        . " LEFT JOIN {$wpdb->terms} AS eventadmin_t ON (eventadmin_tt.term_id = eventadmin_t.term_id)";
+    $clauses['orderby']  = "eventadmin_t.name {$order}, {$wpdb->posts}.post_date {$order}";
+    $clauses['groupby']  = "{$wpdb->posts}.ID";
+
+    return $clauses;
+}
+
+add_filter('posts_clauses', 'eventadmin_sort_by_shift_category', 10, 2);
+
+/**
+ * Adds a Department filter dropdown above the shift list table, showing the department
+ * hierarchy (parent/child) the same way the dashboard's department filter does.
+ *
+ * @return void
+ */
+function eventadmin_shift_department_filter(): void
+{
+    global $typenow;
+    if ($typenow !== 'eventadmin_shift') {
+        return;
+    }
+
+    $categories = eventadmin_get_hierarchical_shift_categories();
+    $selected   = isset($_GET['filter_department']) ? sanitize_text_field(wp_unslash($_GET['filter_department'])) : '';
+
+    echo '<select name="filter_department">';
+    echo '<option value="">' . esc_html__('All departments', 'eventadmin-volunteer-management') . '</option>';
+    echo eventadmin_category_dropdown_options($categories, $selected, 'slug');
+    echo '</select>';
+}
+
+add_action('restrict_manage_posts', 'eventadmin_shift_department_filter');
+
+/**
+ * Applies the Department filter (including child departments) to the shift list query.
+ *
+ * @param WP_Query $query
+ * @return void
+ */
+function eventadmin_shift_department_filter_query(WP_Query $query): void
+{
+    if (!is_admin() || !$query->is_main_query()) return;
+    if ($query->get('post_type') !== 'eventadmin_shift') return;
+    if (empty($_GET['filter_department'])) return;
+
+    $query->set('tax_query', [[
+        'taxonomy' => 'eventadmin_shift_category',
+        'field'    => 'slug',
+        'terms'    => sanitize_text_field(wp_unslash($_GET['filter_department'])),
+    ]]);
+}
+
+add_action('pre_get_posts', 'eventadmin_shift_department_filter_query');

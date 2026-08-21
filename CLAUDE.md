@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**EventAdmin – Volunteer Management** is a WordPress plugin (v1.6.0) for managing volunteers at events. It allows organizers to create shifts, volunteers to self-register, and tracks sign-ups/cancellations.
+**EventAdmin – Volunteer Management** is a WordPress plugin for managing volunteers at events. It allows organizers to create shifts, volunteers to self-register, and tracks sign-ups/cancellations.
 
 - **Requires:** WordPress 5.8+, PHP 8.0+
 - **No build system** – pure PHP plugin, no npm/composer/Makefile

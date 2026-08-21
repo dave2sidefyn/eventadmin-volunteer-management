@@ -1,0 +1,32 @@
+.eventadmin-term-color {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.eventadmin-term-color-swatch {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid #ccd0d4;
+    flex-shrink: 0;
+}
+
+.eventadmin-term-color-code {
+    font-family: Consolas, Monaco, monospace;
+    font-size: 12px;
+    color: #50575e;
+}
+
+.eventadmin-term-badge-hidden {
+    display: inline-block;
+    margin-bottom: 4px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #fdecea;
+    color: #b32d2e;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}

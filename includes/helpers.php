@@ -393,3 +393,84 @@ function eventadmin_normalize_datetime_input(string $raw): string
     $ts = strtotime($raw);
     return $ts ? date('Y-m-d H:i:s', $ts) : '';
 }
+
+/**
+ * Converts a shift_start/shift_end wall-clock string to a Unix timestamp *without* any
+ * timezone shift — i.e. "2026-09-04 17:00:00" always becomes the timestamp for 17:00,
+ * regardless of the server's php.ini date.timezone (which, unlike WP's own timezone_string
+ * option, plain strtotime()/date() silently fall back to — commonly UTC, while the site
+ * itself runs in a different zone). This is what the Timeline chart's JS side needs: it
+ * displays and edits these timestamps using the browser's own local time formatting with
+ * an explicit UTC timezone, so both ends have to agree on "the number IS the wall clock
+ * time" with no shift applied by either side.
+ *
+ * @param string $raw 'Y-m-d H:i:s' or 'Y-m-d\TH:i'.
+ * @return int Unix timestamp, or 0 if unparseable.
+ */
+function eventadmin_wallclock_to_ts(string $raw): int
+{
+    if ($raw === '') {
+        return 0;
+    }
+    $dt = DateTime::createFromFormat('Y-m-d H:i:s', $raw, new DateTimeZone('UTC'))
+        ?: DateTime::createFromFormat('Y-m-d\TH:i', $raw, new DateTimeZone('UTC'));
+    return $dt ? $dt->getTimestamp() : 0;
+}
+
+/**
+ * Re-orders a flat list of hierarchical terms into parent-then-children order,
+ * annotating each term with a `depth` property so callers can indent it for display.
+ * Shared by every admin department dropdown/filter so they all show the same
+ * parent/child structure instead of a flat, unordered list.
+ *
+ * @param WP_Term[] $terms  Flat term list (e.g. from get_terms()).
+ * @param int       $parent Parent term_id to start from; 0 for top-level terms.
+ * @param int       $depth  Current nesting depth (used internally for recursion).
+ * @return WP_Term[]
+ */
+function eventadmin_flatten_term_hierarchy(array $terms, int $parent = 0, int $depth = 0): array
+{
+    $result = [];
+    foreach ($terms as $term) {
+        if ((int) $term->parent !== $parent) {
+            continue;
+        }
+        $term->depth = $depth;
+        $result[]    = $term;
+        $result      = array_merge($result, eventadmin_flatten_term_hierarchy($terms, $term->term_id, $depth + 1));
+    }
+    return $result;
+}
+
+/**
+ * Fetches every department term, ordered parent-then-children (see
+ * eventadmin_flatten_term_hierarchy()) and ready to render as a dropdown.
+ *
+ * @return WP_Term[]
+ */
+function eventadmin_get_hierarchical_shift_categories(): array
+{
+    $terms = get_terms(['taxonomy' => 'eventadmin_shift_category', 'hide_empty' => false, 'orderby' => 'name']);
+    return eventadmin_flatten_term_hierarchy(is_array($terms) ? $terms : []);
+}
+
+/**
+ * Builds indented <option> markup for a hierarchical department dropdown. Shared by every
+ * admin department filter/select so children are always shown nested under their parent
+ * the same way, instead of each screen re-implementing its own flat option loop.
+ *
+ * @param WP_Term[]  $categories  From eventadmin_get_hierarchical_shift_categories().
+ * @param string|int $selected    Currently selected value, matched against $value_field.
+ * @param string     $value_field 'slug' or 'term_id' — which term property becomes the option value.
+ * @return string
+ */
+function eventadmin_category_dropdown_options(array $categories, $selected, string $value_field = 'slug'): string
+{
+    $html = '';
+    foreach ($categories as $cat) {
+        $value  = $value_field === 'term_id' ? $cat->term_id : $cat->slug;
+        $prefix = $cat->depth > 0 ? str_repeat('&nbsp;&nbsp;&nbsp;', $cat->depth) . '&#8211; ' : '';
+        $html  .= '<option value="' . esc_attr($value) . '"' . selected($selected, $value, false) . '>' . $prefix . esc_html($cat->name) . '</option>';
+    }
+    return $html;
+}

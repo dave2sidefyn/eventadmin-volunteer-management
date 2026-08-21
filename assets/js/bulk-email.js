@@ -1,6 +1,16 @@
 jQuery(function ($) {
     const cfg = EVENTADMIN_BULK_EMAIL;
 
+    // The message body is a TinyMCE (teeny) editor — it only syncs to its underlying
+    // textarea on blur/save, not on every keystroke, so read its live content directly.
+    function getEditorValue(name) {
+        const editor = window.tinymce && window.tinymce.get(name);
+        if (editor && !editor.isHidden()) {
+            return editor.getContent();
+        }
+        return $('[name="' + name + '"]').val();
+    }
+
     // Show recipient count / shift selector matching selected radio
     $('[name="bulk_email_recipients"]').on('change', function () {
         const val = $(this).val();
@@ -13,7 +23,7 @@ jQuery(function ($) {
     // Live recipient count when a specific shift or category is picked
     function fetchRecipientCount(recipients, id, $target) {
         if (!id) {
-            $target.text('');
+            $target.text('').removeAttr('title').css('cursor', '');
             return;
         }
         $target.text(cfg.i18n.counting);
@@ -28,13 +38,15 @@ jQuery(function ($) {
             if (res.success) {
                 const n = res.data.count;
                 const tpl = n === 1 ? cfg.i18n.recipientCountOne : cfg.i18n.recipientCountMany;
-                $target.text(tpl.replace('{n}', n));
+                $target.text(tpl.replace('{n}', n))
+                    .attr('title', res.data.tooltip || '')
+                    .css('cursor', res.data.tooltip ? 'help' : '');
             } else {
-                $target.text('');
+                $target.text('').removeAttr('title').css('cursor', '');
             }
         })
         .fail(function () {
-            $target.text('');
+            $target.text('').removeAttr('title').css('cursor', '');
         });
     }
 
@@ -97,7 +109,7 @@ jQuery(function ($) {
             bulk_email_from_name:        $form.find('[name="bulk_email_from_name"]').val(),
             bulk_email_from_email:       $form.find('[name="bulk_email_from_email"]').val(),
             bulk_email_subject:          $form.find('[name="bulk_email_subject"]').val(),
-            bulk_email_body:             $form.find('[name="bulk_email_body"]').val(),
+            bulk_email_body:             getEditorValue('bulk_email_body'),
             bulk_email_recipients:       $form.find('[name="bulk_email_recipients"]:checked').val(),
             bulk_email_shift_id:         $form.find('[name="bulk_email_shift_id"]').val(),
             bulk_email_category_id:      $form.find('[name="bulk_email_category_id"]').val(),
@@ -176,33 +188,63 @@ jQuery(function ($) {
         return str;
     }
 
+    let previewDebounce = null;
     function updatePreview() {
         const fromName  = $('[name="bulk_email_from_name"]').val();
         const fromEmail = $('[name="bulk_email_from_email"]').val();
         const subject   = $('[name="bulk_email_subject"]').val();
-        const body      = $('[name="bulk_email_body"]').val();
+        const body      = getEditorValue('bulk_email_body');
 
         const fromLabel = fromName
             ? fromName + (fromEmail ? ' <' + fromEmail + '>' : '')
             : fromEmail;
 
         $('#ea-preview-from').text(fromLabel || '—');
-        $('#ea-preview-subject').text(applyPlaceholders(subject) || '—');
 
         const attachmentName = $('#bulk_email_attachment_name').text();
         $('#ea-preview-attachment-row').toggle(!!attachmentName);
         $('#ea-preview-attachment').text(attachmentName);
 
-        const bodyReplaced = applyPlaceholders(body);
-        // If body contains HTML tags, render as HTML; otherwise convert line breaks.
-        // Decided before expanding {shifts} so its sample <ul>/<li> markup doesn't
-        // suppress the line-break conversion for the surrounding plain-text preview.
-        const hasHtml = /<[a-z][\s\S]*>/i.test(bodyReplaced);
-        const bodyFormatted = hasHtml ? bodyReplaced : bodyReplaced.replace(/\n/g, '<br>');
-        $('#ea-preview-body').html(bodyFormatted.split('{shifts}').join(previewShiftsHtml));
+        const subjectReplaced = applyPlaceholders(subject);
+        const bodyReplaced    = applyPlaceholders(body).split('{shifts}').join(previewShiftsHtml);
+
+        // Render through the real email template (header logo, footer, colors) via AJAX,
+        // debounced since this fires on every keystroke.
+        clearTimeout(previewDebounce);
+        previewDebounce = setTimeout(function () {
+            if (!cfg.ajax_url || !cfg.nonce_preview) return;
+            $.post(cfg.ajax_url, {
+                action:  'eventadmin_render_email_preview',
+                nonce:   cfg.nonce_preview,
+                subject: subjectReplaced,
+                body:    bodyReplaced,
+            }).done(function (res) {
+                if (res.success) {
+                    $('#ea-preview-body').attr('srcdoc', res.data.html);
+                }
+            });
+        }, 400);
     }
 
     $('#eventadmin-bulk-email-form').on('input', 'input, textarea', updatePreview);
+
+    // wp_editor()'s inline bootstrap script runs as the page is parsed, which can complete
+    // before this script's own ready handler does — so the editor may already exist by the
+    // time we get here. Bind directly in that case instead of only waiting for "AddEditor",
+    // which would otherwise never fire again and silently drop the live preview updates.
+    if (window.tinymce) {
+        const existingEditor = window.tinymce.get('bulk_email_body');
+        if (existingEditor) {
+            existingEditor.on('input keyup change', updatePreview);
+        } else {
+            window.tinymce.on('AddEditor', function (e) {
+                if (e.editor.id === 'bulk_email_body') {
+                    e.editor.on('input keyup change', updatePreview);
+                }
+            });
+        }
+    }
+
     updatePreview();
 
     // History table: filter

@@ -37,11 +37,10 @@ function eventadmin_volunteer_list_page(): void
         'post_type'   => 'eventadmin_shift',
         'numberposts' => -1,
         'meta_key'    => 'shift_start',
-        'orderby'     => 'meta_value',
+        'orderby'     => ['title' => 'ASC', 'meta_value' => 'ASC'],
         'meta_type'   => 'DATETIME',
-        'order'       => 'ASC',
     ]);
-    $all_categories = get_terms(['taxonomy' => 'eventadmin_shift_category', 'hide_empty' => false]);
+    $all_categories = eventadmin_get_hierarchical_shift_categories();
 
     // Nonce-gated filters
     $filter_valid      = isset($_GET['eventadmin_vol_nonce']) &&
@@ -81,16 +80,114 @@ function eventadmin_volunteer_list_page(): void
         $volunteers   = array_filter($volunteers, fn($u) => in_array($u->ID, $cat_user_ids, true));
     }
 
+    $blocked_log = get_option('eventadmin_blocked_log', []);
+    $cleanup_log = get_option('eventadmin_cleanup_log', []);
+
+    $tabs = [
+        'volunteers' => esc_html__('Volunteers', 'eventadmin-volunteer-management'),
+        /* translators: %d is the number of blocked registration attempts */
+        'blocked'    => sprintf(esc_html__('Blocked registration attempts (%d)', 'eventadmin-volunteer-management'), count($blocked_log)),
+        /* translators: %d is the number of auto-deleted unverified accounts */
+        'cleanup'    => sprintf(esc_html__('Auto-deleted unverified accounts (%d)', 'eventadmin-volunteer-management'), count($cleanup_log)),
+    ];
+    $active_tab = isset($_GET['tab']) && array_key_exists(sanitize_key(wp_unslash($_GET['tab'])), $tabs)
+        ? sanitize_key(wp_unslash($_GET['tab']))
+        : 'volunteers';
+
     echo '<div class="wrap">';
     echo '<h1>' . esc_html__('Volunteers', 'eventadmin-volunteer-management') . '</h1>';
 
-    // Shift filter form
-    echo '<form method="get" action="edit.php" style="margin-bottom:16px;">';
+    echo '<h2 class="nav-tab-wrapper">';
+    foreach ($tabs as $slug => $label) {
+        $url    = admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-volunteers&tab=' . $slug);
+        $active = $active_tab === $slug ? ' nav-tab-active' : '';
+        echo '<a class="nav-tab' . $active . '" href="' . esc_url($url) . '">' . $label . '</a>';
+    }
+    echo '</h2>';
+
+    if ($active_tab === 'blocked') {
+        if (empty($blocked_log)) {
+            echo '<p><em>' . esc_html__('No blocked registration attempts.', 'eventadmin-volunteer-management') . '</em></p>';
+        } else {
+            echo '<table class="widefat striped" style="max-width:800px;margin-top:1rem;">';
+            echo '<thead><tr>';
+            echo '<th>' . esc_html__('Date', 'eventadmin-volunteer-management') . '</th>';
+            echo '<th>' . esc_html__('E-Mail', 'eventadmin-volunteer-management') . '</th>';
+            echo '<th>' . esc_html__('IP', 'eventadmin-volunteer-management') . '</th>';
+            echo '<th>' . esc_html__('Provider', 'eventadmin-volunteer-management') . '</th>';
+            echo '<th>' . esc_html__('Reason', 'eventadmin-volunteer-management') . '</th>';
+            echo '</tr></thead><tbody>';
+            foreach (array_reverse($blocked_log) as $entry) {
+                echo '<tr>';
+                echo '<td>' . esc_html(wp_date(get_option('date_format') . ' ' . get_option('time_format'), $entry['time'])) . '</td>';
+                echo '<td>' . esc_html($entry['email'] ?: '—') . '</td>';
+                echo '<td>' . esc_html($entry['ip'] ?: '—') . '</td>';
+                echo '<td>' . esc_html($entry['provider'] ?: '—') . '</td>';
+                echo '<td>' . esc_html($entry['reason'] ?: '—') . '</td>';
+                echo '</tr>';
+            }
+            echo '</tbody></table>';
+        }
+        echo '</div>';
+        return;
+    }
+
+    if ($active_tab === 'cleanup') {
+        if (empty($cleanup_log)) {
+            echo '<p><em>' . esc_html__('No auto-deleted unverified accounts.', 'eventadmin-volunteer-management') . '</em></p>';
+        } else {
+            echo '<div id="eventadmin-cleanup-log-section">';
+            echo '<p style="margin-top:1rem;"><button type="button" id="eventadmin-clear-cleanup-log" class="button">' . esc_html__('Clear log', 'eventadmin-volunteer-management') . '</button></p>';
+            echo '<table class="widefat striped" style="max-width:640px;">';
+            echo '<thead><tr>';
+            echo '<th>' . esc_html__('Date', 'eventadmin-volunteer-management') . '</th>';
+            echo '<th>' . esc_html__('Name', 'eventadmin-volunteer-management') . '</th>';
+            echo '<th>' . esc_html__('E-Mail', 'eventadmin-volunteer-management') . '</th>';
+            echo '</tr></thead><tbody>';
+            foreach (array_reverse($cleanup_log) as $entry) {
+                echo '<tr>';
+                echo '<td>' . esc_html(wp_date(get_option('date_format') . ' ' . get_option('time_format'), $entry['time'])) . '</td>';
+                echo '<td>' . esc_html($entry['name']) . '</td>';
+                echo '<td>' . esc_html($entry['email']) . '</td>';
+                echo '</tr>';
+            }
+            echo '</tbody></table>';
+            echo '</div>';
+
+            wp_enqueue_script(
+                'eventadmin-volunteer-list',
+                plugin_dir_url(__FILE__) . '../../assets/js/volunteer-list.js',
+                ['jquery'],
+                '1.0',
+                true
+            );
+            wp_localize_script('eventadmin-volunteer-list', 'EVENTADMIN_VOL', [
+                'ajax_url'                => admin_url('admin-ajax.php'),
+                'nonce_clear_cleanup_log' => wp_create_nonce('eventadmin_clear_cleanup_log'),
+                'i18n'                    => [
+                    'error'                     => esc_html__('An error occurred. Please try again.', 'eventadmin-volunteer-management'),
+                    'clear_cleanup_log_confirm' => esc_html__('Clear the auto-deleted unverified accounts log? This cannot be undone.', 'eventadmin-volunteer-management'),
+                ],
+            ]);
+        }
+        echo '</div>';
+        return;
+    }
+
+    // Single toolbar row: create/grant buttons, shift+category filters, and search — all
+    // on one line (wrapping only on narrow screens) instead of three stacked full-width rows.
+    echo '<div class="eventadmin-vol-toolbar" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:1rem 0;">';
+
+    echo '<div class="eventadmin-vol-actions" style="display:flex;gap:8px;flex-wrap:wrap;">';
+    echo '<button type="button" class="button button-primary eventadmin-modal-open" data-target="#eventadmin-create-volunteer-modal">' . esc_html__('Create new volunteer', 'eventadmin-volunteer-management') . '</button>';
+    echo '<button type="button" class="button eventadmin-modal-open" data-target="#eventadmin-grant-role-modal">' . esc_html__('Grant volunteer role', 'eventadmin-volunteer-management') . '</button>';
+    echo '</div>';
+
+    echo '<form method="get" action="edit.php" id="eventadmin-volunteers-filters" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0;">';
     wp_nonce_field('eventadmin_vol_filter', 'eventadmin_vol_nonce');
     echo '<input type="hidden" name="post_type" value="eventadmin_shift">';
     echo '<input type="hidden" name="page" value="eventadmin-volunteers">';
-    echo '<label>' . esc_html__('Filter by shift:', 'eventadmin-volunteer-management') . ' ';
-    echo '<select name="filter_shift">';
+    echo '<select name="filter_shift" aria-label="' . esc_attr__('Filter by shift', 'eventadmin-volunteer-management') . '">';
     echo '<option value="">' . esc_html__('All volunteers', 'eventadmin-volunteer-management') . '</option>';
     foreach ($all_shifts as $shift) {
         $start = get_post_meta($shift->ID, 'shift_start', true);
@@ -99,33 +196,36 @@ function eventadmin_volunteer_list_page(): void
         $sel   = selected($selected_shift, $shift->ID, false);
         echo '<option value="' . esc_attr($shift->ID) . '"' . $sel . '>' . $label . '</option>';
     }
-    echo '</select></label> ';
+    echo '</select>';
     if (!empty($all_categories)) {
-        echo '<label>' . esc_html__('Category:', 'eventadmin-volunteer-management') . ' ';
-        echo '<select name="filter_category">';
-        echo '<option value="">' . esc_html__('All', 'eventadmin-volunteer-management') . '</option>';
-        foreach ($all_categories as $cat) {
-            $sel = selected($selected_category, $cat->term_id, false);
-            echo '<option value="' . esc_attr($cat->term_id) . '"' . $sel . '>' . esc_html($cat->name) . '</option>';
-        }
-        echo '</select></label> ';
+        echo '<select name="filter_category" aria-label="' . esc_attr__('Category', 'eventadmin-volunteer-management') . '">';
+        echo '<option value="">' . esc_html__('All categories', 'eventadmin-volunteer-management') . '</option>';
+        echo eventadmin_category_dropdown_options($all_categories, $selected_category, 'term_id');
+        echo '</select>';
     }
-    echo '<input type="submit" class="button" value="' . esc_attr__('Filter', 'eventadmin-volunteer-management') . '">';
+    echo '<noscript><input type="submit" class="button" value="' . esc_attr__('Filter', 'eventadmin-volunteer-management') . '"></noscript>';
     if ($selected_shift || $selected_category) {
-        echo ' <a href="' . esc_url(admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-volunteers')) . '" class="button">' . esc_html__('Reset', 'eventadmin-volunteer-management') . '</a>';
+        echo '<a href="' . esc_url(admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-volunteers')) . '" class="button">' . esc_html__('Reset', 'eventadmin-volunteer-management') . '</a>';
     }
     echo '</form>';
 
-    // Link to Send Announcement page for bulk emails
-    $announcement_url = admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-bulk-email');
-    echo '<p style="margin-bottom:24px;">';
-    echo esc_html__('To send an email to multiple volunteers, use the', 'eventadmin-volunteer-management') . ' ';
-    echo '<a href="' . esc_url($announcement_url) . '">' . esc_html__('Send Announcement', 'eventadmin-volunteer-management') . '</a>.';
-    echo '</p>';
+    echo '<div class="eventadmin-vol-search" style="display:flex;align-items:center;gap:8px;">';
+    echo '<input type="search" id="eventadmin-vol-search" placeholder="' . esc_attr__('Search volunteers…', 'eventadmin-volunteer-management') . '" class="regular-text">';
+    echo '<span id="eventadmin-vol-count" style="color:#666;font-style:italic;"></span>';
+    echo '</div>';
 
-    // Create new volunteer section
-    echo '<div style="background:#f6f7f7;border:1px solid #dcdcde;padding:16px;margin-bottom:24px;max-width:480px;">';
-    echo '<h3 style="margin-top:0;">' . esc_html__('Create new volunteer', 'eventadmin-volunteer-management') . '</h3>';
+    echo '</div>';
+    echo '<script>
+        document.querySelectorAll("#eventadmin-volunteers-filters select").forEach(function (el) {
+            el.addEventListener("change", function () { el.form.submit(); });
+        });
+    </script>';
+
+    // "Create new volunteer" modal
+    echo '<div id="eventadmin-create-volunteer-modal" class="eventadmin-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100000;">';
+    echo '<div style="position:relative;background:#fff;max-width:480px;margin:60px auto;padding:20px;border-radius:6px;max-height:80vh;overflow-y:auto;">';
+    echo '<button type="button" class="eventadmin-modal-close" aria-label="' . esc_attr__('Close', 'eventadmin-volunteer-management') . '" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:24px;line-height:1;cursor:pointer;color:#666;padding:4px 8px;">&times;</button>';
+    echo '<h2 style="margin-top:0;">' . esc_html__('Create new volunteer', 'eventadmin-volunteer-management') . '</h2>';
     echo '<form id="eventadmin-create-volunteer-form">';
     wp_nonce_field('eventadmin_create_volunteer', 'eventadmin_create_volunteer_nonce');
     echo '<p style="display:flex;gap:8px;flex-wrap:wrap;">';
@@ -136,39 +236,37 @@ function eventadmin_volunteer_list_page(): void
     echo '<input type="text" name="user_identifier" placeholder="' . esc_attr__('E-Mail (optional)', 'eventadmin-volunteer-management') . '" title="' . esc_attr__('Leave blank for offline volunteers without an email address', 'eventadmin-volunteer-management') . '" style="flex:1;min-width:120px;">';
     echo '<input type="text" name="phone" placeholder="' . esc_attr__('Phone', 'eventadmin-volunteer-management') . '" style="flex:1;min-width:120px;">';
     echo '</p>';
+    echo '<p>';
     echo '<button type="submit" class="button button-primary">' . esc_html__('Create volunteer', 'eventadmin-volunteer-management') . '</button>';
     echo ' <span id="eventadmin-create-volunteer-result" style="margin-left:8px;"></span>';
-    echo '</form>';
-    echo '</div>';
+    echo '</p></form>';
+    echo '</div></div>';
 
-    // Grant volunteer role section
+    // "Grant volunteer role" modal
     $non_volunteers = get_users(['role__not_in' => ['eventadmin_volunteer'], 'orderby' => 'display_name', 'fields' => ['ID', 'display_name', 'user_email']]);
-    echo '<div style="background:#f6f7f7;border:1px solid #dcdcde;padding:16px;margin-bottom:24px;max-width:480px;">';
-    echo '<h3 style="margin-top:0;">' . esc_html__('Grant volunteer role', 'eventadmin-volunteer-management') . '</h3>';
+    echo '<div id="eventadmin-grant-role-modal" class="eventadmin-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100000;">';
+    echo '<div style="position:relative;background:#fff;max-width:480px;margin:60px auto;padding:20px;border-radius:6px;max-height:80vh;overflow-y:auto;">';
+    echo '<button type="button" class="eventadmin-modal-close" aria-label="' . esc_attr__('Close', 'eventadmin-volunteer-management') . '" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:24px;line-height:1;cursor:pointer;color:#666;padding:4px 8px;">&times;</button>';
+    echo '<h2 style="margin-top:0;">' . esc_html__('Grant volunteer role', 'eventadmin-volunteer-management') . '</h2>';
     if (empty($non_volunteers)) {
         echo '<p><em>' . esc_html__('All existing users already have the volunteer role.', 'eventadmin-volunteer-management') . '</em></p>';
     } else {
         echo '<form id="eventadmin-grant-role-form">';
         wp_nonce_field('eventadmin_grant_volunteer_role', 'eventadmin_grant_role_nonce');
         echo '<p>';
-        echo '<select name="user_id" id="eventadmin-grant-role-user" style="max-width:100%;" required>';
+        echo '<select name="user_id" id="eventadmin-grant-role-user" style="max-width:100%;width:100%;" required>';
         echo '<option value="">' . esc_html__('— Select user —', 'eventadmin-volunteer-management') . '</option>';
         foreach ($non_volunteers as $u) {
             echo '<option value="' . esc_attr($u->ID) . '">' . esc_html($u->display_name) . ' (' . esc_html($u->user_email) . ')</option>';
         }
         echo '</select>';
         echo '</p>';
+        echo '<p>';
         echo '<button type="submit" class="button button-primary">' . esc_html__('Grant role', 'eventadmin-volunteer-management') . '</button>';
         echo ' <span id="eventadmin-grant-role-result" style="margin-left:8px;"></span>';
-        echo '</form>';
+        echo '</p></form>';
     }
-    echo '</div>';
-
-    // Text search + volunteer count
-    echo '<p style="margin-bottom:8px;">';
-    echo '<input type="search" id="eventadmin-vol-search" placeholder="' . esc_attr__('Search volunteers…', 'eventadmin-volunteer-management') . '" class="regular-text">';
-    echo ' <span id="eventadmin-vol-count" style="color:#666;font-style:italic;margin-left:8px;"></span>';
-    echo '</p>';
+    echo '</div></div>';
 
     // Volunteer table
     $sortable_cols = [
@@ -297,54 +395,7 @@ function eventadmin_volunteer_list_page(): void
 
     echo '</tbody></table>';
 
-    // Blocked registration log
-    $blocked_log = get_option('eventadmin_blocked_log', []);
-    if (!empty($blocked_log)) {
-        echo '<h3 style="margin-top:2rem;">' . esc_html__('Blocked registration attempts', 'eventadmin-volunteer-management') . '</h3>';
-        echo '<table class="widefat striped" style="max-width:800px;">';
-        echo '<thead><tr>';
-        echo '<th>' . esc_html__('Date', 'eventadmin-volunteer-management') . '</th>';
-        echo '<th>' . esc_html__('E-Mail', 'eventadmin-volunteer-management') . '</th>';
-        echo '<th>' . esc_html__('IP', 'eventadmin-volunteer-management') . '</th>';
-        echo '<th>' . esc_html__('Provider', 'eventadmin-volunteer-management') . '</th>';
-        echo '<th>' . esc_html__('Reason', 'eventadmin-volunteer-management') . '</th>';
-        echo '</tr></thead><tbody>';
-        foreach (array_reverse($blocked_log) as $entry) {
-            echo '<tr>';
-            echo '<td>' . esc_html(wp_date(get_option('date_format') . ' ' . get_option('time_format'), $entry['time'])) . '</td>';
-            echo '<td>' . esc_html($entry['email'] ?: '—') . '</td>';
-            echo '<td>' . esc_html($entry['ip'] ?: '—') . '</td>';
-            echo '<td>' . esc_html($entry['provider'] ?: '—') . '</td>';
-            echo '<td>' . esc_html($entry['reason'] ?: '—') . '</td>';
-            echo '</tr>';
-        }
-        echo '</tbody></table>';
-    }
-
-    // Auto-cleanup log
-    $cleanup_log = get_option('eventadmin_cleanup_log', []);
-    if (!empty($cleanup_log)) {
-        echo '<div id="eventadmin-cleanup-log-section">';
-        echo '<h3 style="margin-top:2rem;">' . esc_html__('Auto-deleted unverified accounts', 'eventadmin-volunteer-management') . '</h3>';
-        echo '<p><button type="button" id="eventadmin-clear-cleanup-log" class="button">' . esc_html__('Clear log', 'eventadmin-volunteer-management') . '</button></p>';
-        echo '<table class="widefat striped" style="max-width:640px;">';
-        echo '<thead><tr>';
-        echo '<th>' . esc_html__('Date', 'eventadmin-volunteer-management') . '</th>';
-        echo '<th>' . esc_html__('Name', 'eventadmin-volunteer-management') . '</th>';
-        echo '<th>' . esc_html__('E-Mail', 'eventadmin-volunteer-management') . '</th>';
-        echo '</tr></thead><tbody>';
-        foreach (array_reverse($cleanup_log) as $entry) {
-            echo '<tr>';
-            echo '<td>' . esc_html(wp_date(get_option('date_format') . ' ' . get_option('time_format'), $entry['time'])) . '</td>';
-            echo '<td>' . esc_html($entry['name']) . '</td>';
-            echo '<td>' . esc_html($entry['email']) . '</td>';
-            echo '</tr>';
-        }
-        echo '</tbody></table>';
-        echo '</div>';
-    }
-
-    // JS for the group email form
+    // JS for the volunteer table, modals and group email form
     wp_enqueue_script(
         'eventadmin-volunteer-list',
         plugin_dir_url(__FILE__) . '../../assets/js/volunteer-list.js',
@@ -355,7 +406,6 @@ function eventadmin_volunteer_list_page(): void
     wp_localize_script('eventadmin-volunteer-list', 'EVENTADMIN_VOL', [
         'ajax_url'      => admin_url('admin-ajax.php'),
         'nonce_remove'  => wp_create_nonce('eventadmin_remove_volunteer_role'),
-        'nonce_clear_cleanup_log' => wp_create_nonce('eventadmin_clear_cleanup_log'),
         'i18n'          => [
             'volunteers'              => esc_html__('volunteers', 'eventadmin-volunteer-management'),
             'error'                   => esc_html__('An error occurred. Please try again.', 'eventadmin-volunteer-management'),
@@ -364,7 +414,6 @@ function eventadmin_volunteer_list_page(): void
             'volunteer_created'       => esc_html__('Volunteer created. Reloading…', 'eventadmin-volunteer-management'),
             'remove_confirm'          => esc_html__('Remove the volunteer role from {name}? They still have {shifts} upcoming shift(s).', 'eventadmin-volunteer-management'),
             'remove_confirm_no_shifts' => esc_html__('Remove the volunteer role from {name}?', 'eventadmin-volunteer-management'),
-            'clear_cleanup_log_confirm' => esc_html__('Clear the auto-deleted unverified accounts log? This cannot be undone.', 'eventadmin-volunteer-management'),
         ],
     ]);
 

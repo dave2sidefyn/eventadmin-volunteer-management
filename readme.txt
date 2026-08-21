@@ -4,7 +4,7 @@ Tags: volunteer, shift, planning, event
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.10.0
+Stable tag: 2.0.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -26,8 +26,8 @@ Designed for clubs, street festivals, and similar events — organizers create s
 * Per-shift organizer user, name, and email — override the global notification sender per shift with a linked WordPress user plus optional manual overrides
 * Automatic reminder emails X days before a shift starts
 * CSV export per shift or for all shifts
-* Admin overview with filters (upcoming/past/all, category, volunteer, date) and sorting
-* Dashboard statistics: registered volunteers, upcoming shifts, empty shifts, understaffed shifts, filled/open spots
+* Admin overview with Dashboard, Cards, Table, and Timeline views — the Timeline view lets you drag shifts directly on a Gantt-style chart to reschedule them
+* Dashboard statistics: registered volunteers, upcoming shifts, filled/open spots, split into required vs. optional openings
 * Bulk email tool: send custom announcements to all or opted-in volunteers — processed in batches, with a real-time progress bar, delivery failure tracking, and a confirmation email to the sender
 * Volunteers can opt out of announcements via their profile page
 * Send history log with subject, message preview, recipient count, and failure count
@@ -63,6 +63,21 @@ You can set a minimum number of volunteers per shift. The admin dashboard will h
 3. Statistics & charts in the backend
 
 == Changelog ==
+
+= Version 2.0.0 =
+* New: Shift categories (departments) — hidden departments now show a badge and their color swatch in the department list, and Quick Edit gained color, hidden, parent, and description fields so all of this can be changed without opening the full edit screen
+* New: Shift list (Shifts → All Shifts) can now be filtered and sorted by department, with the department shown as a colored badge
+* New: Volunteers page reorganized — "Create volunteer" and "Grant role" now open as modals, blocked registration attempts and auto-deleted unverified accounts moved to their own tabs, filters apply instantly without a "Filter" button, and the whole toolbar (buttons, filters, search) fits on one row
+* New: Shift overview reorganized into Dashboard, Cards, Table, and Timeline tabs (previously a single filtered view); each tab only shows the filters relevant to it
+* New: Timeline view supports dragging a shift's bar to move or resize it directly on the chart, with an Undo option after saving and a matching "Edit Shift" modal for precise changes
+* New: Dashboard statistics split each shift's open spots into "required" (below minimum) vs. "optional" (up to maximum)
+* New: Send Announcement redesigned into a two-column layout with a real, live HTML preview of the email, and hovering the recipient count shows who will receive it and which shift(s) they're signed up for
+* New: E-Mail design settings — pick a header color, set a header title/subtitle shown together with the logo, format the e-mail footer with rich text, and (advanced) add custom CSS applied to every e-mail
+* New: All e-mail texts in Settings → Communication (assignment, cancellation, reminder) now use the same rich-text editor as the footer, and the Communication tab is split into General / Shift Confirmations / Reminders sub-tabs
+* New: Every modal in the plugin now closes via a small "×" in the top-right corner instead of a full-width button
+* Fix: Shift categories marked "Hide from volunteers" lost their HTML badge styling in the department list and rendered as plain text
+* Fix: Editing a shift's time via the Timeline (drag or Edit Shift modal) could shift the saved time by a couple of hours on sites where WordPress's timezone setting differs from the server's PHP default
+* Removed: "Empty shifts" and "Understaffed shifts" dashboard counters (redundant with the required/optional open-spot numbers)
 
 = Version 1.10.0 =
 * New: Send Announcement can now attach a PDF from the media library to every email in the batch

@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       EventAdmin – Volunteer Management
  * Description:       Manage volunteers for events directly in WordPress. Create and schedule shifts, allow volunteers to sign up and cancel independently, and configure individual rules – e.g., maximum shifts per person per year.
- * Version:           1.10.0
+ * Version:           2.0.0
  * Author:            David Wiedmer, sidefyn GmbH
  * Author URI:        https://profiles.wordpress.org/davesidefyn/
  * Requires at least: 5.8
@@ -16,7 +16,7 @@
 
 defined('ABSPATH') or die('No script kiddies please!');
 
-define('EVENTADMIN_VERSION', '1.10.0');
+define('EVENTADMIN_VERSION', '2.0.0');
 define('EVENTADMIN_REVIEW_URL', 'https://wordpress.org/plugins/eventadmin-volunteer-management/#reviews');
 define('EVENTADMIN_DONATE_URL', 'https://revolut.me/davidwiedmer');
 

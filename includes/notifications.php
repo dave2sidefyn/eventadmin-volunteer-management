@@ -320,6 +320,32 @@ function eventadmin_get_sender_header(): array
 }
 
 /**
+ * Lightens a #rrggbb hex color by the given fraction (0–1), for deriving the second
+ * gradient stop of the email header from a single admin-picked color.
+ *
+ * @param string $hex     A validated #rrggbb (or #rgb) color.
+ * @param float  $percent 0–1, how far toward white to shift each channel.
+ * @return string
+ */
+function eventadmin_adjust_color_brightness(string $hex, float $percent): string
+{
+    $hex = ltrim($hex, '#');
+    if (strlen($hex) === 3) {
+        $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+    }
+    if (strlen($hex) !== 6) {
+        return '#' . $hex;
+    }
+
+    $channels = array_map(function (string $channel) use ($percent): int {
+        $value = hexdec($channel);
+        return (int) round(max(0, min(255, $value + (255 - $value) * $percent)));
+    }, str_split($hex, 2));
+
+    return sprintf('#%02x%02x%02x', ...$channels);
+}
+
+/**
  * Returns the email body wrapped in the plugin's standard HTML template.
  *
  * Integrators can override the final HTML via the `eventadmin_email_template_html`
@@ -332,12 +358,22 @@ function eventadmin_get_sender_header(): array
  */
 function eventadmin_wrap_email_template(string $subject, string $message, array $args = []): string
 {
-    $site_name = wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES);
-    $defaults  = [
-        'site_name'   => $site_name,
-        'preheader'   => wp_strip_all_tags($subject),
-        'heading'     => $subject,
-        'footer_text' => sprintf(
+    $site_name    = wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES);
+    $logo_id      = (int) get_option('eventadmin_email_header_logo_id', 0);
+    $header_color = get_option('eventadmin_email_header_color', '');
+    $defaults     = [
+        'site_name'          => $site_name,
+        'preheader'          => wp_strip_all_tags($subject),
+        'heading'            => $subject,
+        'header_title'       => get_option('eventadmin_email_header_title', $site_name),
+        'header_subtitle'    => get_option('eventadmin_email_header_subtitle', wp_specialchars_decode(get_bloginfo('description'), ENT_QUOTES)),
+        'logo_url'           => $logo_id ? wp_get_attachment_image_url($logo_id, 'medium') : '',
+        'header_gradient'    => $header_color
+            ? 'linear-gradient(135deg,' . $header_color . ' 0%,' . eventadmin_adjust_color_brightness($header_color, 0.3) . ' 100%)'
+            : 'linear-gradient(135deg,#17324d 0%,#28587d 100%)',
+        'header_text_color' => get_option('eventadmin_email_header_text_color', '#ffffff') ?: '#ffffff',
+        'custom_css'  => get_option('eventadmin_email_custom_css', ''),
+        'footer_text' => get_option('eventadmin_email_footer_html', '') ?: sprintf(
             /* translators: %s = site name */
             esc_html__('This email was sent by %s.', 'eventadmin-volunteer-management'),
             $site_name
@@ -357,7 +393,8 @@ function eventadmin_wrap_email_template(string $subject, string $message, array 
 <head>
     <meta charset="' . esc_attr(get_bloginfo('charset')) . '">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>' . esc_html($subject) . '</title>
+    <title>' . esc_html($subject) . '</title>' . ($args['custom_css'] !== '' ? '
+    <style>' . $args['custom_css'] . '</style>' : '') . '
 </head>
 <body style="margin:0;padding:0;background:#f3f5f7;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;color:#1f2933;">
     <div style="display:none;max-height:0;overflow:hidden;opacity:0;mso-hide:all;">' . esc_html($args['preheader']) . '</div>
@@ -366,8 +403,14 @@ function eventadmin_wrap_email_template(string $subject, string $message, array 
             <td align="center">
                 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:640px;background:#ffffff;border:1px solid #dde3ea;border-radius:14px;overflow:hidden;">
                     <tr>
-                        <td style="padding:28px 32px;background:linear-gradient(135deg,#17324d 0%,#28587d 100%);color:#ffffff;">
-                            <div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.82;">' . esc_html($args['site_name']) . '</div>
+                        <td style="padding:28px 32px;background:' . esc_attr($args['header_gradient']) . ';color:' . esc_attr($args['header_text_color']) . ';">
+                            ' . (
+                                $args['logo_url']
+                                    ? '<img src="' . esc_url($args['logo_url']) . '" alt="' . esc_attr($args['header_title'] ?: $args['site_name']) . '" style="max-width:220px;max-height:80px;display:block;' . (($args['header_title'] || $args['header_subtitle']) ? 'margin-bottom:8px;' : '') . '">'
+                                    : ''
+                            )
+                            . ($args['header_title'] ? '<div style="font-size:15px;font-weight:700;letter-spacing:.02em;">' . esc_html($args['header_title']) . '</div>' : '')
+                            . ($args['header_subtitle'] ? '<div style="margin-top:2px;font-size:13px;opacity:.82;">' . esc_html($args['header_subtitle']) . '</div>' : '') . '
                             <div style="margin-top:8px;font-size:28px;line-height:1.25;font-weight:700;">' . esc_html($args['heading']) . '</div>
                         </td>
                     </tr>
@@ -429,3 +472,71 @@ function eventadmin_send_HTML_e_mail(
     );
     return remove_filter('wp_mail_content_type', $set_html);
 }
+
+/**
+ * AJAX: renders a subject/body pair through the real email template (header logo, footer,
+ * colors, everything) so admin screens can show an accurate visual preview instead of a
+ * plain-text approximation — shared by the Settings page and the Send Announcement page.
+ */
+function eventadmin_ajax_render_email_preview(): void
+{
+    if (
+        !isset($_POST['nonce']) ||
+        !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'eventadmin_email_preview')
+    ) {
+        wp_send_json_error();
+    }
+
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error();
+    }
+
+    $subject = isset($_POST['subject']) ? sanitize_text_field(wp_unslash($_POST['subject'])) : '';
+    $body    = isset($_POST['body']) ? wp_kses_post(wp_unslash($_POST['body'])) : '';
+
+    // The Settings page previews the header logo / footer as currently edited (possibly
+    // unsaved), so it can pass those in directly. When omitted (e.g. the Send Announcement
+    // page, which has no logo/footer fields of its own), eventadmin_wrap_email_template()
+    // falls back to whatever is actually saved.
+    $args = [];
+    if (isset($_POST['footer_html'])) {
+        $footer_html      = wp_kses_post(wp_unslash($_POST['footer_html']));
+        $args['footer_text'] = $footer_html !== '' ? $footer_html : sprintf(
+            /* translators: %s = site name */
+            esc_html__('This email was sent by %s.', 'eventadmin-volunteer-management'),
+            wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES)
+        );
+    }
+    if (isset($_POST['logo_id'])) {
+        $logo_id           = absint($_POST['logo_id']);
+        $args['logo_url']  = $logo_id ? wp_get_attachment_image_url($logo_id, 'medium') : '';
+    }
+    if (isset($_POST['header_title'])) {
+        $args['header_title'] = sanitize_text_field(wp_unslash($_POST['header_title']));
+    }
+    if (isset($_POST['header_subtitle'])) {
+        $args['header_subtitle'] = sanitize_text_field(wp_unslash($_POST['header_subtitle']));
+    }
+    if (isset($_POST['header_color'])) {
+        $header_color           = sanitize_hex_color(wp_unslash($_POST['header_color']));
+        $args['header_gradient'] = $header_color
+            ? 'linear-gradient(135deg,' . $header_color . ' 0%,' . eventadmin_adjust_color_brightness($header_color, 0.3) . ' 100%)'
+            : 'linear-gradient(135deg,#17324d 0%,#28587d 100%)';
+    }
+    if (isset($_POST['header_text_color'])) {
+        $args['header_text_color'] = sanitize_hex_color(wp_unslash($_POST['header_text_color'])) ?: '#ffffff';
+    }
+    if (isset($_POST['custom_css'])) {
+        $args['custom_css'] = wp_strip_all_tags(wp_unslash($_POST['custom_css']));
+    }
+
+    $html = eventadmin_wrap_email_template(
+        $subject !== '' ? $subject : esc_html__('(no subject)', 'eventadmin-volunteer-management'),
+        $body,
+        $args
+    );
+
+    wp_send_json_success(['html' => $html]);
+}
+
+add_action('wp_ajax_eventadmin_render_email_preview', 'eventadmin_ajax_render_email_preview');

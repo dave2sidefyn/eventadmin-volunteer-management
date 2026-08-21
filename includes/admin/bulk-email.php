@@ -36,61 +36,85 @@ function eventadmin_bulk_email_page(): void
     $preset_user_id = isset($_GET['recipient_user_id']) ? absint($_GET['recipient_user_id']) : 0;
     $preset_user    = $preset_user_id ? get_userdata($preset_user_id) : null;
 
+    $log  = get_option('eventadmin_email_log', []);
+    $tabs = [
+        'send'    => esc_html__('Send Announcement', 'eventadmin-volunteer-management'),
+        /* translators: %d is the number of previously sent announcements */
+        'history' => sprintf(esc_html__('Send History (%d)', 'eventadmin-volunteer-management'), count($log)),
+    ];
+    $active_tab = isset($_GET['tab']) && array_key_exists(sanitize_key(wp_unslash($_GET['tab'])), $tabs)
+        ? sanitize_key(wp_unslash($_GET['tab']))
+        : 'send';
+
     echo '<div class="wrap">';
     echo '<h1>' . esc_html__('Send Announcement to Volunteers', 'eventadmin-volunteer-management') . '</h1>';
 
-    echo '<p>' . esc_html__('Use {first_name} and {last_name} as placeholders in the message body. Use {shifts} to list each recipient\'s own upcoming shifts.', 'eventadmin-volunteer-management') . '</p>';
+    echo '<h2 class="nav-tab-wrapper">';
+    foreach ($tabs as $slug => $label) {
+        $url    = admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-bulk-email&tab=' . $slug);
+        $active = $active_tab === $slug ? ' nav-tab-active' : '';
+        echo '<a class="nav-tab' . $active . '" href="' . esc_url($url) . '">' . $label . '</a>';
+    }
+    echo '</h2>';
 
-    echo '<form id="eventadmin-bulk-email-form" method="post">';
+    wp_enqueue_media();
+
+    wp_enqueue_script(
+        'eventadmin-bulk-email',
+        plugin_dir_url(__FILE__) . '../../assets/js/bulk-email.js',
+        ['jquery', 'editor'],
+        '1.0',
+        true
+    );
+
+    wp_localize_script('eventadmin-bulk-email', 'EVENTADMIN_BULK_EMAIL', [
+        'ajax_url'    => admin_url('admin-ajax.php'),
+        'nonce_batch'   => wp_create_nonce('eventadmin_bulk_email_batch'),
+        'nonce_preview' => wp_create_nonce('eventadmin_email_preview'),
+        'i18n'        => [
+            'done'               => esc_html__('Done! All emails sent.', 'eventadmin-volunteer-management'),
+            'failed'             => esc_html__('({failed} could not be delivered)', 'eventadmin-volunteer-management'),
+            'error'              => esc_html__('An error occurred. Please try again.', 'eventadmin-volunteer-management'),
+            'sending'            => esc_html__('Sent {sent} of {total}…', 'eventadmin-volunteer-management'),
+            'counting'           => esc_html__('Counting…', 'eventadmin-volunteer-management'),
+            'recipientCountOne'  => esc_html__('{n} recipient', 'eventadmin-volunteer-management'),
+            'recipientCountMany' => esc_html__('{n} recipients', 'eventadmin-volunteer-management'),
+            'selectPdfTitle'     => esc_html__('Select a PDF to attach', 'eventadmin-volunteer-management'),
+            'selectPdfButton'    => esc_html__('Use this PDF', 'eventadmin-volunteer-management'),
+        ],
+    ]);
+
+    if ($active_tab === 'history') {
+        eventadmin_bulk_email_render_history_tab($log);
+        echo '</div>';
+        return;
+    }
+
+    echo '<form id="eventadmin-bulk-email-form" method="post" style="margin-top:1rem;">';
     wp_nonce_field('eventadmin_bulk_email_init', 'eventadmin_bulk_email_nonce');
 
     $default_from_name  = get_option('eventadmin_notification_email_name', get_bloginfo('name'));
     $default_from_email = get_option('eventadmin_notification_email', get_option('admin_email'));
 
-    echo '<table class="form-table"><tbody>';
+    echo '<div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(360px, 1fr));gap:24px;align-items:start;max-width:1100px;">';
 
-    echo '<tr><th scope="row"><label for="bulk_from_name">' . esc_html__('From name', 'eventadmin-volunteer-management') . '</label></th>';
-    echo '<td><input type="text" id="bulk_from_name" name="bulk_email_from_name" class="regular-text" value="' . esc_attr($default_from_name) . '" required></td></tr>';
-
-    echo '<tr><th scope="row"><label for="bulk_from_email">' . esc_html__('From email', 'eventadmin-volunteer-management') . '</label></th>';
-    echo '<td><input type="email" id="bulk_from_email" name="bulk_email_from_email" class="regular-text" value="' . esc_attr($default_from_email) . '" required></td></tr>';
-
-    echo '<tr><th scope="row"><label for="bulk_email_subject">' . esc_html__('Subject', 'eventadmin-volunteer-management') . '</label></th>';
-    echo '<td><input type="text" id="bulk_email_subject" name="bulk_email_subject" class="regular-text" required></td></tr>';
-
-    echo '<tr><th scope="row"><label for="bulk_email_body">' . esc_html__('Message', 'eventadmin-volunteer-management') . '</label></th>';
-    echo '<td><textarea id="bulk_email_body" name="bulk_email_body" rows="10" class="large-text" required></textarea></td></tr>';
-
-    echo '<tr><th scope="row"><label for="bulk_email_attachment_button">' . esc_html__('Attachment (optional)', 'eventadmin-volunteer-management') . '</label></th>';
-    echo '<td>';
-    echo '<input type="hidden" id="bulk_email_attachment_id" name="bulk_email_attachment_id" value="">';
-    echo '<button type="button" id="bulk_email_attachment_button" class="button">' . esc_html__('Select PDF…', 'eventadmin-volunteer-management') . '</button>';
-    echo ' <span id="bulk_email_attachment_name" style="margin-left:8px;"></span>';
-    echo ' <a href="#" id="bulk_email_attachment_remove" style="margin-left:8px;display:none;">' . esc_html__('Remove', 'eventadmin-volunteer-management') . '</a>';
-    echo '<p class="description">' . esc_html__('The PDF will be attached to every email in this announcement.', 'eventadmin-volunteer-management') . '</p>';
-    echo '</td></tr>';
+    // Row 1, left: Recipients
+    echo '<div>';
+    echo '<h3 style="margin-top:0;">' . esc_html__('Recipients', 'eventadmin-volunteer-management') . '</h3>';
 
     $offline_exclude = ['key' => 'eventadmin_offline_volunteer', 'compare' => 'NOT EXISTS'];
-    $count_all = count(get_users([
-        'role'       => 'eventadmin_volunteer',
-        'fields'     => 'ID',
-        'meta_query' => [$offline_exclude],
-    ]));
-    $count_subscribed = count(get_users([
-        'role'       => 'eventadmin_volunteer',
-        'fields'     => 'ID',
-        'meta_query' => [
-            'relation' => 'AND',
-            $offline_exclude,
-            [
-                'relation' => 'OR',
-                ['key' => 'eventadmin_announcements', 'compare' => 'NOT EXISTS'],
-                ['key' => 'eventadmin_announcements', 'value' => '1'],
-            ],
-        ],
-    ]));
-    $count_no_shift  = count(eventadmin_bulk_email_get_recipient_users('no_shift', 0, 0, 0));
-    $count_has_shift = count(eventadmin_bulk_email_get_recipient_users('has_shift', 0, 0, 0));
+    $users_subscribed = eventadmin_bulk_email_get_recipient_users('subscribed', 0, 0, 0);
+    $users_all        = eventadmin_bulk_email_get_recipient_users('all', 0, 0, 0);
+    $users_no_shift   = eventadmin_bulk_email_get_recipient_users('no_shift', 0, 0, 0);
+    $users_has_shift  = eventadmin_bulk_email_get_recipient_users('has_shift', 0, 0, 0);
+    $count_subscribed = count($users_subscribed);
+    $count_all        = count($users_all);
+    $count_no_shift   = count($users_no_shift);
+    $count_has_shift  = count($users_has_shift);
+    $tooltip_subscribed = eventadmin_bulk_email_build_recipient_tooltip($users_subscribed, 'subscribed');
+    $tooltip_all        = eventadmin_bulk_email_build_recipient_tooltip($users_all, 'all');
+    $tooltip_no_shift   = eventadmin_bulk_email_build_recipient_tooltip($users_no_shift, 'no_shift');
+    $tooltip_has_shift  = eventadmin_bulk_email_build_recipient_tooltip($users_has_shift, 'has_shift');
 
     $all_shifts     = get_posts([
         'post_type'   => 'eventadmin_shift',
@@ -99,10 +123,8 @@ function eventadmin_bulk_email_page(): void
         'orderby'     => ['title' => 'ASC', 'meta_value' => 'ASC'],
         'meta_type'   => 'DATETIME',
     ]);
-    $all_categories = get_terms(['taxonomy' => 'eventadmin_shift_category', 'hide_empty' => false]);
+    $all_categories = eventadmin_get_hierarchical_shift_categories();
 
-    echo '<tr><th scope="row">' . esc_html__('Recipients', 'eventadmin-volunteer-management') . '</th>';
-    echo '<td>';
     if ($preset_user) {
         $preset_name = esc_html(trim($preset_user->first_name . ' ' . $preset_user->last_name) ?: $preset_user->user_login);
         echo '<label><input type="radio" name="bulk_email_recipients" value="user" checked> ';
@@ -112,23 +134,23 @@ function eventadmin_bulk_email_page(): void
     }
     echo '<label><input type="radio" name="bulk_email_recipients" value="subscribed"' . ($preset_user ? '' : ' checked') . '> ';
     echo esc_html__('Subscribed volunteers only (opted-in)', 'eventadmin-volunteer-management');
-    echo ' &nbsp;<span class="bulk-email-count" data-for="subscribed" style="color:#666;font-style:italic;">';
+    echo ' &nbsp;<span class="bulk-email-count" data-for="subscribed" style="color:#666;font-style:italic;cursor:help;" title="' . esc_attr($tooltip_subscribed) . '">';
     /* translators: %d number of recipients */
     echo esc_html(sprintf(_n('%d recipient', '%d recipients', $count_subscribed, 'eventadmin-volunteer-management'), $count_subscribed));
     echo '</span></label><br>';
     echo '<label><input type="radio" name="bulk_email_recipients" value="all"> ';
     echo esc_html__('All volunteers', 'eventadmin-volunteer-management');
-    echo ' &nbsp;<span class="bulk-email-count" data-for="all" style="color:#666;font-style:italic;display:none;">';
+    echo ' &nbsp;<span class="bulk-email-count" data-for="all" style="color:#666;font-style:italic;display:none;cursor:help;" title="' . esc_attr($tooltip_all) . '">';
     echo esc_html(sprintf(_n('%d recipient', '%d recipients', $count_all, 'eventadmin-volunteer-management'), $count_all));
     echo '</span></label><br>';
     echo '<label><input type="radio" name="bulk_email_recipients" value="no_shift"> ';
     echo esc_html__('Volunteers without any upcoming shift', 'eventadmin-volunteer-management');
-    echo ' &nbsp;<span class="bulk-email-count" data-for="no_shift" style="color:#666;font-style:italic;display:none;">';
+    echo ' &nbsp;<span class="bulk-email-count" data-for="no_shift" style="color:#666;font-style:italic;display:none;cursor:help;" title="' . esc_attr($tooltip_no_shift) . '">';
     echo esc_html(sprintf(_n('%d recipient', '%d recipients', $count_no_shift, 'eventadmin-volunteer-management'), $count_no_shift));
     echo '</span></label><br>';
     echo '<label><input type="radio" name="bulk_email_recipients" value="has_shift"> ';
     echo esc_html__('Volunteers with at least one upcoming shift', 'eventadmin-volunteer-management');
-    echo ' &nbsp;<span class="bulk-email-count" data-for="has_shift" style="color:#666;font-style:italic;display:none;">';
+    echo ' &nbsp;<span class="bulk-email-count" data-for="has_shift" style="color:#666;font-style:italic;display:none;cursor:help;" title="' . esc_attr($tooltip_has_shift) . '">';
     echo esc_html(sprintf(_n('%d recipient', '%d recipients', $count_has_shift, 'eventadmin-volunteer-management'), $count_has_shift));
     echo '</span></label><br>';
     echo '<label><input type="radio" name="bulk_email_recipients" value="shift"> ';
@@ -153,29 +175,65 @@ function eventadmin_bulk_email_page(): void
         echo '<div id="eventadmin-category-select-wrap" style="margin-top:8px;display:none;">';
         echo '<select name="bulk_email_category_id">';
         echo '<option value="">' . esc_html__('— Select category —', 'eventadmin-volunteer-management') . '</option>';
-        foreach ($all_categories as $cat) {
-            echo '<option value="' . esc_attr($cat->term_id) . '">' . esc_html($cat->name) . '</option>';
-        }
+        echo eventadmin_category_dropdown_options($all_categories, 0, 'term_id');
         echo '</select>';
         echo ' <span id="eventadmin-category-recipient-count" style="color:#666;font-style:italic;"></span>';
         echo '</div>';
     }
-    echo '</td></tr>';
+    echo '</div>'; // end Recipients cell
 
-    echo '</tbody></table>';
+    // Row 1, right: Sender
+    echo '<div>';
+    echo '<h3 style="margin-top:0;">' . esc_html__('Sender', 'eventadmin-volunteer-management') . '</h3>';
+    echo '<p><label for="bulk_from_name">' . esc_html__('From name', 'eventadmin-volunteer-management') . '</label><br>';
+    echo '<input type="text" id="bulk_from_name" name="bulk_email_from_name" style="width:100%;" value="' . esc_attr($default_from_name) . '" required></p>';
+    echo '<p><label for="bulk_from_email">' . esc_html__('From email', 'eventadmin-volunteer-management') . '</label><br>';
+    echo '<input type="email" id="bulk_from_email" name="bulk_email_from_email" style="width:100%;" value="' . esc_attr($default_from_email) . '" required></p>';
+    echo '</div>';
+
+    // Row 2, left: Subject
+    echo '<div>';
+    echo '<h3 style="margin-top:0;">' . esc_html__('Subject', 'eventadmin-volunteer-management') . '</h3>';
+    echo '<input type="text" id="bulk_email_subject" name="bulk_email_subject" style="width:100%;" required>';
+    echo '</div>';
+
+    // Row 2, right: Attachment
+    echo '<div>';
+    echo '<h3 style="margin-top:0;">' . esc_html__('Attachment (optional)', 'eventadmin-volunteer-management') . '</h3>';
+    echo '<input type="hidden" id="bulk_email_attachment_id" name="bulk_email_attachment_id" value="">';
+    echo '<button type="button" id="bulk_email_attachment_button" class="button">' . esc_html__('Select PDF…', 'eventadmin-volunteer-management') . '</button>';
+    echo ' <span id="bulk_email_attachment_name" style="margin-left:8px;"></span>';
+    echo ' <a href="#" id="bulk_email_attachment_remove" style="margin-left:8px;display:none;">' . esc_html__('Remove', 'eventadmin-volunteer-management') . '</a>';
+    echo '<p class="description">' . esc_html__('The PDF will be attached to every email in this announcement.', 'eventadmin-volunteer-management') . '</p>';
+    echo '</div>';
+
+    // Row 3, left: Message
+    echo '<div>';
+    echo '<h3 style="margin-top:0;">' . esc_html__('Message', 'eventadmin-volunteer-management') . '</h3>';
+    wp_editor('', 'bulk_email_body', [
+        'textarea_name' => 'bulk_email_body',
+        'textarea_rows' => 14,
+        'media_buttons' => true,
+        'teeny'         => true,
+        'quicktags'     => false,
+    ]);
+    echo '</div>';
+
+    // Row 3, right: live preview
+    echo '<div>';
+    echo '<h3 style="margin-top:0;">' . esc_html__('Preview (example data)', 'eventadmin-volunteer-management') . '</h3>';
+    echo '<p class="description">' . esc_html__('Use {first_name} and {last_name} as placeholders in the message body. Use {shifts} to list each recipient\'s own upcoming shifts.', 'eventadmin-volunteer-management') . '</p>';
+    echo '<div id="eventadmin-email-preview" style="background:#f6f7f7;border:1px solid #dcdcde;padding:16px;">';
+    echo '<p style="margin:0 0 4px;"><strong>' . esc_html__('From:', 'eventadmin-volunteer-management') . '</strong> <span id="ea-preview-from"></span></p>';
+    echo '<p id="ea-preview-attachment-row" style="margin:0 0 4px;display:none;"><strong>' . esc_html__('Attachment:', 'eventadmin-volunteer-management') . '</strong> <span id="ea-preview-attachment"></span></p>';
+    echo '<iframe id="ea-preview-body" title="' . esc_attr__('Preview (example data)', 'eventadmin-volunteer-management') . '" style="display:block;width:100%;height:460px;border:1px solid #dcdcde;background:#fff;margin-top:8px;"></iframe>';
+    echo '</div>';
+    echo '</div>';
+
+    echo '</div>'; // end grid
 
     echo '<p class="submit"><button type="submit" class="button button-primary">' . esc_html__('Start sending', 'eventadmin-volunteer-management') . '</button></p>';
     echo '</form>';
-
-    // Live preview
-    echo '<div id="eventadmin-email-preview" style="background:#f6f7f7;border:1px solid #dcdcde;padding:16px;margin-top:8px;max-width:700px;">';
-    echo '<h3 style="margin-top:0;">' . esc_html__('Preview (example data)', 'eventadmin-volunteer-management') . '</h3>';
-    echo '<p style="margin:0 0 4px;"><strong>' . esc_html__('From:', 'eventadmin-volunteer-management') . '</strong> <span id="ea-preview-from"></span></p>';
-    echo '<p style="margin:0 0 4px;"><strong>' . esc_html__('Subject:', 'eventadmin-volunteer-management') . '</strong> <span id="ea-preview-subject"></span></p>';
-    echo '<p id="ea-preview-attachment-row" style="margin:0 0 4px;display:none;"><strong>' . esc_html__('Attachment:', 'eventadmin-volunteer-management') . '</strong> <span id="ea-preview-attachment"></span></p>';
-    echo '<hr style="margin:8px 0;">';
-    echo '<div id="ea-preview-body" style="font-size:13px;"></div>';
-    echo '</div>';
 
     // Progress UI (hidden until send starts)
     echo '<div id="eventadmin-bulk-email-progress" style="display:none;">';
@@ -186,43 +244,19 @@ function eventadmin_bulk_email_page(): void
     echo '<p id="eventadmin-bulk-email-status"></p>';
     echo '</div>';
 
-    wp_enqueue_media();
+    echo '</div>';
+}
 
-    wp_enqueue_script(
-        'eventadmin-bulk-email',
-        plugin_dir_url(__FILE__) . '../../assets/js/bulk-email.js',
-        ['jquery'],
-        '1.0',
-        true
-    );
-
-    wp_localize_script('eventadmin-bulk-email', 'EVENTADMIN_BULK_EMAIL', [
-        'ajax_url'    => admin_url('admin-ajax.php'),
-        'nonce_batch' => wp_create_nonce('eventadmin_bulk_email_batch'),
-        'i18n'        => [
-            'done'               => esc_html__('Done! All emails sent.', 'eventadmin-volunteer-management'),
-            'failed'             => esc_html__('({failed} could not be delivered)', 'eventadmin-volunteer-management'),
-            'error'              => esc_html__('An error occurred. Please try again.', 'eventadmin-volunteer-management'),
-            'sending'            => esc_html__('Sent {sent} of {total}…', 'eventadmin-volunteer-management'),
-            'counting'           => esc_html__('Counting…', 'eventadmin-volunteer-management'),
-            'recipientCountOne'  => esc_html__('{n} recipient', 'eventadmin-volunteer-management'),
-            'recipientCountMany' => esc_html__('{n} recipients', 'eventadmin-volunteer-management'),
-            'selectPdfTitle'     => esc_html__('Select a PDF to attach', 'eventadmin-volunteer-management'),
-            'selectPdfButton'    => esc_html__('Use this PDF', 'eventadmin-volunteer-management'),
-        ],
-    ]);
-
-    // Send log
-    $log = get_option('eventadmin_email_log', []);
-    echo '<hr>';
-    echo '<details id="eventadmin-history-details">';
-    /* translators: %d number of log entries */
-    echo '<summary style="cursor:pointer;font-size:1.3em;font-weight:600;padding:8px 0;">';
-    echo esc_html(sprintf(
-        _n('Send History (%d entry)', 'Send History (%d entries)', count($log), 'eventadmin-volunteer-management'),
-        count($log)
-    ));
-    echo '</summary>';
+/**
+ * Renders the "Send History" tab: a filterable, sortable table of every previously sent
+ * announcement.
+ *
+ * @param array $log Entries from the 'eventadmin_email_log' option.
+ * @return void
+ */
+function eventadmin_bulk_email_render_history_tab(array $log): void
+{
+    echo '<div style="margin-top:1rem;">';
 
     if (empty($log)) {
         echo '<p><em>' . esc_html__('No announcements sent yet.', 'eventadmin-volunteer-management') . '</em></p>';
@@ -306,7 +340,6 @@ function eventadmin_bulk_email_page(): void
 
         echo '</tbody></table>';
     }
-    echo '</details>';
 
     echo '</div>';
 }
@@ -430,6 +463,73 @@ function eventadmin_bulk_email_get_recipient_users(string $recipients, int $shif
 }
 
 /**
+ * Builds a hover-tooltip string listing recipient names for a "N recipients" count —
+ * so hovering over the count shows who they are. Volunteers matched via more than one
+ * upcoming shift (relevant for the 'has_shift' and 'category' selections, where a
+ * recipient can qualify through several of their assigned shifts) are annotated with
+ * how many shifts, e.g. "Anna Muster (3 shifts)".
+ *
+ * @param WP_User[] $users
+ * @param string    $recipients  One of 'all', 'subscribed', 'no_shift', 'has_shift', 'shift', 'category'.
+ * @param int       $category_id Term ID (for 'category'), used to scope the per-person shift count.
+ * @return string
+ */
+function eventadmin_bulk_email_build_recipient_tooltip(array $users, string $recipients, int $category_id = 0): string
+{
+    if (empty($users)) {
+        return '';
+    }
+
+    $shift_counts = [];
+    if (in_array($recipients, ['has_shift', 'category'], true)) {
+        $query_args = [
+            'post_type'   => 'eventadmin_shift',
+            'numberposts' => -1,
+            'fields'      => 'ids',
+            'meta_query'  => [
+                ['key' => 'shift_start', 'value' => current_time('mysql'), 'compare' => '>=', 'type' => 'DATETIME'],
+            ],
+        ];
+        if ($recipients === 'category' && $category_id) {
+            $query_args['tax_query'] = [['taxonomy' => 'eventadmin_shift_category', 'field' => 'term_id', 'terms' => $category_id]];
+        }
+        foreach (get_posts($query_args) as $sid) {
+            foreach (get_post_meta($sid) as $key => $val) {
+                if (str_starts_with($key, 'assigned_user_')) {
+                    $uid = absint($val[0]);
+                    $shift_counts[$uid] = ($shift_counts[$uid] ?? 0) + 1;
+                }
+            }
+        }
+    }
+
+    $max_names = 30;
+    $lines     = [];
+    foreach (array_slice($users, 0, $max_names) as $u) {
+        $name  = trim($u->first_name . ' ' . $u->last_name) ?: $u->user_login;
+        $count = $shift_counts[$u->ID] ?? 0;
+        if ($count > 1) {
+            /* translators: 1: volunteer name, 2: number of shifts */
+            $name = sprintf(__('%1$s (%2$d shifts)', 'eventadmin-volunteer-management'), $name, $count);
+        }
+        // Belt-and-suspenders: every recipient list above already excludes offline
+        // volunteers (they have no real email address), but flag it here too in case a
+        // future recipient path forgets to — better an obvious label than a silent miss.
+        if (get_user_meta($u->ID, 'eventadmin_offline_volunteer', true)) {
+            /* translators: %s is the volunteer name */
+            $name = sprintf(__('%s (Offline — will NOT be notified)', 'eventadmin-volunteer-management'), $name);
+        }
+        $lines[] = $name;
+    }
+    if (count($users) > $max_names) {
+        /* translators: %d is the number of additional recipients not listed */
+        $lines[] = sprintf(__('…and %d more', 'eventadmin-volunteer-management'), count($users) - $max_names);
+    }
+
+    return implode("\n", $lines);
+}
+
+/**
  * Formats a volunteer's own upcoming shifts as an HTML list, for the {shifts} placeholder.
  *
  * @param int $user_id Volunteer ID.
@@ -492,7 +592,10 @@ function eventadmin_bulk_email_count(): void
 
     $users = eventadmin_bulk_email_get_recipient_users($recipients, $shift_id, $category_id, 0);
 
-    wp_send_json_success(['count' => count($users)]);
+    wp_send_json_success([
+        'count'   => count($users),
+        'tooltip' => eventadmin_bulk_email_build_recipient_tooltip($users, $recipients, $category_id),
+    ]);
 }
 
 add_action('wp_ajax_eventadmin_bulk_email_count', 'eventadmin_bulk_email_count');

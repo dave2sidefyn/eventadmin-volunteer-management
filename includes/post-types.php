@@ -60,7 +60,9 @@ function eventadmin_register_post_types(): void
         'publicly_queryable' => false,
         'hierarchical' => true,
         'show_ui' => true,
-        'show_admin_column' => true,
+        // The shift list table gets its own colored "Department" badge column
+        // (includes/admin/quick-edit.php) instead of this plain-text default one.
+        'show_admin_column' => false,
         'rewrite' => false,
         'show_in_rest' => true
     ]);
