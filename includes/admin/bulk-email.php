@@ -39,7 +39,7 @@ function eventadmin_bulk_email_page(): void
     echo '<div class="wrap">';
     echo '<h1>' . esc_html__('Send Announcement to Volunteers', 'eventadmin-volunteer-management') . '</h1>';
 
-    echo '<p>' . esc_html__('Use {first_name} and {last_name} as placeholders in the message body.', 'eventadmin-volunteer-management') . '</p>';
+    echo '<p>' . esc_html__('Use {first_name} and {last_name} as placeholders in the message body. Use {shifts} to list each recipient\'s own upcoming shifts.', 'eventadmin-volunteer-management') . '</p>';
 
     echo '<form id="eventadmin-bulk-email-form" method="post">';
     wp_nonce_field('eventadmin_bulk_email_init', 'eventadmin_bulk_email_nonce');
@@ -60,6 +60,15 @@ function eventadmin_bulk_email_page(): void
 
     echo '<tr><th scope="row"><label for="bulk_email_body">' . esc_html__('Message', 'eventadmin-volunteer-management') . '</label></th>';
     echo '<td><textarea id="bulk_email_body" name="bulk_email_body" rows="10" class="large-text" required></textarea></td></tr>';
+
+    echo '<tr><th scope="row"><label for="bulk_email_attachment_button">' . esc_html__('Attachment (optional)', 'eventadmin-volunteer-management') . '</label></th>';
+    echo '<td>';
+    echo '<input type="hidden" id="bulk_email_attachment_id" name="bulk_email_attachment_id" value="">';
+    echo '<button type="button" id="bulk_email_attachment_button" class="button">' . esc_html__('Select PDF…', 'eventadmin-volunteer-management') . '</button>';
+    echo ' <span id="bulk_email_attachment_name" style="margin-left:8px;"></span>';
+    echo ' <a href="#" id="bulk_email_attachment_remove" style="margin-left:8px;display:none;">' . esc_html__('Remove', 'eventadmin-volunteer-management') . '</a>';
+    echo '<p class="description">' . esc_html__('The PDF will be attached to every email in this announcement.', 'eventadmin-volunteer-management') . '</p>';
+    echo '</td></tr>';
 
     $offline_exclude = ['key' => 'eventadmin_offline_volunteer', 'compare' => 'NOT EXISTS'];
     $count_all = count(get_users([
@@ -162,6 +171,7 @@ function eventadmin_bulk_email_page(): void
     echo '<h3 style="margin-top:0;">' . esc_html__('Preview (example data)', 'eventadmin-volunteer-management') . '</h3>';
     echo '<p style="margin:0 0 4px;"><strong>' . esc_html__('From:', 'eventadmin-volunteer-management') . '</strong> <span id="ea-preview-from"></span></p>';
     echo '<p style="margin:0 0 4px;"><strong>' . esc_html__('Subject:', 'eventadmin-volunteer-management') . '</strong> <span id="ea-preview-subject"></span></p>';
+    echo '<p id="ea-preview-attachment-row" style="margin:0 0 4px;display:none;"><strong>' . esc_html__('Attachment:', 'eventadmin-volunteer-management') . '</strong> <span id="ea-preview-attachment"></span></p>';
     echo '<hr style="margin:8px 0;">';
     echo '<div id="ea-preview-body" style="font-size:13px;"></div>';
     echo '</div>';
@@ -174,6 +184,8 @@ function eventadmin_bulk_email_page(): void
     echo '</div>';
     echo '<p id="eventadmin-bulk-email-status"></p>';
     echo '</div>';
+
+    wp_enqueue_media();
 
     wp_enqueue_script(
         'eventadmin-bulk-email',
@@ -194,6 +206,8 @@ function eventadmin_bulk_email_page(): void
             'counting'           => esc_html__('Counting…', 'eventadmin-volunteer-management'),
             'recipientCountOne'  => esc_html__('{n} recipient', 'eventadmin-volunteer-management'),
             'recipientCountMany' => esc_html__('{n} recipients', 'eventadmin-volunteer-management'),
+            'selectPdfTitle'     => esc_html__('Select a PDF to attach', 'eventadmin-volunteer-management'),
+            'selectPdfButton'    => esc_html__('Use this PDF', 'eventadmin-volunteer-management'),
         ],
     ]);
 
@@ -259,10 +273,11 @@ function eventadmin_bulk_email_page(): void
             $from_name  = $entry['from_name']  ?? '';
             $from_email = $entry['from_email'] ?? '';
             $from_label = $from_name ? $from_name . ($from_email ? ' <' . $from_email . '>' : '') : $from_email;
-            $failed_count = (int)($entry['failed'] ?? 0);
-            $full_body    = wp_kses_post($entry['body'] ?? '');
-            $preview      = esc_html(wp_strip_all_tags(mb_strimwidth($entry['body'] ?? '', 0, 80, '…')));
-            $date         = $entry['date'] ?? '';
+            $failed_count    = (int)($entry['failed'] ?? 0);
+            $full_body       = wp_kses_post($entry['body'] ?? '');
+            $preview         = esc_html(wp_strip_all_tags(mb_strimwidth($entry['body'] ?? '', 0, 80, '…')));
+            $date            = $entry['date'] ?? '';
+            $attachment_name = $entry['attachment_name'] ?? '';
 
             echo '<tr'
                 . ' data-date="' . esc_attr($date) . '"'
@@ -281,6 +296,9 @@ function eventadmin_bulk_email_page(): void
             echo '<td>' . ($failed_count > 0 ? '<span style="color:#d63638;">' . esc_html($failed_count) . '</span>' : '0') . '</td>';
             echo '<td>' . esc_html($sender_name) . '</td>';
             echo '<td><details><summary style="cursor:pointer;"><small>' . $preview . '</small></summary>';
+            if ($attachment_name) {
+                echo '<p style="margin:8px 0 0;font-size:12px;"><strong>' . esc_html__('Attachment:', 'eventadmin-volunteer-management') . '</strong> &#128206; ' . esc_html($attachment_name) . '</p>';
+            }
             echo '<div style="margin:8px 0 0;font-size:12px;max-width:500px;">' . $full_body . '</div></details></td>';
             echo '</tr>';
         }
@@ -411,6 +429,40 @@ function eventadmin_bulk_email_get_recipient_users(string $recipients, int $shif
 }
 
 /**
+ * Formats a volunteer's own upcoming shifts as an HTML list, for the {shifts} placeholder.
+ *
+ * @param int $user_id Volunteer ID.
+ * @return string
+ */
+function eventadmin_bulk_email_format_upcoming_shifts(int $user_id): string
+{
+    $shifts = get_posts([
+        'post_type'   => 'eventadmin_shift',
+        'numberposts' => -1,
+        'meta_key'    => 'shift_start',
+        'orderby'     => 'meta_value',
+        'order'       => 'ASC',
+        'meta_query'  => [
+            ['key' => 'shift_start', 'value' => current_time('mysql'), 'compare' => '>=', 'type' => 'DATETIME'],
+            ['key' => 'assigned_user_' . $user_id, 'compare' => 'EXISTS'],
+        ],
+    ]);
+
+    if (empty($shifts)) {
+        return '<p><em>' . esc_html__('No upcoming shifts.', 'eventadmin-volunteer-management') . '</em></p>';
+    }
+
+    $items = '';
+    foreach ($shifts as $shift) {
+        $start = get_post_meta($shift->ID, 'shift_start', true);
+        $end   = get_post_meta($shift->ID, 'shift_end', true);
+        $items .= '<li>' . esc_html($shift->post_title) . ' — ' . esc_html(eventadmin_get_formatted_zeitraum($start, $end)) . '</li>';
+    }
+
+    return '<ul>' . $items . '</ul>';
+}
+
+/**
  * AJAX: returns the live recipient count for the currently selected shift or category
  * in the bulk email form (radio button counts for 'all'/'subscribed' are rendered server-side).
  */
@@ -468,6 +520,7 @@ function eventadmin_bulk_email_init(): void
     $shift_id    = isset($_POST['bulk_email_shift_id'])    ? absint($_POST['bulk_email_shift_id'])    : 0;
     $category_id = isset($_POST['bulk_email_category_id']) ? absint($_POST['bulk_email_category_id']) : 0;
     $target_user_id = isset($_POST['bulk_email_user_id']) ? absint($_POST['bulk_email_user_id']) : 0;
+    $attachment_id  = isset($_POST['bulk_email_attachment_id']) ? absint($_POST['bulk_email_attachment_id']) : 0;
 
     if (!$subject || !$body) {
         wp_send_json_error(['message' => esc_html__('Subject and message are required.', 'eventadmin-volunteer-management')]);
@@ -483,6 +536,21 @@ function eventadmin_bulk_email_init(): void
 
     if ($recipients === 'user' && !$target_user_id) {
         wp_send_json_error(['message' => esc_html__('No recipient specified.', 'eventadmin-volunteer-management')]);
+    }
+
+    $attachment_path = '';
+    $attachment_name = '';
+    if ($attachment_id) {
+        $attachment_post = get_post($attachment_id);
+        if (!$attachment_post || $attachment_post->post_type !== 'attachment' || get_post_mime_type($attachment_id) !== 'application/pdf') {
+            wp_send_json_error(['message' => esc_html__('The selected attachment is not a valid PDF.', 'eventadmin-volunteer-management')]);
+        }
+        $resolved_path = get_attached_file($attachment_id);
+        if (!$resolved_path || !file_exists($resolved_path)) {
+            wp_send_json_error(['message' => esc_html__('The selected attachment could not be found.', 'eventadmin-volunteer-management')]);
+        }
+        $attachment_path = $resolved_path;
+        $attachment_name = basename($resolved_path);
     }
 
     $users    = eventadmin_bulk_email_get_recipient_users($recipients, $shift_id, $category_id, $target_user_id);
@@ -502,15 +570,17 @@ function eventadmin_bulk_email_init(): void
     $job_key = 'eventadmin_bulk_email_' . wp_generate_password(12, false);
 
     set_transient($job_key, [
-        'subject'    => $subject,
-        'body'       => $body,
-        'from_name'  => $from_name,
-        'from_email' => $from_email,
-        'user_ids'   => $user_ids,
-        'recipients' => $recipients_meta,
-        'sent_by'    => get_current_user_id(),
-        'offset'     => 0,
-        'failed'     => 0,
+        'subject'         => $subject,
+        'body'            => $body,
+        'from_name'       => $from_name,
+        'from_email'      => $from_email,
+        'user_ids'        => $user_ids,
+        'recipients'      => $recipients_meta,
+        'sent_by'         => get_current_user_id(),
+        'offset'          => 0,
+        'failed'          => 0,
+        'attachment_path' => $attachment_path,
+        'attachment_name' => $attachment_name,
     ], HOUR_IN_SECONDS);
 
     wp_send_json_success([
@@ -554,6 +624,8 @@ function eventadmin_bulk_email_batch(): void
     $from_email   = $job['from_email'] ?? get_option('admin_email');
     $sender       = get_userdata($job['sent_by'] ?? 0);
     $reply_to     = $sender ? $sender->user_email : $from_email;
+    $attachments  = !empty($job['attachment_path']) ? [$job['attachment_path']] : [];
+    $has_shifts_placeholder = str_contains($job['body'], '{shifts}');
 
     $failed = 0;
     foreach ($batch as $user_id) {
@@ -565,9 +637,14 @@ function eventadmin_bulk_email_batch(): void
             [$user->first_name, $user->last_name],
             $job['body']
         );
-        // Convert plain line breaks to <br> for any body that has no block-level HTML already
+        // Convert plain line breaks to <br> for any body that has no block-level HTML already.
+        // Done before expanding {shifts} so its injected <ul>/<li> markup doesn't suppress
+        // nl2br for the surrounding plain-text parts of the message.
         if (!preg_match('/<(p|div|br|h[1-6]|ul|ol|li)\b/i', $body)) {
             $body = nl2br($body);
+        }
+        if ($has_shifts_placeholder) {
+            $body = str_replace('{shifts}', eventadmin_bulk_email_format_upcoming_shifts($user_id), $body);
         }
 
         $sent = eventadmin_send_HTML_e_mail(
@@ -583,7 +660,8 @@ function eventadmin_bulk_email_batch(): void
                 'preheader' => wp_strip_all_tags($job['subject']),
                 'heading'   => $job['subject'],
                 'site_name' => $blog_name,
-            ]
+            ],
+            $attachments
         );
 
         if (!$sent) $failed++;
@@ -599,15 +677,16 @@ function eventadmin_bulk_email_batch(): void
         // Append to send log (capped at 50 entries)
         $log = get_option('eventadmin_email_log', []);
         array_unshift($log, [
-            'date'       => current_time('Y-m-d H:i:s'),
-            'subject'    => $job['subject'],
-            'body'       => $job['body'],
-            'recipients' => $job['recipients'] ?? 'all',
-            'from_name'  => $job['from_name']  ?? '',
-            'from_email' => $job['from_email'] ?? '',
-            'total'      => $total,
-            'failed'     => $total_failed,
-            'sent_by'    => $job['sent_by'] ?? 0,
+            'date'            => current_time('Y-m-d H:i:s'),
+            'subject'         => $job['subject'],
+            'body'            => $job['body'],
+            'recipients'      => $job['recipients'] ?? 'all',
+            'from_name'       => $job['from_name']  ?? '',
+            'from_email'      => $job['from_email'] ?? '',
+            'total'           => $total,
+            'failed'          => $total_failed,
+            'sent_by'         => $job['sent_by'] ?? 0,
+            'attachment_name' => $job['attachment_name'] ?? '',
         ]);
         $log = array_slice($log, 0, 50);
         update_option('eventadmin_email_log', $log);

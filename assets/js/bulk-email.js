@@ -45,6 +45,38 @@ jQuery(function ($) {
         fetchRecipientCount('category', $(this).val(), $('#eventadmin-category-recipient-count'));
     });
 
+    // Attachment: WP media picker restricted to PDFs
+    let attachmentFrame;
+    $('#bulk_email_attachment_button').on('click', function (e) {
+        e.preventDefault();
+        if (attachmentFrame) {
+            attachmentFrame.open();
+            return;
+        }
+        attachmentFrame = wp.media({
+            title: cfg.i18n.selectPdfTitle,
+            button: { text: cfg.i18n.selectPdfButton },
+            library: { type: 'application/pdf' },
+            multiple: false,
+        });
+        attachmentFrame.on('select', function () {
+            const attachment = attachmentFrame.state().get('selection').first().toJSON();
+            $('#bulk_email_attachment_id').val(attachment.id);
+            $('#bulk_email_attachment_name').text(attachment.filename);
+            $('#bulk_email_attachment_remove').show();
+            updatePreview();
+        });
+        attachmentFrame.open();
+    });
+
+    $('#bulk_email_attachment_remove').on('click', function (e) {
+        e.preventDefault();
+        $('#bulk_email_attachment_id').val('');
+        $('#bulk_email_attachment_name').text('');
+        $(this).hide();
+        updatePreview();
+    });
+
     $('#eventadmin-bulk-email-form').on('submit', function (e) {
         e.preventDefault();
 
@@ -70,6 +102,7 @@ jQuery(function ($) {
             bulk_email_shift_id:         $form.find('[name="bulk_email_shift_id"]').val(),
             bulk_email_category_id:      $form.find('[name="bulk_email_category_id"]').val(),
             bulk_email_user_id:          $form.find('[name="bulk_email_user_id"]').val(),
+            bulk_email_attachment_id:    $form.find('[name="bulk_email_attachment_id"]').val(),
         })
         .done(function (res) {
             if (!res.success) {
@@ -134,6 +167,7 @@ jQuery(function ($) {
         '{first_name}': 'Anna',
         '{last_name}':  'Example',
     };
+    const previewShiftsHtml = '<ul><li>Registration Desk — Sat, 12 Sep 2026, 09:00–13:00</li><li>Bar — Sat, 12 Sep 2026, 18:00–22:00</li></ul>';
 
     function applyPlaceholders(str) {
         for (const [key, val] of Object.entries(previewPlaceholders)) {
@@ -154,14 +188,18 @@ jQuery(function ($) {
 
         $('#ea-preview-from').text(fromLabel || '—');
         $('#ea-preview-subject').text(applyPlaceholders(subject) || '—');
+
+        const attachmentName = $('#bulk_email_attachment_name').text();
+        $('#ea-preview-attachment-row').toggle(!!attachmentName);
+        $('#ea-preview-attachment').text(attachmentName);
+
         const bodyReplaced = applyPlaceholders(body);
-        // If body contains HTML tags, render as HTML; otherwise convert line breaks
+        // If body contains HTML tags, render as HTML; otherwise convert line breaks.
+        // Decided before expanding {shifts} so its sample <ul>/<li> markup doesn't
+        // suppress the line-break conversion for the surrounding plain-text preview.
         const hasHtml = /<[a-z][\s\S]*>/i.test(bodyReplaced);
-        if (hasHtml) {
-            $('#ea-preview-body').html(bodyReplaced);
-        } else {
-            $('#ea-preview-body').html(bodyReplaced.replace(/\n/g, '<br>'));
-        }
+        const bodyFormatted = hasHtml ? bodyReplaced : bodyReplaced.replace(/\n/g, '<br>');
+        $('#ea-preview-body').html(bodyFormatted.split('{shifts}').join(previewShiftsHtml));
     }
 
     $('#eventadmin-bulk-email-form').on('input', 'input, textarea', updatePreview);

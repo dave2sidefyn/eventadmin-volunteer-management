@@ -408,7 +408,8 @@ function eventadmin_send_HTML_e_mail(
     string $subject,
     string $message,
     array|string|null $headers = null,
-    array $template_args = []
+    array $template_args = [],
+    array $attachments = []
 ): bool
 {
     $set_html = function () {
@@ -420,7 +421,8 @@ function eventadmin_send_HTML_e_mail(
         $to,
         $subject,
         $wrapped_message,
-        $headers ?? eventadmin_get_sender_header()
+        $headers ?? eventadmin_get_sender_header(),
+        $attachments
     );
     return remove_filter('wp_mail_content_type', $set_html);
 }

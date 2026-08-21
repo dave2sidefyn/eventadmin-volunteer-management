@@ -2,11 +2,9 @@
 # This file is distributed under the same license as the Plugins - EventAdmin – Volunteer Management - Stable (latest release) package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Plugins - EventAdmin – Volunteer Management - Stable "
-"(latest release)\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-"
-"volunteer-management\n"
-"POT-Creation-Date: 2026-08-21T09:35:09+00:00\n"
+"Project-Id-Version: Plugins - EventAdmin – Volunteer Management - Stable (latest release)\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
+"POT-Creation-Date: 2026-08-21T11:46:13+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: de_DE_formal\n"
 "MIME-Version: 1.0\n"
@@ -72,8 +70,8 @@ msgid ""
 "provider for the volunteer registration form, via the Simple Cloudflare "
 "Turnstile plugin."
 msgstr ""
-"Neu in dieser Version: Cloudflare Turnstile steht jetzt als CAPTCHA-Anbieter "
-"für das Anmeldeformular für Freiwillige zur Verfügung, über das Plugin "
+"Neu in dieser Version: Cloudflare Turnstile steht jetzt als CAPTCHA-Anbieter"
+" für das Anmeldeformular für Freiwillige zur Verfügung, über das Plugin "
 "Simple Cloudflare Turnstile."
 
 #: eventadmin-volunteer-management.php:287
@@ -90,10 +88,13 @@ msgid "Send Announcement to Volunteers"
 msgstr "Ankündigung an Volunteers senden"
 
 #: includes/admin/bulk-email.php:42
-msgid "Use {first_name} and {last_name} as placeholders in the message body."
+msgid ""
+"Use {first_name} and {last_name} as placeholders in the message body. Use "
+"{shifts} to list each recipient's own upcoming shifts."
 msgstr ""
-"Verwenden Sie {first_name} und {last_name} als Platzhalter im "
-"Nachrichtentext."
+"Verwende {first_name} und {last_name} als Platzhalter im Nachrichtentext. "
+"Verwende {shifts}, um die bevorstehenden Schichten der jeweiligen Person "
+"aufzulisten."
 
 #: includes/admin/bulk-email.php:52
 msgid "From name"
@@ -103,180 +104,212 @@ msgstr "Absendername"
 msgid "From email"
 msgstr "Absender-E-Mail"
 
-#: includes/admin/bulk-email.php:58 includes/admin/bulk-email.php:222
+#: includes/admin/bulk-email.php:58 includes/admin/bulk-email.php:236
 msgid "Subject"
 msgstr "Betreff"
 
-#: includes/admin/bulk-email.php:61 includes/admin/bulk-email.php:228
+#: includes/admin/bulk-email.php:61 includes/admin/bulk-email.php:242
 msgid "Message"
 msgstr "Nachricht"
 
-#: includes/admin/bulk-email.php:95 includes/admin/bulk-email.php:223
+#: includes/admin/bulk-email.php:64
+msgid "Attachment (optional)"
+msgstr "Anhang (optional)"
+
+#: includes/admin/bulk-email.php:67
+msgid "Select PDF…"
+msgstr "PDF auswählen…"
+
+#: includes/admin/bulk-email.php:69 includes/admin/dashboard.php:490
+msgid "Remove"
+msgstr "Entfernen"
+
+#: includes/admin/bulk-email.php:70
+msgid "The PDF will be attached to every email in this announcement."
+msgstr "Das PDF wird jeder E-Mail dieser Ankündigung angehängt."
+
+#: includes/admin/bulk-email.php:104 includes/admin/bulk-email.php:237
 msgid "Recipients"
 msgstr "Empfänger"
 
-#: includes/admin/bulk-email.php:105
+#: includes/admin/bulk-email.php:114
 msgid "Subscribed volunteers only (opted-in)"
 msgstr "Nur angemeldete Volunteers"
 
 #. translators: %d number of recipients
-#: includes/admin/bulk-email.php:108 includes/admin/bulk-email.php:113
-#: includes/admin/bulk-email.php:118 includes/admin/bulk-email.php:123
+#: includes/admin/bulk-email.php:117 includes/admin/bulk-email.php:122
+#: includes/admin/bulk-email.php:127 includes/admin/bulk-email.php:132
 #, php-format
 msgid "%d recipient"
 msgid_plural "%d recipients"
 msgstr[0] "%d Empfänger"
 msgstr[1] "%d Empfänger"
 
-#: includes/admin/bulk-email.php:111 includes/admin/documentation.php:134
+#: includes/admin/bulk-email.php:120 includes/admin/documentation.php:134
 #: includes/admin/volunteer-list.php:93
 msgid "All volunteers"
 msgstr "Alle Volunteers"
 
-#: includes/admin/bulk-email.php:116
+#: includes/admin/bulk-email.php:125 includes/admin/documentation.php:135
 msgid "Volunteers without any upcoming shift"
 msgstr "Volunteers ohne bevorstehende Schicht"
 
-#: includes/admin/bulk-email.php:121
+#: includes/admin/bulk-email.php:130 includes/admin/documentation.php:135
 msgid "Volunteers with at least one upcoming shift"
 msgstr "Volunteers mit mindestens einer bevorstehenden Schicht"
 
-#: includes/admin/bulk-email.php:126 includes/admin/documentation.php:135
+#: includes/admin/bulk-email.php:135 includes/admin/documentation.php:136
 msgid "Volunteers of a specific shift"
 msgstr "Volunteers einer bestimmten Schicht"
 
-#: includes/admin/bulk-email.php:130
+#: includes/admin/bulk-email.php:139
 msgid "— Select shift —"
 msgstr "— Schicht auswählen —"
 
-#: includes/admin/bulk-email.php:141
+#: includes/admin/bulk-email.php:150 includes/admin/documentation.php:136
 msgid "Volunteers of a specific category"
 msgstr "Volunteers einer bestimmten Kategorie"
 
-#: includes/admin/bulk-email.php:145
+#: includes/admin/bulk-email.php:154
 msgid "— Select category —"
 msgstr "— Kategorie auswählen —"
 
-#: includes/admin/bulk-email.php:157
+#: includes/admin/bulk-email.php:166
 msgid "Start sending"
 msgstr "Senden starten"
 
-#: includes/admin/bulk-email.php:162
+#: includes/admin/bulk-email.php:171
 msgid "Preview (example data)"
 msgstr "Vorschau (Beispieldaten)"
 
-#: includes/admin/bulk-email.php:163
+#: includes/admin/bulk-email.php:172
 msgid "From:"
 msgstr "Von:"
 
-#: includes/admin/bulk-email.php:164 includes/admin/settings.php:644
+#: includes/admin/bulk-email.php:173 includes/admin/settings.php:644
 msgid "Subject:"
 msgstr "Thema:"
 
-#: includes/admin/bulk-email.php:171
+#: includes/admin/bulk-email.php:174 includes/admin/bulk-email.php:300
+msgid "Attachment:"
+msgstr "Anhang:"
+
+#: includes/admin/bulk-email.php:181
 msgid "Sending in progress…"
 msgstr "Senden läuft…"
 
-#: includes/admin/bulk-email.php:190
+#: includes/admin/bulk-email.php:202
 msgid "Done! All emails sent."
 msgstr "Fertig! Alle E-Mails wurden gesendet."
 
-#: includes/admin/bulk-email.php:191
+#: includes/admin/bulk-email.php:203
 msgid "({failed} could not be delivered)"
 msgstr "({failed} konnte nicht zugestellt werden)"
 
-#: includes/admin/bulk-email.php:192 includes/admin/volunteer-list.php:358
+#: includes/admin/bulk-email.php:204 includes/admin/volunteer-list.php:358
 msgid "An error occurred. Please try again."
 msgstr "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
 
-#: includes/admin/bulk-email.php:193
+#: includes/admin/bulk-email.php:205
 msgid "Sent {sent} of {total}…"
 msgstr "{sent} von {total} gesendet…"
 
-#: includes/admin/bulk-email.php:194
+#: includes/admin/bulk-email.php:206
 msgid "Counting…"
 msgstr "Zähle…"
 
-#: includes/admin/bulk-email.php:195
+#: includes/admin/bulk-email.php:207
 msgid "{n} recipient"
 msgstr "{n} Empfänger"
 
-#: includes/admin/bulk-email.php:196
+#: includes/admin/bulk-email.php:208
 msgid "{n} recipients"
 msgstr "{n} Empfänger"
 
-#: includes/admin/bulk-email.php:207
+#: includes/admin/bulk-email.php:209
+msgid "Select a PDF to attach"
+msgstr "PDF zum Anhängen auswählen"
+
+#: includes/admin/bulk-email.php:210
+msgid "Use this PDF"
+msgstr "Dieses PDF verwenden"
+
+#: includes/admin/bulk-email.php:221
 #, php-format
 msgid "Send History (%d entry)"
 msgid_plural "Send History (%d entries)"
 msgstr[0] "Sendeverlauf (%d Eintrag)"
 msgstr[1] "Sendeverlauf (%d Einträge)"
 
-#: includes/admin/bulk-email.php:213
+#: includes/admin/bulk-email.php:227
 msgid "No announcements sent yet."
 msgstr "Noch keine Ankündigungen gesendet."
 
-#: includes/admin/bulk-email.php:216
+#: includes/admin/bulk-email.php:230
 msgid "Filter…"
 msgstr "Filtern…"
 
-#: includes/admin/bulk-email.php:221 includes/admin/dashboard.php:328
+#: includes/admin/bulk-email.php:235 includes/admin/dashboard.php:328
 #: includes/admin/volunteer-list.php:303 includes/admin/volunteer-list.php:329
 msgid "Date"
 msgstr "Datum"
 
-#: includes/admin/bulk-email.php:224
+#: includes/admin/bulk-email.php:238
 msgid "From"
 msgstr "Von"
 
-#: includes/admin/bulk-email.php:225
+#: includes/admin/bulk-email.php:239
 msgid "Sent to"
 msgstr "Gesendet an"
 
-#: includes/admin/bulk-email.php:226
+#: includes/admin/bulk-email.php:240
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: includes/admin/bulk-email.php:227
+#: includes/admin/bulk-email.php:241
 msgid "Sent by"
 msgstr "Gesendet von"
 
-#: includes/admin/bulk-email.php:231 includes/admin/volunteer-list.php:184
+#: includes/admin/bulk-email.php:245 includes/admin/volunteer-list.php:184
 msgid "Click to sort"
 msgstr "Zum Sortieren klicken"
 
-#: includes/admin/bulk-email.php:243 includes/admin/volunteer-list.php:277
+#: includes/admin/bulk-email.php:257 includes/admin/volunteer-list.php:277
 msgid "Subscribed"
 msgstr "Angemeldet"
 
-#: includes/admin/bulk-email.php:245
+#: includes/admin/bulk-email.php:259
 msgid "Without an upcoming shift"
 msgstr "Ohne bevorstehende Schicht"
 
-#: includes/admin/bulk-email.php:247
+#: includes/admin/bulk-email.php:261
 msgid "With an upcoming shift"
 msgstr "Mit bevorstehender Schicht"
 
 #. translators: %s is the shift title
-#: includes/admin/bulk-email.php:250
+#: includes/admin/bulk-email.php:264
 #, php-format
 msgid "Shift: %s"
 msgstr "Schicht: %s"
 
 #. translators: %s is the category name
-#: includes/admin/bulk-email.php:253
+#: includes/admin/bulk-email.php:267
 #, php-format
 msgid "Category: %s"
 msgstr "Kategorie: %s"
 
-#: includes/admin/bulk-email.php:257 includes/admin/dashboard.php:286
+#: includes/admin/bulk-email.php:271 includes/admin/dashboard.php:286
 #: includes/admin/dashboard.php:295 includes/admin/dashboard.php:304
 #: includes/admin/dashboard.php:319 includes/admin/volunteer-list.php:104
 msgid "All"
 msgstr "Alle"
 
-#: includes/admin/bulk-email.php:423 includes/admin/bulk-email.php:455
-#: includes/admin/bulk-email.php:533 includes/admin/import.php:134
+#: includes/admin/bulk-email.php:452
+msgid "No upcoming shifts."
+msgstr "Keine bevorstehenden Schichten."
+
+#: includes/admin/bulk-email.php:475 includes/admin/bulk-email.php:507
+#: includes/admin/bulk-email.php:603 includes/admin/import.php:134
 #: includes/admin/import.php:146 includes/admin/import.php:163
 #: includes/admin/import.php:174 includes/admin/volunteer-list.php:380
 #: includes/admin/volunteer-list.php:410 includes/admin/volunteer-list.php:439
@@ -285,64 +318,73 @@ msgstr "Alle"
 msgid "Security check failed."
 msgstr "Sicherheitsprüfung fehlgeschlagen."
 
-#: includes/admin/bulk-email.php:427 includes/admin/bulk-email.php:459
-#: includes/admin/bulk-email.php:537 includes/admin/volunteer-list.php:384
+#: includes/admin/bulk-email.php:479 includes/admin/bulk-email.php:511
+#: includes/admin/bulk-email.php:607 includes/admin/volunteer-list.php:384
 #: includes/admin/volunteer-list.php:414 includes/admin/volunteer-list.php:443
 #: includes/admin/volunteer-list.php:511
 msgid "Insufficient permissions."
 msgstr "Unzureichende Berechtigungen."
 
-#: includes/admin/bulk-email.php:436
+#: includes/admin/bulk-email.php:488
 msgid "Invalid recipient type."
 msgstr "Ungültiger Empfängertyp."
 
-#: includes/admin/bulk-email.php:473
+#: includes/admin/bulk-email.php:526
 msgid "Subject and message are required."
 msgstr "Betreff und Nachricht sind erforderlich."
 
-#: includes/admin/bulk-email.php:477
+#: includes/admin/bulk-email.php:530
 msgid "Please select a shift."
 msgstr "Bitte eine Schicht auswählen."
 
-#: includes/admin/bulk-email.php:481
+#: includes/admin/bulk-email.php:534
 msgid "Please select a category."
 msgstr "Bitte eine Kategorie auswählen."
 
-#: includes/admin/bulk-email.php:485
+#: includes/admin/bulk-email.php:538
 msgid "No recipient specified."
 msgstr "Kein Empfänger angegeben."
 
-#: includes/admin/bulk-email.php:544
+#: includes/admin/bulk-email.php:546
+msgid "The selected attachment is not a valid PDF."
+msgstr "Der ausgewählte Anhang ist kein gültiges PDF."
+
+#: includes/admin/bulk-email.php:550
+msgid "The selected attachment could not be found."
+msgstr "Der ausgewählte Anhang konnte nicht gefunden werden."
+
+#: includes/admin/bulk-email.php:614
 msgid "Job not found or expired."
 msgstr "Auftrag nicht gefunden oder abgelaufen."
 
 #. translators: %d is the number of failed deliveries
-#: includes/admin/bulk-email.php:620
+#: includes/admin/bulk-email.php:699
 #, php-format
 msgid "%d emails could not be delivered."
 msgstr "%d E-Mails konnten nicht zugestellt werden."
 
-#: includes/admin/bulk-email.php:623
+#: includes/admin/bulk-email.php:702
 msgid "All emails were delivered successfully."
 msgstr "Alle E-Mails wurden erfolgreich zugestellt."
 
 #. translators: %s is the email subject that was sent
-#: includes/admin/bulk-email.php:629
+#: includes/admin/bulk-email.php:708
 #, php-format
 msgid "[%s] Announcement sent: %s"
 msgstr "[%s] Ankündigung gesendet: %s"
 
-#. translators: 1: blog name, 2: email subject, 3: sent count, 4: delivery note
-#: includes/admin/bulk-email.php:635
+#. translators: 1: blog name, 2: email subject, 3: sent count, 4: delivery
+#. note
+#: includes/admin/bulk-email.php:714
 #, php-format
 msgid ""
-"Your announcement <strong>%2$s</strong> was sent on %1$s.<br><br>Recipients: "
-"%3$d<br>%4$s"
+"Your announcement <strong>%2$s</strong> was sent on %1$s.<br><br>Recipients:"
+" %3$d<br>%4$s"
 msgstr ""
-"Ihre Ankündigung <strong>%2$s</strong> wurde am %1$s gesendet."
-"<br><br>Empfänger: %3$d<br>%4$s"
+"Ihre Ankündigung <strong>%2$s</strong> wurde am %1$s "
+"gesendet.<br><br>Empfänger: %3$d<br>%4$s"
 
-#: includes/admin/bulk-email.php:647
+#: includes/admin/bulk-email.php:726
 msgid "Announcement delivery summary"
 msgstr "Zusammenfassung der Ankündigungszustellung"
 
@@ -367,8 +409,8 @@ msgid ""
 "Hidden departments no longer appear in the frontend filter or as a category "
 "label, but shifts already assigned to them remain visible."
 msgstr ""
-"Ausgeblendete Abteilungen erscheinen nicht mehr im Filter der Schichtauswahl "
-"oder als Kategorielabel, bereits zugewiesene Schichten bleiben aber "
+"Ausgeblendete Abteilungen erscheinen nicht mehr im Filter der Schichtauswahl"
+" oder als Kategorielabel, bereits zugewiesene Schichten bleiben aber "
 "weiterhin sichtbar."
 
 #: includes/admin/dashboard.php:25 includes/admin/dashboard.php:26
@@ -583,10 +625,6 @@ msgstr "Offline"
 msgid "Notify volunteer"
 msgstr "Volunteer benachrichtigen"
 
-#: includes/admin/dashboard.php:490
-msgid "Remove"
-msgstr "Entfernen"
-
 #: includes/admin/dashboard.php:498
 msgid "No volunteers assigned."
 msgstr "Es wurden keine Volunteers eingeteilt."
@@ -683,15 +721,16 @@ msgstr "Beschreibung"
 
 #: includes/admin/documentation.php:69
 msgid ""
-"EventAdmin is a simple yet powerful plugin for managing volunteers at events."
+"EventAdmin is a simple yet powerful plugin for managing volunteers at "
+"events."
 msgstr ""
 "EventAdmin ist ein einfaches, aber leistungsstarkes Plugin zur Verwaltung "
 "von Volunteers bei Veranstaltungen."
 
 #: includes/admin/documentation.php:70
 msgid ""
-"Ideal for clubs, street festivals, and events. Organizers can create shifts, "
-"assign participants, or let volunteers sign up themselves. CSV export, "
+"Ideal for clubs, street festivals, and events. Organizers can create shifts,"
+" assign participants, or let volunteers sign up themselves. CSV export, "
 "limits, visual statistics, and an admin dashboard are included."
 msgstr ""
 "Ideal für Vereine, Straßenfeste und Veranstaltungen. Organisatoren können "
@@ -712,8 +751,8 @@ msgid ""
 "Frontend view for registered volunteers (registration, shift selection, "
 "profile)"
 msgstr ""
-"Frontend-Ansicht für registrierte Volunteers (Registrierung, Schichtauswahl, "
-"Profil)"
+"Frontend-Ansicht für registrierte Volunteers (Registrierung, Schichtauswahl,"
+" Profil)"
 
 #: includes/admin/documentation.php:77
 msgid "Self-registration and cancellation by volunteers"
@@ -730,7 +769,8 @@ msgstr ""
 #: includes/admin/documentation.php:79
 msgid "Automatic checks (e.g. max. 2 shifts/year, no overlaps)"
 msgstr ""
-"Automatische Kontrollen (z. B. max. 2 Schichten/Jahr, keine Überschneidungen)"
+"Automatische Kontrollen (z. B. max. 2 Schichten/Jahr, keine "
+"Überschneidungen)"
 
 #: includes/admin/documentation.php:80
 msgid ""
@@ -756,8 +796,8 @@ msgstr ""
 msgid ""
 "Dashboard statistics: empty shifts, understaffed shifts, filled/open spots"
 msgstr ""
-"Dashboard-Statistiken: leere Schichten, unterbesetzte Schichten, belegte/"
-"freie Plätze"
+"Dashboard-Statistiken: leere Schichten, unterbesetzte Schichten, "
+"belegte/freie Plätze"
 
 #: includes/admin/documentation.php:84
 msgid ""
@@ -859,13 +899,14 @@ msgstr "Nicht verifiziert"
 
 #: includes/admin/documentation.php:116
 msgid ""
-"Registered via the public form but has not yet clicked the magic login link. "
-"The account is auto-deleted once the link expires (~24 h). The badge "
+"Registered via the public form but has not yet clicked the magic login link."
+" The account is auto-deleted once the link expires (~24 h). The badge "
 "disappears as soon as the link is clicked."
 msgstr ""
-"Über das öffentliche Formular registriert, hat aber noch nicht auf den Magic-"
-"Login-Link geklickt. Das Konto wird automatisch gelöscht, sobald der Link "
-"abläuft (~24 Std.). Der Badge verschwindet, sobald der Link geklickt wurde."
+"Über das öffentliche Formular registriert, hat aber noch nicht auf den "
+"Magic-Login-Link geklickt. Das Konto wird automatisch gelöscht, sobald der "
+"Link abläuft (~24 Std.). Der Badge verschwindet, sobald der Link geklickt "
+"wurde."
 
 #: includes/admin/documentation.php:119 includes/admin/volunteer-list.php:250
 msgid "Social"
@@ -885,8 +926,8 @@ msgstr "(kein Badge)"
 
 #: includes/admin/documentation.php:124
 msgid ""
-"Self-registered via the public form and verified by clicking the magic link, "
-"or registered before the badge system was introduced (version 0.9.8)."
+"Self-registered via the public form and verified by clicking the magic link,"
+" or registered before the badge system was introduced (version 0.9.8)."
 msgstr ""
 "Selbst über das öffentliche Formular registriert und per Magic-Link "
 "verifiziert, oder vor Einführung des Badge-Systems registriert (Version "
@@ -894,7 +935,8 @@ msgstr ""
 
 #: includes/admin/documentation.php:128
 msgid ""
-"A volunteer can have multiple badges at the same time (e.g. Manual + Social)."
+"A volunteer can have multiple badges at the same time (e.g. Manual + "
+"Social)."
 msgstr ""
 "Ein Volunteer kann gleichzeitig mehrere Badges haben (z.B. Manual + Social)."
 
@@ -903,8 +945,8 @@ msgid ""
 "The Send Announcement page (Shifts → Send Announcement) lets you send a "
 "custom email to volunteers. Available recipient options:"
 msgstr ""
-"Die Seite Ankündigung senden (Schichten → Ankündigung senden) ermöglicht das "
-"Versenden einer individuellen E-Mail an Volunteers. Verfügbare "
+"Die Seite Ankündigung senden (Schichten → Ankündigung senden) ermöglicht das"
+" Versenden einer individuellen E-Mail an Volunteers. Verfügbare "
 "Empfängeroptionen:"
 
 #: includes/admin/documentation.php:133
@@ -920,44 +962,66 @@ msgid "Every volunteer with an email address, regardless of opt-in status."
 msgstr "Alle Volunteers mit E-Mail-Adresse, unabhängig vom Abonnementstatus."
 
 #: includes/admin/documentation.php:135
-msgid "Only the volunteers assigned to a selected shift."
-msgstr "Nur die Volunteers, die einer ausgewählten Schicht zugewiesen sind."
+msgid ""
+"Split volunteers by whether they currently have an upcoming shift assigned —"
+" useful for nudging people who haven't signed up yet."
+msgstr ""
+"Teilt Volunteers danach auf, ob ihnen aktuell eine bevorstehende Schicht "
+"zugewiesen ist — nützlich, um Personen zu erinnern, die sich noch nicht "
+"eingetragen haben."
 
 #: includes/admin/documentation.php:136
+msgid ""
+"Only the volunteers assigned to a selected shift or department. A live "
+"recipient count is shown once you pick one."
+msgstr ""
+"Nur die Volunteers, die einer ausgewählten Schicht oder Abteilung zugewiesen"
+" sind. Sobald Sie eine auswählen, wird die Empfängerzahl live angezeigt."
+
+#: includes/admin/documentation.php:137
 msgid "Individual volunteer"
 msgstr "Einzelner Volunteer"
 
-#: includes/admin/documentation.php:136
+#: includes/admin/documentation.php:137
 msgid ""
 "Click \"Email\" on any volunteer row to open the form pre-filled for that "
 "person."
 msgstr ""
-"Klicken Sie in der Volunteer-Liste auf \"E-Mail\", um das Formular für diese "
-"Person vorausgefüllt zu öffnen."
-
-#: includes/admin/documentation.php:138
-msgid ""
-"The From name and From email can be overridden per send. Use {first_name} "
-"and {last_name} as personalisation placeholders. HTML formatting is "
-"supported — the live preview below the form renders the email as it will "
-"appear."
-msgstr ""
-"Absendername und Absender-E-Mail können pro Sendung überschrieben werden. "
-"Verwenden Sie {first_name} und {last_name} als Personalisierungsplatzhalter. "
-"HTML-Formatierung wird unterstützt — die Live-Vorschau unter dem Formular "
-"zeigt die E-Mail so, wie sie erscheinen wird."
+"Klicken Sie in der Volunteer-Liste auf \"E-Mail\", um das Formular für diese"
+" Person vorausgefüllt zu öffnen."
 
 #: includes/admin/documentation.php:139
 msgid ""
-"Every sent announcement is recorded in the collapsible Send History table on "
-"the same page. The table can be filtered by typing and sorted by clicking "
+"The From name and From email can be overridden per send. Use {first_name} "
+"and {last_name} as personalisation placeholders, and {shifts} to list each "
+"recipient's own upcoming shifts. HTML formatting is supported — the live "
+"preview below the form renders the email as it will appear."
+msgstr ""
+"Absendername und Absender-E-Mail können pro Sendung überschrieben werden. "
+"Verwenden Sie {first_name} und {last_name} als Personalisierungsplatzhalter "
+"sowie {shifts}, um die bevorstehenden Schichten der jeweiligen Person "
+"aufzulisten. HTML-Formatierung wird unterstützt — die Live-Vorschau unter "
+"dem Formular zeigt die E-Mail so, wie sie erscheinen wird."
+
+#: includes/admin/documentation.php:140
+msgid ""
+"A PDF can optionally be attached — it will be sent with every email in that "
+"announcement."
+msgstr ""
+"Ein PDF kann optional angehängt werden — es wird mit jeder E-Mail dieser "
+"Ankündigung versendet."
+
+#: includes/admin/documentation.php:141
+msgid ""
+"Every sent announcement is recorded in the collapsible Send History table on"
+" the same page. The table can be filtered by typing and sorted by clicking "
 "column headers."
 msgstr ""
 "Jede gesendete Ankündigung wird in der aufklappbaren Tabelle Sendeverlauf "
 "auf derselben Seite gespeichert. Die Tabelle kann durch Eingabe gefiltert "
 "und durch Klicken auf Spaltenüberschriften sortiert werden."
 
-#: includes/admin/documentation.php:140
+#: includes/admin/documentation.php:142
 msgid ""
 "Offline volunteers (no email address) are excluded from all announcement "
 "sending. Volunteers can opt out under their profile."
@@ -965,21 +1029,21 @@ msgstr ""
 "Offline-Volunteers (ohne E-Mail-Adresse) werden von allen Ankündigungen "
 "ausgeschlossen. Volunteers können sich in ihrem Profil abmelden."
 
-#: includes/admin/documentation.php:142
+#: includes/admin/documentation.php:144
 msgid "Email Template Customization"
 msgstr "Anpassung der E-Mail-Vorlage"
 
-#: includes/admin/documentation.php:143
+#: includes/admin/documentation.php:145
 msgid ""
 "All plugin emails use a shared HTML wrapper so registration links, "
-"assignment confirmations, cancellations, and announcements have a consistent "
-"look."
+"assignment confirmations, cancellations, and announcements have a consistent"
+" look."
 msgstr ""
 "Alle Plugin-E-Mails verwenden eine gemeinsame HTML-Vorlage, damit "
 "Registrierungslinks, Anmeldebestätigungen, Abmeldungen und Mitteilungen "
 "einheitlich aussehen."
 
-#: includes/admin/documentation.php:144
+#: includes/admin/documentation.php:146
 msgid ""
 "Integrators can customize or fully replace this wrapper in theme code or a "
 "small companion plugin using WordPress filters."
@@ -988,22 +1052,22 @@ msgstr ""
 "Begleit-Plugin mithilfe von WordPress-Filtern anpassen oder vollständig "
 "ersetzen."
 
-#: includes/admin/documentation.php:146
+#: includes/admin/documentation.php:148
 msgid ""
 "Adjust template variables such as heading, preheader, site name, or footer "
 "text before the final HTML is generated."
 msgstr ""
-"Passt Vorlagenvariablen wie Überschrift, Preheader, Website-Name oder Footer-"
-"Text an, bevor das endgültige HTML erzeugt wird."
+"Passt Vorlagenvariablen wie Überschrift, Preheader, Website-Name oder "
+"Footer-Text an, bevor das endgültige HTML erzeugt wird."
 
-#: includes/admin/documentation.php:147
+#: includes/admin/documentation.php:149
 msgid ""
 "Modify only the inner email body HTML while keeping the default wrapper."
 msgstr ""
 "Ändert nur das innere HTML des E-Mail-Inhalts, während die Standardvorlage "
 "beibehalten wird."
 
-#: includes/admin/documentation.php:148
+#: includes/admin/documentation.php:150
 msgid ""
 "Replace the complete final HTML output if you need a fully custom branded "
 "layout."
@@ -1011,7 +1075,7 @@ msgstr ""
 "Ersetzt die gesamte endgültige HTML-Ausgabe, wenn Sie ein vollständig "
 "individuelles, gebrandetes Layout benötigen."
 
-#: includes/admin/documentation.php:150
+#: includes/admin/documentation.php:152
 msgid ""
 "Example: add this in your theme’s functions.php or a small custom plugin to "
 "change the footer text of all EventAdmin emails."
@@ -1020,7 +1084,7 @@ msgstr ""
 "kleines eigenes Plugin ein, um den Footer-Text aller EventAdmin-E-Mails zu "
 "ändern."
 
-#: includes/admin/documentation.php:155
+#: includes/admin/documentation.php:157
 msgid ""
 "Use a custom plugin instead of editing EventAdmin directly if you want your "
 "changes to survive plugin updates."
@@ -1028,11 +1092,11 @@ msgstr ""
 "Verwenden Sie ein eigenes Plugin, statt EventAdmin direkt zu bearbeiten, "
 "wenn Ihre Änderungen Plugin-Updates überstehen sollen."
 
-#: includes/admin/documentation.php:157
+#: includes/admin/documentation.php:159
 msgid "Automatic Cleanup of Unverified Accounts"
 msgstr "Automatische Bereinigung unverifizierter Konten"
 
-#: includes/admin/documentation.php:158
+#: includes/admin/documentation.php:160
 msgid ""
 "A daily background job automatically deletes volunteer accounts that were "
 "registered via the public form but whose magic login link expired without "
@@ -1045,58 +1109,59 @@ msgstr ""
 "wenn sie keine Schichtzuweisungen haben und nicht als manuell hinzugefügt "
 "markiert sind."
 
-#: includes/admin/documentation.php:159
+#: includes/admin/documentation.php:161
 msgid ""
-"A log of automatically deleted accounts (up to the last 100) is shown at the "
-"bottom of the Volunteers page."
+"A log of automatically deleted accounts (up to the last 100) is shown at the"
+" bottom of the Volunteers page."
 msgstr ""
 "Ein Protokoll der automatisch gelöschten Konten (bis zu den letzten 100) "
 "wird unten auf der Volunteer-Seite angezeigt."
 
-#: includes/admin/documentation.php:161
+#: includes/admin/documentation.php:163
 msgid "Frequently Asked Questions (FAQ)"
 msgstr "Häufig gestellte Fragen (FAQ)"
 
-#: includes/admin/documentation.php:163
+#: includes/admin/documentation.php:165
 msgid "Do volunteers need an account?"
 msgstr "Benötigen Volunteers ein Konto?"
 
-#: includes/admin/documentation.php:164
+#: includes/admin/documentation.php:166
 msgid "Yes, they must be logged in to view and join shifts."
 msgstr ""
 "Ja, sie müssen angemeldet sein, um Schichten einzusehen und daran "
 "teilzunehmen."
 
-#: includes/admin/documentation.php:166
+#: includes/admin/documentation.php:168
 msgid "How can I assign volunteers manually?"
 msgstr "Wie kann ich Volunteers manuell zuweisen?"
 
-#: includes/admin/documentation.php:167
+#: includes/admin/documentation.php:169
 msgid ""
 "In the admin dashboard under “Volunteer Overview” for each shift via form."
 msgstr ""
-"Im Admin-Dashboard unter «Volunteer-Übersicht» für jede Schicht per Formular."
+"Im Admin-Dashboard unter «Volunteer-Übersicht» für jede Schicht per "
+"Formular."
 
-#: includes/admin/documentation.php:169
+#: includes/admin/documentation.php:171
 msgid "What happens when shifts are full?"
 msgstr "Was passiert, wenn alle Schichten belegt sind?"
 
-#: includes/admin/documentation.php:170
+#: includes/admin/documentation.php:172
 msgid ""
-"By default, full shifts are hidden on the volunteer page. You can optionally "
-"show them in a separate read-only section by enabling \"Show full shifts to "
-"volunteers\" under Settings."
+"By default, full shifts are hidden on the volunteer page. You can optionally"
+" show them in a separate read-only section by enabling \"Show full shifts to"
+" volunteers\" under Settings."
 msgstr ""
-"Standardmäßig sind volle Schichten auf der Volunteer-Seite ausgeblendet. Sie "
-"können diese optional in einem separaten schreibgeschützten Abschnitt "
+"Standardmäßig sind volle Schichten auf der Volunteer-Seite ausgeblendet. Sie"
+" können diese optional in einem separaten schreibgeschützten Abschnitt "
 "anzeigen, indem Sie unter Einstellungen \"Volle Schichten für Volunteers "
 "anzeigen\" aktivieren."
 
-#: includes/admin/documentation.php:172
+#: includes/admin/documentation.php:174
 msgid "What is the minimum volunteers field for?"
 msgstr "Wozu dient das Feld für die Mindestanzahl Volunteers?"
 
-#: includes/admin/documentation.php:173
+#: includes/admin/documentation.php:175
 msgid ""
 "You can set a minimum number of volunteers per shift. The admin dashboard "
 "will highlight shifts that have not reached the minimum with an "
@@ -1105,14 +1170,14 @@ msgid ""
 msgstr ""
 "Sie können eine Mindestanzahl von Volunteers pro Schicht festlegen. Das "
 "Admin-Dashboard hebt Schichten, die die Mindestanzahl nicht erreicht haben, "
-"mit einer Unterbesetzungswarnung hervor. Dies ist nur informativ – es werden "
-"keine Anmelderegeln basierend auf der Mindestanzahl durchgesetzt."
+"mit einer Unterbesetzungswarnung hervor. Dies ist nur informativ – es werden"
+" keine Anmelderegeln basierend auf der Mindestanzahl durchgesetzt."
 
-#: includes/admin/documentation.php:178
+#: includes/admin/documentation.php:180
 msgid "Support EventAdmin"
 msgstr "EventAdmin unterstützen"
 
-#: includes/admin/documentation.php:179
+#: includes/admin/documentation.php:181
 msgid ""
 "EventAdmin is free and open source. If it saves you time, please consider "
 "leaving a review or making a small donation — it helps a lot!"
@@ -1120,11 +1185,11 @@ msgstr ""
 "EventAdmin ist kostenlos und Open Source. Wenn es Ihnen Zeit spart, freuen "
 "wir uns über eine Bewertung oder eine kleine Spende!"
 
-#: includes/admin/documentation.php:181
+#: includes/admin/documentation.php:183
 msgid "Rate 5 stars on WordPress.org"
 msgstr "5 Sterne auf WordPress.org geben"
 
-#: includes/admin/documentation.php:182
+#: includes/admin/documentation.php:184
 msgid "Donate via Revolut"
 msgstr "Über Revolut spenden"
 
@@ -1182,8 +1247,8 @@ msgid ""
 msgstr ""
 "Abteilungen (mit Farbe und Hierarchie) werden für jede Abteilung mit "
 "mindestens einer Schicht automatisch mit übernommen. Anmeldungen von "
-"Volunteers sind im Export nicht enthalten, da die Benutzer-IDs einer anderen "
-"Website hier keine Bedeutung hätten."
+"Volunteers sind im Export nicht enthalten, da die Benutzer-IDs einer anderen"
+" Website hier keine Bedeutung hätten."
 
 #: includes/admin/import.php:58
 msgid "Import demo data"
@@ -1208,7 +1273,8 @@ msgstr "Verwaiste Zuweisungen aufräumen"
 #: includes/admin/import.php:80
 msgid ""
 "Removes shift assignments for users that no longer exist in WordPress. This "
-"can happen when a user was deleted without the plugin's cleanup hook running."
+"can happen when a user was deleted without the plugin's cleanup hook "
+"running."
 msgstr ""
 "Entfernt Schichtzuweisungen für Benutzer, die in WordPress nicht mehr "
 "vorhanden sind. Dies kann passieren, wenn ein Benutzer gelöscht wurde, ohne "
@@ -1249,8 +1315,8 @@ msgstr "Abbau"
 
 #: includes/admin/import.php:285
 msgid ""
-"Dismantling of booths, tents, tables, etc. This person should be skilled and "
-"have experience in dismantling."
+"Dismantling of booths, tents, tables, etc. This person should be skilled and"
+" have experience in dismantling."
 msgstr ""
 "Abbau von Ständen, Zelten, Tischen usw. Diese Person sollte über "
 "Fachkenntnisse und Erfahrung im Abbau verfügen."
@@ -1311,8 +1377,8 @@ msgstr "Bar"
 
 #: includes/admin/import.php:290
 msgid ""
-"People for the bar, who can also tap beer, are important. This person should "
-"be friendly and good with customers."
+"People for the bar, who can also tap beer, are important. This person should"
+" be friendly and good with customers."
 msgstr ""
 "Mitarbeiter für die Bar, die auch Bier zapfen können, sind wichtig. Diese "
 "Person sollte freundlich sein und gut mit Kunden umgehen können."
@@ -1323,8 +1389,8 @@ msgstr "Pfand"
 
 #: includes/admin/import.php:291
 msgid ""
-"Return of plates and cups. There should always be at least one person at the "
-"deposit stand."
+"Return of plates and cups. There should always be at least one person at the"
+" deposit stand."
 msgstr ""
 "Rückgabe von Tellern und Tassen. Am Pfandständer sollte sich immer "
 "mindestens eine Person befinden."
@@ -1453,8 +1519,8 @@ msgid ""
 "If enabled, WordPress will not send the default \"set your password\" email "
 "to newly registered volunteers."
 msgstr ""
-"Wenn aktiviert, sendet WordPress keine Standard-„Passwort festlegen\"-E-Mail "
-"an neu registrierte Volunteers."
+"Wenn aktiviert, sendet WordPress keine Standard-„Passwort festlegen\"-E-Mail"
+" an neu registrierte Volunteers."
 
 #: includes/admin/settings.php:266
 msgid "Rules"
@@ -1508,7 +1574,8 @@ msgstr ""
 "Fügt dem Registrierungsformular eine CAPTCHA-Prüfung hinzu, um "
 "automatisierte Spam-Registrierungen zu blockieren."
 
-#. translators: %s = link to the Simple Cloudflare Turnstile plugin on WordPress.org
+#. translators: %s = link to the Simple Cloudflare Turnstile plugin on
+#. WordPress.org
 #: includes/admin/settings.php:365
 #, php-format
 msgid "Requires the free %s plugin to be installed and activated."
@@ -1522,8 +1589,8 @@ msgid ""
 "everyone."
 msgstr ""
 "Das Plugin „Simple Cloudflare Turnstile“ ist aktiv, hat aber noch keinen "
-"Website- oder Geheimschlüssel konfiguriert. Solange das nicht geschieht, ist "
-"die Registrierung für alle blockiert."
+"Website- oder Geheimschlüssel konfiguriert. Solange das nicht geschieht, ist"
+" die Registrierung für alle blockiert."
 
 #: includes/admin/settings.php:378
 msgid "CAPTCHA site key"
@@ -1532,8 +1599,8 @@ msgstr "CAPTCHA-Website-Schlüssel"
 #: includes/admin/settings.php:381
 msgid ""
 "Get your keys from the provider's admin console. Not used for Cloudflare "
-"Turnstile — configure its site key in the Simple Cloudflare Turnstile plugin "
-"settings instead."
+"Turnstile — configure its site key in the Simple Cloudflare Turnstile plugin"
+" settings instead."
 msgstr ""
 "Schlüssel im Admin-Bereich des Anbieters abrufen. Wird für Cloudflare "
 "Turnstile nicht verwendet — den Website-Schlüssel stattdessen in den "
@@ -1561,8 +1628,8 @@ msgid ""
 "Scores below this value are treated as bots (0.0 = all pass, 1.0 = all "
 "blocked). Default: 0.5. Only applies to reCAPTCHA v3."
 msgstr ""
-"Werte unter diesem Schwellenwert werden als Bot behandelt (0.0 = alle durch, "
-"1.0 = alle blockiert). Standard: 0.5. Gilt nur für reCAPTCHA v3."
+"Werte unter diesem Schwellenwert werden als Bot behandelt (0.0 = alle durch,"
+" 1.0 = alle blockiert). Standard: 0.5. Gilt nur für reCAPTCHA v3."
 
 #: includes/admin/settings.php:412
 msgid "Volunteer Shift Selector"
@@ -1729,12 +1796,12 @@ msgstr "— Keine —"
 #: includes/admin/shift-metaboxes.php:90
 msgid ""
 "Only staff-side users are shown here by default. If selected, this user is "
-"used as the sender fallback for shift emails unless a custom organizer name/"
-"email is entered below."
+"used as the sender fallback for shift emails unless a custom organizer "
+"name/email is entered below."
 msgstr ""
 "Standardmäßig werden hier nur Benutzer mit Backend-Zugriff angezeigt. Wird "
-"ein Benutzer ausgewählt, dient er als Absender-Fallback für Schicht-E-Mails, "
-"sofern unten kein eigener Organisator-Name/E-Mail eingetragen wird."
+"ein Benutzer ausgewählt, dient er als Absender-Fallback für Schicht-E-Mails,"
+" sofern unten kein eigener Organisator-Name/E-Mail eingetragen wird."
 
 #: includes/admin/shift-metaboxes.php:92
 msgid "Organizer name:"
@@ -2000,7 +2067,8 @@ msgstr "Sie dürfen nur %1$d Schichten pro %2$s übernehmen."
 #: includes/helpers.php:232
 msgid "This shift overlaps with one you have already taken."
 msgstr ""
-"Diese Schicht überschneidet sich mit einer, die Sie bereits angetreten haben."
+"Diese Schicht überschneidet sich mit einer, die Sie bereits angetreten "
+"haben."
 
 #: includes/helpers.php:268
 msgid "Login link has expired or is invalid."
@@ -2020,7 +2088,8 @@ msgstr "abgemeldet"
 msgid "Volunteer was %1$s: %2$s"
 msgstr "Volunteer wurde %1$s: %2$s"
 
-#. translators: %1$s = first name, %2$s = last name, %3$s = action, %4$s = title of shift
+#. translators: %1$s = first name, %2$s = last name, %3$s = action, %4$s =
+#. title of shift
 #: includes/notifications.php:128
 #, php-format
 msgid "The volunteer %1$s, %2$s was %3$s for the shift: %4$s"
@@ -2185,17 +2254,19 @@ msgstr "Hallo %1$s,<br><br>Ihr Login-Link:<br>%2$s"
 msgid "Registration error. Please try again later."
 msgstr "Registrierungsfehler. Bitte versuchen Sie es später erneut."
 
-#. translators: %1$s = first name, %2$s = site name, %3$s = site url, %4$s = login url
+#. translators: %1$s = first name, %2$s = site name, %3$s = site url, %4$s =
+#. login url
 #: includes/registration.php:411
 #, php-format
 msgid ""
 "Hello %1$s,<br><br>Thank you for registering at %2$s (%3$s).<br><br>Here is "
 "your login link:<br>%4$s"
 msgstr ""
-"Hallo %1$s,<br><br>vielen Dank für Ihre Registrierung bei %2$s (%3$s)."
-"<br><br>Hier ist Ihr Anmeldelink:<br>%4$s"
+"Hallo %1$s,<br><br>vielen Dank für Ihre Registrierung bei %2$s "
+"(%3$s).<br><br>Hier ist Ihr Anmeldelink:<br>%4$s"
 
-#. translators: 1: number of open volunteer slots remaining, 2: total number of volunteer slots offered
+#. translators: 1: number of open volunteer slots remaining, 2: total number
+#. of volunteer slots offered
 #: includes/shiftselector.php:42
 #, php-format
 msgid "%1$d/%2$d slots open"
@@ -2267,25 +2338,43 @@ msgstr "Sie wurden erfolgreich entfernt."
 msgid "You are not signed up for this shift."
 msgstr "Sie sind für diese Schicht nicht eingeteilt."
 
+#~ msgid "Use {first_name} and {last_name} as placeholders in the message body."
+#~ msgstr ""
+#~ "Verwenden Sie {first_name} und {last_name} als Platzhalter im "
+#~ "Nachrichtentext."
+
+#~ msgid ""
+#~ "The From name and From email can be overridden per send. Use {first_name} "
+#~ "and {last_name} as personalisation placeholders. HTML formatting is "
+#~ "supported — the live preview below the form renders the email as it will "
+#~ "appear."
+#~ msgstr ""
+#~ "Absendername und Absender-E-Mail können pro Sendung überschrieben werden. "
+#~ "Verwenden Sie {first_name} und {last_name} als Personalisierungsplatzhalter."
+#~ " HTML-Formatierung wird unterstützt — die Live-Vorschau unter dem Formular "
+#~ "zeigt die E-Mail so, wie sie erscheinen wird."
+
+#~ msgid "Only the volunteers assigned to a selected shift."
+#~ msgstr "Nur die Volunteers, die einer ausgewählten Schicht zugewiesen sind."
+
 #~ msgid ""
 #~ "New in this release: fixed a bug where Administrators who also held the "
 #~ "Volunteer role could lose access to wp-admin menu items on sites using a "
-#~ "custom database table prefix, plus completed French and Dutch "
-#~ "translations."
+#~ "custom database table prefix, plus completed French and Dutch translations."
 #~ msgstr ""
-#~ "Neu in dieser Version: ein Fehler wurde behoben, durch den "
-#~ "Administratoren, die zusätzlich die Rolle Volunteer hatten, auf Websites "
-#~ "mit einem individuellen Datenbank-Tabellenpräfix den Zugriff auf "
-#~ "Menüpunkte im wp-admin verlieren konnten; außerdem wurden die "
-#~ "französischen und niederländischen Übersetzungen vervollständigt."
+#~ "Neu in dieser Version: ein Fehler wurde behoben, durch den Administratoren, "
+#~ "die zusätzlich die Rolle Volunteer hatten, auf Websites mit einem "
+#~ "individuellen Datenbank-Tabellenpräfix den Zugriff auf Menüpunkte im wp-"
+#~ "admin verlieren konnten; außerdem wurden die französischen und "
+#~ "niederländischen Übersetzungen vervollständigt."
 
 #~ msgid "Get your keys from the provider's admin console."
 #~ msgstr "Schlüssel im Admin-Bereich des Anbieters abrufen."
 
 #~ msgid ""
 #~ "New in this release: assign existing volunteers directly, add offline "
-#~ "volunteers without an email address, and set a per-shift organizer name "
-#~ "and email for notifications."
+#~ "volunteers without an email address, and set a per-shift organizer name and "
+#~ "email for notifications."
 #~ msgstr ""
 #~ "Neu in dieser Version: bestehende Volunteers direkt zuweisen, Offline-"
 #~ "Volunteers ohne E-Mail-Adresse hinzufügen und einen eigenen Organisator-"
@@ -2295,9 +2384,9 @@ msgstr "Sie sind für diese Schicht nicht eingeteilt."
 #~ "If selected, this user is used as the sender fallback for shift emails "
 #~ "unless a custom organizer name/email is entered below."
 #~ msgstr ""
-#~ "Falls ausgewählt, wird dieser User als Absender-Fallback für Schicht-E-"
-#~ "Mails verwendet, sofern unten kein eigener Organisator-Name bzw. keine "
-#~ "eigene Organisator-E-Mail eingetragen ist."
+#~ "Falls ausgewählt, wird dieser User als Absender-Fallback für Schicht-E-Mails"
+#~ " verwendet, sofern unten kein eigener Organisator-Name bzw. keine eigene "
+#~ "Organisator-E-Mail eingetragen ist."
 
 #~ msgid "Only staff-side users are shown here by default."
 #~ msgstr "Hier werden standardmässig nur interne Benutzer angezeigt."

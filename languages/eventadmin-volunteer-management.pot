@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-21T10:17:25+00:00\n"
+"POT-Creation-Date: 2026-08-21T11:46:13+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: eventadmin-volunteer-management\n"
@@ -74,7 +74,7 @@ msgid "Send Announcement to Volunteers"
 msgstr ""
 
 #: includes/admin/bulk-email.php:42
-msgid "Use {first_name} and {last_name} as placeholders in the message body."
+msgid "Use {first_name} and {last_name} as placeholders in the message body. Use {shifts} to list each recipient's own upcoming shifts."
 msgstr ""
 
 #: includes/admin/bulk-email.php:52
@@ -86,185 +86,218 @@ msgid "From email"
 msgstr ""
 
 #: includes/admin/bulk-email.php:58
-#: includes/admin/bulk-email.php:222
+#: includes/admin/bulk-email.php:236
 msgid "Subject"
 msgstr ""
 
 #: includes/admin/bulk-email.php:61
-#: includes/admin/bulk-email.php:228
+#: includes/admin/bulk-email.php:242
 msgid "Message"
 msgstr ""
 
-#: includes/admin/bulk-email.php:95
-#: includes/admin/bulk-email.php:223
+#: includes/admin/bulk-email.php:64
+msgid "Attachment (optional)"
+msgstr ""
+
+#: includes/admin/bulk-email.php:67
+msgid "Select PDF…"
+msgstr ""
+
+#: includes/admin/bulk-email.php:69
+#: includes/admin/dashboard.php:490
+msgid "Remove"
+msgstr ""
+
+#: includes/admin/bulk-email.php:70
+msgid "The PDF will be attached to every email in this announcement."
+msgstr ""
+
+#: includes/admin/bulk-email.php:104
+#: includes/admin/bulk-email.php:237
 msgid "Recipients"
 msgstr ""
 
-#: includes/admin/bulk-email.php:105
+#: includes/admin/bulk-email.php:114
 msgid "Subscribed volunteers only (opted-in)"
 msgstr ""
 
 #. translators: %d number of recipients
-#: includes/admin/bulk-email.php:108
-#: includes/admin/bulk-email.php:113
-#: includes/admin/bulk-email.php:118
-#: includes/admin/bulk-email.php:123
+#: includes/admin/bulk-email.php:117
+#: includes/admin/bulk-email.php:122
+#: includes/admin/bulk-email.php:127
+#: includes/admin/bulk-email.php:132
 #, php-format
 msgid "%d recipient"
 msgid_plural "%d recipients"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/bulk-email.php:111
+#: includes/admin/bulk-email.php:120
 #: includes/admin/documentation.php:134
 #: includes/admin/volunteer-list.php:93
 msgid "All volunteers"
 msgstr ""
 
-#: includes/admin/bulk-email.php:116
+#: includes/admin/bulk-email.php:125
+#: includes/admin/documentation.php:135
 msgid "Volunteers without any upcoming shift"
 msgstr ""
 
-#: includes/admin/bulk-email.php:121
+#: includes/admin/bulk-email.php:130
+#: includes/admin/documentation.php:135
 msgid "Volunteers with at least one upcoming shift"
 msgstr ""
 
-#: includes/admin/bulk-email.php:126
-#: includes/admin/documentation.php:135
+#: includes/admin/bulk-email.php:135
+#: includes/admin/documentation.php:136
 msgid "Volunteers of a specific shift"
 msgstr ""
 
-#: includes/admin/bulk-email.php:130
+#: includes/admin/bulk-email.php:139
 msgid "— Select shift —"
 msgstr ""
 
-#: includes/admin/bulk-email.php:141
+#: includes/admin/bulk-email.php:150
+#: includes/admin/documentation.php:136
 msgid "Volunteers of a specific category"
 msgstr ""
 
-#: includes/admin/bulk-email.php:145
+#: includes/admin/bulk-email.php:154
 msgid "— Select category —"
 msgstr ""
 
-#: includes/admin/bulk-email.php:157
+#: includes/admin/bulk-email.php:166
 msgid "Start sending"
 msgstr ""
 
-#: includes/admin/bulk-email.php:162
+#: includes/admin/bulk-email.php:171
 msgid "Preview (example data)"
 msgstr ""
 
-#: includes/admin/bulk-email.php:163
+#: includes/admin/bulk-email.php:172
 msgid "From:"
 msgstr ""
 
-#: includes/admin/bulk-email.php:164
+#: includes/admin/bulk-email.php:173
 #: includes/admin/settings.php:644
 msgid "Subject:"
 msgstr ""
 
-#: includes/admin/bulk-email.php:171
+#: includes/admin/bulk-email.php:174
+#: includes/admin/bulk-email.php:300
+msgid "Attachment:"
+msgstr ""
+
+#: includes/admin/bulk-email.php:181
 msgid "Sending in progress…"
 msgstr ""
 
-#: includes/admin/bulk-email.php:190
+#: includes/admin/bulk-email.php:202
 msgid "Done! All emails sent."
 msgstr ""
 
-#: includes/admin/bulk-email.php:191
+#: includes/admin/bulk-email.php:203
 msgid "({failed} could not be delivered)"
 msgstr ""
 
-#: includes/admin/bulk-email.php:192
+#: includes/admin/bulk-email.php:204
 #: includes/admin/volunteer-list.php:358
 msgid "An error occurred. Please try again."
 msgstr ""
 
-#: includes/admin/bulk-email.php:193
+#: includes/admin/bulk-email.php:205
 msgid "Sent {sent} of {total}…"
 msgstr ""
 
-#: includes/admin/bulk-email.php:194
+#: includes/admin/bulk-email.php:206
 msgid "Counting…"
 msgstr ""
 
-#: includes/admin/bulk-email.php:195
+#: includes/admin/bulk-email.php:207
 msgid "{n} recipient"
 msgstr ""
 
-#: includes/admin/bulk-email.php:196
+#: includes/admin/bulk-email.php:208
 msgid "{n} recipients"
 msgstr ""
 
-#: includes/admin/bulk-email.php:207
+#: includes/admin/bulk-email.php:209
+msgid "Select a PDF to attach"
+msgstr ""
+
+#: includes/admin/bulk-email.php:210
+msgid "Use this PDF"
+msgstr ""
+
+#: includes/admin/bulk-email.php:221
 #, php-format
 msgid "Send History (%d entry)"
 msgid_plural "Send History (%d entries)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/bulk-email.php:213
+#: includes/admin/bulk-email.php:227
 msgid "No announcements sent yet."
 msgstr ""
 
-#: includes/admin/bulk-email.php:216
+#: includes/admin/bulk-email.php:230
 msgid "Filter…"
 msgstr ""
 
-#: includes/admin/bulk-email.php:221
+#: includes/admin/bulk-email.php:235
 #: includes/admin/dashboard.php:328
 #: includes/admin/volunteer-list.php:303
 #: includes/admin/volunteer-list.php:329
 msgid "Date"
 msgstr ""
 
-#: includes/admin/bulk-email.php:224
+#: includes/admin/bulk-email.php:238
 msgid "From"
 msgstr ""
 
-#: includes/admin/bulk-email.php:225
+#: includes/admin/bulk-email.php:239
 msgid "Sent to"
 msgstr ""
 
-#: includes/admin/bulk-email.php:226
+#: includes/admin/bulk-email.php:240
 msgid "Failed"
 msgstr ""
 
-#: includes/admin/bulk-email.php:227
+#: includes/admin/bulk-email.php:241
 msgid "Sent by"
 msgstr ""
 
-#: includes/admin/bulk-email.php:231
+#: includes/admin/bulk-email.php:245
 #: includes/admin/volunteer-list.php:184
 msgid "Click to sort"
 msgstr ""
 
-#: includes/admin/bulk-email.php:243
+#: includes/admin/bulk-email.php:257
 #: includes/admin/volunteer-list.php:277
 msgid "Subscribed"
 msgstr ""
 
-#: includes/admin/bulk-email.php:245
+#: includes/admin/bulk-email.php:259
 msgid "Without an upcoming shift"
 msgstr ""
 
-#: includes/admin/bulk-email.php:247
+#: includes/admin/bulk-email.php:261
 msgid "With an upcoming shift"
 msgstr ""
 
 #. translators: %s is the shift title
-#: includes/admin/bulk-email.php:250
+#: includes/admin/bulk-email.php:264
 #, php-format
 msgid "Shift: %s"
 msgstr ""
 
 #. translators: %s is the category name
-#: includes/admin/bulk-email.php:253
+#: includes/admin/bulk-email.php:267
 #, php-format
 msgid "Category: %s"
 msgstr ""
 
-#: includes/admin/bulk-email.php:257
+#: includes/admin/bulk-email.php:271
 #: includes/admin/dashboard.php:286
 #: includes/admin/dashboard.php:295
 #: includes/admin/dashboard.php:304
@@ -273,9 +306,13 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: includes/admin/bulk-email.php:423
-#: includes/admin/bulk-email.php:455
-#: includes/admin/bulk-email.php:533
+#: includes/admin/bulk-email.php:452
+msgid "No upcoming shifts."
+msgstr ""
+
+#: includes/admin/bulk-email.php:475
+#: includes/admin/bulk-email.php:507
+#: includes/admin/bulk-email.php:603
 #: includes/admin/import.php:134
 #: includes/admin/import.php:146
 #: includes/admin/import.php:163
@@ -289,9 +326,9 @@ msgstr ""
 msgid "Security check failed."
 msgstr ""
 
-#: includes/admin/bulk-email.php:427
-#: includes/admin/bulk-email.php:459
-#: includes/admin/bulk-email.php:537
+#: includes/admin/bulk-email.php:479
+#: includes/admin/bulk-email.php:511
+#: includes/admin/bulk-email.php:607
 #: includes/admin/volunteer-list.php:384
 #: includes/admin/volunteer-list.php:414
 #: includes/admin/volunteer-list.php:443
@@ -299,53 +336,61 @@ msgstr ""
 msgid "Insufficient permissions."
 msgstr ""
 
-#: includes/admin/bulk-email.php:436
+#: includes/admin/bulk-email.php:488
 msgid "Invalid recipient type."
 msgstr ""
 
-#: includes/admin/bulk-email.php:473
+#: includes/admin/bulk-email.php:526
 msgid "Subject and message are required."
 msgstr ""
 
-#: includes/admin/bulk-email.php:477
+#: includes/admin/bulk-email.php:530
 msgid "Please select a shift."
 msgstr ""
 
-#: includes/admin/bulk-email.php:481
+#: includes/admin/bulk-email.php:534
 msgid "Please select a category."
 msgstr ""
 
-#: includes/admin/bulk-email.php:485
+#: includes/admin/bulk-email.php:538
 msgid "No recipient specified."
 msgstr ""
 
-#: includes/admin/bulk-email.php:544
+#: includes/admin/bulk-email.php:546
+msgid "The selected attachment is not a valid PDF."
+msgstr ""
+
+#: includes/admin/bulk-email.php:550
+msgid "The selected attachment could not be found."
+msgstr ""
+
+#: includes/admin/bulk-email.php:614
 msgid "Job not found or expired."
 msgstr ""
 
 #. translators: %d is the number of failed deliveries
-#: includes/admin/bulk-email.php:620
+#: includes/admin/bulk-email.php:699
 #, php-format
 msgid "%d emails could not be delivered."
 msgstr ""
 
-#: includes/admin/bulk-email.php:623
+#: includes/admin/bulk-email.php:702
 msgid "All emails were delivered successfully."
 msgstr ""
 
 #. translators: %s is the email subject that was sent
-#: includes/admin/bulk-email.php:629
+#: includes/admin/bulk-email.php:708
 #, php-format
 msgid "[%s] Announcement sent: %s"
 msgstr ""
 
 #. translators: 1: blog name, 2: email subject, 3: sent count, 4: delivery note
-#: includes/admin/bulk-email.php:635
+#: includes/admin/bulk-email.php:714
 #, php-format
 msgid "Your announcement <strong>%2$s</strong> was sent on %1$s.<br><br>Recipients: %3$d<br>%4$s"
 msgstr ""
 
-#: includes/admin/bulk-email.php:647
+#: includes/admin/bulk-email.php:726
 msgid "Announcement delivery summary"
 msgstr ""
 
@@ -606,10 +651,6 @@ msgstr ""
 msgid "Notify volunteer"
 msgstr ""
 
-#: includes/admin/dashboard.php:490
-msgid "Remove"
-msgstr ""
-
 #: includes/admin/dashboard.php:498
 msgid "No volunteers assigned."
 msgstr ""
@@ -860,122 +901,130 @@ msgid "Every volunteer with an email address, regardless of opt-in status."
 msgstr ""
 
 #: includes/admin/documentation.php:135
-msgid "Only the volunteers assigned to a selected shift."
+msgid "Split volunteers by whether they currently have an upcoming shift assigned — useful for nudging people who haven't signed up yet."
 msgstr ""
 
 #: includes/admin/documentation.php:136
+msgid "Only the volunteers assigned to a selected shift or department. A live recipient count is shown once you pick one."
+msgstr ""
+
+#: includes/admin/documentation.php:137
 msgid "Individual volunteer"
 msgstr ""
 
-#: includes/admin/documentation.php:136
+#: includes/admin/documentation.php:137
 msgid "Click \"Email\" on any volunteer row to open the form pre-filled for that person."
 msgstr ""
 
-#: includes/admin/documentation.php:138
-msgid "The From name and From email can be overridden per send. Use {first_name} and {last_name} as personalisation placeholders. HTML formatting is supported — the live preview below the form renders the email as it will appear."
-msgstr ""
-
 #: includes/admin/documentation.php:139
-msgid "Every sent announcement is recorded in the collapsible Send History table on the same page. The table can be filtered by typing and sorted by clicking column headers."
+msgid "The From name and From email can be overridden per send. Use {first_name} and {last_name} as personalisation placeholders, and {shifts} to list each recipient's own upcoming shifts. HTML formatting is supported — the live preview below the form renders the email as it will appear."
 msgstr ""
 
 #: includes/admin/documentation.php:140
-msgid "Offline volunteers (no email address) are excluded from all announcement sending. Volunteers can opt out under their profile."
+msgid "A PDF can optionally be attached — it will be sent with every email in that announcement."
+msgstr ""
+
+#: includes/admin/documentation.php:141
+msgid "Every sent announcement is recorded in the collapsible Send History table on the same page. The table can be filtered by typing and sorted by clicking column headers."
 msgstr ""
 
 #: includes/admin/documentation.php:142
-msgid "Email Template Customization"
-msgstr ""
-
-#: includes/admin/documentation.php:143
-msgid "All plugin emails use a shared HTML wrapper so registration links, assignment confirmations, cancellations, and announcements have a consistent look."
+msgid "Offline volunteers (no email address) are excluded from all announcement sending. Volunteers can opt out under their profile."
 msgstr ""
 
 #: includes/admin/documentation.php:144
-msgid "Integrators can customize or fully replace this wrapper in theme code or a small companion plugin using WordPress filters."
+msgid "Email Template Customization"
+msgstr ""
+
+#: includes/admin/documentation.php:145
+msgid "All plugin emails use a shared HTML wrapper so registration links, assignment confirmations, cancellations, and announcements have a consistent look."
 msgstr ""
 
 #: includes/admin/documentation.php:146
-msgid "Adjust template variables such as heading, preheader, site name, or footer text before the final HTML is generated."
-msgstr ""
-
-#: includes/admin/documentation.php:147
-msgid "Modify only the inner email body HTML while keeping the default wrapper."
+msgid "Integrators can customize or fully replace this wrapper in theme code or a small companion plugin using WordPress filters."
 msgstr ""
 
 #: includes/admin/documentation.php:148
-msgid "Replace the complete final HTML output if you need a fully custom branded layout."
+msgid "Adjust template variables such as heading, preheader, site name, or footer text before the final HTML is generated."
+msgstr ""
+
+#: includes/admin/documentation.php:149
+msgid "Modify only the inner email body HTML while keeping the default wrapper."
 msgstr ""
 
 #: includes/admin/documentation.php:150
+msgid "Replace the complete final HTML output if you need a fully custom branded layout."
+msgstr ""
+
+#: includes/admin/documentation.php:152
 msgid "Example: add this in your theme’s functions.php or a small custom plugin to change the footer text of all EventAdmin emails."
 msgstr ""
 
-#: includes/admin/documentation.php:155
+#: includes/admin/documentation.php:157
 msgid "Use a custom plugin instead of editing EventAdmin directly if you want your changes to survive plugin updates."
 msgstr ""
 
-#: includes/admin/documentation.php:157
+#: includes/admin/documentation.php:159
 msgid "Automatic Cleanup of Unverified Accounts"
 msgstr ""
 
-#: includes/admin/documentation.php:158
+#: includes/admin/documentation.php:160
 msgid "A daily background job automatically deletes volunteer accounts that were registered via the public form but whose magic login link expired without ever being clicked. Accounts are only deleted if they have no shift assignments and are not marked as manually added."
 msgstr ""
 
-#: includes/admin/documentation.php:159
+#: includes/admin/documentation.php:161
 msgid "A log of automatically deleted accounts (up to the last 100) is shown at the bottom of the Volunteers page."
 msgstr ""
 
-#: includes/admin/documentation.php:161
+#: includes/admin/documentation.php:163
 msgid "Frequently Asked Questions (FAQ)"
 msgstr ""
 
-#: includes/admin/documentation.php:163
+#: includes/admin/documentation.php:165
 msgid "Do volunteers need an account?"
 msgstr ""
 
-#: includes/admin/documentation.php:164
+#: includes/admin/documentation.php:166
 msgid "Yes, they must be logged in to view and join shifts."
 msgstr ""
 
-#: includes/admin/documentation.php:166
+#: includes/admin/documentation.php:168
 msgid "How can I assign volunteers manually?"
 msgstr ""
 
-#: includes/admin/documentation.php:167
+#: includes/admin/documentation.php:169
 msgid "In the admin dashboard under “Volunteer Overview” for each shift via form."
 msgstr ""
 
-#: includes/admin/documentation.php:169
+#: includes/admin/documentation.php:171
 msgid "What happens when shifts are full?"
 msgstr ""
 
-#: includes/admin/documentation.php:170
+#: includes/admin/documentation.php:172
 msgid "By default, full shifts are hidden on the volunteer page. You can optionally show them in a separate read-only section by enabling \"Show full shifts to volunteers\" under Settings."
 msgstr ""
 
-#: includes/admin/documentation.php:172
+#: includes/admin/documentation.php:174
 msgid "What is the minimum volunteers field for?"
 msgstr ""
 
-#: includes/admin/documentation.php:173
+#: includes/admin/documentation.php:175
 msgid "You can set a minimum number of volunteers per shift. The admin dashboard will highlight shifts that have not reached the minimum with an understaffing warning. This is informational only – no signup rules are enforced based on the minimum."
 msgstr ""
 
-#: includes/admin/documentation.php:178
+#: includes/admin/documentation.php:180
 msgid "Support EventAdmin"
 msgstr ""
 
-#: includes/admin/documentation.php:179
+#: includes/admin/documentation.php:181
 msgid "EventAdmin is free and open source. If it saves you time, please consider leaving a review or making a small donation — it helps a lot!"
 msgstr ""
 
-#: includes/admin/documentation.php:181
+#: includes/admin/documentation.php:183
 msgid "Rate 5 stars on WordPress.org"
 msgstr ""
 
-#: includes/admin/documentation.php:182
+#: includes/admin/documentation.php:184
 msgid "Donate via Revolut"
 msgstr ""
 
