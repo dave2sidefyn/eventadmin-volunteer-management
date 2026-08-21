@@ -3,8 +3,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-08-21T13:21:02+00:00\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-"
+"volunteer-management\n"
+"POT-Creation-Date: 2026-08-21T13:38:23+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
@@ -25,8 +26,8 @@ msgid ""
 "shifts, allow volunteers to sign up and cancel independently, and configure "
 "individual rules – e.g., maximum shifts per person per year."
 msgstr ""
-"Gérez les bénévoles pour vos événements directement dans WordPress. Créez et"
-" planifiez des créneaux, permettez aux bénévoles de s'inscrire et d'annuler "
+"Gérez les bénévoles pour vos événements directement dans WordPress. Créez et "
+"planifiez des créneaux, permettez aux bénévoles de s'inscrire et d'annuler "
 "de manière autonome, et configurez des règles individuelles – ex. : nombre "
 "maximum de créneaux par personne et par an."
 
@@ -93,8 +94,8 @@ msgid ""
 "{shifts} to list each recipient's own upcoming shifts."
 msgstr ""
 "Utilisez {first_name} et {last_name} comme variables dans le corps du "
-"message. Utilisez {shifts} pour lister les créneaux à venir propres à chaque"
-" destinataire."
+"message. Utilisez {shifts} pour lister les créneaux à venir propres à chaque "
+"destinataire."
 
 #: includes/admin/bulk-email.php:52
 msgid "From name"
@@ -373,16 +374,15 @@ msgstr "Tous les e-mails ont été envoyés avec succès."
 msgid "[%s] Announcement sent: %s"
 msgstr "[%s] Annonce envoyée : %s"
 
-#. translators: 1: blog name, 2: email subject, 3: sent count, 4: delivery
-#. note
+#. translators: 1: blog name, 2: email subject, 3: sent count, 4: delivery note
 #: includes/admin/bulk-email.php:716
 #, php-format
 msgid ""
-"Your announcement <strong>%2$s</strong> was sent on %1$s.<br><br>Recipients:"
-" %3$d<br>%4$s"
+"Your announcement <strong>%2$s</strong> was sent on %1$s.<br><br>Recipients: "
+"%3$d<br>%4$s"
 msgstr ""
-"Votre annonce <strong>%2$s</strong> a été envoyée le "
-"%1$s.<br><br>Destinataires : %3$d<br>%4$s"
+"Votre annonce <strong>%2$s</strong> a été envoyée le %1$s."
+"<br><br>Destinataires : %3$d<br>%4$s"
 
 #: includes/admin/bulk-email.php:728
 msgid "Announcement delivery summary"
@@ -735,8 +735,8 @@ msgstr "Veuillez créer au moins une page avec le shortcode"
 #: includes/admin/documentation.php:41
 msgid "to use the plugin. You can also access the other shortcodes:"
 msgstr ""
-"pour utiliser le plugin. Vous pouvez également accéder aux autres shortcodes"
-" :"
+"pour utiliser le plugin. Vous pouvez également accéder aux autres "
+"shortcodes :"
 
 #: includes/admin/documentation.php:44
 msgid "Other Shortcodes"
@@ -754,8 +754,8 @@ msgstr ""
 msgid ""
 "Shows the full cockpit for logged-in volunteers (profile & shift selection)."
 msgstr ""
-"Affiche le cockpit complet pour les bénévoles connectés (profil et sélection"
-" de créneaux)."
+"Affiche le cockpit complet pour les bénévoles connectés (profil et sélection "
+"de créneaux)."
 
 #: includes/admin/documentation.php:56
 msgid "Shows the volunteer profile for logged-in users."
@@ -783,16 +783,15 @@ msgstr "Description"
 
 #: includes/admin/documentation.php:69
 msgid ""
-"EventAdmin is a simple yet powerful plugin for managing volunteers at "
-"events."
+"EventAdmin is a simple yet powerful plugin for managing volunteers at events."
 msgstr ""
 "EventAdmin est un plugin simple mais puissant pour gérer les bénévoles lors "
 "d'événements."
 
 #: includes/admin/documentation.php:70
 msgid ""
-"Ideal for clubs, street festivals, and events. Organizers can create shifts,"
-" assign participants, or let volunteers sign up themselves. CSV export, "
+"Ideal for clubs, street festivals, and events. Organizers can create shifts, "
+"assign participants, or let volunteers sign up themselves. CSV export, "
 "limits, visual statistics, and an admin dashboard are included."
 msgstr ""
 "Idéal pour les associations, les fêtes de rue et les événements. Les "
@@ -807,8 +806,8 @@ msgstr "Fonctionnalités"
 #: includes/admin/documentation.php:75
 msgid "Create shifts with time period, category, and min./max. volunteers"
 msgstr ""
-"Créer des créneaux avec une période, une catégorie et un nombre min./max. de"
-" bénévoles"
+"Créer des créneaux avec une période, une catégorie et un nombre min./max. de "
+"bénévoles"
 
 #: includes/admin/documentation.php:76
 msgid ""
@@ -859,8 +858,8 @@ msgstr ""
 msgid ""
 "Dashboard statistics: empty shifts, understaffed shifts, filled/open spots"
 msgstr ""
-"Statistiques du tableau de bord : créneaux vides, créneaux en sous-effectif,"
-" places occupées/disponibles"
+"Statistiques du tableau de bord : créneaux vides, créneaux en sous-effectif, "
+"places occupées/disponibles"
 
 #: includes/admin/documentation.php:84
 msgid ""
@@ -924,8 +923,8 @@ msgid ""
 "shows badges next to each name to indicate how the account was created or "
 "its current status."
 msgstr ""
-"La page Bénévoles (Services → Bénévoles) liste tous les comptes bénévoles et"
-" affiche des badges à côté de chaque nom pour indiquer comment le compte a "
+"La page Bénévoles (Services → Bénévoles) liste tous les comptes bénévoles et "
+"affiche des badges à côté de chaque nom pour indiquer comment le compte a "
 "été créé ou son statut actuel."
 
 #: includes/admin/documentation.php:102
@@ -962,8 +961,8 @@ msgstr "Non vérifié"
 
 #: includes/admin/documentation.php:116
 msgid ""
-"Registered via the public form but has not yet clicked the magic login link."
-" The account is auto-deleted once the link expires (~24 h). The badge "
+"Registered via the public form but has not yet clicked the magic login link. "
+"The account is auto-deleted once the link expires (~24 h). The badge "
 "disappears as soon as the link is clicked."
 msgstr ""
 "Inscrit via le formulaire public mais n'a pas encore cliqué sur le lien de "
@@ -979,8 +978,8 @@ msgid ""
 "Registered or linked via Nextend Social Login (e.g. Google, Facebook). "
 "Requires the Nextend Social Login plugin."
 msgstr ""
-"Inscrit ou lié via Nextend Social Login (ex. Google, Facebook). Nécessite le"
-" plugin Nextend Social Login."
+"Inscrit ou lié via Nextend Social Login (ex. Google, Facebook). Nécessite le "
+"plugin Nextend Social Login."
 
 #: includes/admin/documentation.php:123
 msgid "(no badge)"
@@ -988,8 +987,8 @@ msgstr "(aucun badge)"
 
 #: includes/admin/documentation.php:124
 msgid ""
-"Self-registered via the public form and verified by clicking the magic link,"
-" or registered before the badge system was introduced (version 0.9.8)."
+"Self-registered via the public form and verified by clicking the magic link, "
+"or registered before the badge system was introduced (version 0.9.8)."
 msgstr ""
 "Auto-inscrit via le formulaire public et vérifié en cliquant sur le lien "
 "magique, ou inscrit avant l'introduction du système de badges (version "
@@ -997,8 +996,7 @@ msgstr ""
 
 #: includes/admin/documentation.php:128
 msgid ""
-"A volunteer can have multiple badges at the same time (e.g. Manual + "
-"Social)."
+"A volunteer can have multiple badges at the same time (e.g. Manual + Social)."
 msgstr ""
 "Un bénévole peut avoir plusieurs badges en même temps (ex. Manuel + Social)."
 
@@ -1027,12 +1025,12 @@ msgstr ""
 
 #: includes/admin/documentation.php:135
 msgid ""
-"Split volunteers by whether they currently have an upcoming shift assigned —"
-" useful for nudging people who haven't signed up yet."
+"Split volunteers by whether they currently have an upcoming shift assigned — "
+"useful for nudging people who haven't signed up yet."
 msgstr ""
 "Répartit les bénévoles selon qu'ils ont actuellement un créneau à venir "
-"assigné ou non — utile pour relancer les personnes qui ne se sont pas encore"
-" inscrites."
+"assigné ou non — utile pour relancer les personnes qui ne se sont pas encore "
+"inscrites."
 
 #: includes/admin/documentation.php:136
 msgid ""
@@ -1052,8 +1050,8 @@ msgid ""
 "Click \"Email\" on any volunteer row to open the form pre-filled for that "
 "person."
 msgstr ""
-"Cliquez sur « E-mail » dans la liste des bénévoles pour ouvrir le formulaire"
-" pré-rempli pour cette personne."
+"Cliquez sur « E-mail » dans la liste des bénévoles pour ouvrir le formulaire "
+"pré-rempli pour cette personne."
 
 #: includes/admin/documentation.php:139
 msgid ""
@@ -1065,8 +1063,8 @@ msgstr ""
 "Le nom et l'e-mail de l'expéditeur peuvent être modifiés pour chaque envoi. "
 "Utilisez {first_name} et {last_name} comme variables de personnalisation, "
 "ainsi que {shifts} pour lister les créneaux à venir propres à chaque "
-"destinataire. Le formatage HTML est pris en charge — l'aperçu en direct sous"
-" le formulaire affiche l'e-mail tel qu'il apparaîtra."
+"destinataire. Le formatage HTML est pris en charge — l'aperçu en direct sous "
+"le formulaire affiche l'e-mail tel qu'il apparaîtra."
 
 #: includes/admin/documentation.php:140
 msgid ""
@@ -1078,8 +1076,8 @@ msgstr ""
 
 #: includes/admin/documentation.php:141
 msgid ""
-"Every sent announcement is recorded in the collapsible Send History table on"
-" the same page. The table can be filtered by typing and sorted by clicking "
+"Every sent announcement is recorded in the collapsible Send History table on "
+"the same page. The table can be filtered by typing and sorted by clicking "
 "column headers."
 msgstr ""
 "Chaque annonce envoyée est enregistrée dans le tableau Historique d'envoi "
@@ -1101,12 +1099,12 @@ msgstr "Personnalisation du modèle d'e-mail"
 #: includes/admin/documentation.php:145
 msgid ""
 "All plugin emails use a shared HTML wrapper so registration links, "
-"assignment confirmations, cancellations, and announcements have a consistent"
-" look."
+"assignment confirmations, cancellations, and announcements have a consistent "
+"look."
 msgstr ""
 "Tous les e-mails du plugin utilisent un habillage HTML commun afin que les "
-"liens d'inscription, les confirmations d'affectation, les désinscriptions et"
-" les annonces aient une apparence cohérente."
+"liens d'inscription, les confirmations d'affectation, les désinscriptions et "
+"les annonces aient une apparence cohérente."
 
 #: includes/admin/documentation.php:146
 msgid ""
@@ -1137,8 +1135,8 @@ msgid ""
 "Replace the complete final HTML output if you need a fully custom branded "
 "layout."
 msgstr ""
-"Remplacez l'intégralité du HTML final si vous avez besoin d'une mise en page"
-" entièrement personnalisée à votre image."
+"Remplacez l'intégralité du HTML final si vous avez besoin d'une mise en page "
+"entièrement personnalisée à votre image."
 
 #: includes/admin/documentation.php:152
 msgid ""
@@ -1176,8 +1174,8 @@ msgstr ""
 
 #: includes/admin/documentation.php:161
 msgid ""
-"A log of automatically deleted accounts (up to the last 100) is shown at the"
-" bottom of the Volunteers page."
+"A log of automatically deleted accounts (up to the last 100) is shown at the "
+"bottom of the Volunteers page."
 msgstr ""
 "Un journal des comptes supprimés automatiquement (jusqu'aux 100 derniers) "
 "est affiché en bas de la page Bénévoles."
@@ -1212,9 +1210,9 @@ msgstr "Que se passe-t-il lorsque les créneaux sont complets ?"
 
 #: includes/admin/documentation.php:172
 msgid ""
-"By default, full shifts are hidden on the volunteer page. You can optionally"
-" show them in a separate read-only section by enabling \"Show full shifts to"
-" volunteers\" under Settings."
+"By default, full shifts are hidden on the volunteer page. You can optionally "
+"show them in a separate read-only section by enabling \"Show full shifts to "
+"volunteers\" under Settings."
 msgstr ""
 "Par défaut, les créneaux complets sont masqués sur la page des bénévoles. "
 "Vous pouvez les afficher dans une section séparée en lecture seule en "
@@ -1280,8 +1278,8 @@ msgstr ""
 #, php-format
 msgid "On the source site, go to %s, choose \"Shifts\" and download the file."
 msgstr ""
-"Sur le site source, allez dans %s, choisissez « Créneaux » et téléchargez le"
-" fichier."
+"Sur le site source, allez dans %s, choisissez « Créneaux » et téléchargez le "
+"fichier."
 
 #: includes/admin/import.php:46
 msgid "Tools > Export"
@@ -1309,8 +1307,8 @@ msgid ""
 "included in the export, since another site's user IDs would be meaningless "
 "here."
 msgstr ""
-"Les départements (avec leur couleur et leur hiérarchie) sont automatiquement"
-" repris pour chaque département comportant au moins un créneau. Les "
+"Les départements (avec leur couleur et leur hiérarchie) sont automatiquement "
+"repris pour chaque département comportant au moins un créneau. Les "
 "inscriptions des bénévoles ne sont pas incluses dans l'export, car les ID "
 "utilisateur d'un autre site n'auraient ici aucune signification."
 
@@ -1337,12 +1335,11 @@ msgstr "Nettoyer les affectations orphelines"
 #: includes/admin/import.php:80
 msgid ""
 "Removes shift assignments for users that no longer exist in WordPress. This "
-"can happen when a user was deleted without the plugin's cleanup hook "
-"running."
+"can happen when a user was deleted without the plugin's cleanup hook running."
 msgstr ""
 "Supprime les affectations de service pour les utilisateurs qui n'existent "
-"plus dans WordPress. Cela peut survenir lorsqu'un utilisateur a été supprimé"
-" sans avoir été préalablement désinscrit des services."
+"plus dans WordPress. Cela peut survenir lorsqu'un utilisateur a été supprimé "
+"sans avoir été préalablement désinscrit des services."
 
 #: includes/admin/import.php:84
 msgid "No orphaned assignments found."
@@ -1379,8 +1376,8 @@ msgstr "Démontage"
 
 #: includes/admin/import.php:285
 msgid ""
-"Dismantling of booths, tents, tables, etc. This person should be skilled and"
-" have experience in dismantling."
+"Dismantling of booths, tents, tables, etc. This person should be skilled and "
+"have experience in dismantling."
 msgstr ""
 "Démontage des stands, tentes, tables, etc. Cette personne doit être "
 "compétente et avoir de l'expérience en démontage."
@@ -1440,8 +1437,8 @@ msgstr "Bar"
 
 #: includes/admin/import.php:290
 msgid ""
-"People for the bar, who can also tap beer, are important. This person should"
-" be friendly and good with customers."
+"People for the bar, who can also tap beer, are important. This person should "
+"be friendly and good with customers."
 msgstr ""
 "Les personnes pour le bar, qui peuvent aussi tirer la bière, sont "
 "importantes. Cette personne doit être aimable et à l'aise avec les clients."
@@ -1452,11 +1449,11 @@ msgstr "Consigne"
 
 #: includes/admin/import.php:291
 msgid ""
-"Return of plates and cups. There should always be at least one person at the"
-" deposit stand."
+"Return of plates and cups. There should always be at least one person at the "
+"deposit stand."
 msgstr ""
-"Retour des assiettes et des tasses. Il devrait toujours y avoir au moins une"
-" personne au stand de consigne."
+"Retour des assiettes et des tasses. Il devrait toujours y avoir au moins une "
+"personne au stand de consigne."
 
 #: includes/admin/import.php:292
 msgid "Grill"
@@ -1635,8 +1632,7 @@ msgstr ""
 "Ajoute un défi CAPTCHA au formulaire d'inscription des bénévoles pour "
 "bloquer les inscriptions automatiques indésirables."
 
-#. translators: %s = link to the Simple Cloudflare Turnstile plugin on
-#. WordPress.org
+#. translators: %s = link to the Simple Cloudflare Turnstile plugin on WordPress.org
 #: includes/admin/settings.php:367
 #, php-format
 msgid "Requires the free %s plugin to be installed and activated."
@@ -1648,8 +1644,8 @@ msgid ""
 "key configured yet. Until it is configured, registration is blocked for "
 "everyone."
 msgstr ""
-"Le plugin Simple Cloudflare Turnstile est actif, mais aucune clé de site/clé"
-" secrète n'est encore configurée. Tant qu'il n'est pas configuré, "
+"Le plugin Simple Cloudflare Turnstile est actif, mais aucune clé de site/clé "
+"secrète n'est encore configurée. Tant qu'il n'est pas configuré, "
 "l'inscription est bloquée pour tout le monde."
 
 #: includes/admin/settings.php:380
@@ -1659,8 +1655,8 @@ msgstr "Clé de site CAPTCHA"
 #: includes/admin/settings.php:383
 msgid ""
 "Get your keys from the provider's admin console. Not used for Cloudflare "
-"Turnstile — configure its site key in the Simple Cloudflare Turnstile plugin"
-" settings instead."
+"Turnstile — configure its site key in the Simple Cloudflare Turnstile plugin "
+"settings instead."
 msgstr ""
 "Obtenez vos clés depuis la console d'administration du fournisseur. Non "
 "utilisé pour Cloudflare Turnstile — configurez plutôt sa clé de site dans "
@@ -1687,8 +1683,8 @@ msgid ""
 "Scores below this value are treated as bots (0.0 = all pass, 1.0 = all "
 "blocked). Default: 0.5. Only applies to reCAPTCHA v3."
 msgstr ""
-"Les scores inférieurs à cette valeur sont traités comme des bots (0.0 = tous"
-" passent, 1.0 = tous bloqués). Par défaut : 0.5. S'applique uniquement à "
+"Les scores inférieurs à cette valeur sont traités comme des bots (0.0 = tous "
+"passent, 1.0 = tous bloqués). Par défaut : 0.5. S'applique uniquement à "
 "reCAPTCHA v3."
 
 #: includes/admin/settings.php:414
@@ -1762,8 +1758,8 @@ msgid ""
 "Additional CSS injected on the frontend. Use this for theme-specific "
 "adjustments without modifying your theme files."
 msgstr ""
-"CSS supplémentaire injecté sur le frontend. Utilisez-le pour des ajustements"
-" spécifiques au thème sans modifier vos fichiers de thème."
+"CSS supplémentaire injecté sur le frontend. Utilisez-le pour des ajustements "
+"spécifiques au thème sans modifier vos fichiers de thème."
 
 #: includes/admin/settings.php:510
 msgid "Sender"
@@ -1803,8 +1799,8 @@ msgid ""
 "Leave empty to turn reminder emails off entirely."
 msgstr ""
 "Jours entiers séparés par des virgules, p. ex. 7, 1. Les valeurs négatives "
-"ou nulles sont ignorées. Laissez vide pour désactiver complètement les "
-"e-mails de rappel."
+"ou nulles sont ignorées. Laissez vide pour désactiver complètement les e-"
+"mails de rappel."
 
 #: includes/admin/settings.php:607
 msgid "Email Subject (Reminder)"
@@ -1861,8 +1857,8 @@ msgstr "— Aucun —"
 #: includes/admin/shift-metaboxes.php:90
 msgid ""
 "Only staff-side users are shown here by default. If selected, this user is "
-"used as the sender fallback for shift emails unless a custom organizer "
-"name/email is entered below."
+"used as the sender fallback for shift emails unless a custom organizer name/"
+"email is entered below."
 msgstr ""
 "Par défaut, seuls les utilisateurs côté back-office sont affichés ici. Si "
 "sélectionné, cet utilisateur est utilisé comme expéditeur de secours pour "
@@ -1882,8 +1878,8 @@ msgid ""
 "Leave empty to use the linked organizer user or the global notification "
 "sender."
 msgstr ""
-"Laissez vide pour utiliser l'utilisateur organisateur lié ou l'expéditeur de"
-" notification global."
+"Laissez vide pour utiliser l'utilisateur organisateur lié ou l'expéditeur de "
+"notification global."
 
 #: includes/admin/shift-metaboxes.php:173
 msgid "Duplicate"
@@ -2152,8 +2148,7 @@ msgstr "retiré"
 msgid "Volunteer was %1$s: %2$s"
 msgstr "Le bénévole a été %1$s : %2$s"
 
-#. translators: %1$s = first name, %2$s = last name, %3$s = action, %4$s =
-#. title of shift
+#. translators: %1$s = first name, %2$s = last name, %3$s = action, %4$s = title of shift
 #: includes/notifications.php:128
 #, php-format
 msgid "The volunteer %1$s, %2$s was %3$s for the shift: %4$s"
@@ -2318,19 +2313,17 @@ msgstr "Bonjour %1$s,<br><br>Votre lien de connexion :<br>%2$s"
 msgid "Registration error. Please try again later."
 msgstr "Erreur d'inscription. Veuillez réessayer ultérieurement."
 
-#. translators: %1$s = first name, %2$s = site name, %3$s = site url, %4$s =
-#. login url
+#. translators: %1$s = first name, %2$s = site name, %3$s = site url, %4$s = login url
 #: includes/registration.php:411
 #, php-format
 msgid ""
 "Hello %1$s,<br><br>Thank you for registering at %2$s (%3$s).<br><br>Here is "
 "your login link:<br>%4$s"
 msgstr ""
-"Bonjour %1$s,<br><br>Merci de votre inscription sur %2$s "
-"(%3$s).<br><br>Voici votre lien de connexion :<br>%4$s"
+"Bonjour %1$s,<br><br>Merci de votre inscription sur %2$s (%3$s)."
+"<br><br>Voici votre lien de connexion :<br>%4$s"
 
-#. translators: 1: number of open volunteer slots remaining, 2: total number
-#. of volunteer slots offered
+#. translators: 1: number of open volunteer slots remaining, 2: total number of volunteer slots offered
 #: includes/shiftselector.php:42
 #, php-format
 msgid "%1$d/%2$d slots open"
@@ -2408,7 +2401,8 @@ msgstr "Vous n'êtes pas inscrit à ce créneau."
 #~ msgid "Comma-separated whole days, e.g. 7, 1"
 #~ msgstr "Jours entiers séparés par des virgules, p. ex. 7, 1"
 
-#~ msgid "Use {first_name} and {last_name} as placeholders in the message body."
+#~ msgid ""
+#~ "Use {first_name} and {last_name} as placeholders in the message body."
 #~ msgstr ""
 #~ "Utilisez {first_name} et {last_name} comme variables dans le corps du "
 #~ "message."
@@ -2419,10 +2413,10 @@ msgstr "Vous n'êtes pas inscrit à ce créneau."
 #~ "supported — the live preview below the form renders the email as it will "
 #~ "appear."
 #~ msgstr ""
-#~ "Le nom et l'e-mail de l'expéditeur peuvent être modifiés pour chaque envoi. "
-#~ "Utilisez {first_name} et {last_name} comme variables de personnalisation. Le"
-#~ " formatage HTML est pris en charge — l'aperçu en direct sous le formulaire "
-#~ "affiche l'e-mail tel qu'il apparaîtra."
+#~ "Le nom et l'e-mail de l'expéditeur peuvent être modifiés pour chaque "
+#~ "envoi. Utilisez {first_name} et {last_name} comme variables de "
+#~ "personnalisation. Le formatage HTML est pris en charge — l'aperçu en "
+#~ "direct sous le formulaire affiche l'e-mail tel qu'il apparaîtra."
 
 #~ msgid "Only the volunteers assigned to a selected shift."
 #~ msgstr "Uniquement les bénévoles affectés à un service sélectionné."
@@ -2430,25 +2424,27 @@ msgstr "Vous n'êtes pas inscrit à ce créneau."
 #~ msgid ""
 #~ "New in this release: fixed a bug where Administrators who also held the "
 #~ "Volunteer role could lose access to wp-admin menu items on sites using a "
-#~ "custom database table prefix, plus completed French and Dutch translations."
+#~ "custom database table prefix, plus completed French and Dutch "
+#~ "translations."
 #~ msgstr ""
 #~ "Nouveau dans cette version : correction d'un bug empêchant les "
 #~ "administrateurs ayant également le rôle Bénévole d'accéder à certains "
 #~ "éléments du menu wp-admin sur les sites utilisant un préfixe de table de "
-#~ "base de données personnalisé ; les traductions françaises et néerlandaises "
-#~ "ont également été complétées."
+#~ "base de données personnalisé ; les traductions françaises et "
+#~ "néerlandaises ont également été complétées."
 
 #~ msgid "Get your keys from the provider's admin console."
 #~ msgstr "Obtenez vos clés depuis la console d'administration du fournisseur."
 
 #~ msgid ""
 #~ "New in this release: assign existing volunteers directly, add offline "
-#~ "volunteers without an email address, and set a per-shift organizer name and "
-#~ "email for notifications."
+#~ "volunteers without an email address, and set a per-shift organizer name "
+#~ "and email for notifications."
 #~ msgstr ""
-#~ "Nouveau dans cette version : assignez directement des bénévoles existants, "
-#~ "ajoutez des bénévoles hors ligne sans adresse e-mail et définissez un nom et"
-#~ " une adresse e-mail d'organisateur par créneau pour les notifications."
+#~ "Nouveau dans cette version : assignez directement des bénévoles "
+#~ "existants, ajoutez des bénévoles hors ligne sans adresse e-mail et "
+#~ "définissez un nom et une adresse e-mail d'organisateur par créneau pour "
+#~ "les notifications."
 
 #~ msgid "Leave empty to use the global notification email."
 #~ msgstr "Laisser vide pour utiliser l'adresse de notification globale."

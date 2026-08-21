@@ -3,8 +3,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-08-21T13:21:02+00:00\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-"
+"volunteer-management\n"
+"POT-Creation-Date: 2026-08-21T13:38:23+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
@@ -71,8 +72,8 @@ msgid ""
 "Turnstile plugin."
 msgstr ""
 "Nieuw in deze versie: Cloudflare Turnstile is nu beschikbaar als CAPTCHA-"
-"aanbieder voor het aanmeldformulier voor vrijwilligers, via de plugin Simple"
-" Cloudflare Turnstile."
+"aanbieder voor het aanmeldformulier voor vrijwilligers, via de plugin Simple "
+"Cloudflare Turnstile."
 
 #: eventadmin-volunteer-management.php:287
 msgid "Dismiss"
@@ -372,16 +373,15 @@ msgstr "Alle e-mails zijn succesvol afgeleverd."
 msgid "[%s] Announcement sent: %s"
 msgstr "[%s] Aankondiging verzonden: %s"
 
-#. translators: 1: blog name, 2: email subject, 3: sent count, 4: delivery
-#. note
+#. translators: 1: blog name, 2: email subject, 3: sent count, 4: delivery note
 #: includes/admin/bulk-email.php:716
 #, php-format
 msgid ""
-"Your announcement <strong>%2$s</strong> was sent on %1$s.<br><br>Recipients:"
-" %3$d<br>%4$s"
+"Your announcement <strong>%2$s</strong> was sent on %1$s.<br><br>Recipients: "
+"%3$d<br>%4$s"
 msgstr ""
-"Je aankondiging <strong>%2$s</strong> is verzonden op "
-"%1$s.<br><br>Ontvangers: %3$d<br>%4$s"
+"Je aankondiging <strong>%2$s</strong> is verzonden op %1$s."
+"<br><br>Ontvangers: %3$d<br>%4$s"
 
 #: includes/admin/bulk-email.php:728
 msgid "Announcement delivery summary"
@@ -408,8 +408,8 @@ msgid ""
 "Hidden departments no longer appear in the frontend filter or as a category "
 "label, but shifts already assigned to them remain visible."
 msgstr ""
-"Verborgen afdelingen verschijnen niet meer in het filter van de dienstkiezer"
-" of als categorielabel, maar diensten die er al aan zijn toegewezen blijven "
+"Verborgen afdelingen verschijnen niet meer in het filter van de dienstkiezer "
+"of als categorielabel, maar diensten die er al aan zijn toegewezen blijven "
 "zichtbaar."
 
 #: includes/admin/dashboard.php:25 includes/admin/dashboard.php:26
@@ -733,8 +733,7 @@ msgstr "Maak minimaal één pagina aan met de shortcode."
 
 #: includes/admin/documentation.php:41
 msgid "to use the plugin. You can also access the other shortcodes:"
-msgstr ""
-"om de plugin te gebruiken. Je kunt ook de andere shortcodes gebruiken:"
+msgstr "om de plugin te gebruiken. Je kunt ook de andere shortcodes gebruiken:"
 
 #: includes/admin/documentation.php:44
 msgid "Other Shortcodes"
@@ -781,22 +780,21 @@ msgstr "Beschrijving"
 
 #: includes/admin/documentation.php:69
 msgid ""
-"EventAdmin is a simple yet powerful plugin for managing volunteers at "
-"events."
+"EventAdmin is a simple yet powerful plugin for managing volunteers at events."
 msgstr ""
 "EventAdmin is een eenvoudige maar krachtige plugin voor het beheren van "
 "Volunteers bij evenementen."
 
 #: includes/admin/documentation.php:70
 msgid ""
-"Ideal for clubs, street festivals, and events. Organizers can create shifts,"
-" assign participants, or let volunteers sign up themselves. CSV export, "
+"Ideal for clubs, street festivals, and events. Organizers can create shifts, "
+"assign participants, or let volunteers sign up themselves. CSV export, "
 "limits, visual statistics, and an admin dashboard are included."
 msgstr ""
-"Ideaal voor verenigingen, straatfeesten en evenementen. Organisatoren kunnen"
-" diensten aanmaken, deelnemers toewijzen of Volunteers zich zelf laten "
-"aanmelden. CSV-export, limieten, visuele statistieken en een admin­dashboard"
-" zijn inbegrepen."
+"Ideaal voor verenigingen, straatfeesten en evenementen. Organisatoren kunnen "
+"diensten aanmaken, deelnemers toewijzen of Volunteers zich zelf laten "
+"aanmelden. CSV-export, limieten, visuele statistieken en een admin­dashboard "
+"zijn inbegrepen."
 
 #: includes/admin/documentation.php:73
 msgid "Features"
@@ -956,8 +954,8 @@ msgstr "Niet geverifieerd"
 
 #: includes/admin/documentation.php:116
 msgid ""
-"Registered via the public form but has not yet clicked the magic login link."
-" The account is auto-deleted once the link expires (~24 h). The badge "
+"Registered via the public form but has not yet clicked the magic login link. "
+"The account is auto-deleted once the link expires (~24 h). The badge "
 "disappears as soon as the link is clicked."
 msgstr ""
 "Via het openbare formulier geregistreerd maar heeft nog niet op de magic "
@@ -982,8 +980,8 @@ msgstr "(geen badge)"
 
 #: includes/admin/documentation.php:124
 msgid ""
-"Self-registered via the public form and verified by clicking the magic link,"
-" or registered before the badge system was introduced (version 0.9.8)."
+"Self-registered via the public form and verified by clicking the magic link, "
+"or registered before the badge system was introduced (version 0.9.8)."
 msgstr ""
 "Zelf geregistreerd via het openbare formulier en geverifieerd door op de "
 "magic link te klikken, of geregistreerd vóór de introductie van het badge-"
@@ -991,8 +989,7 @@ msgstr ""
 
 #: includes/admin/documentation.php:128
 msgid ""
-"A volunteer can have multiple badges at the same time (e.g. Manual + "
-"Social)."
+"A volunteer can have multiple badges at the same time (e.g. Manual + Social)."
 msgstr ""
 "Een vrijwilliger kan meerdere badges tegelijk hebben (bijv. Handmatig + "
 "Sociaal)."
@@ -1002,8 +999,8 @@ msgid ""
 "The Send Announcement page (Shifts → Send Announcement) lets you send a "
 "custom email to volunteers. Available recipient options:"
 msgstr ""
-"De pagina Aankondiging verzenden (Diensten → Aankondiging verzenden) stelt u"
-" in staat een aangepaste e-mail naar vrijwilligers te sturen. Beschikbare "
+"De pagina Aankondiging verzenden (Diensten → Aankondiging verzenden) stelt u "
+"in staat een aangepaste e-mail naar vrijwilligers te sturen. Beschikbare "
 "ontvangeropties:"
 
 #: includes/admin/documentation.php:133
@@ -1021,8 +1018,8 @@ msgstr "Alle vrijwilligers met een e-mailadres, ongeacht de abonnementstatus."
 
 #: includes/admin/documentation.php:135
 msgid ""
-"Split volunteers by whether they currently have an upcoming shift assigned —"
-" useful for nudging people who haven't signed up yet."
+"Split volunteers by whether they currently have an upcoming shift assigned — "
+"useful for nudging people who haven't signed up yet."
 msgstr ""
 "Splitst vrijwilligers op basis van of ze momenteel een aankomende dienst "
 "toegewezen hebben — handig om mensen te herinneren die zich nog niet hebben "
@@ -1072,8 +1069,8 @@ msgstr ""
 
 #: includes/admin/documentation.php:141
 msgid ""
-"Every sent announcement is recorded in the collapsible Send History table on"
-" the same page. The table can be filtered by typing and sorted by clicking "
+"Every sent announcement is recorded in the collapsible Send History table on "
+"the same page. The table can be filtered by typing and sorted by clicking "
 "column headers."
 msgstr ""
 "Elke verzonden aankondiging wordt opgeslagen in de inklapbare tabel "
@@ -1096,20 +1093,20 @@ msgstr "Aanpassing e-mailsjabloon"
 #: includes/admin/documentation.php:145
 msgid ""
 "All plugin emails use a shared HTML wrapper so registration links, "
-"assignment confirmations, cancellations, and announcements have a consistent"
-" look."
+"assignment confirmations, cancellations, and announcements have a consistent "
+"look."
 msgstr ""
 "Alle plugin-e-mails gebruiken een gedeelde HTML-wrapper, zodat "
-"registratielinks, toewijzingsbevestigingen, afmeldingen en aankondigingen er"
-" consistent uitzien."
+"registratielinks, toewijzingsbevestigingen, afmeldingen en aankondigingen er "
+"consistent uitzien."
 
 #: includes/admin/documentation.php:146
 msgid ""
 "Integrators can customize or fully replace this wrapper in theme code or a "
 "small companion plugin using WordPress filters."
 msgstr ""
-"Integrators kunnen deze wrapper aanpassen of volledig vervangen in themacode"
-" of een kleine begeleidende plugin met behulp van WordPress-filters."
+"Integrators kunnen deze wrapper aanpassen of volledig vervangen in themacode "
+"of een kleine begeleidende plugin met behulp van WordPress-filters."
 
 #: includes/admin/documentation.php:148
 msgid ""
@@ -1169,8 +1166,8 @@ msgstr ""
 
 #: includes/admin/documentation.php:161
 msgid ""
-"A log of automatically deleted accounts (up to the last 100) is shown at the"
-" bottom of the Volunteers page."
+"A log of automatically deleted accounts (up to the last 100) is shown at the "
+"bottom of the Volunteers page."
 msgstr ""
 "Een logboek van automatisch verwijderde accounts (tot de laatste 100) wordt "
 "onderaan de pagina Vrijwilligers weergegeven."
@@ -1196,8 +1193,8 @@ msgstr "Hoe kan ik Volunteers handmatig toewijzen?"
 msgid ""
 "In the admin dashboard under “Volunteer Overview” for each shift via form."
 msgstr ""
-"In het admin­dashboard onder \"Volunteer­overzicht\" voor elke dienst via "
-"een formulier."
+"In het admin­dashboard onder \"Volunteer­overzicht\" voor elke dienst via een "
+"formulier."
 
 #: includes/admin/documentation.php:171
 msgid "What happens when shifts are full?"
@@ -1205,9 +1202,9 @@ msgstr "Wat gebeurt er als diensten vol zijn?"
 
 #: includes/admin/documentation.php:172
 msgid ""
-"By default, full shifts are hidden on the volunteer page. You can optionally"
-" show them in a separate read-only section by enabling \"Show full shifts to"
-" volunteers\" under Settings."
+"By default, full shifts are hidden on the volunteer page. You can optionally "
+"show them in a separate read-only section by enabling \"Show full shifts to "
+"volunteers\" under Settings."
 msgstr ""
 "Standaard zijn volle diensten verborgen op de Volunteer­pagina. Je kunt ze "
 "optioneel weergeven in een aparte alleen-lezen sectie door \"Volle diensten "
@@ -1224,9 +1221,9 @@ msgid ""
 "understaffing warning. This is informational only – no signup rules are "
 "enforced based on the minimum."
 msgstr ""
-"Je kunt een minimum aantal Volunteers per dienst instellen. Het "
-"admin­dashboard markeert diensten die het minimum niet hebben bereikt met "
-"een onderbezettingswaarschuwing. Dit is alleen informatief – er worden geen "
+"Je kunt een minimum aantal Volunteers per dienst instellen. Het admin­"
+"dashboard markeert diensten die het minimum niet hebben bereikt met een "
+"onderbezettingswaarschuwing. Dit is alleen informatief – er worden geen "
 "aanmeldingsregels afgedwongen op basis van het minimum."
 
 #: includes/admin/documentation.php:180
@@ -1264,8 +1261,8 @@ msgid ""
 "tools:"
 msgstr ""
 "Diensten en afdelingen zijn gewone WordPress-berichten en taxonomietermen. "
-"Je kunt de opzet van een andere site daarom overnemen met de eigen "
-"export-/importtools van WordPress:"
+"Je kunt de opzet van een andere site daarom overnemen met de eigen export-/"
+"importtools van WordPress:"
 
 #. translators: %s: link to the Tools > Export screen
 #: includes/admin/import.php:45
@@ -1298,8 +1295,8 @@ msgid ""
 "included in the export, since another site's user IDs would be meaningless "
 "here."
 msgstr ""
-"Afdelingen (met kleur en hiërarchie) worden automatisch meegenomen voor elke"
-" afdeling met minstens één dienst. Aanmeldingen van vrijwilligers zijn niet "
+"Afdelingen (met kleur en hiërarchie) worden automatisch meegenomen voor elke "
+"afdeling met minstens één dienst. Aanmeldingen van vrijwilligers zijn niet "
 "opgenomen in de export, omdat de gebruikers-ID's van een andere site hier "
 "geen betekenis hebben."
 
@@ -1326,12 +1323,11 @@ msgstr "Verweesde toewijzingen opruimen"
 #: includes/admin/import.php:80
 msgid ""
 "Removes shift assignments for users that no longer exist in WordPress. This "
-"can happen when a user was deleted without the plugin's cleanup hook "
-"running."
+"can happen when a user was deleted without the plugin's cleanup hook running."
 msgstr ""
 "Verwijdert diensttoewijzingen voor gebruikers die niet meer bestaan in "
-"WordPress. Dit kan gebeuren als een gebruiker is verwijderd zonder eerst uit"
-" de diensten te worden uitgeschreven."
+"WordPress. Dit kan gebeuren als een gebruiker is verwijderd zonder eerst uit "
+"de diensten te worden uitgeschreven."
 
 #: includes/admin/import.php:84
 msgid "No orphaned assignments found."
@@ -1368,8 +1364,8 @@ msgstr "Afbouw"
 
 #: includes/admin/import.php:285
 msgid ""
-"Dismantling of booths, tents, tables, etc. This person should be skilled and"
-" have experience in dismantling."
+"Dismantling of booths, tents, tables, etc. This person should be skilled and "
+"have experience in dismantling."
 msgstr ""
 "Afbouw van stands, tenten, tafels, etc. Deze persoon moet vaardig zijn en "
 "ervaring hebben met afbouw."
@@ -1408,8 +1404,8 @@ msgid ""
 "Help with various tasks that do not fit into another category. This person "
 "should be flexible and willing to take on different tasks."
 msgstr ""
-"Hulp bij diverse taken die niet in een andere categorie passen. Deze persoon"
-" moet flexibel zijn en bereid zijn om verschillende taken op zich te nemen."
+"Hulp bij diverse taken die niet in een andere categorie passen. Deze persoon "
+"moet flexibel zijn en bereid zijn om verschillende taken op zich te nemen."
 
 #: includes/admin/import.php:289
 msgid "Trash Hero"
@@ -1429,8 +1425,8 @@ msgstr "Bar"
 
 #: includes/admin/import.php:290
 msgid ""
-"People for the bar, who can also tap beer, are important. This person should"
-" be friendly and good with customers."
+"People for the bar, who can also tap beer, are important. This person should "
+"be friendly and good with customers."
 msgstr ""
 "Medewerkers voor de bar die ook bier kunnen tappen zijn belangrijk. Deze "
 "persoon moet vriendelijk zijn en goed met klanten kunnen omgaan."
@@ -1441,11 +1437,11 @@ msgstr "Statiegeld"
 
 #: includes/admin/import.php:291
 msgid ""
-"Return of plates and cups. There should always be at least one person at the"
-" deposit stand."
+"Return of plates and cups. There should always be at least one person at the "
+"deposit stand."
 msgstr ""
-"Retourneren van borden en bekers. Er moet altijd minstens één persoon bij de"
-" statiegeldbalie staan."
+"Retourneren van borden en bekers. Er moet altijd minstens één persoon bij de "
+"statiegeldbalie staan."
 
 #: includes/admin/import.php:292
 msgid "Grill"
@@ -1569,8 +1565,8 @@ msgid ""
 "If enabled, WordPress will not send the default \"set your password\" email "
 "to newly registered volunteers."
 msgstr ""
-"Als ingeschakeld, stuurt WordPress geen standaard 'stel uw wachtwoord "
-"in'-e-mail naar nieuw geregistreerde vrijwilligers."
+"Als ingeschakeld, stuurt WordPress geen standaard 'stel uw wachtwoord in'-e-"
+"mail naar nieuw geregistreerde vrijwilligers."
 
 #: includes/admin/settings.php:268
 msgid "Rules"
@@ -1624,8 +1620,7 @@ msgstr ""
 "Voegt een CAPTCHA-uitdaging toe aan het registratieformulier om "
 "geautomatiseerde spamregistraties te blokkeren."
 
-#. translators: %s = link to the Simple Cloudflare Turnstile plugin on
-#. WordPress.org
+#. translators: %s = link to the Simple Cloudflare Turnstile plugin on WordPress.org
 #: includes/admin/settings.php:367
 #, php-format
 msgid "Requires the free %s plugin to be installed and activated."
@@ -1638,8 +1633,8 @@ msgid ""
 "everyone."
 msgstr ""
 "De plugin Simple Cloudflare Turnstile is actief, maar heeft nog geen "
-"sitesleutel/geheime sleutel geconfigureerd. Zolang dit niet is ingesteld, is"
-" registratie voor iedereen geblokkeerd."
+"sitesleutel/geheime sleutel geconfigureerd. Zolang dit niet is ingesteld, is "
+"registratie voor iedereen geblokkeerd."
 
 #: includes/admin/settings.php:380
 msgid "CAPTCHA site key"
@@ -1648,8 +1643,8 @@ msgstr "CAPTCHA-sitesleutel"
 #: includes/admin/settings.php:383
 msgid ""
 "Get your keys from the provider's admin console. Not used for Cloudflare "
-"Turnstile — configure its site key in the Simple Cloudflare Turnstile plugin"
-" settings instead."
+"Turnstile — configure its site key in the Simple Cloudflare Turnstile plugin "
+"settings instead."
 msgstr ""
 "Haal uw sleutels op uit de beheerconsole van de aanbieder. Niet gebruikt "
 "voor Cloudflare Turnstile — configureer de sitesleutel in plaats daarvan in "
@@ -1714,8 +1709,7 @@ msgstr "Categoriefilter"
 #: includes/admin/settings.php:447
 msgid "Choose which filter controls appear on the volunteer shift selector."
 msgstr ""
-"Kies welke filteropties worden getoond op de dienstkiezer voor "
-"vrijwilligers."
+"Kies welke filteropties worden getoond op de dienstkiezer voor vrijwilligers."
 
 #: includes/admin/settings.php:455
 msgid "Formatting"
@@ -1848,13 +1842,12 @@ msgstr "— Geen —"
 #: includes/admin/shift-metaboxes.php:90
 msgid ""
 "Only staff-side users are shown here by default. If selected, this user is "
-"used as the sender fallback for shift emails unless a custom organizer "
-"name/email is entered below."
+"used as the sender fallback for shift emails unless a custom organizer name/"
+"email is entered below."
 msgstr ""
 "Standaard worden hier alleen back-endgebruikers getoond. Indien "
-"geselecteerd, wordt deze gebruiker als terugval-afzender voor dienst-e-mails"
-" gebruikt, tenzij hieronder een aangepaste organisatornaam/e-mail is "
-"ingevuld."
+"geselecteerd, wordt deze gebruiker als terugval-afzender voor dienst-e-mails "
+"gebruikt, tenzij hieronder een aangepaste organisatornaam/e-mail is ingevuld."
 
 #: includes/admin/shift-metaboxes.php:92
 msgid "Organizer name:"
@@ -2139,8 +2132,7 @@ msgstr "verwijderd"
 msgid "Volunteer was %1$s: %2$s"
 msgstr "Volunteer is %1$s: %2$s"
 
-#. translators: %1$s = first name, %2$s = last name, %3$s = action, %4$s =
-#. title of shift
+#. translators: %1$s = first name, %2$s = last name, %3$s = action, %4$s = title of shift
 #: includes/notifications.php:128
 #, php-format
 msgid "The volunteer %1$s, %2$s was %3$s for the shift: %4$s"
@@ -2304,8 +2296,7 @@ msgstr "Hallo %1$s,<br><br>Je inloglink:<br>%2$s"
 msgid "Registration error. Please try again later."
 msgstr "Registratiefout. Probeer het later opnieuw."
 
-#. translators: %1$s = first name, %2$s = site name, %3$s = site url, %4$s =
-#. login url
+#. translators: %1$s = first name, %2$s = site name, %3$s = site url, %4$s = login url
 #: includes/registration.php:411
 #, php-format
 msgid ""
@@ -2315,8 +2306,7 @@ msgstr ""
 "Hallo %1$s,<br><br>Bedankt voor je registratie bij %2$s (%3$s).<br><br>Hier "
 "is je inloglink:<br>%4$s"
 
-#. translators: 1: number of open volunteer slots remaining, 2: total number
-#. of volunteer slots offered
+#. translators: 1: number of open volunteer slots remaining, 2: total number of volunteer slots offered
 #: includes/shiftselector.php:42
 #, php-format
 msgid "%1$d/%2$d slots open"
@@ -2394,7 +2384,8 @@ msgstr "Je bent niet aangemeld voor deze dienst."
 #~ msgid "Comma-separated whole days, e.g. 7, 1"
 #~ msgstr "Kommagescheiden hele dagen, bijv. 7, 1"
 
-#~ msgid "Use {first_name} and {last_name} as placeholders in the message body."
+#~ msgid ""
+#~ "Use {first_name} and {last_name} as placeholders in the message body."
 #~ msgstr ""
 #~ "Gebruik {first_name} en {last_name} als plaatshouders in de berichttekst."
 
@@ -2406,8 +2397,8 @@ msgstr "Je bent niet aangemeld voor deze dienst."
 #~ msgstr ""
 #~ "De naam en het e-mailadres van de afzender kunnen per verzending worden "
 #~ "overschreven. Gebruik {first_name} en {last_name} als "
-#~ "personalisatieplaatshouders. HTML-opmaak wordt ondersteund — de live preview"
-#~ " onder het formulier toont de e-mail zoals hij eruit zal zien."
+#~ "personalisatieplaatshouders. HTML-opmaak wordt ondersteund — de live "
+#~ "preview onder het formulier toont de e-mail zoals hij eruit zal zien."
 
 #~ msgid "Only the volunteers assigned to a selected shift."
 #~ msgstr ""
@@ -2416,24 +2407,25 @@ msgstr "Je bent niet aangemeld voor deze dienst."
 #~ msgid ""
 #~ "New in this release: fixed a bug where Administrators who also held the "
 #~ "Volunteer role could lose access to wp-admin menu items on sites using a "
-#~ "custom database table prefix, plus completed French and Dutch translations."
+#~ "custom database table prefix, plus completed French and Dutch "
+#~ "translations."
 #~ msgstr ""
 #~ "Nieuw in deze versie: een bug opgelost waarbij beheerders die ook de rol "
 #~ "Vrijwilliger hadden toegang tot wp-admin-menu-items konden verliezen op "
-#~ "sites met een aangepast databasetabelvoorvoegsel; daarnaast zijn de Franse "
-#~ "en Nederlandse vertalingen aangevuld."
+#~ "sites met een aangepast databasetabelvoorvoegsel; daarnaast zijn de "
+#~ "Franse en Nederlandse vertalingen aangevuld."
 
 #~ msgid "Get your keys from the provider's admin console."
 #~ msgstr "Haal uw sleutels op uit de beheerconsole van de aanbieder."
 
 #~ msgid ""
 #~ "New in this release: assign existing volunteers directly, add offline "
-#~ "volunteers without an email address, and set a per-shift organizer name and "
-#~ "email for notifications."
+#~ "volunteers without an email address, and set a per-shift organizer name "
+#~ "and email for notifications."
 #~ msgstr ""
 #~ "Nieuw in deze versie: bestaande vrijwilligers direct toewijzen, offline "
-#~ "vrijwilligers zonder e-mailadres toevoegen en een eigen organisatornaam en "
-#~ "e-mailadres per dienst instellen."
+#~ "vrijwilligers zonder e-mailadres toevoegen en een eigen organisatornaam "
+#~ "en e-mailadres per dienst instellen."
 
 #~ msgid "Leave empty to use the global notification email."
 #~ msgstr "Leeg laten om het globale meldingsadres te gebruiken."

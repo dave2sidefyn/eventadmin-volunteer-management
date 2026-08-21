@@ -4,7 +4,7 @@ Tags: volunteer, shift, planning, event
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.9.0
+Stable tag: 1.10.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -63,6 +63,19 @@ You can set a minimum number of volunteers per shift. The admin dashboard will h
 3. Statistics & charts in the backend
 
 == Changelog ==
+
+= Version 1.10.0 =
+* New: Send Announcement can now attach a PDF from the media library to every email in the batch
+* New: {shifts} placeholder in Send Announcement lists each recipient's own upcoming shifts in the message body
+* New: Shift overview has two additional views alongside Cards — a flat, exportable-looking Table view and a Timeline view showing a per-volunteer Gantt-style chart of shift start/end times
+* New: Timeline view shows open (unfilled) slots as red (below the shift's minimum) or grey (optional, up to maximum) bars, with a toggle to show or hide them, hour-aligned time axis, and the shift name drawn directly on each bar
+* New: Click an open slot in the Timeline, or use the new "Add volunteer" button in the Table view, to assign a volunteer without leaving the page
+* New: Table and Timeline views show each shift's capacity (assigned/max, plus minimum when set)
+* Fix: Shift-selection dropdowns (Send Announcement, Volunteers filter) were sorted as plain strings and could be scrambled by differing date formats between admin-entered and imported shifts; now sorted correctly and by shift name, then time
+* Fix: Those same dropdowns showed a bogus end time (whatever time the page happened to load) instead of the shift's real end time, or none at all
+* Fix: The "Add volunteers manually" dropdown sorted by a WordPress field this plugin never sets, unrelated to the names actually shown; now sorted by the same name
+* Fix: Shift overview no longer paginates at 20 shifts per page — a full event's shift list now renders on one page
+* Fix: A negative value (e.g. "-1") in the reminder-days setting was silently turned into a positive reminder day instead of being ignored; clarified that leaving the field empty disables reminder emails entirely
 
 = Version 1.9.0 =
 * New: Send Announcement now shows a live recipient count for a selected shift or category, not just for "All"/"Subscribed"
