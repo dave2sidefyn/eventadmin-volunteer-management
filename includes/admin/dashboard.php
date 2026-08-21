@@ -272,9 +272,11 @@ function eventadmin_admin_overview_page(): void
     $raw_time   = $filter_valid && isset($_GET['filter_time']) ? sanitize_text_field(wp_unslash($_GET['filter_time'])) : '';
     $raw_sortby = $filter_valid && isset($_GET['sort_by'])     ? sanitize_text_field(wp_unslash($_GET['sort_by']))     : '';
     $raw_order  = $filter_valid && isset($_GET['order'])       ? sanitize_text_field(wp_unslash($_GET['order']))       : '';
+    $raw_view   = $filter_valid && isset($_GET['filter_view']) ? sanitize_text_field(wp_unslash($_GET['filter_view'])) : '';
     $time_filter = in_array($raw_time, $allowed_time_filters, true)          ? $raw_time              : 'future';
     $sort_by     = in_array($raw_sortby, $allowed_sort_by, true)             ? $raw_sortby            : 'date';
     $order       = in_array(strtoupper($raw_order), $allowed_orders, true)  ? strtoupper($raw_order) : 'ASC';
+    $view        = $raw_view === 'table' ? 'table' : 'cards';
 
     echo '<form method="get" action="edit.php" class="form-filters">';
     wp_nonce_field('eventadmin_filter_shifts', 'eventadmin_filter_shifts_nonce');
@@ -342,6 +344,16 @@ function eventadmin_admin_overview_page(): void
     }
     echo '</select></label>';
 
+    // View mode
+    echo '<label>' . esc_html__('View:', 'eventadmin-volunteer-management') . '<select name="filter_view">';
+    foreach ([
+        'cards' => esc_html__('Cards', 'eventadmin-volunteer-management'),
+        'table' => esc_html__('Table', 'eventadmin-volunteer-management'),
+    ] as $val => $label) {
+        echo '<option value="' . esc_attr($val) . '"' . selected($view, $val, false) . '>' . esc_html($label) . '</option>';
+    }
+    echo '</select></label>';
+
     echo '<input type="submit" class="button" value="' . esc_attr__('Filter', 'eventadmin-volunteer-management') . '">';
     echo '<a href="' . esc_html(admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-overview')) . '" class="button">' . esc_html__('Reset filter', 'eventadmin-volunteer-management') . '</a>';
 
@@ -362,6 +374,8 @@ function eventadmin_admin_overview_page(): void
         $selected_date,
         $total_found
     );
+
+    $table_rows = [];
 
     foreach ($shifts as $shift) {
         $title = esc_html($shift->post_title);
@@ -393,6 +407,27 @@ function eventadmin_admin_overview_page(): void
             ($selected_state === 'understaffed'        && !(count($users) < $max)) ||
             ($selected_state === 'heavilyunderstaffed' && !($min > 0 && count($users) < $min))
         ) {
+            continue;
+        }
+
+        if ($view === 'table') {
+            $shift_categories = wp_get_post_terms($shift->ID, 'eventadmin_shift_category');
+            $category_names   = implode(', ', wp_list_pluck($shift_categories, 'name'));
+            $period           = eventadmin_get_formatted_zeitraum($start, $end);
+            if (empty($users)) {
+                $table_rows[] = [$category_names, $title, $period, '', '', ''];
+            } else {
+                foreach ($users as $u) {
+                    $table_rows[] = [
+                        $category_names,
+                        $title,
+                        $period,
+                        $u['name'],
+                        $u['offline'] ? '' : $u['email'],
+                        $u['phone'],
+                    ];
+                }
+            }
             continue;
         }
 
@@ -509,6 +544,33 @@ function eventadmin_admin_overview_page(): void
         echo '</div><hr>';
     }
 
+    if ($view === 'table') {
+        echo '<table class="widefat striped" id="eventadmin-roster-table">';
+        echo '<thead><tr>';
+        foreach ([
+            esc_html__('Category', 'eventadmin-volunteer-management'),
+            esc_html__('Shift', 'eventadmin-volunteer-management'),
+            esc_html__('Period', 'eventadmin-volunteer-management'),
+            esc_html__('Name', 'eventadmin-volunteer-management'),
+            esc_html__('E-Mail', 'eventadmin-volunteer-management'),
+            esc_html__('Phone', 'eventadmin-volunteer-management'),
+        ] as $col_label) {
+            echo '<th>' . $col_label . '</th>';
+        }
+        echo '</tr></thead><tbody>';
+        if (empty($table_rows)) {
+            echo '<tr><td colspan="6"><em>' . esc_html__('No shifts found.', 'eventadmin-volunteer-management') . '</em></td></tr>';
+        }
+        foreach ($table_rows as $row) {
+            echo '<tr>';
+            foreach ($row as $cell) {
+                echo '<td>' . ($cell === '' ? '<em style="color:#aaa;">—</em>' : esc_html($cell)) . '</td>';
+            }
+            echo '</tr>';
+        }
+        echo '</tbody></table>';
+    }
+
     // Pagination
     $total_pages = $total_found > 0 ? (int)ceil($total_found / $per_page) : 1;
     if ($total_pages > 1) {
@@ -523,6 +585,7 @@ function eventadmin_admin_overview_page(): void
             'filter_time'                     => $time_filter !== 'future' ? $time_filter : null,
             'sort_by'                         => $sort_by !== 'date' ? $sort_by : null,
             'order'                           => $order !== 'ASC' ? $order : null,
+            'filter_view'                     => $view !== 'cards' ? $view : null,
             'eventadmin_filter_shifts_nonce'  => wp_create_nonce('eventadmin_filter_shifts'),
         ]), admin_url('edit.php'));
 

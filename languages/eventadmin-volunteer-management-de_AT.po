@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-08-21T11:46:13+00:00\n"
+"POT-Creation-Date: 2026-08-21T12:36:53+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: de_AT\n"
 "MIME-Version: 1.0\n"
@@ -79,7 +79,7 @@ msgid "Dismiss"
 msgstr "Schließen"
 
 #: includes/admin/bulk-email.php:21 includes/admin/bulk-email.php:22
-#: includes/admin/documentation.php:130 includes/admin/volunteer-list.php:121
+#: includes/admin/documentation.php:130 includes/admin/volunteer-list.php:123
 msgid "Send Announcement"
 msgstr "Ankündigung senden"
 
@@ -104,11 +104,11 @@ msgstr "Absendername"
 msgid "From email"
 msgstr "Absender-E-Mail"
 
-#: includes/admin/bulk-email.php:58 includes/admin/bulk-email.php:236
+#: includes/admin/bulk-email.php:58 includes/admin/bulk-email.php:237
 msgid "Subject"
 msgstr "Betreff"
 
-#: includes/admin/bulk-email.php:61 includes/admin/bulk-email.php:242
+#: includes/admin/bulk-email.php:61 includes/admin/bulk-email.php:243
 msgid "Message"
 msgstr "Nachricht"
 
@@ -120,7 +120,7 @@ msgstr "Anhang (optional)"
 msgid "Select PDF…"
 msgstr "PDF auswählen…"
 
-#: includes/admin/bulk-email.php:69 includes/admin/dashboard.php:490
+#: includes/admin/bulk-email.php:69 includes/admin/dashboard.php:532
 msgid "Remove"
 msgstr "Entfernen"
 
@@ -128,7 +128,7 @@ msgstr "Entfernen"
 msgid "The PDF will be attached to every email in this announcement."
 msgstr "Das PDF wird jeder E-Mail dieser Ankündigung angehängt."
 
-#: includes/admin/bulk-email.php:104 includes/admin/bulk-email.php:237
+#: includes/admin/bulk-email.php:104 includes/admin/bulk-email.php:238
 msgid "Recipients"
 msgstr "Empfänger"
 
@@ -146,7 +146,7 @@ msgstr[0] "%d Empfänger"
 msgstr[1] "%d Empfänger"
 
 #: includes/admin/bulk-email.php:120 includes/admin/documentation.php:134
-#: includes/admin/volunteer-list.php:93
+#: includes/admin/volunteer-list.php:94
 msgid "All volunteers"
 msgstr "Alle Volunteers"
 
@@ -166,216 +166,216 @@ msgstr "Volunteers einer bestimmten Schicht"
 msgid "— Select shift —"
 msgstr "— Schicht auswählen —"
 
-#: includes/admin/bulk-email.php:150 includes/admin/documentation.php:136
+#: includes/admin/bulk-email.php:151 includes/admin/documentation.php:136
 msgid "Volunteers of a specific category"
 msgstr "Volunteers einer bestimmten Kategorie"
 
-#: includes/admin/bulk-email.php:154
+#: includes/admin/bulk-email.php:155
 msgid "— Select category —"
 msgstr "— Kategorie auswählen —"
 
-#: includes/admin/bulk-email.php:166
+#: includes/admin/bulk-email.php:167
 msgid "Start sending"
 msgstr "Senden starten"
 
-#: includes/admin/bulk-email.php:171
+#: includes/admin/bulk-email.php:172
 msgid "Preview (example data)"
 msgstr "Vorschau (Beispieldaten)"
 
-#: includes/admin/bulk-email.php:172
+#: includes/admin/bulk-email.php:173
 msgid "From:"
 msgstr "Von:"
 
-#: includes/admin/bulk-email.php:173 includes/admin/settings.php:644
+#: includes/admin/bulk-email.php:174 includes/admin/settings.php:644
 msgid "Subject:"
 msgstr "Betreff:"
 
-#: includes/admin/bulk-email.php:174 includes/admin/bulk-email.php:300
+#: includes/admin/bulk-email.php:175 includes/admin/bulk-email.php:301
 msgid "Attachment:"
 msgstr "Anhang:"
 
-#: includes/admin/bulk-email.php:181
+#: includes/admin/bulk-email.php:182
 msgid "Sending in progress…"
 msgstr "Senden läuft…"
 
-#: includes/admin/bulk-email.php:202
+#: includes/admin/bulk-email.php:203
 msgid "Done! All emails sent."
 msgstr "Fertig! Alle E-Mails wurden gesendet."
 
-#: includes/admin/bulk-email.php:203
+#: includes/admin/bulk-email.php:204
 msgid "({failed} could not be delivered)"
 msgstr "({failed} konnte nicht zugestellt werden)"
 
-#: includes/admin/bulk-email.php:204 includes/admin/volunteer-list.php:358
+#: includes/admin/bulk-email.php:205 includes/admin/volunteer-list.php:361
 msgid "An error occurred. Please try again."
 msgstr "Ein Fehler ist aufgetreten. Bitte versuche es erneut."
 
-#: includes/admin/bulk-email.php:205
+#: includes/admin/bulk-email.php:206
 msgid "Sent {sent} of {total}…"
 msgstr "{sent} von {total} gesendet…"
 
-#: includes/admin/bulk-email.php:206
+#: includes/admin/bulk-email.php:207
 msgid "Counting…"
 msgstr "Zähle…"
 
-#: includes/admin/bulk-email.php:207
+#: includes/admin/bulk-email.php:208
 msgid "{n} recipient"
 msgstr "{n} Empfänger"
 
-#: includes/admin/bulk-email.php:208
+#: includes/admin/bulk-email.php:209
 msgid "{n} recipients"
 msgstr "{n} Empfänger"
 
-#: includes/admin/bulk-email.php:209
+#: includes/admin/bulk-email.php:210
 msgid "Select a PDF to attach"
 msgstr "PDF zum Anhängen auswählen"
 
-#: includes/admin/bulk-email.php:210
+#: includes/admin/bulk-email.php:211
 msgid "Use this PDF"
 msgstr "Dieses PDF verwenden"
 
-#: includes/admin/bulk-email.php:221
+#: includes/admin/bulk-email.php:222
 #, php-format
 msgid "Send History (%d entry)"
 msgid_plural "Send History (%d entries)"
 msgstr[0] "Sendeverlauf (%d Eintrag)"
 msgstr[1] "Sendeverlauf (%d Einträge)"
 
-#: includes/admin/bulk-email.php:227
+#: includes/admin/bulk-email.php:228
 msgid "No announcements sent yet."
 msgstr "Noch keine Ankündigungen gesendet."
 
-#: includes/admin/bulk-email.php:230
+#: includes/admin/bulk-email.php:231
 msgid "Filter…"
 msgstr "Filtern…"
 
-#: includes/admin/bulk-email.php:235 includes/admin/dashboard.php:328
-#: includes/admin/volunteer-list.php:303 includes/admin/volunteer-list.php:329
+#: includes/admin/bulk-email.php:236 includes/admin/dashboard.php:330
+#: includes/admin/volunteer-list.php:306 includes/admin/volunteer-list.php:332
 msgid "Date"
 msgstr "Datum"
 
-#: includes/admin/bulk-email.php:238
+#: includes/admin/bulk-email.php:239
 msgid "From"
 msgstr "Von"
 
-#: includes/admin/bulk-email.php:239
+#: includes/admin/bulk-email.php:240
 msgid "Sent to"
 msgstr "Gesendet an"
 
-#: includes/admin/bulk-email.php:240
+#: includes/admin/bulk-email.php:241
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: includes/admin/bulk-email.php:241
+#: includes/admin/bulk-email.php:242
 msgid "Sent by"
 msgstr "Gesendet von"
 
-#: includes/admin/bulk-email.php:245 includes/admin/volunteer-list.php:184
+#: includes/admin/bulk-email.php:246 includes/admin/volunteer-list.php:186
 msgid "Click to sort"
 msgstr "Zum Sortieren klicken"
 
-#: includes/admin/bulk-email.php:257 includes/admin/volunteer-list.php:277
+#: includes/admin/bulk-email.php:258 includes/admin/volunteer-list.php:280
 msgid "Subscribed"
 msgstr "Angemeldet"
 
-#: includes/admin/bulk-email.php:259
+#: includes/admin/bulk-email.php:260
 msgid "Without an upcoming shift"
 msgstr "Ohne bevorstehende Schicht"
 
-#: includes/admin/bulk-email.php:261
+#: includes/admin/bulk-email.php:262
 msgid "With an upcoming shift"
 msgstr "Mit bevorstehender Schicht"
 
 #. translators: %s is the shift title
-#: includes/admin/bulk-email.php:264
+#: includes/admin/bulk-email.php:265
 #, php-format
 msgid "Shift: %s"
 msgstr "Schicht: %s"
 
 #. translators: %s is the category name
-#: includes/admin/bulk-email.php:267
+#: includes/admin/bulk-email.php:268
 #, php-format
 msgid "Category: %s"
 msgstr "Kategorie: %s"
 
-#: includes/admin/bulk-email.php:271 includes/admin/dashboard.php:286
-#: includes/admin/dashboard.php:295 includes/admin/dashboard.php:304
-#: includes/admin/dashboard.php:319 includes/admin/volunteer-list.php:104
+#: includes/admin/bulk-email.php:272 includes/admin/dashboard.php:288
+#: includes/admin/dashboard.php:297 includes/admin/dashboard.php:306
+#: includes/admin/dashboard.php:321 includes/admin/volunteer-list.php:106
 msgid "All"
 msgstr "Alle"
 
-#: includes/admin/bulk-email.php:452
+#: includes/admin/bulk-email.php:454
 msgid "No upcoming shifts."
 msgstr "Keine bevorstehenden Schichten."
 
-#: includes/admin/bulk-email.php:475 includes/admin/bulk-email.php:507
-#: includes/admin/bulk-email.php:603 includes/admin/import.php:134
+#: includes/admin/bulk-email.php:477 includes/admin/bulk-email.php:509
+#: includes/admin/bulk-email.php:605 includes/admin/import.php:134
 #: includes/admin/import.php:146 includes/admin/import.php:163
-#: includes/admin/import.php:174 includes/admin/volunteer-list.php:380
-#: includes/admin/volunteer-list.php:410 includes/admin/volunteer-list.php:439
-#: includes/admin/volunteer-list.php:507 includes/shiftselector.php:325
+#: includes/admin/import.php:174 includes/admin/volunteer-list.php:383
+#: includes/admin/volunteer-list.php:413 includes/admin/volunteer-list.php:442
+#: includes/admin/volunteer-list.php:510 includes/shiftselector.php:325
 #: includes/shiftselector.php:373
 msgid "Security check failed."
 msgstr "Sicherheitsprüfung fehlgeschlagen."
 
-#: includes/admin/bulk-email.php:479 includes/admin/bulk-email.php:511
-#: includes/admin/bulk-email.php:607 includes/admin/volunteer-list.php:384
-#: includes/admin/volunteer-list.php:414 includes/admin/volunteer-list.php:443
-#: includes/admin/volunteer-list.php:511
+#: includes/admin/bulk-email.php:481 includes/admin/bulk-email.php:513
+#: includes/admin/bulk-email.php:609 includes/admin/volunteer-list.php:387
+#: includes/admin/volunteer-list.php:417 includes/admin/volunteer-list.php:446
+#: includes/admin/volunteer-list.php:514
 msgid "Insufficient permissions."
 msgstr "Unzureichende Berechtigungen."
 
-#: includes/admin/bulk-email.php:488
+#: includes/admin/bulk-email.php:490
 msgid "Invalid recipient type."
 msgstr "Ungültiger Empfängertyp."
 
-#: includes/admin/bulk-email.php:526
+#: includes/admin/bulk-email.php:528
 msgid "Subject and message are required."
 msgstr "Betreff und Nachricht sind erforderlich."
 
-#: includes/admin/bulk-email.php:530
+#: includes/admin/bulk-email.php:532
 msgid "Please select a shift."
 msgstr "Bitte eine Schicht auswählen."
 
-#: includes/admin/bulk-email.php:534
+#: includes/admin/bulk-email.php:536
 msgid "Please select a category."
 msgstr "Bitte eine Kategorie auswählen."
 
-#: includes/admin/bulk-email.php:538
+#: includes/admin/bulk-email.php:540
 msgid "No recipient specified."
 msgstr "Kein Empfänger angegeben."
 
-#: includes/admin/bulk-email.php:546
+#: includes/admin/bulk-email.php:548
 msgid "The selected attachment is not a valid PDF."
 msgstr "Der ausgewählte Anhang ist kein gültiges PDF."
 
-#: includes/admin/bulk-email.php:550
+#: includes/admin/bulk-email.php:552
 msgid "The selected attachment could not be found."
 msgstr "Der ausgewählte Anhang konnte nicht gefunden werden."
 
-#: includes/admin/bulk-email.php:614
+#: includes/admin/bulk-email.php:616
 msgid "Job not found or expired."
 msgstr "Job nicht gefunden oder abgelaufen."
 
 #. translators: %d is the number of failed deliveries
-#: includes/admin/bulk-email.php:699
+#: includes/admin/bulk-email.php:701
 #, php-format
 msgid "%d emails could not be delivered."
 msgstr "%d E-Mails konnten nicht zugestellt werden."
 
-#: includes/admin/bulk-email.php:702
+#: includes/admin/bulk-email.php:704
 msgid "All emails were delivered successfully."
 msgstr "Alle E-Mails wurden erfolgreich zugestellt."
 
 #. translators: %s is the email subject that was sent
-#: includes/admin/bulk-email.php:708
+#: includes/admin/bulk-email.php:710
 #, php-format
 msgid "[%s] Announcement sent: %s"
 msgstr "[%s] Ankündigung gesendet: %s"
 
 #. translators: 1: blog name, 2: email subject, 3: sent count, 4: delivery
 #. note
-#: includes/admin/bulk-email.php:714
+#: includes/admin/bulk-email.php:716
 #, php-format
 msgid ""
 "Your announcement <strong>%2$s</strong> was sent on %1$s.<br><br>Recipients:"
@@ -384,7 +384,7 @@ msgstr ""
 "Deine Ankündigung <strong>%2$s</strong> wurde am %1$s "
 "gesendet.<br><br>Empfänger: %3$d<br>%4$s"
 
-#: includes/admin/bulk-email.php:726
+#: includes/admin/bulk-email.php:728
 msgid "Announcement delivery summary"
 msgstr "Zusammenfassung der Ankündigungszustellung"
 
@@ -473,7 +473,7 @@ msgstr "Freie Plätze:"
 msgid "Empty"
 msgstr "Leer"
 
-#: includes/admin/dashboard.php:254 includes/admin/dashboard.php:420
+#: includes/admin/dashboard.php:254 includes/admin/dashboard.php:455
 msgid "Understaffed"
 msgstr "Unterbesetzt"
 
@@ -481,180 +481,198 @@ msgstr "Unterbesetzt"
 msgid "Heavily understaffed"
 msgstr "Stark unterbesetzt"
 
-#: includes/admin/dashboard.php:285
+#: includes/admin/dashboard.php:287
 msgid "Department:"
 msgstr "Abteilung:"
 
-#: includes/admin/dashboard.php:294
+#: includes/admin/dashboard.php:296
 msgid "State:"
 msgstr "Status:"
 
-#: includes/admin/dashboard.php:303
+#: includes/admin/dashboard.php:305
 msgid "Volunteers:"
 msgstr "Volunteers:"
 
-#: includes/admin/dashboard.php:312 includes/shiftselector.php:202
+#: includes/admin/dashboard.php:314 includes/shiftselector.php:202
 msgid "Date:"
 msgstr "Datum:"
 
-#: includes/admin/dashboard.php:315
+#: includes/admin/dashboard.php:317
 msgid "Show:"
 msgstr "Anzeigen:"
 
-#: includes/admin/dashboard.php:317
+#: includes/admin/dashboard.php:319
 msgid "Upcoming"
 msgstr "Bevorstehend"
 
-#: includes/admin/dashboard.php:318
+#: includes/admin/dashboard.php:320
 msgid "Past"
 msgstr "Vergangen"
 
-#: includes/admin/dashboard.php:326
+#: includes/admin/dashboard.php:328
 msgid "Sort by:"
 msgstr "Sortieren nach:"
 
-#: includes/admin/dashboard.php:329 includes/admin/dashboard.php:475
-#: includes/admin/dashboard.php:680 includes/admin/dashboard.php:771
-#: includes/admin/settings.php:515 includes/admin/volunteer-list.php:173
-#: includes/admin/volunteer-list.php:330
+#: includes/admin/dashboard.php:331 includes/admin/dashboard.php:517
+#: includes/admin/dashboard.php:554 includes/admin/dashboard.php:750
+#: includes/admin/dashboard.php:841 includes/admin/settings.php:515
+#: includes/admin/volunteer-list.php:175 includes/admin/volunteer-list.php:333
 msgid "Name"
 msgstr "Name"
 
-#: includes/admin/dashboard.php:336
+#: includes/admin/dashboard.php:338
 msgid "Order:"
 msgstr "Reihenfolge:"
 
-#: includes/admin/dashboard.php:338
+#: includes/admin/dashboard.php:340
 msgid "Ascending"
 msgstr "Aufsteigend"
 
-#: includes/admin/dashboard.php:339
+#: includes/admin/dashboard.php:341
 msgid "Descending"
 msgstr "Absteigend"
 
-#: includes/admin/dashboard.php:345 includes/admin/volunteer-list.php:111
+#: includes/admin/dashboard.php:348
+msgid "View:"
+msgstr "Ansicht:"
+
+#: includes/admin/dashboard.php:350
+msgid "Cards"
+msgstr "Karten"
+
+#: includes/admin/dashboard.php:351
+msgid "Table"
+msgstr "Tabelle"
+
+#: includes/admin/dashboard.php:357 includes/admin/volunteer-list.php:113
 msgid "Filter"
 msgstr "Filtern"
 
-#: includes/admin/dashboard.php:346
+#: includes/admin/dashboard.php:358
 msgid "Reset filter"
 msgstr "Filter zurücksetzen"
 
-#: includes/admin/dashboard.php:411
+#: includes/admin/dashboard.php:446
 msgid "CSV for this shift"
 msgstr "CSV für diese Schicht"
 
-#: includes/admin/dashboard.php:415
+#: includes/admin/dashboard.php:450
 msgid "Period:"
 msgstr "Zeitraum:"
 
-#: includes/admin/dashboard.php:416 includes/admin/dashboard.php:766
+#: includes/admin/dashboard.php:451 includes/admin/dashboard.php:836
 msgid "Filled:"
 msgstr "Besetzt:"
 
-#: includes/admin/dashboard.php:418
+#: includes/admin/dashboard.php:453
 msgid "Min.:"
 msgstr "Min.:"
 
-#: includes/admin/dashboard.php:427
+#: includes/admin/dashboard.php:462
 msgid "Add volunteers manually"
 msgstr "Volunteer manuell hinzufügen"
 
-#: includes/admin/dashboard.php:446
+#: includes/admin/dashboard.php:488
 msgid "Select existing volunteer…"
 msgstr "Bestehende Person auswählen…"
 
-#: includes/admin/dashboard.php:452 includes/admin/dashboard.php:467
+#: includes/admin/dashboard.php:494 includes/admin/dashboard.php:509
 msgid "Send confirmation email"
 msgstr "Bestätigungs-E-Mail senden"
 
-#: includes/admin/dashboard.php:453
+#: includes/admin/dashboard.php:495
 msgid "Add to shift"
 msgstr "Zur Schicht hinzufügen"
 
-#: includes/admin/dashboard.php:455
+#: includes/admin/dashboard.php:497
 msgid "or add a new volunteer below"
 msgstr "oder neue Person unten hinzufügen"
 
-#: includes/admin/dashboard.php:463 includes/admin/volunteer-list.php:130
+#: includes/admin/dashboard.php:505 includes/admin/volunteer-list.php:132
 #: includes/profile.php:50 includes/registration.php:254
 msgid "First name"
 msgstr "Vorname"
 
-#: includes/admin/dashboard.php:464 includes/admin/volunteer-list.php:131
+#: includes/admin/dashboard.php:506 includes/admin/volunteer-list.php:133
 #: includes/profile.php:55 includes/registration.php:257
 msgid "Last name"
 msgstr "Nachname"
 
-#: includes/admin/dashboard.php:465 includes/admin/volunteer-list.php:134
+#: includes/admin/dashboard.php:507 includes/admin/volunteer-list.php:136
 msgid "E-Mail (optional)"
 msgstr "E-Mail (optional)"
 
-#: includes/admin/dashboard.php:465 includes/admin/volunteer-list.php:134
+#: includes/admin/dashboard.php:507 includes/admin/volunteer-list.php:136
 msgid "Leave blank for offline volunteers without an email address"
 msgstr "Leer lassen für Offline-Volunteers ohne E-Mail-Adresse"
 
-#: includes/admin/dashboard.php:466 includes/admin/dashboard.php:475
-#: includes/admin/dashboard.php:682 includes/admin/dashboard.php:773
-#: includes/admin/volunteer-list.php:135 includes/admin/volunteer-list.php:175
+#: includes/admin/dashboard.php:508 includes/admin/dashboard.php:517
+#: includes/admin/dashboard.php:556 includes/admin/dashboard.php:752
+#: includes/admin/dashboard.php:843 includes/admin/volunteer-list.php:137
+#: includes/admin/volunteer-list.php:177
 msgid "Phone"
 msgstr "Telefon"
 
-#: includes/admin/dashboard.php:468
+#: includes/admin/dashboard.php:510
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: includes/admin/dashboard.php:475 includes/admin/dashboard.php:681
-#: includes/admin/dashboard.php:772 includes/admin/settings.php:525
-#: includes/admin/volunteer-list.php:174 includes/admin/volunteer-list.php:304
-#: includes/admin/volunteer-list.php:331 includes/profile.php:62
-#: includes/registration.php:263
+#: includes/admin/dashboard.php:517 includes/admin/dashboard.php:555
+#: includes/admin/dashboard.php:751 includes/admin/dashboard.php:842
+#: includes/admin/settings.php:525 includes/admin/volunteer-list.php:176
+#: includes/admin/volunteer-list.php:307 includes/admin/volunteer-list.php:334
+#: includes/profile.php:62 includes/registration.php:263
 msgid "E-Mail"
 msgstr "E-Mail-Adresse"
 
-#: includes/admin/dashboard.php:475
+#: includes/admin/dashboard.php:517
 msgid "Action"
 msgstr "Aktion"
 
-#: includes/admin/dashboard.php:479 includes/admin/dashboard.php:786
-#: includes/admin/documentation.php:107 includes/admin/volunteer-list.php:244
+#: includes/admin/dashboard.php:521 includes/admin/dashboard.php:856
+#: includes/admin/documentation.php:107 includes/admin/volunteer-list.php:247
 msgid "Offline"
 msgstr "Offline"
 
-#: includes/admin/dashboard.php:489
+#: includes/admin/dashboard.php:531
 msgid "Notify volunteer"
 msgstr "Volunteer benachrichtigen"
 
-#: includes/admin/dashboard.php:498
+#: includes/admin/dashboard.php:540
 msgid "No volunteers assigned."
 msgstr "Es wurden keine Volunteers eingeteilt."
 
-#: includes/admin/dashboard.php:580
-msgid "Invalid volunteer selected."
-msgstr "Ungültige Person ausgewählt."
-
-#: includes/admin/dashboard.php:677
+#: includes/admin/dashboard.php:551 includes/admin/dashboard.php:747
 msgid "Category"
 msgstr "Kategorie"
 
-#: includes/admin/dashboard.php:678 includes/post-types.php:18
-#: includes/post-types.php:29
+#: includes/admin/dashboard.php:552 includes/admin/dashboard.php:748
+#: includes/post-types.php:18 includes/post-types.php:29
 msgid "Shift"
 msgstr "Schicht"
 
-#: includes/admin/dashboard.php:679 includes/admin/quick-edit.php:114
+#: includes/admin/dashboard.php:553 includes/admin/dashboard.php:749
+#: includes/admin/quick-edit.php:114
 msgid "Period"
 msgstr "Zeitraum"
 
-#: includes/admin/dashboard.php:683 includes/admin/quick-edit.php:60
+#: includes/admin/dashboard.php:562
+msgid "No shifts found."
+msgstr "Keine Schichten gefunden."
+
+#: includes/admin/dashboard.php:650
+msgid "Invalid volunteer selected."
+msgstr "Ungültige Person ausgewählt."
+
+#: includes/admin/dashboard.php:753 includes/admin/quick-edit.php:60
 msgid "Start"
 msgstr "Start"
 
-#: includes/admin/dashboard.php:684 includes/admin/quick-edit.php:61
+#: includes/admin/dashboard.php:754 includes/admin/quick-edit.php:61
 msgid "End"
 msgstr "Ende"
 
-#: includes/admin/dashboard.php:744
+#: includes/admin/dashboard.php:814
 msgid "Assigned Volunteers"
 msgstr "Zugewiesene Volunteers"
 
@@ -881,7 +899,7 @@ msgstr ""
 "Von einem Admin ohne E-Mail-Adresse erstellt. Kann sich nicht anmelden und "
 "erhält keine Benachrichtigungen."
 
-#: includes/admin/documentation.php:111 includes/admin/volunteer-list.php:253
+#: includes/admin/documentation.php:111 includes/admin/volunteer-list.php:256
 msgid "Manual"
 msgstr "Manuell"
 
@@ -893,7 +911,7 @@ msgstr ""
 "Von einem Admin über das Dashboard-Formular oder die Funktion \"Volunteer-"
 "Rolle vergeben\" hinzugefügt. Wird nie automatisch gelöscht."
 
-#: includes/admin/documentation.php:115 includes/admin/volunteer-list.php:247
+#: includes/admin/documentation.php:115 includes/admin/volunteer-list.php:250
 msgid "Unverified"
 msgstr "Nicht verifiziert"
 
@@ -908,7 +926,7 @@ msgstr ""
 "Link abläuft (~24 Std.). Der Badge verschwindet, sobald der Link geklickt "
 "wurde."
 
-#: includes/admin/documentation.php:119 includes/admin/volunteer-list.php:250
+#: includes/admin/documentation.php:119 includes/admin/volunteer-list.php:253
 msgid "Social"
 msgstr "Social Login"
 
@@ -1831,135 +1849,135 @@ msgid " (Copy)"
 msgstr " (Kopie)"
 
 #: includes/admin/volunteer-list.php:18 includes/admin/volunteer-list.php:19
-#: includes/admin/volunteer-list.php:84
+#: includes/admin/volunteer-list.php:85
 msgid "Volunteers"
 msgstr "Volunteers"
 
-#: includes/admin/volunteer-list.php:91
+#: includes/admin/volunteer-list.php:92
 msgid "Filter by shift:"
 msgstr "Nach Schicht filtern:"
 
-#: includes/admin/volunteer-list.php:102
+#: includes/admin/volunteer-list.php:104
 msgid "Category:"
 msgstr "Kategorie:"
 
-#: includes/admin/volunteer-list.php:113
+#: includes/admin/volunteer-list.php:115
 msgid "Reset"
 msgstr "Zurücksetzen"
 
-#: includes/admin/volunteer-list.php:120
+#: includes/admin/volunteer-list.php:122
 msgid "To send an email to multiple volunteers, use the"
 msgstr "Um eine E-Mail an mehrere Volunteers zu senden, verwende"
 
-#: includes/admin/volunteer-list.php:126
+#: includes/admin/volunteer-list.php:128
 msgid "Create new volunteer"
 msgstr "Neuen Volunteers erstellen"
 
-#: includes/admin/volunteer-list.php:137
+#: includes/admin/volunteer-list.php:139
 msgid "Create volunteer"
 msgstr "Volunteers erstellen"
 
-#: includes/admin/volunteer-list.php:145
+#: includes/admin/volunteer-list.php:147
 msgid "Grant volunteer role"
 msgstr "Volunteer-Rolle vergeben"
 
-#: includes/admin/volunteer-list.php:147
+#: includes/admin/volunteer-list.php:149
 msgid "All existing users already have the volunteer role."
 msgstr "Alle bestehenden Benutzer haben bereits die Volunteer-Rolle."
 
-#: includes/admin/volunteer-list.php:153
+#: includes/admin/volunteer-list.php:155
 msgid "— Select user —"
 msgstr "— Benutzer auswählen —"
 
-#: includes/admin/volunteer-list.php:159
+#: includes/admin/volunteer-list.php:161
 msgid "Grant role"
 msgstr "Rolle vergeben"
 
-#: includes/admin/volunteer-list.php:167
+#: includes/admin/volunteer-list.php:169
 msgid "Search volunteers…"
 msgstr "Volunteers suchen…"
 
-#: includes/admin/volunteer-list.php:176
+#: includes/admin/volunteer-list.php:178
 msgid "Announcements"
 msgstr "Ankündigungen"
 
-#: includes/admin/volunteer-list.php:177
+#: includes/admin/volunteer-list.php:179
 msgid "Upcoming shifts"
 msgstr "Bevorstehende Schichten"
 
-#: includes/admin/volunteer-list.php:178
+#: includes/admin/volunteer-list.php:180
 msgid "Registered"
 msgstr "Registriert"
 
-#: includes/admin/volunteer-list.php:179
+#: includes/admin/volunteer-list.php:181
 msgid "Last shift"
 msgstr "Letzte Schicht"
 
-#: includes/admin/volunteer-list.php:187
+#: includes/admin/volunteer-list.php:189
 msgid "Contact"
 msgstr "Kontaktieren"
 
-#: includes/admin/volunteer-list.php:188
+#: includes/admin/volunteer-list.php:190
 msgid "Actions"
 msgstr "Aktionen"
 
-#: includes/admin/volunteer-list.php:192
+#: includes/admin/volunteer-list.php:194
 msgid "No volunteers found."
 msgstr "Keine Volunteers gefunden."
 
-#: includes/admin/volunteer-list.php:278
+#: includes/admin/volunteer-list.php:281
 msgid "Opted out"
 msgstr "Abgemeldet"
 
-#: includes/admin/volunteer-list.php:284
+#: includes/admin/volunteer-list.php:287
 msgid "Email"
 msgstr "E-Mail senden"
 
-#: includes/admin/volunteer-list.php:290
+#: includes/admin/volunteer-list.php:293
 msgid "Remove role"
 msgstr "Rolle entfernen"
 
-#: includes/admin/volunteer-list.php:300
+#: includes/admin/volunteer-list.php:303
 msgid "Blocked registration attempts"
 msgstr "Blockierte Registrierungsversuche"
 
-#: includes/admin/volunteer-list.php:305
+#: includes/admin/volunteer-list.php:308
 msgid "IP"
 msgstr "IP"
 
-#: includes/admin/volunteer-list.php:306
+#: includes/admin/volunteer-list.php:309
 msgid "Provider"
 msgstr "Anbieter"
 
-#: includes/admin/volunteer-list.php:307
+#: includes/admin/volunteer-list.php:310
 msgid "Reason"
 msgstr "Grund"
 
-#: includes/admin/volunteer-list.php:325
+#: includes/admin/volunteer-list.php:328
 msgid "Auto-deleted unverified accounts"
 msgstr "Automatisch gelöschte, nicht verifizierte Konten"
 
-#: includes/admin/volunteer-list.php:326
+#: includes/admin/volunteer-list.php:329
 msgid "Clear log"
 msgstr "Protokoll leeren"
 
-#: includes/admin/volunteer-list.php:357
+#: includes/admin/volunteer-list.php:360
 msgid "volunteers"
 msgstr "Volunteers"
 
-#: includes/admin/volunteer-list.php:359
+#: includes/admin/volunteer-list.php:362
 msgid "Role granted. Reloading…"
 msgstr "Rolle vergeben. Wird neu geladen…"
 
-#: includes/admin/volunteer-list.php:360 includes/admin/volunteer-list.php:425
+#: includes/admin/volunteer-list.php:363 includes/admin/volunteer-list.php:428
 msgid "Role removed."
 msgstr "Rolle entfernt."
 
-#: includes/admin/volunteer-list.php:361 includes/admin/volunteer-list.php:493
+#: includes/admin/volunteer-list.php:364 includes/admin/volunteer-list.php:496
 msgid "Volunteer created. Reloading…"
 msgstr "Volunteer erstellt. Wird neu geladen…"
 
-#: includes/admin/volunteer-list.php:362
+#: includes/admin/volunteer-list.php:365
 msgid ""
 "Remove the volunteer role from {name}? They still have {shifts} upcoming "
 "shift(s)."
@@ -1967,33 +1985,33 @@ msgstr ""
 "Die Volunteer-Rolle von {name} entfernen? Diese Person hat noch {shifts} "
 "bevorstehende Schicht(en)."
 
-#: includes/admin/volunteer-list.php:363
+#: includes/admin/volunteer-list.php:366
 msgid "Remove the volunteer role from {name}?"
 msgstr "Die Volunteer-Rolle von {name} entfernen?"
 
-#: includes/admin/volunteer-list.php:364
+#: includes/admin/volunteer-list.php:367
 msgid "Clear the auto-deleted unverified accounts log? This cannot be undone."
 msgstr ""
 "Protokoll der automatisch gelöschten, nicht verifizierten Konten leeren? "
 "Dies kann nicht rückgängig gemacht werden."
 
-#: includes/admin/volunteer-list.php:391 includes/admin/volunteer-list.php:421
+#: includes/admin/volunteer-list.php:394 includes/admin/volunteer-list.php:424
 msgid "User not found."
 msgstr "Benutzer nicht gefunden."
 
-#: includes/admin/volunteer-list.php:396
+#: includes/admin/volunteer-list.php:399
 msgid "Role granted."
 msgstr "Rolle vergeben."
 
-#: includes/admin/volunteer-list.php:452
+#: includes/admin/volunteer-list.php:455
 msgid "First name is required."
 msgstr "Vorname ist erforderlich."
 
-#: includes/admin/volunteer-list.php:459
+#: includes/admin/volunteer-list.php:462
 msgid "A user with this e-mail already exists."
 msgstr "Ein Benutzer mit dieser E-Mail-Adresse existiert bereits."
 
-#: includes/admin/volunteer-list.php:515
+#: includes/admin/volunteer-list.php:518
 msgid "Log cleared."
 msgstr "Protokoll geleert."
 
@@ -2094,7 +2112,7 @@ msgid "The volunteer %1$s, %2$s was %3$s for the shift: %4$s"
 msgstr "Der Volunteer %1$s %2$s wurde für die Schicht %4$s %3$s"
 
 #. translators: %s = site name
-#: includes/notifications.php:339
+#: includes/notifications.php:340
 #, php-format
 msgid "This email was sent by %s."
 msgstr "Diese E-Mail wurde von %s gesendet."
