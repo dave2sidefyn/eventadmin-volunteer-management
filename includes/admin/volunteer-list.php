@@ -94,7 +94,8 @@ function eventadmin_volunteer_list_page(): void
     echo '<option value="">' . esc_html__('All volunteers', 'eventadmin-volunteer-management') . '</option>';
     foreach ($all_shifts as $shift) {
         $start = get_post_meta($shift->ID, 'shift_start', true);
-        $label = esc_html($shift->post_title) . ($start ? ' (' . esc_html(eventadmin_get_formatted_zeitraum($start, '')) . ')' : '');
+        $end   = get_post_meta($shift->ID, 'shift_end', true);
+        $label = esc_html($shift->post_title) . ($start ? ' (' . esc_html(eventadmin_get_formatted_zeitraum($start, $end)) . ')' : '');
         $sel   = selected($selected_shift, $shift->ID, false);
         echo '<option value="' . esc_attr($shift->ID) . '"' . $sel . '>' . $label . '</option>';
     }
