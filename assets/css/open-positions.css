@@ -1,0 +1,147 @@
+/**
+ * EventAdmin Volunteer Management - Public "open positions" list
+ * Styles for the [eventadmin_open_positions] shortcode.
+ * Kept self-contained (no dependency on cockpit.css) so it can be embedded
+ * on any public page.
+ */
+
+.eventadmin-open-positions {
+    margin: 1rem 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * Summary style (default) — one row per department with its open-slot count.
+ * ------------------------------------------------------------------------- */
+
+.eventadmin-open-positions.eaop-style-summary {
+    margin: 1.25rem 0;
+}
+
+.eventadmin-open-positions .eaop-summary-intro {
+    margin: 0 0 0.6rem;
+    font-weight: 700;
+}
+
+.eventadmin-open-positions .eaop-summary-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.eventadmin-open-positions .eaop-summary-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.eventadmin-open-positions .eaop-summary-item:last-child {
+    border-bottom: none;
+}
+
+.eventadmin-open-positions .eaop-summary-badge {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 3px;
+    background: var(--eaop-color, #9a9a9a);
+    flex: 0 0 auto;
+    align-self: center;
+}
+
+.eventadmin-open-positions .eaop-summary-name {
+    font-weight: 600;
+}
+
+.eventadmin-open-positions .eaop-summary-count {
+    margin-inline-start: auto;
+    padding-inline-start: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+ * List style — every open shift, grouped under its department.
+ * ------------------------------------------------------------------------- */
+
+.eventadmin-open-positions .eaop-ressort {
+    margin-bottom: 2rem;
+    margin-inline-start: calc(var(--eaop-depth, 0) * 1.5rem);
+}
+
+.eventadmin-open-positions .eaop-ressort-title {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--eaop-color, #9a9a9a);
+    font-size: 1.15rem;
+}
+
+.eventadmin-open-positions .eaop-ressort-badge {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 3px;
+    background: var(--eaop-color, #9a9a9a);
+    flex: 0 0 auto;
+    align-self: center;
+}
+
+.eventadmin-open-positions .eaop-ressort-name {
+    font-weight: 700;
+}
+
+.eventadmin-open-positions .eaop-ressort-open {
+    margin-inline-start: auto;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #555;
+    white-space: nowrap;
+}
+
+.eventadmin-open-positions .eaop-shift-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.eventadmin-open-positions .eaop-shift {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-inline-start: 4px solid var(--eaop-color, #9a9a9a);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.eventadmin-open-positions .eaop-shift-when {
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.eventadmin-open-positions .eaop-shift-title {
+    font-weight: 700;
+    margin: 0.15rem 0;
+}
+
+.eventadmin-open-positions .eaop-shift-open {
+    font-size: 0.85rem;
+    color: #0073aa;
+    font-weight: 600;
+}
+
+.eventadmin-open-positions .eaop-shift-desc {
+    margin-top: 0.4rem;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.eventadmin-open-positions .eaop-empty {
+    color: #555;
+    font-style: italic;
+}

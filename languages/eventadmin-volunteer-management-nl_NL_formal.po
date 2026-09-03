@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-"
 "volunteer-management\n"
-"POT-Creation-Date: 2026-08-21T21:55:05+00:00\n"
+"POT-Creation-Date: 2026-09-03T11:00:45+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: nl_NL_formal\n"
 "MIME-Version: 1.0\n"
@@ -41,7 +41,7 @@ msgstr "David Wiedmer, sidefyn GmbH"
 msgid "https://profiles.wordpress.org/davesidefyn/"
 msgstr "https://profiles.wordpress.org/davesidefyn/"
 
-#: eventadmin-volunteer-management.php:161
+#: eventadmin-volunteer-management.php:162
 msgid ""
 "EventAdmin – Volunteer Management – developed by <a "
 "href=\"mailto:dave@sidefyn.ch\">David Wiedmer, sidefyn GmbH</a>"
@@ -49,40 +49,40 @@ msgstr ""
 "EventAdmin – Volunteer Management – ontwikkeld door <a "
 "href=\"mailto:dave@sidefyn.ch\">David Wiedmer, sidefyn GmbH</a>"
 
-#: eventadmin-volunteer-management.php:254
-#: eventadmin-volunteer-management.php:283
+#: eventadmin-volunteer-management.php:255
+#: eventadmin-volunteer-management.php:284
 msgid "Rate 5 stars"
 msgstr "5 sterren geven"
 
-#: eventadmin-volunteer-management.php:255
-#: eventadmin-volunteer-management.php:284
+#: eventadmin-volunteer-management.php:256
+#: eventadmin-volunteer-management.php:285
 msgid "Donate"
 msgstr "Doneren"
 
 #. translators: %s is the plugin version number, e.g. "0.9.3"
-#: eventadmin-volunteer-management.php:278
+#: eventadmin-volunteer-management.php:279
 #, php-format
 msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s is er!"
 
-#: eventadmin-volunteer-management.php:281
+#: eventadmin-volunteer-management.php:282
 msgid ""
-"New in this release: a redesigned shift overview with Dashboard, Cards, "
-"Table, and Timeline tabs (drag shifts directly on the Timeline to reschedule "
-"them), a reorganized Volunteers page, and richer e-mail design options "
-"including header colors, rich-text templates, and custom CSS."
+"New in this release: the [eventadmin_open_positions] shortcode — a public, "
+"no-login overview of where volunteers are still needed, grouped by "
+"department. Put it on your recruitment page so visitors see the gaps before "
+"they sign up."
 msgstr ""
-"Nieuw in deze versie: een vernieuwd dienstoverzicht met tabbladen Dashboard, "
-"Kaarten, Tabel en Tijdlijn (sleep diensten direct op de tijdlijn om ze te "
-"verzetten), een geherstructureerde Vrijwilligerspagina en uitgebreidere e-"
-"mailontwerpopties zoals kopkleuren, rich-text-sjablonen en aangepaste CSS."
+"Nieuw in deze versie: de shortcode [eventadmin_open_positions] — een "
+"openbaar overzicht zonder inloggen dat laat zien waar nog vrijwilligers "
+"nodig zijn, gegroepeerd per afdeling. Plaats het op uw wervingspagina, zodat "
+"bezoekers de gaten zien voordat ze zich aanmelden."
 
-#: eventadmin-volunteer-management.php:287
+#: eventadmin-volunteer-management.php:288
 msgid "Dismiss"
 msgstr "Sluiten"
 
 #: includes/admin/bulk-email.php:21 includes/admin/bulk-email.php:22
-#: includes/admin/bulk-email.php:41 includes/admin/documentation.php:130
+#: includes/admin/bulk-email.php:41 includes/admin/documentation.php:151
 msgid "Send Announcement"
 msgstr "Aankondiging versturen"
 
@@ -150,20 +150,20 @@ msgid_plural "%d recipients"
 msgstr[0] "%d ontvanger"
 msgstr[1] "%d ontvangers"
 
-#: includes/admin/bulk-email.php:142 includes/admin/documentation.php:134
+#: includes/admin/bulk-email.php:142 includes/admin/documentation.php:155
 #: includes/admin/volunteer-list.php:191
 msgid "All volunteers"
 msgstr "Alle Volunteers"
 
-#: includes/admin/bulk-email.php:147 includes/admin/documentation.php:135
+#: includes/admin/bulk-email.php:147 includes/admin/documentation.php:156
 msgid "Volunteers without any upcoming shift"
 msgstr "Volunteers zonder aankomende dienst"
 
-#: includes/admin/bulk-email.php:152 includes/admin/documentation.php:135
+#: includes/admin/bulk-email.php:152 includes/admin/documentation.php:156
 msgid "Volunteers with at least one upcoming shift"
 msgstr "Volunteers met minstens één aankomende dienst"
 
-#: includes/admin/bulk-email.php:157 includes/admin/documentation.php:136
+#: includes/admin/bulk-email.php:157 includes/admin/documentation.php:157
 msgid "Volunteers of a specific shift"
 msgstr "Vrijwilligers van een specifieke dienst"
 
@@ -171,7 +171,7 @@ msgstr "Vrijwilligers van een specifieke dienst"
 msgid "— Select shift —"
 msgstr "— Dienst selecteren —"
 
-#: includes/admin/bulk-email.php:173 includes/admin/documentation.php:136
+#: includes/admin/bulk-email.php:173 includes/admin/documentation.php:157
 msgid "Volunteers of a specific category"
 msgstr "Vrijwilligers van een specifieke categorie"
 
@@ -449,7 +449,7 @@ msgstr "Bovenliggend"
 msgid "— None —"
 msgstr "— Geen —"
 
-#: includes/admin/category-manager.php:215 includes/admin/documentation.php:67
+#: includes/admin/category-manager.php:215 includes/admin/documentation.php:71
 msgid "Description"
 msgstr "Beschrijving"
 
@@ -517,19 +517,19 @@ msgstr "CSV-export alle diensten"
 msgid "EventAdmin Overview"
 msgstr "EventAdmin overzicht"
 
-#: includes/admin/dashboard.php:332
+#: includes/admin/dashboard.php:332 includes/admin/documentation.php:113
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: includes/admin/dashboard.php:333
+#: includes/admin/dashboard.php:333 includes/admin/documentation.php:114
 msgid "Cards"
 msgstr "Kaarten"
 
-#: includes/admin/dashboard.php:334
+#: includes/admin/dashboard.php:334 includes/admin/documentation.php:115
 msgid "Table"
 msgstr "Tabel"
 
-#: includes/admin/dashboard.php:335
+#: includes/admin/dashboard.php:335 includes/admin/documentation.php:116
 msgid "Timeline"
 msgstr "Tijdlijn"
 
@@ -690,7 +690,7 @@ msgid "Action"
 msgstr "Actie"
 
 #: includes/admin/dashboard.php:712 includes/admin/dashboard.php:1278
-#: includes/admin/documentation.php:107 includes/admin/volunteer-list.php:345
+#: includes/admin/documentation.php:128 includes/admin/volunteer-list.php:345
 msgid "Offline"
 msgstr "Offline"
 
@@ -848,10 +848,20 @@ msgid "Volunteers can sign up for or cancel shifts."
 msgstr "Volunteers kunnen zich aanmelden of afmelden voor diensten."
 
 #: includes/admin/documentation.php:64
+msgid ""
+"Public, no-login overview of where volunteers are still needed, grouped by "
+"department. Ideal for a recruitment page that points visitors to the "
+"registration form."
+msgstr ""
+"Openbaar overzicht zonder inloggen dat laat zien waar nog vrijwilligers "
+"nodig zijn, gegroepeerd per afdeling. Ideaal voor een wervingspagina die "
+"bezoekers naar het registratieformulier leidt."
+
+#: includes/admin/documentation.php:68
 msgid "Manage Volunteers for Events"
 msgstr "Volunteers beheren voor evenementen"
 
-#: includes/admin/documentation.php:65
+#: includes/admin/documentation.php:69
 msgid ""
 "Shift planning, self-registration, limits, CSV export, statistics, and "
 "dashboard."
@@ -859,14 +869,14 @@ msgstr ""
 "Dienstplanning, zelfregistratie, limieten, CSV-export, statistieken en "
 "dashboard."
 
-#: includes/admin/documentation.php:69
+#: includes/admin/documentation.php:73
 msgid ""
 "EventAdmin is a simple yet powerful plugin for managing volunteers at events."
 msgstr ""
 "EventAdmin is een eenvoudige maar krachtige plugin voor het beheren van "
 "Volunteers bij evenementen."
 
-#: includes/admin/documentation.php:70
+#: includes/admin/documentation.php:74
 msgid ""
 "Ideal for clubs, street festivals, and events. Organizers can create shifts, "
 "assign participants, or let volunteers sign up themselves. CSV export, "
@@ -877,15 +887,15 @@ msgstr ""
 "aanmelden. CSV-export, limieten, visuele statistieken en een admin­dashboard "
 "zijn inbegrepen."
 
-#: includes/admin/documentation.php:73
+#: includes/admin/documentation.php:77
 msgid "Features"
 msgstr "Functionaliteit"
 
-#: includes/admin/documentation.php:75
+#: includes/admin/documentation.php:79
 msgid "Create shifts with time period, category, and min./max. volunteers"
 msgstr "Diensten aanmaken met tijdsperiode, categorie en min./max. Volunteers"
 
-#: includes/admin/documentation.php:76
+#: includes/admin/documentation.php:80
 msgid ""
 "Frontend view for registered volunteers (registration, shift selection, "
 "profile)"
@@ -893,11 +903,11 @@ msgstr ""
 "Frontend­weergave voor geregistreerde Volunteers (registratie, "
 "dienstselectie, profiel)"
 
-#: includes/admin/documentation.php:77
+#: includes/admin/documentation.php:81
 msgid "Self-registration and cancellation by volunteers"
 msgstr "Zelfregistratie en afmelding door Volunteers"
 
-#: includes/admin/documentation.php:78
+#: includes/admin/documentation.php:82
 msgid ""
 "Optional \"Full shifts\" section visible to volunteers (enable under "
 "Settings)"
@@ -905,11 +915,11 @@ msgstr ""
 "Optionele sectie \"Volle diensten\" zichtbaar voor Volunteers (inschakelen "
 "via Instellingen)"
 
-#: includes/admin/documentation.php:79
+#: includes/admin/documentation.php:83
 msgid "Automatic checks (e.g. max. 2 shifts/year, no overlaps)"
 msgstr "Automatische controles (bijv. max. 2 diensten/jaar, geen overlappen)"
 
-#: includes/admin/documentation.php:80
+#: includes/admin/documentation.php:84
 msgid ""
 "Manual assignment by admins, including creating new volunteer accounts on "
 "the fly"
@@ -917,26 +927,69 @@ msgstr ""
 "Handmatige toewijzing door admins, inclusief het direct aanmaken van nieuwe "
 "Volunteer-accounts"
 
-#: includes/admin/documentation.php:81
+#: includes/admin/documentation.php:85
 msgid "CSV export per shift or for all shifts"
 msgstr "CSV-export per dienst of voor alle diensten"
 
-#: includes/admin/documentation.php:82
+#: includes/admin/documentation.php:86
 msgid ""
-"Admin overview with filters (upcoming/past/all, category, volunteer, date) "
-"and sorting"
+"Hierarchical departments with custom colors, optional \"hide from "
+"volunteers\", and inline Quick Edit"
 msgstr ""
-"Admin­overzicht met filters (aankomend/verleden/alle, categorie, volunteer, "
-"datum) en sortering"
+"Hiërarchische afdelingen met eigen kleuren, optioneel \"verbergen voor "
+"vrijwilligers\" en inline snelbewerking"
 
-#: includes/admin/documentation.php:83
+#: includes/admin/documentation.php:87
 msgid ""
-"Dashboard statistics: empty shifts, understaffed shifts, filled/open spots"
+"Public \"open positions\" overview shortcode for visitors who are not "
+"registered yet"
 msgstr ""
-"Dashboard­statistieken: lege diensten, onderbezette diensten, bezette/vrije "
-"plaatsen"
+"Openbare shortcode \"Openstaande plekken\" voor bezoekers die nog niet "
+"geregistreerd zijn"
 
-#: includes/admin/documentation.php:84
+#: includes/admin/documentation.php:88
+msgid ""
+"Per-shift organizer: a linked WordPress user and/or a manual sender name and "
+"email"
+msgstr ""
+"Organisator per dienst: een gekoppelde WordPress-gebruiker en/of een "
+"handmatig ingestelde afzendernaam en e-mailadres"
+
+#: includes/admin/documentation.php:89
+msgid ""
+"Assignment, cancellation, and reminder emails (reminders a configurable "
+"number of days before a shift)"
+msgstr ""
+"E-mails voor toewijzing, annulering en herinnering (herinneringen een "
+"instelbaar aantal dagen voor een dienst)"
+
+#: includes/admin/documentation.php:90
+msgid ""
+"Registration form with honeypot and optional CAPTCHA (reCAPTCHA, hCaptcha, "
+"or Cloudflare Turnstile); blocked attempts are logged"
+msgstr ""
+"Registratieformulier met honeypot en optionele CAPTCHA (reCAPTCHA, hCaptcha "
+"of Cloudflare Turnstile); geblokkeerde pogingen worden gelogd"
+
+#: includes/admin/documentation.php:91
+msgid ""
+"E-mail design settings: header color, header title/subtitle, rich-text "
+"templates, and custom CSS"
+msgstr ""
+"Instellingen voor e-mailontwerp: kopkleur, koptitel/-ondertitel, rich-text-"
+"sjablonen en aangepaste CSS"
+
+#: includes/admin/documentation.php:92
+msgid ""
+"Shift overview with Dashboard, Cards, Table, and Timeline tabs — drag shifts "
+"on the Timeline to reschedule; dashboard stats split open spots into "
+"required vs. optional"
+msgstr ""
+"Dienstoverzicht met de tabbladen Dashboard, Kaarten, Tabel en Tijdlijn — "
+"sleep diensten op de tijdlijn om ze te verzetten; de dashboardstatistiek "
+"splitst openstaande plekken in \"vereist\" en \"optioneel\""
+
+#: includes/admin/documentation.php:93
 msgid ""
 "Bulk email tool: send announcements to all, opted-in, shift-specific, or "
 "individual volunteers; supports HTML formatting; includes progress tracking "
@@ -946,32 +999,32 @@ msgstr ""
 "dienstspecifieke of individuele vrijwilligers; ondersteunt HTML-opmaak; met "
 "voortgangsregistratie en verzendgeschiedenis"
 
-#: includes/admin/documentation.php:85
+#: includes/admin/documentation.php:94
 msgid "Volunteers can opt out of announcements in their profile"
 msgstr "Volunteers kunnen aankondigingen uitschakelen in hun profiel"
 
-#: includes/admin/documentation.php:86
+#: includes/admin/documentation.php:95
 msgid "Integration with Nextend Social Login"
 msgstr "Integratie met Nextend Social Login"
 
-#: includes/admin/documentation.php:89
+#: includes/admin/documentation.php:98
 msgid "Installation"
 msgstr "Installatie"
 
-#: includes/admin/documentation.php:91
+#: includes/admin/documentation.php:100
 msgid "Install the plugin via the WordPress backend or upload the ZIP"
 msgstr ""
 "Installeer de plugin via het WordPress­backend of upload het ZIP-bestand."
 
-#: includes/admin/documentation.php:92
+#: includes/admin/documentation.php:101
 msgid "Activate the plugin"
 msgstr "Activeer de plugin."
 
-#: includes/admin/documentation.php:93
+#: includes/admin/documentation.php:102
 msgid "Create a page and insert the"
 msgstr "Maak een pagina aan en voeg de"
 
-#: includes/admin/documentation.php:93
+#: includes/admin/documentation.php:102
 msgid ""
 "shortcode — this is the main volunteer page (registration for new visitors, "
 "shift selector and profile for logged-in volunteers)"
@@ -979,19 +1032,96 @@ msgstr ""
 "shortcode – dit is de hoofdpagina voor Volunteers (registratie voor nieuwe "
 "bezoekers, dienst­selectie en profiel voor ingelogde Volunteers)"
 
-#: includes/admin/documentation.php:94
+#: includes/admin/documentation.php:103
 msgid "Create shift categories under Shifts → Categories"
 msgstr "Maak dienstcategorieën aan via Diensten → Categorieën"
 
-#: includes/admin/documentation.php:95
+#: includes/admin/documentation.php:104
 msgid "Create your first shifts under Shifts → Add New"
 msgstr "Maak uw eerste diensten aan via Diensten → Nieuw toevoegen"
 
-#: includes/admin/documentation.php:98
+#: includes/admin/documentation.php:107 includes/post-types.php:47
+#: includes/post-types.php:57
+msgid "Departments"
+msgstr "Afdelingen"
+
+#: includes/admin/documentation.php:108
+msgid ""
+"Departments (Shifts → Categories) group shifts, can be nested under a "
+"parent, and each carries a color used for its badge on shift cards and in "
+"the overview. \"Hide from volunteers\" removes a department from the "
+"frontend filter and labels; a shift disappears for volunteers only when "
+"every department it belongs to is hidden (shifts someone already signed up "
+"for are never hidden). Color, parent, visibility, and description can also "
+"be changed via Quick Edit in the department list, and the shift list itself "
+"can be filtered and sorted by department."
+msgstr ""
+"Afdelingen (Diensten → Categorieën) groeperen diensten, kunnen onder een "
+"bovenliggende afdeling worden geplaatst en hebben elk een kleur die wordt "
+"gebruikt voor het label op de dienstkaarten en in het overzicht. \"Verbergen "
+"voor vrijwilligers\" haalt een afdeling uit het frontendfilter en de labels; "
+"een dienst verdwijnt alleen voor vrijwilligers wanneer elke afdeling waartoe "
+"hij behoort verborgen is (diensten waarvoor iemand zich al heeft "
+"ingeschreven worden nooit verborgen). Kleur, bovenliggende afdeling, "
+"zichtbaarheid en beschrijving kunnen ook via snelbewerking in de "
+"afdelingslijst worden gewijzigd, en de dienstenlijst zelf kan op afdeling "
+"worden gefilterd en gesorteerd."
+
+#: includes/admin/documentation.php:110
+msgid "Shift Overview"
+msgstr "Dienstoverzicht"
+
+#: includes/admin/documentation.php:111
+msgid ""
+"The shift overview (Shifts → Overview) is split into four tabs, each showing "
+"only the filters relevant to it:"
+msgstr ""
+"Het dienstoverzicht (Diensten → Overzicht) is verdeeld over vier tabbladen, "
+"die elk alleen de relevante filters tonen:"
+
+#: includes/admin/documentation.php:113
+msgid ""
+"registered volunteers, upcoming shifts, and open spots split into required "
+"(below a shift's minimum) and optional (up to the maximum)."
+msgstr ""
+"geregistreerde vrijwilligers, aankomende diensten en openstaande plekken, "
+"gesplitst in \"vereist\" (onder het minimum van een dienst) en \"optioneel\" "
+"(tot het maximum)."
+
+#: includes/admin/documentation.php:114
+msgid ""
+"the shift cards, with filters for upcoming/past/all, department, volunteer, "
+"and date."
+msgstr ""
+"de dienstkaarten, met filters voor aankomend/verleden/alle, afdeling, "
+"vrijwilliger en datum."
+
+#: includes/admin/documentation.php:115
+msgid ""
+"a flat, export-style table; the \"Add volunteer\" button assigns someone "
+"without leaving the page."
+msgstr ""
+"een platte, exportachtige tabel; met de knop \"Vrijwilliger toevoegen\" "
+"wijst u iemand toe zonder de pagina te verlaten."
+
+#: includes/admin/documentation.php:116
+msgid ""
+"a per-volunteer Gantt chart. Drag a shift's bar to move or resize it (with "
+"an Undo after saving), or use the Edit Shift modal for exact times. Unfilled "
+"slots show as red (below minimum) or grey (optional) bars, which can be "
+"toggled off."
+msgstr ""
+"een Gantt-diagram per vrijwilliger. Sleep de balk van een dienst om deze te "
+"verplaatsen of van lengte te veranderen (met \"Ongedaan maken\" na het "
+"opslaan), of gebruik het venster \"Dienst bewerken\" voor exacte tijden. "
+"Onbezette plekken verschijnen als rode (onder het minimum) of grijze "
+"(optionele) balken, die kunnen worden uitgeschakeld."
+
+#: includes/admin/documentation.php:119
 msgid "Volunteer List & Badges"
 msgstr "Vrijwilligerslijst & badges"
 
-#: includes/admin/documentation.php:99
+#: includes/admin/documentation.php:120
 msgid ""
 "The Volunteers page (Shifts → Volunteers) lists all volunteer accounts and "
 "shows badges next to each name to indicate how the account was created or "
@@ -1001,15 +1131,15 @@ msgstr ""
 "vrijwilligersaccounts en geeft badges naast elke naam om aan te geven hoe "
 "het account is aangemaakt of wat de huidige status is."
 
-#: includes/admin/documentation.php:102
+#: includes/admin/documentation.php:123
 msgid "Badge"
 msgstr "Badge"
 
-#: includes/admin/documentation.php:103
+#: includes/admin/documentation.php:124 includes/admin/documentation.php:195
 msgid "Meaning"
 msgstr "Betekenis"
 
-#: includes/admin/documentation.php:108
+#: includes/admin/documentation.php:129
 msgid ""
 "Created by an admin without an email address. Cannot log in and receives no "
 "notifications."
@@ -1017,11 +1147,11 @@ msgstr ""
 "Aangemaakt door een beheerder zonder e-mailadres. Kan niet inloggen en "
 "ontvangt geen meldingen."
 
-#: includes/admin/documentation.php:111 includes/admin/volunteer-list.php:354
+#: includes/admin/documentation.php:132 includes/admin/volunteer-list.php:354
 msgid "Manual"
 msgstr "Handmatig"
 
-#: includes/admin/documentation.php:112
+#: includes/admin/documentation.php:133
 msgid ""
 "Added by an admin via the dashboard form or the \"Grant volunteer role\" "
 "function. Never auto-deleted."
@@ -1029,11 +1159,11 @@ msgstr ""
 "Toegevoegd door een beheerder via het dashboardformulier of de functie "
 "\"Vrijwilligersrol toewijzen\". Wordt nooit automatisch verwijderd."
 
-#: includes/admin/documentation.php:115 includes/admin/volunteer-list.php:348
+#: includes/admin/documentation.php:136 includes/admin/volunteer-list.php:348
 msgid "Unverified"
 msgstr "Niet geverifieerd"
 
-#: includes/admin/documentation.php:116
+#: includes/admin/documentation.php:137
 msgid ""
 "Registered via the public form but has not yet clicked the magic login link. "
 "The account is auto-deleted once the link expires (~24 h). The badge "
@@ -1043,11 +1173,11 @@ msgstr ""
 "login-link geklikt. Het account wordt automatisch verwijderd zodra de link "
 "verloopt (~24 u). De badge verdwijnt zodra op de link is geklikt."
 
-#: includes/admin/documentation.php:119 includes/admin/volunteer-list.php:351
+#: includes/admin/documentation.php:140 includes/admin/volunteer-list.php:351
 msgid "Social"
 msgstr "Sociale login"
 
-#: includes/admin/documentation.php:120
+#: includes/admin/documentation.php:141
 msgid ""
 "Registered or linked via Nextend Social Login (e.g. Google, Facebook). "
 "Requires the Nextend Social Login plugin."
@@ -1055,11 +1185,11 @@ msgstr ""
 "Geregistreerd of gekoppeld via Nextend Social Login (bijv. Google, "
 "Facebook). Vereist de Nextend Social Login-plugin."
 
-#: includes/admin/documentation.php:123
+#: includes/admin/documentation.php:144
 msgid "(no badge)"
 msgstr "(geen badge)"
 
-#: includes/admin/documentation.php:124
+#: includes/admin/documentation.php:145
 msgid ""
 "Self-registered via the public form and verified by clicking the magic link, "
 "or registered before the badge system was introduced (version 0.9.8)."
@@ -1068,14 +1198,14 @@ msgstr ""
 "magic link te klikken, of geregistreerd vóór de introductie van het badge-"
 "systeem (versie 0.9.8)."
 
-#: includes/admin/documentation.php:128
+#: includes/admin/documentation.php:149
 msgid ""
 "A volunteer can have multiple badges at the same time (e.g. Manual + Social)."
 msgstr ""
 "Een vrijwilliger kan meerdere badges tegelijk hebben (bijv. Handmatig + "
 "Sociaal)."
 
-#: includes/admin/documentation.php:131
+#: includes/admin/documentation.php:152
 msgid ""
 "The Send Announcement page (Shifts → Send Announcement) lets you send a "
 "custom email to volunteers. Available recipient options:"
@@ -1084,20 +1214,20 @@ msgstr ""
 "in staat een aangepaste e-mail naar vrijwilligers te sturen. Beschikbare "
 "ontvangeropties:"
 
-#: includes/admin/documentation.php:133
+#: includes/admin/documentation.php:154
 msgid "Subscribed only"
 msgstr "Alleen geabonneerden"
 
-#: includes/admin/documentation.php:133
+#: includes/admin/documentation.php:154
 msgid "Volunteers who opted in to announcements (default)."
 msgstr ""
 "Vrijwilligers die zich hebben aangemeld voor aankondigingen (standaard)."
 
-#: includes/admin/documentation.php:134
+#: includes/admin/documentation.php:155
 msgid "Every volunteer with an email address, regardless of opt-in status."
 msgstr "Alle vrijwilligers met een e-mailadres, ongeacht de abonnementstatus."
 
-#: includes/admin/documentation.php:135
+#: includes/admin/documentation.php:156
 msgid ""
 "Split volunteers by whether they currently have an upcoming shift assigned — "
 "useful for nudging people who haven't signed up yet."
@@ -1106,7 +1236,7 @@ msgstr ""
 "toegewezen hebben — handig om mensen te herinneren die zich nog niet hebben "
 "aangemeld."
 
-#: includes/admin/documentation.php:136
+#: includes/admin/documentation.php:157
 msgid ""
 "Only the volunteers assigned to a selected shift or department. A live "
 "recipient count is shown once you pick one."
@@ -1115,11 +1245,11 @@ msgstr ""
 "afdeling. Zodra u er een selecteert, wordt het aantal ontvangers live "
 "weergegeven."
 
-#: includes/admin/documentation.php:137
+#: includes/admin/documentation.php:158
 msgid "Individual volunteer"
 msgstr "Individuele vrijwilliger"
 
-#: includes/admin/documentation.php:137
+#: includes/admin/documentation.php:158
 msgid ""
 "Click \"Email\" on any volunteer row to open the form pre-filled for that "
 "person."
@@ -1127,7 +1257,7 @@ msgstr ""
 "Klik op \"E-mail\" in een vrijwilligersrij om het formulier vooraf ingevuld "
 "voor die persoon te openen."
 
-#: includes/admin/documentation.php:139
+#: includes/admin/documentation.php:160
 msgid ""
 "The From name and From email can be overridden per send. Use {first_name} "
 "and {last_name} as personalisation placeholders, and {shifts} to list each "
@@ -1140,7 +1270,7 @@ msgstr ""
 "ontvanger weer te geven. HTML-opmaak wordt ondersteund — de live preview "
 "onder het formulier toont de e-mail zoals hij eruit zal zien."
 
-#: includes/admin/documentation.php:140
+#: includes/admin/documentation.php:161
 msgid ""
 "A PDF can optionally be attached — it will be sent with every email in that "
 "announcement."
@@ -1148,7 +1278,7 @@ msgstr ""
 "Een PDF kan optioneel worden bijgevoegd — deze wordt met elke e-mail van "
 "deze aankondiging verzonden."
 
-#: includes/admin/documentation.php:141
+#: includes/admin/documentation.php:162
 msgid ""
 "Every sent announcement is recorded in the collapsible Send History table on "
 "the same page. The table can be filtered by typing and sorted by clicking "
@@ -1158,7 +1288,7 @@ msgstr ""
 "Verzendgeschiedenis op dezelfde pagina. De tabel kan worden gefilterd door "
 "te typen en gesorteerd door op kolomkoppen te klikken."
 
-#: includes/admin/documentation.php:142
+#: includes/admin/documentation.php:163
 msgid ""
 "Offline volunteers (no email address) are excluded from all announcement "
 "sending. Volunteers can opt out under their profile."
@@ -1167,11 +1297,52 @@ msgstr ""
 "aankondigingsverzendingen. Vrijwilligers kunnen zich afmelden via hun "
 "profiel."
 
-#: includes/admin/documentation.php:144
+#: includes/admin/documentation.php:165
+msgid "Reminder & Notification Emails"
+msgstr "Herinnerings- & meldingse-mails"
+
+#: includes/admin/documentation.php:166
+msgid ""
+"Volunteers are emailed when they are assigned to or removed from a shift, "
+"and again as a reminder a configurable number of days before it starts "
+"(Settings → Communication → Reminders — leave the days field empty to switch "
+"reminders off). All three messages use a rich-text editor and share "
+"placeholders such as {first}, {last}, {title}, {start}, {end}, {desc}, and "
+"{days}. Each shift can override the sender through a linked WordPress user "
+"and/or a manual organizer name and email."
+msgstr ""
+"Vrijwilligers krijgen een e-mail wanneer ze aan een dienst worden toegewezen "
+"of eruit worden verwijderd, en nog een keer als herinnering een instelbaar "
+"aantal dagen voordat de dienst begint (Instellingen → Communicatie → "
+"Herinneringen — laat het dagenveld leeg om herinneringen uit te schakelen). "
+"Alle drie de berichten gebruiken een rich-text-editor en delen tijdelijke "
+"aanduidingen zoals {first}, {last}, {title}, {start}, {end}, {desc} en "
+"{days}. Elke dienst kan de afzender overschrijven via een gekoppelde "
+"WordPress-gebruiker en/of een handmatige organisatornaam en e-mailadres."
+
+#: includes/admin/documentation.php:168
+msgid "E-mail Design"
+msgstr "E-mailontwerp"
+
+#: includes/admin/documentation.php:169
+msgid ""
+"Settings → Communication → E-mail design styles the shared wrapper around "
+"every plugin email: a header color, a header title and subtitle shown next "
+"to the site logo, a rich-text footer, and — under advanced — custom CSS "
+"applied to all emails. The filters below are for changes that go beyond "
+"these options."
+msgstr ""
+"Instellingen → Communicatie → E-mailontwerp bepaalt de opmaak van het "
+"gedeelde kader rond elke plugin-e-mail: een kopkleur, een koptitel en "
+"-ondertitel naast het sitelogo, een met rich text opgemaakte voettekst en — "
+"onder \"Geavanceerd\" — aangepaste CSS voor alle e-mails. De filters "
+"hieronder zijn voor wijzigingen die verder gaan dan deze opties."
+
+#: includes/admin/documentation.php:171
 msgid "Email Template Customization"
 msgstr "Aanpassing e-mailsjabloon"
 
-#: includes/admin/documentation.php:145
+#: includes/admin/documentation.php:172
 msgid ""
 "All plugin emails use a shared HTML wrapper so registration links, "
 "assignment confirmations, cancellations, and announcements have a consistent "
@@ -1181,7 +1352,7 @@ msgstr ""
 "registratielinks, toewijzingsbevestigingen, afmeldingen en aankondigingen er "
 "consistent uitzien."
 
-#: includes/admin/documentation.php:146
+#: includes/admin/documentation.php:173
 msgid ""
 "Integrators can customize or fully replace this wrapper in theme code or a "
 "small companion plugin using WordPress filters."
@@ -1189,7 +1360,7 @@ msgstr ""
 "Integrators kunnen deze wrapper aanpassen of volledig vervangen in themacode "
 "of een kleine begeleidende plugin met behulp van WordPress-filters."
 
-#: includes/admin/documentation.php:148
+#: includes/admin/documentation.php:175
 msgid ""
 "Adjust template variables such as heading, preheader, site name, or footer "
 "text before the final HTML is generated."
@@ -1197,14 +1368,14 @@ msgstr ""
 "Pas sjabloonvariabelen aan, zoals kop, preheader, sitenaam of voettekst, "
 "voordat de uiteindelijke HTML wordt gegenereerd."
 
-#: includes/admin/documentation.php:149
+#: includes/admin/documentation.php:176
 msgid ""
 "Modify only the inner email body HTML while keeping the default wrapper."
 msgstr ""
 "Wijzig alleen de binnenste HTML van de e-mailinhoud, met behoud van de "
 "standaardwrapper."
 
-#: includes/admin/documentation.php:150
+#: includes/admin/documentation.php:177
 msgid ""
 "Replace the complete final HTML output if you need a fully custom branded "
 "layout."
@@ -1212,7 +1383,7 @@ msgstr ""
 "Vervang de volledige uiteindelijke HTML-uitvoer als u een volledig "
 "aangepaste, gebrande lay-out nodig heeft."
 
-#: includes/admin/documentation.php:152
+#: includes/admin/documentation.php:179
 msgid ""
 "Example: add this in your theme’s functions.php or a small custom plugin to "
 "change the footer text of all EventAdmin emails."
@@ -1220,7 +1391,7 @@ msgstr ""
 "Voorbeeld: voeg dit toe aan de functions.php van uw thema of een kleine "
 "aangepaste plugin om de voettekst van alle EventAdmin-e-mails te wijzigen."
 
-#: includes/admin/documentation.php:157
+#: includes/admin/documentation.php:184
 msgid ""
 "Use a custom plugin instead of editing EventAdmin directly if you want your "
 "changes to survive plugin updates."
@@ -1228,11 +1399,11 @@ msgstr ""
 "Gebruik een aangepaste plugin in plaats van EventAdmin rechtstreeks te "
 "bewerken als u wilt dat uw wijzigingen plugin-updates overleven."
 
-#: includes/admin/documentation.php:159
+#: includes/admin/documentation.php:186
 msgid "Automatic Cleanup of Unverified Accounts"
 msgstr "Automatisch verwijderen van niet-geverifieerde accounts"
 
-#: includes/admin/documentation.php:160
+#: includes/admin/documentation.php:187
 msgid ""
 "A daily background job automatically deletes volunteer accounts that were "
 "registered via the public form but whose magic login link expired without "
@@ -1245,7 +1416,7 @@ msgstr ""
 "verwijderd als ze geen dienstindelingen hebben en niet als handmatig "
 "toegevoegd zijn gemarkeerd."
 
-#: includes/admin/documentation.php:161
+#: includes/admin/documentation.php:188
 msgid ""
 "A log of automatically deleted accounts (up to the last 100) is shown at the "
 "bottom of the Volunteers page."
@@ -1253,35 +1424,95 @@ msgstr ""
 "Een logboek van automatisch verwijderde accounts (tot de laatste 100) wordt "
 "onderaan de pagina Vrijwilligers weergegeven."
 
-#: includes/admin/documentation.php:163
+#: includes/admin/documentation.php:190
+msgid "Public \"Open Positions\" Overview"
+msgstr "Openbaar overzicht \"Openstaande plekken\""
+
+#: includes/admin/documentation.php:191
+msgid ""
+"The [eventadmin_open_positions] shortcode shows visitors who are not logged "
+"in where volunteers are still needed, grouped by department. Only "
+"departments with unfilled slots in upcoming shifts are listed. Put it on a "
+"public recruitment page, next to the [eventadmin_register] form."
+msgstr ""
+"De shortcode [eventadmin_open_positions] laat bezoekers die niet zijn "
+"ingelogd zien waar nog vrijwilligers nodig zijn, gegroepeerd per afdeling. "
+"Alleen afdelingen met onbezette plekken in aankomende diensten worden "
+"getoond. Plaats de shortcode op een openbare wervingspagina, naast het "
+"formulier [eventadmin_register]."
+
+#: includes/admin/documentation.php:194
+msgid "Attribute"
+msgstr "Attribuut"
+
+#: includes/admin/documentation.php:200
+msgid ""
+"\"summary\" (default): one line per department with its open-slot count. "
+"\"list\": every open shift, grouped under its department."
+msgstr ""
+"\"summary\" (standaard): één regel per afdeling met het aantal openstaande "
+"plekken. \"list\": elke openstaande dienst, gegroepeerd per afdeling."
+
+#: includes/admin/documentation.php:204
+msgid ""
+"Comma-separated department slugs to limit the output to. Default: all "
+"visible departments."
+msgstr ""
+"Door komma's gescheiden afdelings-slugs om de uitvoer te beperken. "
+"Standaard: alle zichtbare afdelingen."
+
+#: includes/admin/documentation.php:208
+msgid ""
+"\"0\" hides the \"We still need volunteers in:\" intro line (summary style "
+"only)."
+msgstr ""
+"\"0\" verbergt de introregel \"Wij zoeken nog vrijwilligers voor:\" (alleen "
+"stijl \"summary\")."
+
+#: includes/admin/documentation.php:212
+msgid ""
+"\"1\" also includes shifts whose slots are already filled (list style only)."
+msgstr ""
+"\"1\" toont ook diensten waarvan de plekken al bezet zijn (alleen stijl "
+"\"list\")."
+
+#: includes/admin/documentation.php:216
+msgid ""
+"\"0\" also includes shifts that have already ended. Default: past shifts are "
+"hidden."
+msgstr ""
+"\"0\" toont ook diensten die al voorbij zijn. Standaard: verstreken diensten "
+"worden verborgen."
+
+#: includes/admin/documentation.php:221
 msgid "Frequently Asked Questions (FAQ)"
 msgstr "Veelgestelde vragen (FAQ)"
 
-#: includes/admin/documentation.php:165
+#: includes/admin/documentation.php:223
 msgid "Do volunteers need an account?"
 msgstr "Hebben Volunteers een account nodig?"
 
-#: includes/admin/documentation.php:166
+#: includes/admin/documentation.php:224
 msgid "Yes, they must be logged in to view and join shifts."
 msgstr ""
 "Ja, u moet ingelogd zijn om diensten te bekijken en eraan deel te nemen."
 
-#: includes/admin/documentation.php:168
+#: includes/admin/documentation.php:226
 msgid "How can I assign volunteers manually?"
 msgstr "Hoe kan ik Volunteers handmatig toewijzen?"
 
-#: includes/admin/documentation.php:169
+#: includes/admin/documentation.php:227
 msgid ""
 "In the admin dashboard under “Volunteer Overview” for each shift via form."
 msgstr ""
 "In het admin­dashboard onder \"Volunteer­overzicht\" voor elke dienst via een "
 "formulier."
 
-#: includes/admin/documentation.php:171
+#: includes/admin/documentation.php:229
 msgid "What happens when shifts are full?"
 msgstr "Wat gebeurt er als diensten vol zijn?"
 
-#: includes/admin/documentation.php:172
+#: includes/admin/documentation.php:230
 msgid ""
 "By default, full shifts are hidden on the volunteer page. You can optionally "
 "show them in a separate read-only section by enabling \"Show full shifts to "
@@ -1291,11 +1522,11 @@ msgstr ""
 "optioneel weergeven in een aparte alleen-lezen sectie door \"Volle diensten "
 "tonen aan Volunteers\" in te schakelen via Instellingen."
 
-#: includes/admin/documentation.php:174
+#: includes/admin/documentation.php:232
 msgid "What is the minimum volunteers field for?"
 msgstr "Waarvoor dient het veld voor het minimum aantal Volunteers?"
 
-#: includes/admin/documentation.php:175
+#: includes/admin/documentation.php:233
 msgid ""
 "You can set a minimum number of volunteers per shift. The admin dashboard "
 "will highlight shifts that have not reached the minimum with an "
@@ -1307,11 +1538,27 @@ msgstr ""
 "onderbezettingswaarschuwing. Dit is alleen informatief – er worden geen "
 "aanmeldingsregels afgedwongen op basis van het minimum."
 
-#: includes/admin/documentation.php:180
+#: includes/admin/documentation.php:235
+msgid "Can visitors see where help is needed before registering?"
+msgstr "Kunnen bezoekers vóór registratie zien waar hulp nodig is?"
+
+#: includes/admin/documentation.php:236
+msgid ""
+"Yes. Put the [eventadmin_open_positions] shortcode on any public page. It "
+"lists every department that still has unfilled slots, needs no login, and by "
+"default shows a compact summary — add style=\"list\" for the individual open "
+"shifts."
+msgstr ""
+"Ja. Plaats de shortcode [eventadmin_open_positions] op een willekeurige "
+"openbare pagina. Het toont elke afdeling die nog onbezette plekken heeft, "
+"vereist geen inloggen en laat standaard een compacte samenvatting zien — "
+"voeg style=\"list\" toe voor de afzonderlijke openstaande diensten."
+
+#: includes/admin/documentation.php:241
 msgid "Support EventAdmin"
 msgstr "EventAdmin ondersteunen"
 
-#: includes/admin/documentation.php:181
+#: includes/admin/documentation.php:242
 msgid ""
 "EventAdmin is free and open source. If it saves you time, please consider "
 "leaving a review or making a small donation — it helps a lot!"
@@ -1319,11 +1566,11 @@ msgstr ""
 "EventAdmin is gratis en open source. Als het u tijd bespaart, denk dan aan "
 "een beoordeling of een kleine donatie!"
 
-#: includes/admin/documentation.php:183
+#: includes/admin/documentation.php:244
 msgid "Rate 5 stars on WordPress.org"
 msgstr "5 sterren geven op WordPress.org"
 
-#: includes/admin/documentation.php:184
+#: includes/admin/documentation.php:245
 msgid "Donate via Revolut"
 msgstr "Doneren via Revolut"
 
@@ -2330,6 +2577,26 @@ msgstr "De Volunteer %1$s %2$s is %3$s voor de dienst: %4$s"
 msgid "(no subject)"
 msgstr "(geen onderwerp)"
 
+#. translators: %d: number of unfilled volunteer slots
+#: includes/open-positions.php:63
+#, php-format
+msgid "%d spot open"
+msgid_plural "%d spots open"
+msgstr[0] "%d plaats vrij"
+msgstr[1] "%d plaatsen vrij"
+
+#: includes/open-positions.php:181
+msgid "There are currently no open volunteer positions."
+msgstr "Momenteel zijn er geen openstaande diensten."
+
+#: includes/open-positions.php:222 includes/open-positions.php:297
+msgid "Other"
+msgstr "Overig"
+
+#: includes/open-positions.php:236
+msgid "We still need volunteers in:"
+msgstr "Wij zoeken nog vrijwilligers voor:"
+
 #: includes/post-types.php:17 includes/post-types.php:28
 msgid "Shifts"
 msgstr "Diensten"
@@ -2369,10 +2636,6 @@ msgstr "Geen diensten in de prullenbak"
 #: includes/post-types.php:27
 msgid "All Shifts"
 msgstr "Alle diensten"
-
-#: includes/post-types.php:47 includes/post-types.php:57
-msgid "Departments"
-msgstr "Afdelingen"
 
 #: includes/post-types.php:49
 msgid "Search Departments"
@@ -2551,6 +2814,31 @@ msgstr "U bent succesvol afgemeld."
 #: includes/shiftselector.php:417
 msgid "You are not signed up for this shift."
 msgstr "U bent niet aangemeld voor deze dienst."
+
+#~ msgid ""
+#~ "New in this release: a redesigned shift overview with Dashboard, Cards, "
+#~ "Table, and Timeline tabs (drag shifts directly on the Timeline to "
+#~ "reschedule them), a reorganized Volunteers page, and richer e-mail design "
+#~ "options including header colors, rich-text templates, and custom CSS."
+#~ msgstr ""
+#~ "Nieuw in deze versie: een vernieuwd dienstoverzicht met tabbladen "
+#~ "Dashboard, Kaarten, Tabel en Tijdlijn (sleep diensten direct op de "
+#~ "tijdlijn om ze te verzetten), een geherstructureerde Vrijwilligerspagina "
+#~ "en uitgebreidere e-mailontwerpopties zoals kopkleuren, rich-text-"
+#~ "sjablonen en aangepaste CSS."
+
+#~ msgid ""
+#~ "Admin overview with filters (upcoming/past/all, category, volunteer, "
+#~ "date) and sorting"
+#~ msgstr ""
+#~ "Admin­overzicht met filters (aankomend/verleden/alle, categorie, "
+#~ "volunteer, datum) en sortering"
+
+#~ msgid ""
+#~ "Dashboard statistics: empty shifts, understaffed shifts, filled/open spots"
+#~ msgstr ""
+#~ "Dashboard­statistieken: lege diensten, onderbezette diensten, bezette/"
+#~ "vrije plaatsen"
 
 #~ msgid ""
 #~ "New in this release: Cloudflare Turnstile is now available as a CAPTCHA "
