@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: EventAdmin – Volunteer Management 2.1.0\n"
+"Project-Id-Version: EventAdmin – Volunteer Management 2.1.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-03T11:00:45+00:00\n"
+"POT-Creation-Date: 2026-09-03T12:09:32+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: eventadmin-volunteer-management\n"
@@ -55,7 +55,7 @@ msgid "EventAdmin %s is here!"
 msgstr ""
 
 #: eventadmin-volunteer-management.php:282
-msgid "New in this release: the [eventadmin_open_positions] shortcode — a public, no-login overview of where volunteers are still needed, grouped by department. Put it on your recruitment page so visitors see the gaps before they sign up."
+msgid "This release only refreshes the plugin's screenshots and description on WordPress.org — nothing changed in the plugin itself."
 msgstr ""
 
 #: eventadmin-volunteer-management.php:288

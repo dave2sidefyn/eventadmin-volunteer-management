@@ -4,7 +4,7 @@ Tags: volunteer, volunteers, shift scheduling, event management, roster, sign up
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -106,11 +106,16 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 
 == Screenshots ==
 
-1. Admin dashboard with shift overview
-2. Public shift view with registration
-3. Statistics & charts in the backend
+1. Admin dashboard — live staffing overview: registrations, upcoming shifts, filled vs. open spots, and load per department
+2. The volunteer view — browse open shifts by department and sign up in one click
+3. Timeline view — every shift across the event on one chart; drag a shift to reschedule it
+4. Settings — shift limits per day/week/month/year, overlap prevention, cancellation deadline, and spam protection
+5. Send Announcement — target a recipient group and see a live preview of the email
 
 == Changelog ==
+
+= Version 2.1.1 =
+* Maintenance: refreshed the screenshots and description on WordPress.org. No changes to the plugin itself.
 
 = Version 2.1.0 =
 * New: `[eventadmin_open_positions]` shortcode — a public, no-login overview of where volunteers are still needed, grouped by department, for a recruitment page. Two styles: a compact per-department summary (default) or a full list of individual open shifts (`style="list"`), plus `category`, `show_intro`, `show_full`, and `hide_past` attributes
@@ -318,6 +323,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Shift management, volunteer registration, dashboard, export, rules
 
 == Upgrade Notice ==
+
+= 2.1.1 =
+Maintenance only — refreshed screenshots and description. Nothing to do.
 
 = 2.1.0 =
 Adds the [eventadmin_open_positions] shortcode for a public "where we still need volunteers" list. No breaking changes.

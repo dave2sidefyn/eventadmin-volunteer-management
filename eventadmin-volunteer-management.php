@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       EventAdmin – Volunteer Management
  * Description:       Manage volunteers for events directly in WordPress. Create and schedule shifts, allow volunteers to sign up and cancel independently, and configure individual rules – e.g., maximum shifts per person per year.
- * Version:           2.1.0
+ * Version:           2.1.1
  * Author:            David Wiedmer, sidefyn GmbH
  * Author URI:        https://profiles.wordpress.org/davesidefyn/
  * Requires at least: 5.8
@@ -16,7 +16,7 @@
 
 defined('ABSPATH') or die('No script kiddies please!');
 
-define('EVENTADMIN_VERSION', '2.1.0');
+define('EVENTADMIN_VERSION', '2.1.1');
 define('EVENTADMIN_REVIEW_URL', 'https://wordpress.org/plugins/eventadmin-volunteer-management/#reviews');
 define('EVENTADMIN_DONATE_URL', 'https://revolut.me/davidwiedmer');
 
@@ -279,7 +279,7 @@ function eventadmin_update_notice(): void
             $notice_title = sprintf(__('EventAdmin %s is here!', 'eventadmin-volunteer-management'), EVENTADMIN_VERSION);
             ?>
             <strong><?php echo esc_html($notice_title); ?></strong><br>
-            <?php echo esc_html__('New in this release: the [eventadmin_open_positions] shortcode — a public, no-login overview of where volunteers are still needed, grouped by department. Put it on your recruitment page so visitors see the gaps before they sign up.', 'eventadmin-volunteer-management'); ?>
+            <?php echo esc_html__('This release only refreshes the plugin\'s screenshots and description on WordPress.org — nothing changed in the plugin itself.', 'eventadmin-volunteer-management'); ?>
             <div style="margin-top:10px;">
                 <a href="<?php echo esc_url(EVENTADMIN_REVIEW_URL); ?>" target="_blank" class="button button-primary" style="margin-right:8px;">⭐ <?php echo esc_html__('Rate 5 stars', 'eventadmin-volunteer-management'); ?></a>
                 <a href="<?php echo esc_url(EVENTADMIN_DONATE_URL); ?>" target="_blank" class="button">❤️ <?php echo esc_html__('Donate', 'eventadmin-volunteer-management'); ?></a>
