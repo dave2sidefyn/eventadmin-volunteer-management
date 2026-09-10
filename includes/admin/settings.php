@@ -217,6 +217,8 @@ function eventadmin_plugin_placeholders_info(): void
     echo '<li><code>{last}</code> – ' . esc_html__('Last name of the volunteer', 'eventadmin-volunteer-management') . '</li>';
     echo '<li><code>{title}</code> – ' . esc_html__('Title of the shift', 'eventadmin-volunteer-management') . '</li>';
     echo '<li><code>{desc}</code> – ' . esc_html__('Description of the shift', 'eventadmin-volunteer-management') . '</li>';
+    echo '<li><code>{department}</code> – ' . esc_html__('Department of the shift', 'eventadmin-volunteer-management') . '</li>';
+    echo '<li><code>{department_desc}</code> – ' . esc_html__('Description of the shift\'s department', 'eventadmin-volunteer-management') . '</li>';
     echo '<li><code>{start}</code> – ' . esc_html__('Start time of the shift (formatted)', 'eventadmin-volunteer-management') . '</li>';
     echo '<li><code>{end}</code> – ' . esc_html__('End time of the shift (formatted)', 'eventadmin-volunteer-management') . '</li>';
     echo '<li><code>{days}</code> – ' . esc_html__('Number of days before the shift starts', 'eventadmin-volunteer-management') . '</li>';

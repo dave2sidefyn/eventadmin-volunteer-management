@@ -12,6 +12,43 @@ if (!defined('ABSPATH')) {
 }
 
 /**
+ * Collects the department (taxonomy term) name(s) and description(s) assigned to a shift,
+ * so an email template can pull a description written once per department (Shifts →
+ * Departments) instead of one written on every single shift. Hidden departments (the
+ * "Hide from volunteers" term option) are skipped, matching the volunteer-facing side.
+ * When a shift has more than one department, names are joined with ", " and descriptions
+ * with a blank line so each still renders as its own paragraph.
+ *
+ * @param int $shift_id Shift ID.
+ * @return array{names: string, descriptions: string}
+ */
+function eventadmin_get_shift_department_text(int $shift_id): array
+{
+    $terms = wp_get_post_terms($shift_id, 'eventadmin_shift_category');
+    if (is_wp_error($terms) || empty($terms)) {
+        return ['names' => '', 'descriptions' => ''];
+    }
+
+    $names        = [];
+    $descriptions = [];
+    foreach ($terms as $term) {
+        if (eventadmin_is_shift_category_hidden($term->term_id)) {
+            continue;
+        }
+        $names[]     = $term->name;
+        $description = trim(wp_strip_all_tags($term->description));
+        if ($description !== '') {
+            $descriptions[] = $description;
+        }
+    }
+
+    return [
+        'names'        => implode(', ', $names),
+        'descriptions' => implode("\n\n", $descriptions),
+    ];
+}
+
+/**
  * Builds reusable email data for a shift and volunteer.
  *
  * @param int $user_id Volunteer ID.
@@ -62,14 +99,18 @@ function eventadmin_get_shift_email_context(int $user_id, int $shift_id, array $
     // Cast all values to string so strtr() is safe regardless of PHP version.
     $extra_strings = array_map('strval', $extra_replacements);
 
+    $department = eventadmin_get_shift_department_text($shift_id);
+
     $replacements = array_merge([
-        '{first}' => (string) $user->first_name,
-        '{last}'  => (string) $user->last_name,
-        '{title}' => (string) $shift->post_title,
-        '{desc}'  => (string) wp_strip_all_tags($shift->post_content),
-        '{start}' => (string) $start_dt,
-        '{end}'   => (string) $end_dt,
-        '{days}'  => (string) $days_until,
+        '{first}'           => (string) $user->first_name,
+        '{last}'            => (string) $user->last_name,
+        '{title}'           => (string) $shift->post_title,
+        '{desc}'            => (string) wp_strip_all_tags($shift->post_content),
+        '{department}'      => $department['names'],
+        '{department_desc}' => $department['descriptions'],
+        '{start}'           => (string) $start_dt,
+        '{end}'             => (string) $end_dt,
+        '{days}'            => (string) $days_until,
     ], $extra_strings);
 
     return [

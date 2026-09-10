@@ -65,21 +65,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s is er!"
 
 #: eventadmin-volunteer-management.php:293
-msgid ""
-"New in this release: shift management now lives on its own \"Manager\" page "
-"(with the drag-and-drop timeline, Table, and Cards tabs), separate from the "
-"Dashboard; classic menu items like \"All Shifts\" and \"Departments\" can be"
-" hidden from the sidebar; the Timeline's Edit Shift modal gained an "
-"organizer section; and shift/volunteer changes now show up immediately "
-"instead of sometimes taking a few minutes."
-msgstr ""
-"Nieuw in deze versie: dienstbeheer heeft nu een eigen pagina \"Manager\" "
-"(met de tabbladen voor de sleep-tijdlijn, Tabel en Kaarten), los van het "
-"Dashboard; klassieke menu-items zoals \"Alle diensten\" en \"Afdelingen\" "
-"kunnen worden verborgen in de zijbalk; de bewerkmodal voor diensten van de "
-"Tijdlijn heeft een organisatorsectie gekregen; en wijzigingen aan "
-"diensten/vrijwilligers worden nu direct weergegeven in plaats van soms pas "
-"na een paar minuten."
+msgid "New in this release: departments can carry a description that assignment, cancellation, and reminder emails pull in automatically via the {department} and {department_desc} placeholders, so you no longer have to describe every single shift; and Tools → EventAdmin Data has a new \"Import volunteers\" screen for bulk-creating volunteer accounts from a CSV file (rows without an email address become offline volunteers)."
+msgstr "Nieuw in deze versie: afdelingen kunnen een beschrijving hebben die toewijzings-, annulerings- en herinnerings-e-mails automatisch invoegen via de aanduidingen {department} en {department_desc}, zodat je niet meer elke afzonderlijke dienst hoeft te beschrijven. Daarnaast heeft Extra → EventAdmin Data een nieuw scherm \"Vrijwilligers importeren\" om vrijwilligersaccounts in bulk aan te maken vanuit een CSV-bestand (rijen zonder e-mailadres worden offline vrijwilligers)."
 
 #: eventadmin-volunteer-management.php:299
 msgid "Dismiss"
@@ -1588,7 +1575,8 @@ msgid ""
 "and again as a reminder a configurable number of days before it starts "
 "(Settings → Communication → Reminders — leave the days field empty to switch"
 " reminders off). All three messages use a rich-text editor and share "
-"placeholders such as {first}, {last}, {title}, {start}, {end}, {desc}, and "
+"placeholders such as {first}, {last}, {title}, {start}, {end}, {desc}, "
+"{department}, {department_desc}, and "
 "{days}. Each shift can override the sender through a linked WordPress user "
 "and/or a manual organizer name and email."
 msgstr ""
@@ -1597,7 +1585,7 @@ msgstr ""
 "aantal dagen voordat de dienst begint (Instellingen → Communicatie → "
 "Herinneringen — laat het dagenveld leeg om herinneringen uit te schakelen). "
 "Alle drie de berichten gebruiken een rich-text-editor en delen tijdelijke "
-"aanduidingen zoals {first}, {last}, {title}, {start}, {end}, {desc} en "
+"aanduidingen zoals {first}, {last}, {title}, {start}, {end}, {desc}, {department}, {department_desc} en "
 "{days}. Elke dienst kan de afzender overschrijven via een gekoppelde "
 "WordPress-gebruiker en/of een handmatige organisatornaam en e-mailadres."
 
@@ -2151,14 +2139,22 @@ msgid "Description of the shift"
 msgstr "Beschrijving van de dienst"
 
 #: includes/admin/settings.php:220
+msgid "Department of the shift"
+msgstr "Afdeling van de dienst"
+
+#: includes/admin/settings.php:221
+msgid "Description of the shift's department"
+msgstr "Beschrijving van de afdeling van de dienst"
+
+#: includes/admin/settings.php:222
 msgid "Start time of the shift (formatted)"
 msgstr "Begintijd van de dienst (opgemaakt)"
 
-#: includes/admin/settings.php:221
+#: includes/admin/settings.php:223
 msgid "End time of the shift (formatted)"
 msgstr "Eindtijd van de dienst (opgemaakt)"
 
-#: includes/admin/settings.php:222
+#: includes/admin/settings.php:224
 msgid "Number of days before the shift starts"
 msgstr "Aantal dagen voor de start van de dienst"
 
@@ -3179,6 +3175,74 @@ msgstr "Je bent succesvol afgemeld."
 #: includes/shiftselector.php:417
 msgid "You are not signed up for this shift."
 msgstr "Je bent niet aangemeld voor deze dienst."
+
+#: includes/admin/import.php
+msgid "Import volunteers"
+msgstr "Vrijwilligers importeren"
+
+#: includes/admin/import.php
+msgid "Upload a CSV file to create volunteer accounts in bulk. The first row must be a header row; columns can be in any order and the delimiter may be a comma or a semicolon."
+msgstr "Upload een CSV-bestand om vrijwilligersaccounts in bulk aan te maken. De eerste rij moet een koprij zijn; de kolommen mogen in willekeurige volgorde staan en het scheidingsteken mag een komma of een puntkomma zijn."
+
+#: includes/admin/import.php
+msgid "Recognised columns: <code>first_name</code>, <code>last_name</code>, <code>email</code>, <code>phone</code>. Only <code>first_name</code> is required; <code>last_name</code>, <code>email</code> and <code>phone</code> are optional."
+msgstr "Herkende kolommen: <code>first_name</code>, <code>last_name</code>, <code>email</code>, <code>phone</code>. Alleen <code>first_name</code> is verplicht; <code>last_name</code>, <code>email</code> en <code>phone</code> zijn optioneel."
+
+#: includes/admin/import.php
+msgid "A row with no e-mail address creates an offline volunteer (no login, no notifications). A row whose e-mail already belongs to a user is reported and skipped – no existing account is changed. New volunteers are created without a notification e-mail."
+msgstr "Een rij zonder e-mailadres maakt een offline vrijwilliger aan (geen login, geen notificaties). Een rij waarvan het e-mailadres al bij een gebruiker hoort, wordt gemeld en overgeslagen – er wordt geen bestaand account gewijzigd. Nieuwe vrijwilligers worden aangemaakt zonder notificatie-e-mail."
+
+#: includes/admin/import.php
+#, php-format
+msgid "%d volunteer(s) imported."
+msgstr "%d vrijwilliger(s) geïmporteerd."
+
+#: includes/admin/import.php
+msgid "Skipped – e-mail already in use:"
+msgstr "Overgeslagen – e-mailadres al in gebruik:"
+
+#: includes/admin/import.php
+msgid "Skipped – invalid rows:"
+msgstr "Overgeslagen – ongeldige rijen:"
+
+#: includes/admin/import.php
+msgid "No file was uploaded."
+msgstr "Er is geen bestand geüpload."
+
+#: includes/admin/import.php
+msgid "The file could not be uploaded. Please try again."
+msgstr "Het bestand kon niet worden geüpload. Probeer het opnieuw."
+
+#: includes/admin/import.php
+msgid "Please upload a .csv file."
+msgstr "Upload een .csv-bestand."
+
+#: includes/admin/import.php
+msgid "The file could not be read."
+msgstr "Het bestand kon niet worden gelezen."
+
+#: includes/admin/import.php
+msgid "The file is empty."
+msgstr "Het bestand is leeg."
+
+#: includes/admin/import.php
+msgid "The header row must contain a \"first_name\" column."
+msgstr "De koprij moet een kolom \"first_name\" bevatten."
+
+#: includes/admin/import.php
+#, php-format
+msgid "Row %d: invalid e-mail address."
+msgstr "Rij %d: ongeldig e-mailadres."
+
+#: includes/admin/import.php
+#, php-format
+msgid "Row %d: first name is required."
+msgstr "Rij %d: voornaam is verplicht."
+
+#: includes/admin/import.php
+#, php-format
+msgid "Row %1$d: %2$s"
+msgstr "Rij %1$d: %2$s"
 
 #~ msgid ""
 #~ "New in this release: shift management now lives on its own \"Manager\" page "

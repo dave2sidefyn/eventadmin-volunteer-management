@@ -4,7 +4,7 @@ Tags: volunteer, volunteers, shift scheduling, event management, roster, sign up
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.0
+Stable tag: 3.1.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -113,6 +113,10 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 5. Send Announcement — target a recipient group and see a live preview of the email
 
 == Changelog ==
+
+= Version 3.1.0 =
+* New: Departments can have a description that assignment, cancellation, and reminder emails pull in automatically — use the {department} and {department_desc} placeholders in the email templates (Settings → Communication) instead of writing a description on every shift
+* New: Tools → EventAdmin Data → "Import volunteers" — bulk-create volunteer accounts from a CSV file (columns first_name, last_name, email, phone; comma or semicolon delimiter). Only first_name is required; a row with no email address creates an offline volunteer; a row whose email already belongs to a user is reported and skipped. No notification emails are sent
 
 = Version 3.0.0 =
 * New: Shift overview split into two separate admin pages — "Overview" (Dashboard stats only) and a new "Manager" page (with the drag-and-drop timeline, Table, and Cards tabs), each with its own sidebar menu item
@@ -338,6 +342,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Shift management, volunteer registration, dashboard, export, rules
 
 == Upgrade Notice ==
+
+= 3.1.0 =
+Adds department descriptions in emails (the {department_desc} placeholder) and a CSV "Import volunteers" tool under Tools → EventAdmin Data. No breaking changes.
 
 = 2.1.1 =
 Maintenance only — refreshed screenshots and description. Nothing to do.

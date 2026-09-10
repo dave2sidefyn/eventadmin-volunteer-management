@@ -64,20 +64,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s er her!"
 
 #: eventadmin-volunteer-management.php:293
-msgid ""
-"New in this release: shift management now lives on its own \"Manager\" page "
-"(with the drag-and-drop timeline, Table, and Cards tabs), separate from the "
-"Dashboard; classic menu items like \"All Shifts\" and \"Departments\" can be"
-" hidden from the sidebar; the Timeline's Edit Shift modal gained an "
-"organizer section; and shift/volunteer changes now show up immediately "
-"instead of sometimes taking a few minutes."
-msgstr ""
-"Nytt i denne versjonen: vaktadministrasjonen har nå sin egen side «Manager» "
-"(med fanene for dra-og-slipp-tidslinjen, Tabell og Kort), atskilt fra "
-"Dashboard; klassiske menyvalg som «Alle vakter» og «Avdelinger» kan skjules "
-"fra sidemenyen; redigeringsmodalen for tidslinjen har fått en ny arrangør-"
-"seksjon; og endringer i vakter/frivillige vises nå umiddelbart, i stedet for"
-" at det noen ganger tok noen minutter."
+msgid "New in this release: departments can carry a description that assignment, cancellation, and reminder emails pull in automatically via the {department} and {department_desc} placeholders, so you no longer have to describe every single shift; and Tools → EventAdmin Data has a new \"Import volunteers\" screen for bulk-creating volunteer accounts from a CSV file (rows without an email address become offline volunteers)."
+msgstr "Nytt i denne versjonen: avdelinger kan ha en beskrivelse som tildelings-, avmeldings- og påminnelses-e-poster setter inn automatisk via plassholderne {department} og {department_desc}, slik at du ikke lenger må beskrive hver enkelt vakt. I tillegg har Verktøy → EventAdmin Data et nytt skjermbilde «Importer frivillige» for å opprette frivillig-kontoer i bulk fra en CSV-fil (rader uten e-postadresse blir offline frivillige)."
 
 #: eventadmin-volunteer-management.php:299
 msgid "Dismiss"
@@ -1567,7 +1555,8 @@ msgid ""
 "and again as a reminder a configurable number of days before it starts "
 "(Settings → Communication → Reminders — leave the days field empty to switch"
 " reminders off). All three messages use a rich-text editor and share "
-"placeholders such as {first}, {last}, {title}, {start}, {end}, {desc}, and "
+"placeholders such as {first}, {last}, {title}, {start}, {end}, {desc}, "
+"{department}, {department_desc}, and "
 "{days}. Each shift can override the sender through a linked WordPress user "
 "and/or a manual organizer name and email."
 msgstr ""
@@ -1575,7 +1564,7 @@ msgstr ""
 "igjen som en påminnelse et valgfritt antall dager før den starter "
 "(Innstillinger → Kommunikasjon → Påminnelser — la dagsfeltet stå tomt for å "
 "skru av påminnelser). Alle tre meldingene bruker en rikteksteditor og deler "
-"plassholdere som {first}, {last}, {title}, {start}, {end}, {desc} og {days}."
+"plassholdere som {first}, {last}, {title}, {start}, {end}, {desc}, {department}, {department_desc} og {days}."
 " Hver vakt kan overstyre avsenderen gjennom en tilknyttet WordPress-bruker "
 "og/eller et manuelt arrangørnavn og e-post."
 
@@ -2125,14 +2114,22 @@ msgid "Description of the shift"
 msgstr "Beskrivelse av vakten"
 
 #: includes/admin/settings.php:220
+msgid "Department of the shift"
+msgstr "Vaktens avdeling"
+
+#: includes/admin/settings.php:221
+msgid "Description of the shift's department"
+msgstr "Beskrivelse av vaktens avdeling"
+
+#: includes/admin/settings.php:222
 msgid "Start time of the shift (formatted)"
 msgstr "Starttidspunkt for vakten (formatert)"
 
-#: includes/admin/settings.php:221
+#: includes/admin/settings.php:223
 msgid "End time of the shift (formatted)"
 msgstr "Sluttidspunkt for vakten (formatert)"
 
-#: includes/admin/settings.php:222
+#: includes/admin/settings.php:224
 msgid "Number of days before the shift starts"
 msgstr "Antall dager før vakten starter"
 
@@ -3147,3 +3144,71 @@ msgstr "Du har blitt fjernet."
 #: includes/shiftselector.php:417
 msgid "You are not signed up for this shift."
 msgstr "Du er ikke påmeldt denne vakten."
+
+#: includes/admin/import.php
+msgid "Import volunteers"
+msgstr "Importer frivillige"
+
+#: includes/admin/import.php
+msgid "Upload a CSV file to create volunteer accounts in bulk. The first row must be a header row; columns can be in any order and the delimiter may be a comma or a semicolon."
+msgstr "Last opp en CSV-fil for å opprette frivillig-kontoer i bulk. Den første raden må være en overskriftsrad; kolonnene kan stå i vilkårlig rekkefølge, og skilletegnet kan være komma eller semikolon."
+
+#: includes/admin/import.php
+msgid "Recognised columns: <code>first_name</code>, <code>last_name</code>, <code>email</code>, <code>phone</code>. Only <code>first_name</code> is required; <code>last_name</code>, <code>email</code> and <code>phone</code> are optional."
+msgstr "Gjenkjente kolonner: <code>first_name</code>, <code>last_name</code>, <code>email</code>, <code>phone</code>. Bare <code>first_name</code> er påkrevd; <code>last_name</code>, <code>email</code> og <code>phone</code> er valgfrie."
+
+#: includes/admin/import.php
+msgid "A row with no e-mail address creates an offline volunteer (no login, no notifications). A row whose e-mail already belongs to a user is reported and skipped – no existing account is changed. New volunteers are created without a notification e-mail."
+msgstr "En rad uten e-postadresse oppretter en offline frivillig (ingen innlogging, ingen varsler). En rad der e-postadressen allerede tilhører en bruker, blir rapportert og hoppet over – ingen eksisterende konto endres. Nye frivillige opprettes uten varsel-e-post."
+
+#: includes/admin/import.php
+#, php-format
+msgid "%d volunteer(s) imported."
+msgstr "%d frivillig(e) importert."
+
+#: includes/admin/import.php
+msgid "Skipped – e-mail already in use:"
+msgstr "Hoppet over – e-postadresse allerede i bruk:"
+
+#: includes/admin/import.php
+msgid "Skipped – invalid rows:"
+msgstr "Hoppet over – ugyldige rader:"
+
+#: includes/admin/import.php
+msgid "No file was uploaded."
+msgstr "Ingen fil ble lastet opp."
+
+#: includes/admin/import.php
+msgid "The file could not be uploaded. Please try again."
+msgstr "Filen kunne ikke lastes opp. Prøv igjen."
+
+#: includes/admin/import.php
+msgid "Please upload a .csv file."
+msgstr "Last opp en .csv-fil."
+
+#: includes/admin/import.php
+msgid "The file could not be read."
+msgstr "Filen kunne ikke leses."
+
+#: includes/admin/import.php
+msgid "The file is empty."
+msgstr "Filen er tom."
+
+#: includes/admin/import.php
+msgid "The header row must contain a \"first_name\" column."
+msgstr "Overskriftsraden må inneholde en «first_name»-kolonne."
+
+#: includes/admin/import.php
+#, php-format
+msgid "Row %d: invalid e-mail address."
+msgstr "Rad %d: ugyldig e-postadresse."
+
+#: includes/admin/import.php
+#, php-format
+msgid "Row %d: first name is required."
+msgstr "Rad %d: fornavn er påkrevd."
+
+#: includes/admin/import.php
+#, php-format
+msgid "Row %1$d: %2$s"
+msgstr "Rad %1$d: %2$s"

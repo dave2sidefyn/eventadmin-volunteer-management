@@ -65,22 +65,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s est disponible !"
 
 #: eventadmin-volunteer-management.php:293
-msgid ""
-"New in this release: shift management now lives on its own \"Manager\" page "
-"(with the drag-and-drop timeline, Table, and Cards tabs), separate from the "
-"Dashboard; classic menu items like \"All Shifts\" and \"Departments\" can be"
-" hidden from the sidebar; the Timeline's Edit Shift modal gained an "
-"organizer section; and shift/volunteer changes now show up immediately "
-"instead of sometimes taking a few minutes."
-msgstr ""
-"Nouveau dans cette version : la gestion des créneaux dispose désormais de sa"
-" propre page « Manager » (avec les onglets Chronologie glisser-déposer, "
-"Tableau et Cartes), distincte du tableau de bord ; les éléments de menu "
-"classiques comme « Tous les créneaux » et « Départements » peuvent être "
-"masqués dans la barre latérale ; la fenêtre modale de modification de "
-"créneau de la Chronologie a gagné une section organisateur ; et les "
-"modifications de créneaux/bénévoles s'affichent désormais immédiatement au "
-"lieu de parfois prendre quelques minutes."
+msgid "New in this release: departments can carry a description that assignment, cancellation, and reminder emails pull in automatically via the {department} and {department_desc} placeholders, so you no longer have to describe every single shift; and Tools → EventAdmin Data has a new \"Import volunteers\" screen for bulk-creating volunteer accounts from a CSV file (rows without an email address become offline volunteers)."
+msgstr "Nouveautés de cette version : les départements peuvent avoir une description que les e-mails d'inscription, d'annulation et de rappel insèrent automatiquement via les marqueurs {department} et {department_desc} – vous n'avez donc plus à décrire chaque créneau. De plus, Outils → EventAdmin Data propose un nouvel écran « Importer des bénévoles » pour créer des comptes bénévoles en masse à partir d'un fichier CSV (les lignes sans adresse e-mail deviennent des bénévoles hors ligne)."
 
 #: eventadmin-volunteer-management.php:299
 msgid "Dismiss"
@@ -1596,7 +1582,8 @@ msgid ""
 "and again as a reminder a configurable number of days before it starts "
 "(Settings → Communication → Reminders — leave the days field empty to switch"
 " reminders off). All three messages use a rich-text editor and share "
-"placeholders such as {first}, {last}, {title}, {start}, {end}, {desc}, and "
+"placeholders such as {first}, {last}, {title}, {start}, {end}, {desc}, "
+"{department}, {department_desc}, and "
 "{days}. Each shift can override the sender through a linked WordPress user "
 "and/or a manual organizer name and email."
 msgstr ""
@@ -1605,7 +1592,7 @@ msgstr ""
 "début (Réglages → Communication → Rappels — laissez le champ des jours vide "
 "pour désactiver les rappels). Les trois messages utilisent un éditeur de "
 "texte enrichi et partagent des marqueurs tels que {first}, {last}, {title}, "
-"{start}, {end}, {desc} et {days}. Chaque créneau peut remplacer l'expéditeur"
+"{start}, {end}, {desc}, {department}, {department_desc} et {days}. Chaque créneau peut remplacer l'expéditeur"
 " au moyen d'un utilisateur WordPress lié et/ou d'un nom et d'une adresse "
 "e-mail d'organisateur saisis manuellement."
 
@@ -2168,14 +2155,22 @@ msgid "Description of the shift"
 msgstr "Description du créneau"
 
 #: includes/admin/settings.php:220
+msgid "Department of the shift"
+msgstr "Département du créneau"
+
+#: includes/admin/settings.php:221
+msgid "Description of the shift's department"
+msgstr "Description du département du créneau"
+
+#: includes/admin/settings.php:222
 msgid "Start time of the shift (formatted)"
 msgstr "Heure de début du créneau (formatée)"
 
-#: includes/admin/settings.php:221
+#: includes/admin/settings.php:223
 msgid "End time of the shift (formatted)"
 msgstr "Heure de fin du créneau (formatée)"
 
-#: includes/admin/settings.php:222
+#: includes/admin/settings.php:224
 msgid "Number of days before the shift starts"
 msgstr "Nombre de jours avant le début du créneau"
 
@@ -3202,6 +3197,74 @@ msgstr "Vous avez été désinscrit avec succès."
 #: includes/shiftselector.php:417
 msgid "You are not signed up for this shift."
 msgstr "Vous n'êtes pas inscrit à ce créneau."
+
+#: includes/admin/import.php
+msgid "Import volunteers"
+msgstr "Importer des bénévoles"
+
+#: includes/admin/import.php
+msgid "Upload a CSV file to create volunteer accounts in bulk. The first row must be a header row; columns can be in any order and the delimiter may be a comma or a semicolon."
+msgstr "Téléversez un fichier CSV pour créer des comptes bénévoles en masse. La première ligne doit être une ligne d'en-tête ; les colonnes peuvent être dans n'importe quel ordre et le séparateur peut être une virgule ou un point-virgule."
+
+#: includes/admin/import.php
+msgid "Recognised columns: <code>first_name</code>, <code>last_name</code>, <code>email</code>, <code>phone</code>. Only <code>first_name</code> is required; <code>last_name</code>, <code>email</code> and <code>phone</code> are optional."
+msgstr "Colonnes reconnues : <code>first_name</code>, <code>last_name</code>, <code>email</code>, <code>phone</code>. Seul <code>first_name</code> est requis ; <code>last_name</code>, <code>email</code> et <code>phone</code> sont facultatifs."
+
+#: includes/admin/import.php
+msgid "A row with no e-mail address creates an offline volunteer (no login, no notifications). A row whose e-mail already belongs to a user is reported and skipped – no existing account is changed. New volunteers are created without a notification e-mail."
+msgstr "Une ligne sans adresse e-mail crée un bénévole hors ligne (pas de connexion, pas de notifications). Une ligne dont l'e-mail appartient déjà à un utilisateur est signalée et ignorée – aucun compte existant n'est modifié. Les nouveaux bénévoles sont créés sans e-mail de notification."
+
+#: includes/admin/import.php
+#, php-format
+msgid "%d volunteer(s) imported."
+msgstr "%d bénévole(s) importé(s)."
+
+#: includes/admin/import.php
+msgid "Skipped – e-mail already in use:"
+msgstr "Ignoré – e-mail déjà utilisé :"
+
+#: includes/admin/import.php
+msgid "Skipped – invalid rows:"
+msgstr "Ignoré – lignes non valides :"
+
+#: includes/admin/import.php
+msgid "No file was uploaded."
+msgstr "Aucun fichier n'a été téléversé."
+
+#: includes/admin/import.php
+msgid "The file could not be uploaded. Please try again."
+msgstr "Le fichier n'a pas pu être téléversé. Veuillez réessayer."
+
+#: includes/admin/import.php
+msgid "Please upload a .csv file."
+msgstr "Veuillez téléverser un fichier .csv."
+
+#: includes/admin/import.php
+msgid "The file could not be read."
+msgstr "Le fichier n'a pas pu être lu."
+
+#: includes/admin/import.php
+msgid "The file is empty."
+msgstr "Le fichier est vide."
+
+#: includes/admin/import.php
+msgid "The header row must contain a \"first_name\" column."
+msgstr "La ligne d'en-tête doit contenir une colonne « first_name »."
+
+#: includes/admin/import.php
+#, php-format
+msgid "Row %d: invalid e-mail address."
+msgstr "Ligne %d : adresse e-mail non valide."
+
+#: includes/admin/import.php
+#, php-format
+msgid "Row %d: first name is required."
+msgstr "Ligne %d : le prénom est obligatoire."
+
+#: includes/admin/import.php
+#, php-format
+msgid "Row %1$d: %2$s"
+msgstr "Ligne %1$d : %2$s"
 
 #~ msgid ""
 #~ "New in this release: shift management now lives on its own \"Manager\" page "

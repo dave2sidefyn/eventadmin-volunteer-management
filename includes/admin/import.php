@@ -55,6 +55,27 @@ function eventadmin_render_import_page(): void
     </div>
 
     <div class="wrap">
+        <h1><?php esc_attr_e('Import volunteers', 'eventadmin-volunteer-management'); ?></h1>
+        <p><?php esc_html_e('Upload a CSV file to create volunteer accounts in bulk. The first row must be a header row; columns can be in any order and the delimiter may be a comma or a semicolon.', 'eventadmin-volunteer-management'); ?></p>
+        <p><?php echo wp_kses(
+            __('Recognised columns: <code>first_name</code>, <code>last_name</code>, <code>email</code>, <code>phone</code>. Only <code>first_name</code> is required; <code>last_name</code>, <code>email</code> and <code>phone</code> are optional.', 'eventadmin-volunteer-management'),
+            ['code' => []]
+        ); ?></p>
+        <p><?php esc_html_e('A row with no e-mail address creates an offline volunteer (no login, no notifications). A row whose e-mail already belongs to a user is reported and skipped – no existing account is changed. New volunteers are created without a notification e-mail.', 'eventadmin-volunteer-management'); ?></p>
+        <pre style="background:#f6f7f7;border:1px solid #dcdcde;padding:8px 12px;display:inline-block;">first_name,last_name,email,phone
+Anna,Muster,anna@example.com,+41 79 123 45 67</pre>
+        <form method="post" action="" enctype="multipart/form-data">
+            <?php wp_nonce_field('eventadmin_import_volunteers', 'eventadmin_import_volunteers_nonce'); ?>
+            <input type="hidden" name="eventadmin_import_volunteers_action" value="1">
+            <p>
+                <input type="file" name="eventadmin_volunteer_csv" accept=".csv,text/csv" required>
+            </p>
+            <p><input type="submit" class="button button-primary"
+                      value="<?php esc_attr_e('Import volunteers', 'eventadmin-volunteer-management'); ?>"></p>
+        </form>
+    </div>
+
+    <div class="wrap">
         <h1><?php esc_attr_e('Import demo data', 'eventadmin-volunteer-management'); ?></h1>
         <form method="post" action="">
             <?php wp_nonce_field('eventadmin_import_shift_cats', 'eventadmin_import_nonce'); ?>
@@ -116,6 +137,38 @@ function eventadmin_render_import_page(): void
             $removed
         ) . '</p></div>';
     }
+
+    if (isset($_GET['volimport']) && $_GET['volimport'] === 'done') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $result = get_transient('eventadmin_volunteer_import_result_' . get_current_user_id());
+        delete_transient('eventadmin_volunteer_import_result_' . get_current_user_id());
+
+        if (!is_array($result)) {
+            $result = ['created' => 0, 'duplicates' => [], 'errors' => []];
+        }
+
+        $class = (!empty($result['errors']) || !empty($result['duplicates'])) ? 'notice-warning' : 'notice-success';
+        echo '<div class="notice ' . esc_attr($class) . ' is-dismissible"><p>' . sprintf(
+            /* translators: %d: number of volunteer accounts created */
+            esc_html__('%d volunteer(s) imported.', 'eventadmin-volunteer-management'),
+            (int) $result['created']
+        ) . '</p>';
+
+        foreach (['duplicates', 'errors'] as $group) {
+            if (empty($result[$group])) {
+                continue;
+            }
+            $label = $group === 'duplicates'
+                ? esc_html__('Skipped – e-mail already in use:', 'eventadmin-volunteer-management')
+                : esc_html__('Skipped – invalid rows:', 'eventadmin-volunteer-management');
+            echo '<p><strong>' . $label . '</strong></p><ul style="list-style:disc;margin-left:20px;">';
+            foreach ($result[$group] as $line) {
+                echo '<li>' . esc_html($line) . '</li>';
+            }
+            echo '</ul>';
+        }
+
+        echo '</div>';
+    }
 }
 
 /**
@@ -137,6 +190,21 @@ function eventadmin_import_admin_init(): void
         eventadmin_import_shift_categories();
 
         wp_safe_redirect(admin_url('tools.php?page=eventadmin-import&import=success'));
+        exit;
+    }
+
+    if (!empty($_POST['eventadmin_import_volunteers_action'])) {
+        if (
+            !isset($_POST['eventadmin_import_volunteers_nonce']) ||
+            !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['eventadmin_import_volunteers_nonce'])), 'eventadmin_import_volunteers')
+        ) {
+            wp_die(esc_html__('Security check failed.', 'eventadmin-volunteer-management'));
+        }
+
+        $result = eventadmin_import_volunteers_from_upload();
+        set_transient('eventadmin_volunteer_import_result_' . get_current_user_id(), $result, MINUTE_IN_SECONDS);
+
+        wp_safe_redirect(admin_url('tools.php?page=eventadmin-import&volimport=done'));
         exit;
     }
 
@@ -348,6 +416,185 @@ function eventadmin_import_shift_categories(): void
             wp_set_object_terms($shift_id, $shift_category->term_id, 'eventadmin_shift_category');
         }
     }
+}
+
+/**
+ * Validates the uploaded volunteer CSV and hands it to the parser.
+ *
+ * @return array{created: int, duplicates: string[], errors: string[]}
+ */
+function eventadmin_import_volunteers_from_upload(): array
+{
+    $empty = ['created' => 0, 'duplicates' => [], 'errors' => []];
+
+    if (
+        empty($_FILES['eventadmin_volunteer_csv']['tmp_name']) ||
+        !is_uploaded_file($_FILES['eventadmin_volunteer_csv']['tmp_name'])
+    ) {
+        $empty['errors'][] = esc_html__('No file was uploaded.', 'eventadmin-volunteer-management');
+        return $empty;
+    }
+
+    if ((int) ($_FILES['eventadmin_volunteer_csv']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        $empty['errors'][] = esc_html__('The file could not be uploaded. Please try again.', 'eventadmin-volunteer-management');
+        return $empty;
+    }
+
+    // sanitize_text_field() is fine here: filenames only, no path.
+    $name = sanitize_file_name((string) ($_FILES['eventadmin_volunteer_csv']['name'] ?? ''));
+    if (strtolower((string) pathinfo($name, PATHINFO_EXTENSION)) !== 'csv') {
+        $empty['errors'][] = esc_html__('Please upload a .csv file.', 'eventadmin-volunteer-management');
+        return $empty;
+    }
+
+    return eventadmin_import_volunteers_from_csv($_FILES['eventadmin_volunteer_csv']['tmp_name']);
+}
+
+/**
+ * Maps a raw CSV header cell to one of the canonical field keys
+ * (first_name, last_name, email, phone) or '' when it is not recognised.
+ */
+function eventadmin_normalize_volunteer_csv_header(string $raw): string
+{
+    $key = strtolower(trim($raw));
+    $key = preg_replace('/^\xEF\xBB\xBF/', '', $key);      // strip UTF-8 BOM
+    $key = preg_replace('/[\s_\-.]+/', '', (string) $key); // collapse separators
+
+    $map = [
+        'first_name' => ['firstname', 'first', 'givenname', 'vorname', 'prenom', 'prénom', 'voornaam', 'fornavn'],
+        'last_name'  => ['lastname', 'last', 'surname', 'familyname', 'nachname', 'nom', 'achternaam', 'etternavn'],
+        'email'      => ['email', 'emailaddress', 'mail', 'emailadres', 'epost', 'courriel', 'emailadresse'],
+        'phone'      => ['phone', 'phonenumber', 'tel', 'telephone', 'mobile', 'telefon', 'telefoon', 'telefonnummer', 'natel', 'gsm'],
+    ];
+
+    foreach ($map as $canonical => $aliases) {
+        if (in_array($key, $aliases, true)) {
+            return $canonical;
+        }
+    }
+
+    return '';
+}
+
+/**
+ * Parses a volunteer CSV file and creates one eventadmin_volunteer account per row.
+ *
+ * A valid e-mail and a first name are required on every row. Rows whose e-mail
+ * already belongs to a WordPress user are reported and skipped without touching
+ * the existing account. No notification e-mail is sent for created accounts.
+ *
+ * @param string $path Absolute path to the uploaded CSV file.
+ * @return array{created: int, duplicates: string[], errors: string[]}
+ */
+function eventadmin_import_volunteers_from_csv(string $path): array
+{
+    $result = ['created' => 0, 'duplicates' => [], 'errors' => []];
+
+    $handle = fopen($path, 'r');
+    if ($handle === false) {
+        $result['errors'][] = esc_html__('The file could not be read.', 'eventadmin-volunteer-management');
+        return $result;
+    }
+
+    // Detect the delimiter from the header line, then rewind to parse it properly.
+    $first_line = (string) fgets($handle);
+    $delimiter  = substr_count($first_line, ';') > substr_count($first_line, ',') ? ';' : ',';
+    rewind($handle);
+
+    $header = fgetcsv($handle, 0, $delimiter, '"', '');
+    if (!is_array($header)) {
+        fclose($handle);
+        $result['errors'][] = esc_html__('The file is empty.', 'eventadmin-volunteer-management');
+        return $result;
+    }
+
+    $columns = array_map('eventadmin_normalize_volunteer_csv_header', $header);
+    if (!in_array('first_name', $columns, true)) {
+        fclose($handle);
+        $result['errors'][] = esc_html__('The header row must contain a "first_name" column.', 'eventadmin-volunteer-management');
+        return $result;
+    }
+
+    // Suppress WordPress's default "new user" e-mail for every account created here.
+    $suppress_cb = static function (array $mail): array {
+        return array_merge($mail, ['to' => '']);
+    };
+    add_filter('wp_new_user_notification_email', $suppress_cb, 999);
+
+    $line = 1; // header consumed
+    while (($row = fgetcsv($handle, 0, $delimiter, '"', '')) !== false) {
+        $line++;
+
+        // Skip blank lines.
+        if ($row === [null] || implode('', array_map('strval', $row)) === '') {
+            continue;
+        }
+
+        $fields = ['first_name' => '', 'last_name' => '', 'email' => '', 'phone' => ''];
+        foreach ($columns as $index => $canonical) {
+            if ($canonical !== '' && isset($row[$index])) {
+                $fields[$canonical] = trim((string) $row[$index]);
+            }
+        }
+
+        $first = sanitize_text_field($fields['first_name']);
+        $last  = sanitize_text_field($fields['last_name']);
+        $phone = sanitize_text_field($fields['phone']);
+        $email = sanitize_email($fields['email']);
+
+        if ($first === '') {
+            /* translators: %d: CSV line number */
+            $result['errors'][] = sprintf(esc_html__('Row %d: first name is required.', 'eventadmin-volunteer-management'), $line);
+            continue;
+        }
+
+        // No e-mail column value -> offline volunteer (no login, no real address).
+        $is_offline = ($fields['email'] === '');
+
+        if (!$is_offline && !is_email($email)) {
+            /* translators: %d: CSV line number */
+            $result['errors'][] = sprintf(esc_html__('Row %d: invalid e-mail address.', 'eventadmin-volunteer-management'), $line);
+            continue;
+        }
+
+        if (!$is_offline && (email_exists($email) || username_exists($email))) {
+            /* translators: 1: CSV line number, 2: e-mail address */
+            $result['duplicates'][] = sprintf(esc_html__('Row %1$d: %2$s', 'eventadmin-volunteer-management'), $line, $email);
+            continue;
+        }
+
+        $user_id = wp_insert_user([
+            'user_login'   => $is_offline ? 'volunteer_' . wp_generate_password(8, false) : $email,
+            'user_email'   => $is_offline ? 'offline_' . wp_generate_password(12, false) . '@volunteer.invalid' : $email,
+            'user_pass'    => wp_generate_password(),
+            'first_name'   => $first,
+            'last_name'    => $last,
+            'display_name' => trim($first . ' ' . $last),
+            'role'         => 'eventadmin_volunteer',
+        ]);
+
+        if (is_wp_error($user_id)) {
+            /* translators: 1: CSV line number, 2: error message */
+            $result['errors'][] = sprintf(
+                esc_html__('Row %1$d: %2$s', 'eventadmin-volunteer-management'),
+                $line,
+                $user_id->get_error_message()
+            );
+            continue;
+        }
+
+        if ($phone !== '') {
+            update_user_meta($user_id, 'eventadmin_phone', $phone);
+        }
+        update_user_meta($user_id, $is_offline ? 'eventadmin_offline_volunteer' : 'eventadmin_manually_added', '1');
+
+        $result['created']++;
+    }
+
+    remove_filter('wp_new_user_notification_email', $suppress_cb, 999);
+    fclose($handle);
+
+    return $result;
 }
 
 /**
