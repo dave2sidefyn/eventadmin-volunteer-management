@@ -222,9 +222,8 @@ function eventadmin_volunteer_list_page(): void
     </script>';
 
     // "Create new volunteer" modal
-    echo '<div id="eventadmin-create-volunteer-modal" class="eventadmin-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100000;">';
-    echo '<div style="position:relative;background:#fff;max-width:480px;margin:60px auto;padding:20px;border-radius:6px;max-height:80vh;overflow-y:auto;">';
-    echo '<button type="button" class="eventadmin-modal-close" aria-label="' . esc_attr__('Close', 'eventadmin-volunteer-management') . '" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:24px;line-height:1;cursor:pointer;color:#666;padding:4px 8px;">&times;</button>';
+    eventadmin_render_modal_open('eventadmin-create-volunteer-modal');
+    eventadmin_render_modal_close_button();
     echo '<h2 style="margin-top:0;">' . esc_html__('Create new volunteer', 'eventadmin-volunteer-management') . '</h2>';
     echo '<form id="eventadmin-create-volunteer-form">';
     wp_nonce_field('eventadmin_create_volunteer', 'eventadmin_create_volunteer_nonce');
@@ -240,13 +239,12 @@ function eventadmin_volunteer_list_page(): void
     echo '<button type="submit" class="button button-primary">' . esc_html__('Create volunteer', 'eventadmin-volunteer-management') . '</button>';
     echo ' <span id="eventadmin-create-volunteer-result" style="margin-left:8px;"></span>';
     echo '</p></form>';
-    echo '</div></div>';
+    eventadmin_render_modal_close();
 
     // "Grant volunteer role" modal
     $non_volunteers = get_users(['role__not_in' => ['eventadmin_volunteer'], 'orderby' => 'display_name', 'fields' => ['ID', 'display_name', 'user_email']]);
-    echo '<div id="eventadmin-grant-role-modal" class="eventadmin-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100000;">';
-    echo '<div style="position:relative;background:#fff;max-width:480px;margin:60px auto;padding:20px;border-radius:6px;max-height:80vh;overflow-y:auto;">';
-    echo '<button type="button" class="eventadmin-modal-close" aria-label="' . esc_attr__('Close', 'eventadmin-volunteer-management') . '" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:24px;line-height:1;cursor:pointer;color:#666;padding:4px 8px;">&times;</button>';
+    eventadmin_render_modal_open('eventadmin-grant-role-modal');
+    eventadmin_render_modal_close_button();
     echo '<h2 style="margin-top:0;">' . esc_html__('Grant volunteer role', 'eventadmin-volunteer-management') . '</h2>';
     if (empty($non_volunteers)) {
         echo '<p><em>' . esc_html__('All existing users already have the volunteer role.', 'eventadmin-volunteer-management') . '</em></p>';
@@ -266,7 +264,11 @@ function eventadmin_volunteer_list_page(): void
         echo ' <span id="eventadmin-grant-role-result" style="margin-left:8px;"></span>';
         echo '</p></form>';
     }
-    echo '</div></div>';
+    eventadmin_render_modal_close();
+
+    // "View profile" modal — shared with the Timeline view (see includes/admin/user-profile.php).
+    eventadmin_render_volunteer_profile_modal_markup();
+    eventadmin_enqueue_volunteer_profile_modal_script();
 
     // Volunteer table
     $sortable_cols = [
@@ -340,7 +342,13 @@ function eventadmin_volunteer_list_page(): void
         $is_social     = in_array($volunteer->ID, $social_user_ids, true);
         $is_manual     = (bool) get_user_meta($volunteer->ID, 'eventadmin_manually_added', true);
 
-        $display_name = esc_html(trim($volunteer->first_name . ' ' . $volunteer->last_name) ?: $volunteer->user_login);
+        $profile_trigger_name = trim($volunteer->first_name . ' ' . $volunteer->last_name) ?: $volunteer->user_login;
+        // Opens the same "Volunteer activity" modal used from the Timeline (upcoming/past
+        // shifts + notification history) — lets an admin see what a volunteer has already
+        // been assigned/sent without leaving this list.
+        $display_name = '<button type="button" class="button-link eventadmin-view-volunteer-profile" data-user-id="'
+            . esc_attr($volunteer->ID) . '" data-name="' . esc_attr($profile_trigger_name) . '">'
+            . esc_html($profile_trigger_name) . '</button>';
         if ($is_offline) {
             $display_name .= ' <span style="background:#777;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:normal;">' . esc_html__('Offline', 'eventadmin-volunteer-management') . '</span>';
         }

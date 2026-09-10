@@ -131,35 +131,49 @@ function eventadmin_save_shift_meta(int $post_id): void
     if (isset($_POST['shift_end'])) {
         update_post_meta($post_id, 'shift_end', eventadmin_normalize_datetime_input(sanitize_text_field(wp_unslash($_POST['shift_end']))));
     }
-    if (isset($_POST['shift_organizer_name'])) {
-        $org_name = sanitize_text_field(wp_unslash($_POST['shift_organizer_name']));
+    eventadmin_save_shift_organizer_fields($post_id, $_POST);
+
+    $new_start = (string) get_post_meta($post_id, 'shift_start', true);
+    $new_end   = (string) get_post_meta($post_id, 'shift_end', true);
+    if ($old_start !== $new_start || $old_end !== $new_end) {
+        eventadmin_clear_shift_reminder_markers($post_id);
+    }
+}
+
+/**
+ * Saves the three organizer override fields shared by the classic metabox above and the
+ * Timeline view's Edit Shift modal (see eventadmin_ajax_update_shift() /
+ * eventadmin_ajax_create_shift() in includes/admin/dashboard-tab-timeline.php) — kept in one
+ * place so both save paths validate and clear empty values identically.
+ *
+ * @param int $post_id
+ * @param array<string, mixed> $data Raw request data (already-unslashed values are fine too).
+ */
+function eventadmin_save_shift_organizer_fields(int $post_id, array $data): void
+{
+    if (isset($data['shift_organizer_name'])) {
+        $org_name = sanitize_text_field(wp_unslash($data['shift_organizer_name']));
         if ($org_name) {
             update_post_meta($post_id, 'shift_organizer_name', $org_name);
         } else {
             delete_post_meta($post_id, 'shift_organizer_name');
         }
     }
-    if (isset($_POST['shift_organizer_user_id'])) {
-        $organizer_user_id = absint(wp_unslash($_POST['shift_organizer_user_id']));
+    if (isset($data['shift_organizer_user_id'])) {
+        $organizer_user_id = absint(wp_unslash($data['shift_organizer_user_id']));
         if ($organizer_user_id > 0 && get_userdata($organizer_user_id)) {
             update_post_meta($post_id, 'shift_organizer_user_id', $organizer_user_id);
         } else {
             delete_post_meta($post_id, 'shift_organizer_user_id');
         }
     }
-    if (isset($_POST['shift_organizer_email'])) {
-        $org_email = sanitize_email(wp_unslash($_POST['shift_organizer_email']));
+    if (isset($data['shift_organizer_email'])) {
+        $org_email = sanitize_email(wp_unslash($data['shift_organizer_email']));
         if ($org_email) {
             update_post_meta($post_id, 'shift_organizer_email', $org_email);
         } else {
             delete_post_meta($post_id, 'shift_organizer_email');
         }
-    }
-
-    $new_start = (string) get_post_meta($post_id, 'shift_start', true);
-    $new_end   = (string) get_post_meta($post_id, 'shift_end', true);
-    if ($old_start !== $new_start || $old_end !== $new_end) {
-        eventadmin_clear_shift_reminder_markers($post_id);
     }
 }
 
@@ -215,3 +229,63 @@ add_filter('post_row_actions', 'eventadmin_add_duplicate_button', 10, 2);
 }
 
 add_action('admin_post_duplicate_shift', 'eventadmin_duplicate_shift');
+
+/**
+ * Adds the metabox for shift details in the admin area
+ * @return void
+ */
+function eventadmin_add_meta_boxes(): void
+{
+    add_meta_box(
+        'shift_eventadmin_info',
+        esc_html__('Assigned Volunteers', 'eventadmin-volunteer-management'),
+        'eventadmin_shift_meta_box',
+        'eventadmin_shift',
+        'normal'
+    );
+}
+
+add_action('add_meta_boxes', 'eventadmin_add_meta_boxes');
+
+/**
+ * Metabox for shift details in the admin area
+ *
+ * Shows the assigned volunteers for a shift
+ *
+ * @param WP_Post $post The current post object
+ */
+function eventadmin_shift_meta_box(WP_Post $post): void
+{
+    $meta = get_post_meta($post->ID);
+    $max = get_post_meta($post->ID, 'max_volunteers', true);
+    $count = eventadmin_count_assignments($post->ID);
+
+    echo '<p><strong>' . esc_html__('Filled:', 'eventadmin-volunteer-management') . '</strong> ' . esc_html($count) . '/' . esc_html($max) . '</p>';
+
+    echo '<table class="widefat striped">
+<thead>
+<tr>
+<th>' . esc_html__('Name', 'eventadmin-volunteer-management') . '</th>
+<th>' . esc_html__('E-Mail', 'eventadmin-volunteer-management') . '</th>
+<th>' . esc_html__('Phone', 'eventadmin-volunteer-management') . '</th>
+</tr>
+</thead>
+<tbody>';
+    foreach ($meta as $key => $val) {
+        if (str_starts_with($key, 'assigned_user_')) {
+            $uid = absint($val[0]);
+            $user = get_userdata($uid);
+            if (!$user) continue;
+            $phone      = get_user_meta($uid, 'eventadmin_phone', true);
+            $is_offline = (bool) get_user_meta($uid, 'eventadmin_offline_volunteer', true);
+            echo '<tr>';
+            echo '<td>' . esc_html($user->first_name . ' ' . $user->last_name);
+            if ($is_offline) echo ' <span style="background:#888;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;">' . esc_html__('Offline', 'eventadmin-volunteer-management') . '</span>';
+            echo '</td>';
+            echo '<td>' . ($is_offline ? '—' : esc_html($user->user_email)) . '</td>';
+            echo '<td>' . esc_html($phone) . '</td>';
+            echo '</tr>';
+        }
+    }
+    echo '</tbody></table>';
+}

@@ -100,12 +100,12 @@ function eventadmin_plugin_documentation_page()
             <li><?php echo esc_html__('Install the plugin via the WordPress backend or upload the ZIP', 'eventadmin-volunteer-management'); ?></li>
             <li><?php echo esc_html__('Activate the plugin', 'eventadmin-volunteer-management'); ?></li>
             <li><?php echo esc_html__('Create a page and insert the', 'eventadmin-volunteer-management'); ?> <code>[eventadmin]</code> <?php echo esc_html__('shortcode — this is the main volunteer page (registration for new visitors, shift selector and profile for logged-in volunteers)', 'eventadmin-volunteer-management'); ?></li>
-            <li><?php echo esc_html__('Create shift categories under Shifts → Categories', 'eventadmin-volunteer-management'); ?></li>
+            <li><?php echo esc_html__('Create shift categories via the "Departments" button on the Manager page', 'eventadmin-volunteer-management'); ?></li>
             <li><?php echo esc_html__('Create your first shifts under Shifts → Add New', 'eventadmin-volunteer-management'); ?></li>
         </ol>
 
         <h3><?php echo esc_html__('Departments', 'eventadmin-volunteer-management'); ?></h3>
-        <p><?php echo esc_html__('Departments (Shifts → Categories) group shifts, can be nested under a parent, and each carries a color used for its badge on shift cards and in the overview. "Hide from volunteers" removes a department from the frontend filter and labels; a shift disappears for volunteers only when every department it belongs to is hidden (shifts someone already signed up for are never hidden). Color, parent, visibility, and description can also be changed via Quick Edit in the department list, and the shift list itself can be filtered and sorted by department.', 'eventadmin-volunteer-management'); ?></p>
+        <p><?php echo esc_html__('Departments (Manager → Departments) group shifts, can be nested under a parent, and each carries a color used for its badge on shift cards and in the overview. "Hide from volunteers" removes a department from the frontend filter and labels; a shift disappears for volunteers only when every department it belongs to is hidden (shifts someone already signed up for are never hidden). Color, parent, visibility, and description can also be changed via Quick Edit in the department list, and the shift list itself can be filtered and sorted by department.', 'eventadmin-volunteer-management'); ?></p>
 
         <h3><?php echo esc_html__('Shift Overview', 'eventadmin-volunteer-management'); ?></h3>
         <p><?php echo esc_html__('The shift overview (Shifts → Overview) is split into four tabs, each showing only the filters relevant to it:', 'eventadmin-volunteer-management'); ?></p>

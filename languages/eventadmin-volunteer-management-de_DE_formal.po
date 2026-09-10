@@ -2,11 +2,9 @@
 # This file is distributed under the same license as the Plugins - EventAdmin – Volunteer Management - Stable (latest release) package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Plugins - EventAdmin – Volunteer Management - Stable "
-"(latest release)\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-"
-"volunteer-management\n"
-"POT-Creation-Date: 2026-09-03T12:09:32+00:00\n"
+"Project-Id-Version: Plugins - EventAdmin – Volunteer Management - Stable (latest release)\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
+"POT-Creation-Date: 2026-09-10T13:27:39+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: de_DE_formal\n"
 "MIME-Version: 1.0\n"
@@ -42,7 +40,7 @@ msgstr "David Wiedmer, sidefyn GmbH"
 msgid "https://profiles.wordpress.org/davesidefyn/"
 msgstr "https://profiles.wordpress.org/davesidefyn/"
 
-#: eventadmin-volunteer-management.php:162
+#: eventadmin-volunteer-management.php:173
 msgid ""
 "EventAdmin – Volunteer Management – developed by <a "
 "href=\"mailto:dave@sidefyn.ch\">David Wiedmer, sidefyn GmbH</a>"
@@ -50,31 +48,40 @@ msgstr ""
 "EventAdmin – Volunteer-Management – entwickelt von <a "
 "href=\"mailto:dave@sidefyn.ch\">David Wiedmer, sidefyn GmbH</a>"
 
-#: eventadmin-volunteer-management.php:255
-#: eventadmin-volunteer-management.php:284
+#: eventadmin-volunteer-management.php:266
+#: eventadmin-volunteer-management.php:295
 msgid "Rate 5 stars"
 msgstr "5 Sterne geben"
 
-#: eventadmin-volunteer-management.php:256
-#: eventadmin-volunteer-management.php:285
+#: eventadmin-volunteer-management.php:267
+#: eventadmin-volunteer-management.php:296
 msgid "Donate"
 msgstr "Spenden"
 
 #. translators: %s is the plugin version number, e.g. "0.9.3"
-#: eventadmin-volunteer-management.php:279
+#: eventadmin-volunteer-management.php:290
 #, php-format
 msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s ist da!"
 
-#: eventadmin-volunteer-management.php:282
+#: eventadmin-volunteer-management.php:293
 msgid ""
-"This release only refreshes the plugin's screenshots and description on "
-"WordPress.org — nothing changed in the plugin itself."
+"New in this release: shift management now lives on its own \"Manager\" page "
+"(with the drag-and-drop timeline, Table, and Cards tabs), separate from the "
+"Dashboard; classic menu items like \"All Shifts\" and \"Departments\" can be"
+" hidden from the sidebar; the Timeline's Edit Shift modal gained an "
+"organizer section; and shift/volunteer changes now show up immediately "
+"instead of sometimes taking a few minutes."
 msgstr ""
-"Diese Version aktualisiert nur die Screenshots und die Beschreibung auf "
-"WordPress.org — am Plugin selbst hat sich nichts geändert."
+"Neu in dieser Version: Die Schichtverwaltung hat jetzt eine eigene Seite "
+"„Manager“ (mit den Tabs für die Drag-&-Drop-Zeitachse, Tabelle und Karten), "
+"getrennt vom Dashboard; klassische Menüpunkte wie „Alle Schichten“ und "
+"„Abteilungen“ können in der Seitenleiste ausgeblendet werden; das "
+"Bearbeiten-Modal der Zeitachse hat einen neuen Organisator-Bereich erhalten;"
+" und Schicht-/Volunteer-Änderungen werden jetzt sofort angezeigt, statt "
+"manchmal erst nach ein paar Minuten."
 
-#: eventadmin-volunteer-management.php:288
+#: eventadmin-volunteer-management.php:299
 msgid "Dismiss"
 msgstr "Schließen"
 
@@ -101,8 +108,12 @@ msgstr "Fertig! Alle E-Mails wurden gesendet."
 msgid "({failed} could not be delivered)"
 msgstr "({failed} konnte nicht zugestellt werden)"
 
-#: includes/admin/bulk-email.php:77 includes/admin/dashboard.php:906
-#: includes/admin/volunteer-list.php:168 includes/admin/volunteer-list.php:411
+#: includes/admin/bulk-email.php:77
+#: includes/admin/dashboard-tab-timeline.php:304
+#: includes/admin/dashboard-tab-timeline.php:493
+#: includes/admin/dashboard-tab-timeline.php:599
+#: includes/admin/user-profile.php:273 includes/admin/volunteer-list.php:168
+#: includes/admin/volunteer-list.php:419
 msgid "An error occurred. Please try again."
 msgstr "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
 
@@ -176,7 +187,7 @@ msgstr "Volunteers einer bestimmten Kategorie"
 msgid "— Select category —"
 msgstr "— Kategorie auswählen —"
 
-#: includes/admin/bulk-email.php:187 includes/admin/settings.php:636
+#: includes/admin/bulk-email.php:187 includes/admin/settings.php:698
 msgid "Sender"
 msgstr "Absender"
 
@@ -189,6 +200,7 @@ msgid "From email"
 msgstr "Absender-E-Mail"
 
 #: includes/admin/bulk-email.php:196 includes/admin/bulk-email.php:271
+#: includes/admin/user-profile.php:180
 msgid "Subject"
 msgstr "Betreff"
 
@@ -200,8 +212,8 @@ msgstr "Anhang (optional)"
 msgid "Select PDF…"
 msgstr "PDF auswählen…"
 
-#: includes/admin/bulk-email.php:206 includes/admin/dashboard.php:727
-#: includes/admin/settings.php:862
+#: includes/admin/bulk-email.php:206
+#: includes/admin/dashboard-tab-cards.php:131 includes/admin/settings.php:924
 msgid "Remove"
 msgstr "Entfernen"
 
@@ -250,8 +262,10 @@ msgstr "Noch keine Ankündigungen gesendet."
 msgid "Filter…"
 msgstr "Filtern…"
 
-#: includes/admin/bulk-email.php:270 includes/admin/dashboard.php:410
-#: includes/admin/volunteer-list.php:114 includes/admin/volunteer-list.php:143
+#: includes/admin/bulk-email.php:270
+#: includes/admin/dashboard-overview-page.php:276
+#: includes/admin/user-profile.php:178 includes/admin/volunteer-list.php:114
+#: includes/admin/volunteer-list.php:143
 msgid "Date"
 msgstr "Datum"
 
@@ -271,11 +285,11 @@ msgstr "Fehlgeschlagen"
 msgid "Sent by"
 msgstr "Gesendet von"
 
-#: includes/admin/bulk-email.php:280 includes/admin/volunteer-list.php:284
+#: includes/admin/bulk-email.php:280 includes/admin/volunteer-list.php:286
 msgid "Click to sort"
 msgstr "Zum Sortieren klicken"
 
-#: includes/admin/bulk-email.php:292 includes/admin/volunteer-list.php:378
+#: includes/admin/bulk-email.php:292 includes/admin/volunteer-list.php:386
 msgid "Subscribed"
 msgstr "Angemeldet"
 
@@ -299,110 +313,115 @@ msgstr "Schicht: %s"
 msgid "Category: %s"
 msgstr "Kategorie: %s"
 
-#: includes/admin/bulk-email.php:306 includes/admin/dashboard.php:356
-#: includes/admin/dashboard.php:364 includes/admin/dashboard.php:376
-#: includes/admin/dashboard.php:386 includes/admin/dashboard.php:398
+#: includes/admin/bulk-email.php:306
+#: includes/admin/dashboard-overview-page.php:222
+#: includes/admin/dashboard-overview-page.php:230
+#: includes/admin/dashboard-overview-page.php:242
+#: includes/admin/dashboard-overview-page.php:252
+#: includes/admin/dashboard-overview-page.php:264
 msgid "All"
 msgstr "Alle"
 
 #. translators: 1: volunteer name, 2: number of shifts
-#: includes/admin/bulk-email.php:513
+#: includes/admin/bulk-email.php:517
 #, php-format
 msgid "%1$s (%2$d shifts)"
 msgstr "%1$s (%2$d Schichten)"
 
 #. translators: %s is the volunteer name
-#: includes/admin/bulk-email.php:520
+#: includes/admin/bulk-email.php:524
 #, php-format
 msgid "%s (Offline — will NOT be notified)"
 msgstr "%s (Offline – wird NICHT benachrichtigt)"
 
 #. translators: %d is the number of additional recipients not listed
-#: includes/admin/bulk-email.php:526
+#: includes/admin/bulk-email.php:530
 #, php-format
 msgid "…and %d more"
 msgstr "…und %d weitere"
 
-#: includes/admin/bulk-email.php:554
+#: includes/admin/bulk-email.php:560 includes/admin/user-profile.php:146
 msgid "No upcoming shifts."
 msgstr "Keine bevorstehenden Schichten."
 
-#: includes/admin/bulk-email.php:577 includes/admin/bulk-email.php:612
-#: includes/admin/bulk-email.php:708 includes/admin/dashboard.php:1064
-#: includes/admin/import.php:134 includes/admin/import.php:146
-#: includes/admin/import.php:163 includes/admin/import.php:174
-#: includes/admin/volunteer-list.php:432 includes/admin/volunteer-list.php:462
-#: includes/admin/volunteer-list.php:491 includes/admin/volunteer-list.php:559
+#: includes/admin/bulk-email.php:583 includes/admin/bulk-email.php:618
+#: includes/admin/bulk-email.php:714
+#: includes/admin/dashboard-tab-timeline.php:353 includes/admin/import.php:134
+#: includes/admin/import.php:146 includes/admin/import.php:163
+#: includes/admin/import.php:174 includes/admin/user-profile.php:218
+#: includes/admin/volunteer-list.php:440 includes/admin/volunteer-list.php:470
+#: includes/admin/volunteer-list.php:499 includes/admin/volunteer-list.php:567
 #: includes/shiftselector.php:325 includes/shiftselector.php:373
 msgid "Security check failed."
 msgstr "Sicherheitsprüfung fehlgeschlagen."
 
-#: includes/admin/bulk-email.php:581 includes/admin/bulk-email.php:616
-#: includes/admin/bulk-email.php:712 includes/admin/volunteer-list.php:436
-#: includes/admin/volunteer-list.php:466 includes/admin/volunteer-list.php:495
-#: includes/admin/volunteer-list.php:563
+#: includes/admin/bulk-email.php:587 includes/admin/bulk-email.php:622
+#: includes/admin/bulk-email.php:718 includes/admin/volunteer-list.php:444
+#: includes/admin/volunteer-list.php:474 includes/admin/volunteer-list.php:503
+#: includes/admin/volunteer-list.php:571
 msgid "Insufficient permissions."
 msgstr "Unzureichende Berechtigungen."
 
-#: includes/admin/bulk-email.php:590
+#: includes/admin/bulk-email.php:596
 msgid "Invalid recipient type."
 msgstr "Ungültiger Empfängertyp."
 
-#: includes/admin/bulk-email.php:631
+#: includes/admin/bulk-email.php:637
 msgid "Subject and message are required."
 msgstr "Betreff und Nachricht sind erforderlich."
 
-#: includes/admin/bulk-email.php:635
+#: includes/admin/bulk-email.php:641
 msgid "Please select a shift."
 msgstr "Bitte eine Schicht auswählen."
 
-#: includes/admin/bulk-email.php:639
+#: includes/admin/bulk-email.php:645
 msgid "Please select a category."
 msgstr "Bitte eine Kategorie auswählen."
 
-#: includes/admin/bulk-email.php:643
+#: includes/admin/bulk-email.php:649
 msgid "No recipient specified."
 msgstr "Kein Empfänger angegeben."
 
-#: includes/admin/bulk-email.php:651
+#: includes/admin/bulk-email.php:657
 msgid "The selected attachment is not a valid PDF."
 msgstr "Der ausgewählte Anhang ist kein gültiges PDF."
 
-#: includes/admin/bulk-email.php:655
+#: includes/admin/bulk-email.php:661
 msgid "The selected attachment could not be found."
 msgstr "Der ausgewählte Anhang konnte nicht gefunden werden."
 
-#: includes/admin/bulk-email.php:719
+#: includes/admin/bulk-email.php:725
 msgid "Job not found or expired."
 msgstr "Auftrag nicht gefunden oder abgelaufen."
 
 #. translators: %d is the number of failed deliveries
-#: includes/admin/bulk-email.php:804
+#: includes/admin/bulk-email.php:814
 #, php-format
 msgid "%d emails could not be delivered."
 msgstr "%d E-Mails konnten nicht zugestellt werden."
 
-#: includes/admin/bulk-email.php:807
+#: includes/admin/bulk-email.php:817
 msgid "All emails were delivered successfully."
 msgstr "Alle E-Mails wurden erfolgreich zugestellt."
 
 #. translators: %s is the email subject that was sent
-#: includes/admin/bulk-email.php:813
+#: includes/admin/bulk-email.php:823
 #, php-format
 msgid "[%s] Announcement sent: %s"
 msgstr "[%s] Ankündigung gesendet: %s"
 
-#. translators: 1: blog name, 2: email subject, 3: sent count, 4: delivery note
-#: includes/admin/bulk-email.php:819
+#. translators: 1: blog name, 2: email subject, 3: sent count, 4: delivery
+#. note
+#: includes/admin/bulk-email.php:829
 #, php-format
 msgid ""
-"Your announcement <strong>%2$s</strong> was sent on %1$s.<br><br>Recipients: "
-"%3$d<br>%4$s"
+"Your announcement <strong>%2$s</strong> was sent on %1$s.<br><br>Recipients:"
+" %3$d<br>%4$s"
 msgstr ""
-"Ihre Ankündigung <strong>%2$s</strong> wurde am %1$s gesendet."
-"<br><br>Empfänger: %3$d<br>%4$s"
+"Ihre Ankündigung <strong>%2$s</strong> wurde am %1$s "
+"gesendet.<br><br>Empfänger: %3$d<br>%4$s"
 
-#: includes/admin/bulk-email.php:831
+#: includes/admin/bulk-email.php:841
 msgid "Announcement delivery summary"
 msgstr "Zusammenfassung der Ankündigungszustellung"
 
@@ -430,8 +449,8 @@ msgid ""
 "Hidden departments no longer appear in the frontend filter or as a category "
 "label, but shifts already assigned to them remain visible."
 msgstr ""
-"Ausgeblendete Abteilungen erscheinen nicht mehr im Filter der Schichtauswahl "
-"oder als Kategorielabel, bereits zugewiesene Schichten bleiben aber "
+"Ausgeblendete Abteilungen erscheinen nicht mehr im Filter der Schichtauswahl"
+" oder als Kategorielabel, bereits zugewiesene Schichten bleiben aber "
 "weiterhin sichtbar."
 
 #: includes/admin/category-manager.php:173
@@ -442,365 +461,623 @@ msgstr "Vor Volunteers verborgen"
 msgid "Parent"
 msgstr "Übergeordnet"
 
-#: includes/admin/category-manager.php:202 includes/admin/dashboard.php:880
+#: includes/admin/category-manager.php:202
+#: includes/admin/dashboard-tab-timeline.php:192
+#: includes/admin/dashboard-tab-timeline.php:215
 #: includes/admin/shift-metaboxes.php:81
 msgid "— None —"
 msgstr "— Keine —"
 
-#: includes/admin/category-manager.php:215 includes/admin/documentation.php:71
+#: includes/admin/category-manager.php:215
+#: includes/admin/dashboard-tab-timeline.php:203
+#: includes/admin/documentation.php:71
 msgid "Description"
 msgstr "Beschreibung"
 
-#: includes/admin/dashboard.php:25 includes/admin/dashboard.php:26
-msgid "Overview"
-msgstr "Überblick"
+#: includes/admin/dashboard-form-handlers.php:67
+#: includes/admin/dashboard-tab-timeline.php:585
+#: includes/admin/dashboard-tab-timeline.php:680
+msgid "This volunteer is not assigned to this shift."
+msgstr "Diese Person ist für diese Schicht nicht eingeteilt."
 
-#: includes/admin/dashboard.php:200 includes/admin/quick-edit.php:134
-msgid "Filled"
-msgstr "Besetzt"
+#: includes/admin/dashboard-form-handlers.php:82
+msgid "You can only move a volunteer into a shift that is still upcoming."
+msgstr ""
+"Sie können eine Person nur in eine noch bevorstehende Schicht verschieben."
 
-#: includes/admin/dashboard.php:201
-msgid "Open (required)"
-msgstr "Offen (zwingend)"
+#: includes/admin/dashboard-form-handlers.php:88
+msgid "This shift is already full."
+msgstr "Diese Schicht ist bereits voll."
 
-#: includes/admin/dashboard.php:202
-msgid "Open (optional)"
-msgstr "Offen (optional)"
+#: includes/admin/dashboard-form-handlers.php:130
+msgid "Invalid volunteer selected."
+msgstr "Ungültige Person ausgewählt."
 
-#: includes/admin/dashboard.php:203
-msgid "Utilization per department"
-msgstr "Auslastung pro Abteilung"
+#: includes/admin/dashboard-form-handlers.php:200
+#: includes/admin/dashboard-tab-timeline.php:476
+#: includes/admin/shift-metaboxes.php:205 includes/admin/user-profile.php:225
+msgid "Not allowed"
+msgstr "Nicht erlaubt"
 
-#: includes/admin/dashboard.php:204
-msgid "Utilization of all shifts"
-msgstr "Auslastung aller Schichten"
+#: includes/admin/dashboard-form-handlers.php:211
+msgid "Please select both a source and a target date."
+msgstr "Bitte wählen Sie sowohl ein Quell- als auch ein Zieldatum aus."
 
-#: includes/admin/dashboard.php:224
-msgid "Registered Volunteers:"
-msgstr "Registrierte Volunteers:"
-
-#: includes/admin/dashboard.php:225
-msgid "Volunteers without upcoming shift:"
-msgstr "Volunteers ohne bevorstehende Schicht:"
-
-#: includes/admin/dashboard.php:226
-msgid "Upcoming shifts:"
-msgstr "Bevorstehende Schichten:"
-
-#: includes/admin/dashboard.php:227
-msgid "Filled spots:"
-msgstr "Belegte Plätze:"
-
-#: includes/admin/dashboard.php:228
-msgid "Open spots:"
-msgstr "Freie Plätze:"
-
-#: includes/admin/dashboard.php:262
-msgid "Empty"
-msgstr "Leer"
-
-#: includes/admin/dashboard.php:263 includes/admin/dashboard.php:646
-msgid "Understaffed"
-msgstr "Unterbesetzt"
-
-#: includes/admin/dashboard.php:264
-msgid "Heavily understaffed"
-msgstr "Stark unterbesetzt"
-
-#: includes/admin/dashboard.php:324
-msgid "CSV export all shifts"
-msgstr "CSV-Export aller Schichten"
-
-#: includes/admin/dashboard.php:327
-msgid "EventAdmin Overview"
-msgstr "EventAdmin-Übersicht"
-
-#: includes/admin/dashboard.php:332 includes/admin/documentation.php:113
-msgid "Dashboard"
-msgstr "Dashboard"
-
-#: includes/admin/dashboard.php:333 includes/admin/documentation.php:114
-msgid "Cards"
-msgstr "Karten"
-
-#: includes/admin/dashboard.php:334 includes/admin/documentation.php:115
-msgid "Table"
-msgstr "Tabelle"
-
-#: includes/admin/dashboard.php:335 includes/admin/documentation.php:116
-msgid "Timeline"
-msgstr "Zeitachse"
-
-#: includes/admin/dashboard.php:355
-msgid "Department:"
-msgstr "Abteilung:"
-
-#: includes/admin/dashboard.php:363
-msgid "State:"
-msgstr "Status:"
-
-#: includes/admin/dashboard.php:375
-msgid "Volunteers:"
-msgstr "Volunteers:"
-
-#: includes/admin/dashboard.php:385 includes/shiftselector.php:202
-msgid "Date:"
-msgstr "Datum:"
-
-#: includes/admin/dashboard.php:394
-msgid "Show:"
-msgstr "Anzeigen:"
-
-#: includes/admin/dashboard.php:396
-msgid "Upcoming"
-msgstr "Bevorstehend"
-
-#: includes/admin/dashboard.php:397
-msgid "Past"
-msgstr "Vergangen"
-
-#: includes/admin/dashboard.php:408
-msgid "Sort by:"
-msgstr "Sortieren nach:"
-
-#: includes/admin/dashboard.php:411 includes/admin/dashboard.php:708
-#: includes/admin/dashboard.php:755 includes/admin/dashboard.php:1172
-#: includes/admin/dashboard.php:1263 includes/admin/settings.php:643
-#: includes/admin/volunteer-list.php:144 includes/admin/volunteer-list.php:273
-msgid "Name"
-msgstr "Name"
-
-#: includes/admin/dashboard.php:418
-msgid "Order:"
-msgstr "Reihenfolge:"
-
-#: includes/admin/dashboard.php:420
-msgid "Ascending"
-msgstr "Aufsteigend"
-
-#: includes/admin/dashboard.php:421
-msgid "Descending"
-msgstr "Absteigend"
-
-#: includes/admin/dashboard.php:436
-msgid "Show open slots in timeline"
-msgstr "Offene Stellen in der Zeitachse anzeigen"
-
-#: includes/admin/dashboard.php:439
-msgid "Reset filter"
-msgstr "Filter zurücksetzen"
-
-#: includes/admin/dashboard.php:440 includes/admin/volunteer-list.php:206
-msgid "Filter"
-msgstr "Filtern"
-
-#. translators: %d is the minimum number of volunteers required
-#: includes/admin/dashboard.php:517 includes/admin/dashboard.php:573
-#: includes/admin/dashboard.php:1124
-#, php-format
-msgid "(min %d)"
-msgstr "(min %d)"
-
-#: includes/admin/dashboard.php:594
-msgid "Open slot"
-msgstr "Offene Stelle"
-
-#: includes/admin/dashboard.php:637
-msgid "CSV for this shift"
-msgstr "CSV für diese Schicht"
-
-#: includes/admin/dashboard.php:641
-msgid "Period:"
-msgstr "Zeitraum:"
-
-#: includes/admin/dashboard.php:642 includes/admin/dashboard.php:1258
-msgid "Filled:"
-msgstr "Gefüllt:"
-
-#: includes/admin/dashboard.php:644
-msgid "Min.:"
-msgstr "Min.:"
-
-#: includes/admin/dashboard.php:653
-msgid "Add volunteers manually"
-msgstr "Volunteers manuell hinzufügen"
-
-#: includes/admin/dashboard.php:679 includes/admin/dashboard.php:832
-msgid "Select existing volunteer…"
-msgstr "Bestehende Person auswählen…"
-
-#: includes/admin/dashboard.php:685 includes/admin/dashboard.php:700
-#: includes/admin/dashboard.php:834 includes/admin/dashboard.php:849
-msgid "Send confirmation email"
-msgstr "Bestätigungs-E-Mail senden"
-
-#: includes/admin/dashboard.php:686 includes/admin/dashboard.php:836
-msgid "Add to shift"
-msgstr "Zur Schicht hinzufügen"
-
-#: includes/admin/dashboard.php:688 includes/admin/dashboard.php:839
-msgid "or add a new volunteer below"
-msgstr "oder neue Person unten hinzufügen"
-
-#: includes/admin/dashboard.php:696 includes/admin/dashboard.php:845
-#: includes/admin/volunteer-list.php:232 includes/profile.php:50
-#: includes/registration.php:254
-msgid "First name"
-msgstr "Vorname"
-
-#: includes/admin/dashboard.php:697 includes/admin/dashboard.php:846
-#: includes/admin/volunteer-list.php:233 includes/profile.php:55
-#: includes/registration.php:257
-msgid "Last name"
-msgstr "Nachname"
-
-#: includes/admin/dashboard.php:698 includes/admin/dashboard.php:847
-#: includes/admin/volunteer-list.php:236
-msgid "E-Mail (optional)"
-msgstr "E-Mail (optional)"
-
-#: includes/admin/dashboard.php:698 includes/admin/dashboard.php:847
-#: includes/admin/volunteer-list.php:236
-msgid "Leave blank for offline volunteers without an email address"
-msgstr "Leer lassen für Offline-Volunteers ohne E-Mail-Adresse"
-
-#: includes/admin/dashboard.php:699 includes/admin/dashboard.php:708
-#: includes/admin/dashboard.php:757 includes/admin/dashboard.php:848
-#: includes/admin/dashboard.php:1174 includes/admin/dashboard.php:1265
-#: includes/admin/volunteer-list.php:237 includes/admin/volunteer-list.php:275
-msgid "Phone"
-msgstr "Telefon"
-
-#: includes/admin/dashboard.php:701 includes/admin/dashboard.php:851
-msgid "Add"
-msgstr "Hinzufügen"
-
-#: includes/admin/dashboard.php:708 includes/admin/dashboard.php:756
-#: includes/admin/dashboard.php:1173 includes/admin/dashboard.php:1264
-#: includes/admin/settings.php:653 includes/admin/volunteer-list.php:115
-#: includes/admin/volunteer-list.php:145 includes/admin/volunteer-list.php:274
-#: includes/profile.php:62 includes/registration.php:263
-msgid "E-Mail"
-msgstr "E-Mail"
-
-#: includes/admin/dashboard.php:708
-msgid "Action"
-msgstr "Aktion"
-
-#: includes/admin/dashboard.php:712 includes/admin/dashboard.php:1278
-#: includes/admin/documentation.php:128 includes/admin/volunteer-list.php:345
-msgid "Offline"
-msgstr "Offline"
-
-#: includes/admin/dashboard.php:725
-msgid "Notify volunteer"
-msgstr "Volunteer benachrichtigen"
-
-#: includes/admin/dashboard.php:735
-msgid "No volunteers assigned."
-msgstr "Es wurden keine Volunteers eingeteilt."
-
-#: includes/admin/dashboard.php:745 includes/admin/dashboard.php:1169
+#: includes/admin/dashboard-form-handlers.php:254
+#: includes/admin/dashboard-tab-table.php:31
 #: includes/admin/volunteer-list.php:201
 msgid "Category"
 msgstr "Kategorie"
 
-#: includes/admin/dashboard.php:748 includes/admin/dashboard.php:807
-#: includes/admin/dashboard.php:1170 includes/post-types.php:18
+#: includes/admin/dashboard-form-handlers.php:255
+#: includes/admin/dashboard-tab-table.php:34
+#: includes/admin/user-profile.php:67 includes/post-types.php:18
 #: includes/post-types.php:29
 msgid "Shift"
 msgstr "Schicht"
 
-#: includes/admin/dashboard.php:748 includes/admin/dashboard.php:808
-#: includes/admin/dashboard.php:1171 includes/admin/quick-edit.php:133
+#: includes/admin/dashboard-form-handlers.php:256
+#: includes/admin/dashboard-tab-table.php:34 includes/admin/quick-edit.php:133
+#: includes/admin/user-profile.php:68
 msgid "Period"
 msgstr "Zeitraum"
 
-#: includes/admin/dashboard.php:754 includes/admin/dashboard.php:809
-msgid "Capacity"
-msgstr "Kapazität"
+#: includes/admin/dashboard-form-handlers.php:257
+#: includes/admin/dashboard-overview-page.php:277
+#: includes/admin/dashboard-tab-cards.php:112
+#: includes/admin/dashboard-tab-table.php:41 includes/admin/settings.php:705
+#: includes/admin/shift-metaboxes.php:268
+#: includes/admin/volunteer-list.php:144 includes/admin/volunteer-list.php:275
+msgid "Name"
+msgstr "Name"
 
-#: includes/admin/dashboard.php:760 includes/admin/dashboard.php:783
-msgid "No shifts found."
-msgstr "Keine Schichten gefunden."
+#: includes/admin/dashboard-form-handlers.php:258
+#: includes/admin/dashboard-tab-cards.php:112
+#: includes/admin/dashboard-tab-table.php:42 includes/admin/settings.php:715
+#: includes/admin/shift-metaboxes.php:269
+#: includes/admin/volunteer-list.php:115 includes/admin/volunteer-list.php:145
+#: includes/admin/volunteer-list.php:276 includes/profile.php:62
+#: includes/registration.php:263
+msgid "E-Mail"
+msgstr "E-Mail"
 
-#: includes/admin/dashboard.php:769
-msgid "Open slot — not yet booked"
-msgstr "Offene Stelle — noch nicht besetzt"
+#: includes/admin/dashboard-form-handlers.php:259
+#: includes/admin/dashboard-overview-page.php:493
+#: includes/admin/dashboard-tab-cards.php:103
+#: includes/admin/dashboard-tab-cards.php:112
+#: includes/admin/dashboard-tab-table.php:43
+#: includes/admin/shift-metaboxes.php:270
+#: includes/admin/volunteer-list.php:236 includes/admin/volunteer-list.php:277
+msgid "Phone"
+msgstr "Telefon"
 
-#: includes/admin/dashboard.php:770
-msgid "Add volunteer"
-msgstr "Volunteer hinzufügen"
-
-#: includes/admin/dashboard.php:810
-msgid "Selected: {volunteer} — {shift} ({period}, {capacity})"
-msgstr "Ausgewählt: {volunteer} — {shift} ({period}, {capacity})"
-
-#: includes/admin/dashboard.php:823 includes/admin/dashboard.php:874
-#: includes/admin/volunteer-list.php:227 includes/admin/volunteer-list.php:249
-msgid "Close"
-msgstr "Schließen"
-
-#: includes/admin/dashboard.php:875
-msgid "Edit shift"
-msgstr "Schicht bearbeiten"
-
-#: includes/admin/dashboard.php:878
-msgid "Title"
-msgstr "Titel"
-
-#: includes/admin/dashboard.php:879 includes/admin/quick-edit.php:130
-#: includes/post-types.php:48
-msgid "Department"
-msgstr "Abteilung"
-
-#: includes/admin/dashboard.php:884 includes/admin/dashboard.php:1175
+#: includes/admin/dashboard-form-handlers.php:260
+#: includes/admin/dashboard-tab-timeline.php:196
 #: includes/admin/quick-edit.php:60
 msgid "Start"
 msgstr "Start"
 
-#: includes/admin/dashboard.php:885 includes/admin/dashboard.php:1176
+#: includes/admin/dashboard-form-handlers.php:261
+#: includes/admin/dashboard-tab-timeline.php:197
 #: includes/admin/quick-edit.php:61
 msgid "End"
 msgstr "Ende"
 
-#: includes/admin/dashboard.php:888 includes/admin/quick-edit.php:39
-#: includes/admin/quick-edit.php:62
+#: includes/admin/dashboard-menu.php:28 includes/admin/dashboard-menu.php:29
+msgid "Overview"
+msgstr "Überblick"
+
+#: includes/admin/dashboard-menu.php:37 includes/admin/dashboard-menu.php:38
+#: includes/admin/dashboard-overview-page.php:597
+msgid "Manager"
+msgstr "Manager"
+
+#: includes/admin/dashboard-menu.php:101
+msgid "EventAdmin Overview"
+msgstr "EventAdmin-Übersicht"
+
+#: includes/admin/dashboard-menu.php:117
+msgid "EventAdmin Manager"
+msgstr "EventAdmin Manager"
+
+#: includes/admin/dashboard-overview-page.php:38
+msgid "Empty"
+msgstr "Leer"
+
+#: includes/admin/dashboard-overview-page.php:39
+#: includes/admin/dashboard-tab-cards.php:50
+msgid "Understaffed"
+msgstr "Unterbesetzt"
+
+#: includes/admin/dashboard-overview-page.php:40
+msgid "Heavily understaffed"
+msgstr "Stark unterbesetzt"
+
+#. translators: %d: number of shifts copied
+#: includes/admin/dashboard-overview-page.php:135
+#, php-format
+msgid "%d shift was copied."
+msgid_plural "%d shifts were copied."
+msgstr[0] "%d Schicht wurde kopiert."
+msgstr[1] "%d Schichten wurden kopiert."
+
+#: includes/admin/dashboard-overview-page.php:139
+msgid "No shifts were found on the selected day to copy."
+msgstr "Am ausgewählten Tag wurden keine zu kopierenden Schichten gefunden."
+
+#: includes/admin/dashboard-overview-page.php:146
+#: includes/admin/dashboard-overview-page.php:642
+msgid "Copy shifts to another day"
+msgstr "Schichten auf einen anderen Tag kopieren"
+
+#: includes/admin/dashboard-overview-page.php:147
+msgid ""
+"Recreate every shift from a past (or future) day on a new date, keeping each"
+" shift's time of day and duration."
+msgstr ""
+"Erstellen Sie alle Schichten eines vergangenen (oder zukünftigen) Tages an "
+"einem neuen Datum neu – Uhrzeit und Dauer jeder Schicht bleiben dabei "
+"erhalten."
+
+#: includes/admin/dashboard-overview-page.php:151
+msgid "Copy shifts from:"
+msgstr "Schichten kopieren von:"
+
+#: includes/admin/dashboard-overview-page.php:152
+msgid "Select a day…"
+msgstr "Tag auswählen…"
+
+#: includes/admin/dashboard-overview-page.php:158
+msgid "to:"
+msgstr "nach:"
+
+#: includes/admin/dashboard-overview-page.php:159
+msgid "Also copy the volunteers currently signed up"
+msgstr "Auch die aktuell eingeteilten Freiwilligen mitkopieren"
+
+#: includes/admin/dashboard-overview-page.php:161
+msgid "Copy shifts"
+msgstr "Schichten kopieren"
+
+#: includes/admin/dashboard-overview-page.php:210
+msgid "Show filter"
+msgstr "Filter anzeigen"
+
+#: includes/admin/dashboard-overview-page.php:211
+msgid "Hide filter"
+msgstr "Filter verstecken"
+
+#: includes/admin/dashboard-overview-page.php:221
+msgid "Department:"
+msgstr "Abteilung:"
+
+#: includes/admin/dashboard-overview-page.php:229
+msgid "State:"
+msgstr "Status:"
+
+#: includes/admin/dashboard-overview-page.php:241
+msgid "Volunteers:"
+msgstr "Volunteers:"
+
+#: includes/admin/dashboard-overview-page.php:251
+#: includes/shiftselector.php:202
+msgid "Date:"
+msgstr "Datum:"
+
+#: includes/admin/dashboard-overview-page.php:260
+msgid "Show:"
+msgstr "Anzeigen:"
+
+#: includes/admin/dashboard-overview-page.php:262
+msgid "Upcoming"
+msgstr "Bevorstehend"
+
+#: includes/admin/dashboard-overview-page.php:263
+msgid "Past"
+msgstr "Vergangen"
+
+#: includes/admin/dashboard-overview-page.php:274
+msgid "Sort by:"
+msgstr "Sortieren nach:"
+
+#: includes/admin/dashboard-overview-page.php:284
+msgid "Order:"
+msgstr "Reihenfolge:"
+
+#: includes/admin/dashboard-overview-page.php:286
+msgid "Ascending"
+msgstr "Aufsteigend"
+
+#: includes/admin/dashboard-overview-page.php:287
+msgid "Descending"
+msgstr "Absteigend"
+
+#: includes/admin/dashboard-overview-page.php:302
+msgid "Show open slots in timeline"
+msgstr "Offene Stellen in der Zeitachse anzeigen"
+
+#: includes/admin/dashboard-overview-page.php:305
+msgid "Reset filter"
+msgstr "Filter zurücksetzen"
+
+#: includes/admin/dashboard-overview-page.php:306
+#: includes/admin/volunteer-list.php:206
+msgid "Filter"
+msgstr "Filtern"
+
+#. translators: %d is the minimum number of volunteers required
+#: includes/admin/dashboard-overview-page.php:382
+#: includes/admin/dashboard-tab-timeline.php:65
+#: includes/admin/dashboard-tab-timeline.php:436
+#, php-format
+msgid "(min %d)"
+msgstr "(min %d)"
+
+#: includes/admin/dashboard-overview-page.php:477
+#: includes/admin/dashboard-tab-cards.php:83
+msgid "Select existing volunteer…"
+msgstr "Bestehende Person auswählen…"
+
+#: includes/admin/dashboard-overview-page.php:479
+#: includes/admin/dashboard-overview-page.php:494
+#: includes/admin/dashboard-tab-cards.php:89
+#: includes/admin/dashboard-tab-cards.php:104
+msgid "Send confirmation email"
+msgstr "Bestätigungs-E-Mail senden"
+
+#: includes/admin/dashboard-overview-page.php:481
+#: includes/admin/dashboard-tab-cards.php:90
+msgid "Add to shift"
+msgstr "Zur Schicht hinzufügen"
+
+#: includes/admin/dashboard-overview-page.php:484
+#: includes/admin/dashboard-tab-cards.php:92
+msgid "or add a new volunteer below"
+msgstr "oder neue Person unten hinzufügen"
+
+#: includes/admin/dashboard-overview-page.php:490
+#: includes/admin/dashboard-tab-cards.php:100
+#: includes/admin/volunteer-list.php:231 includes/profile.php:50
+#: includes/registration.php:254
+msgid "First name"
+msgstr "Vorname"
+
+#: includes/admin/dashboard-overview-page.php:491
+#: includes/admin/dashboard-tab-cards.php:101
+#: includes/admin/volunteer-list.php:232 includes/profile.php:55
+#: includes/registration.php:257
+msgid "Last name"
+msgstr "Nachname"
+
+#: includes/admin/dashboard-overview-page.php:492
+#: includes/admin/dashboard-tab-cards.php:102
+#: includes/admin/volunteer-list.php:235
+msgid "E-Mail (optional)"
+msgstr "E-Mail (optional)"
+
+#: includes/admin/dashboard-overview-page.php:492
+#: includes/admin/dashboard-tab-cards.php:102
+#: includes/admin/volunteer-list.php:235
+msgid "Leave blank for offline volunteers without an email address"
+msgstr "Leer lassen für Offline-Volunteers ohne E-Mail-Adresse"
+
+#: includes/admin/dashboard-overview-page.php:496
+#: includes/admin/dashboard-tab-cards.php:105
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: includes/admin/dashboard-overview-page.php:596
+#: includes/admin/documentation.php:113
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: includes/admin/dashboard-overview-page.php:598
+#: includes/admin/documentation.php:115
+msgid "Table"
+msgstr "Tabelle"
+
+#: includes/admin/dashboard-overview-page.php:599
+msgid "Cards (old)"
+msgstr "Karten (alt)"
+
+#: includes/admin/dashboard-overview-page.php:637
+#: includes/admin/dashboard-tab-timeline.php:308
+msgid "Add shift"
+msgstr "Schicht hinzufügen"
+
+#: includes/admin/dashboard-overview-page.php:638
+msgid "More options"
+msgstr "Weitere Optionen"
+
+#: includes/admin/dashboard-overview-page.php:643
+#: includes/admin/documentation.php:107 includes/post-types.php:47
+#: includes/post-types.php:57
+msgid "Departments"
+msgstr "Abteilungen"
+
+#: includes/admin/dashboard-overview-page.php:653
+msgid "CSV export all shifts"
+msgstr "CSV-Export aller Schichten"
+
+#: includes/admin/dashboard-tab-cards.php:41
+msgid "CSV for this shift"
+msgstr "CSV für diese Schicht"
+
+#: includes/admin/dashboard-tab-cards.php:45
+msgid "Period:"
+msgstr "Zeitraum:"
+
+#: includes/admin/dashboard-tab-cards.php:46
+#: includes/admin/shift-metaboxes.php:263
+msgid "Filled:"
+msgstr "Gefüllt:"
+
+#: includes/admin/dashboard-tab-cards.php:48
+msgid "Min.:"
+msgstr "Min.:"
+
+#: includes/admin/dashboard-tab-cards.php:57
+msgid "Add volunteers manually"
+msgstr "Volunteers manuell hinzufügen"
+
+#: includes/admin/dashboard-tab-cards.php:112
+msgid "Action"
+msgstr "Aktion"
+
+#: includes/admin/dashboard-tab-cards.php:116
+#: includes/admin/documentation.php:128 includes/admin/shift-metaboxes.php:283
+#: includes/admin/volunteer-list.php:353
+msgid "Offline"
+msgstr "Offline"
+
+#: includes/admin/dashboard-tab-cards.php:129
+#: includes/admin/dashboard-tab-timeline.php:254
+#: includes/admin/dashboard-tab-timeline.php:312
+msgid "Notify volunteer"
+msgstr "Volunteer benachrichtigen"
+
+#: includes/admin/dashboard-tab-cards.php:139
+msgid "No volunteers assigned."
+msgstr "Es wurden keine Volunteers eingeteilt."
+
+#: includes/admin/dashboard-tab-dashboard.php:85
+#: includes/admin/quick-edit.php:134
+msgid "Filled"
+msgstr "Besetzt"
+
+#: includes/admin/dashboard-tab-dashboard.php:86
+msgid "Open (required)"
+msgstr "Offen (zwingend)"
+
+#: includes/admin/dashboard-tab-dashboard.php:87
+msgid "Open (optional)"
+msgstr "Offen (optional)"
+
+#: includes/admin/dashboard-tab-dashboard.php:88
+msgid "Utilization per department"
+msgstr "Auslastung pro Abteilung"
+
+#: includes/admin/dashboard-tab-dashboard.php:89
+msgid "Utilization of all shifts"
+msgstr "Auslastung aller Schichten"
+
+#: includes/admin/dashboard-tab-dashboard.php:109
+msgid "Registered Volunteers:"
+msgstr "Registrierte Volunteers:"
+
+#: includes/admin/dashboard-tab-dashboard.php:110
+msgid "Volunteers without upcoming shift:"
+msgstr "Volunteers ohne bevorstehende Schicht:"
+
+#: includes/admin/dashboard-tab-dashboard.php:111
+msgid "Upcoming shifts:"
+msgstr "Bevorstehende Schichten:"
+
+#: includes/admin/dashboard-tab-dashboard.php:112
+msgid "Filled spots:"
+msgstr "Belegte Plätze:"
+
+#: includes/admin/dashboard-tab-dashboard.php:113
+msgid "Open spots:"
+msgstr "Freie Plätze:"
+
+#: includes/admin/dashboard-tab-table.php:40
+#: includes/admin/user-profile.php:69
+msgid "Capacity"
+msgstr "Kapazität"
+
+#: includes/admin/dashboard-tab-table.php:46
+#: includes/admin/dashboard-tab-timeline.php:136
+msgid "No shifts found."
+msgstr "Keine Schichten gefunden."
+
+#: includes/admin/dashboard-tab-table.php:55
+msgid "Open slot — not yet booked"
+msgstr "Offene Stelle — noch nicht besetzt"
+
+#: includes/admin/dashboard-tab-table.php:56
+#: includes/admin/dashboard-tab-timeline.php:316
+msgid "Add volunteer"
+msgstr "Volunteer hinzufügen"
+
+#: includes/admin/dashboard-tab-timeline.php:91
+msgid "Open slot"
+msgstr "Offene Stelle"
+
+#: includes/admin/dashboard-tab-timeline.php:187
+#: includes/admin/dashboard-tab-timeline.php:307
+msgid "Edit shift"
+msgstr "Schicht bearbeiten"
+
+#: includes/admin/dashboard-tab-timeline.php:190
+msgid "Title"
+msgstr "Titel"
+
+#: includes/admin/dashboard-tab-timeline.php:191
+#: includes/admin/quick-edit.php:130 includes/post-types.php:48
+msgid "Department"
+msgstr "Abteilung"
+
+#: includes/admin/dashboard-tab-timeline.php:200
+#: includes/admin/quick-edit.php:39 includes/admin/quick-edit.php:62
 msgid "Min. Volunteers"
 msgstr "Mind. Volunteers"
 
-#: includes/admin/dashboard.php:889 includes/admin/quick-edit.php:43
-#: includes/admin/quick-edit.php:63
+#: includes/admin/dashboard-tab-timeline.php:201
+#: includes/admin/quick-edit.php:43 includes/admin/quick-edit.php:63
 msgid "Max. Volunteers"
 msgstr "Max. Volunteers"
 
-#: includes/admin/dashboard.php:893 includes/profile.php:75
+#: includes/admin/dashboard-tab-timeline.php:212
+msgid "Advanced"
+msgstr "Erweitert"
+
+#: includes/admin/dashboard-tab-timeline.php:214
+#: includes/admin/shift-metaboxes.php:79
+msgid "Organizer user:"
+msgstr "Organisator-User:"
+
+#: includes/admin/dashboard-tab-timeline.php:224
+#: includes/admin/shift-metaboxes.php:90
+msgid ""
+"Only staff-side users are shown here by default. If selected, this user is "
+"used as the sender fallback for shift emails unless a custom organizer "
+"name/email is entered below."
+msgstr ""
+"Standardmäßig werden hier nur Benutzer mit Backend-Zugriff angezeigt. Wird "
+"ein Benutzer ausgewählt, dient er als Absender-Fallback für Schicht-E-Mails,"
+" sofern unten kein eigener Organisator-Name/E-Mail eingetragen wird."
+
+#: includes/admin/dashboard-tab-timeline.php:226
+#: includes/admin/shift-metaboxes.php:92
+msgid "Organizer name:"
+msgstr "Organisator-Name:"
+
+#: includes/admin/dashboard-tab-timeline.php:227
+#: includes/admin/shift-metaboxes.php:94
+msgid "Organizer email:"
+msgstr "Organisator-E-Mail:"
+
+#: includes/admin/dashboard-tab-timeline.php:229
+#: includes/admin/shift-metaboxes.php:96
+msgid ""
+"Leave empty to use the linked organizer user or the global notification "
+"sender."
+msgstr ""
+"Leer lassen, um den verknüpften Organisator-User oder den globalen "
+"Benachrichtigungs-Absender zu verwenden."
+
+#: includes/admin/dashboard-tab-timeline.php:234 includes/profile.php:75
 msgid "Save"
 msgstr "Speichern"
 
-#: includes/admin/dashboard.php:894
+#: includes/admin/dashboard-tab-timeline.php:235
 msgid "Open full editor"
 msgstr "Vollständigen Editor öffnen"
 
-#: includes/admin/dashboard.php:907
+#: includes/admin/dashboard-tab-timeline.php:246
+#: includes/admin/dashboard-tab-timeline.php:314
+msgid "Move to another shift"
+msgstr "In eine andere Schicht verschieben"
+
+#: includes/admin/dashboard-tab-timeline.php:253
+msgid "Move to:"
+msgstr "Verschieben nach:"
+
+#: includes/admin/dashboard-tab-timeline.php:256
+msgid "Move"
+msgstr "Verschieben"
+
+#: includes/admin/dashboard-tab-timeline.php:305
 msgid "Shift time updated."
 msgstr "Schichtzeit aktualisiert."
 
-#: includes/admin/dashboard.php:908
+#: includes/admin/dashboard-tab-timeline.php:306
 msgid "Undo"
 msgstr "Rückgängig"
 
-#: includes/admin/dashboard.php:981
-msgid "Invalid volunteer selected."
-msgstr "Ungültige Person ausgewählt."
+#: includes/admin/dashboard-tab-timeline.php:309
+msgid "Remove from shift"
+msgstr "Aus Schicht entfernen"
 
-#: includes/admin/dashboard.php:1071
+#. translators: %s is the volunteer's name
+#: includes/admin/dashboard-tab-timeline.php:311
+#, php-format
+msgid "Remove %s from this shift?"
+msgstr "%s aus dieser Schicht entfernen?"
+
+#: includes/admin/dashboard-tab-timeline.php:313
+msgid "View profile"
+msgstr "Profil ansehen"
+
+#: includes/admin/dashboard-tab-timeline.php:315
+#: includes/admin/user-profile.php:272
+msgid "Loading…"
+msgstr "Lädt…"
+
+#: includes/admin/dashboard-tab-timeline.php:317
+msgid "Delete shift"
+msgstr "Schicht löschen"
+
+#: includes/admin/dashboard-tab-timeline.php:318
+msgid "Delete this shift?"
+msgstr "Diese Schicht löschen?"
+
+#. translators: %d is the number of volunteers currently assigned to the shift
+#: includes/admin/dashboard-tab-timeline.php:320
+#, php-format
+msgid ""
+"Delete this shift? This will also remove %d assigned volunteer(s) from it."
+msgstr ""
+"Diese Schicht löschen? Dadurch werden auch %d eingeteilte Person(en) "
+"entfernt."
+
+#: includes/admin/dashboard-tab-timeline.php:321
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: includes/admin/dashboard-tab-timeline.php:322
+msgid "Confirm"
+msgstr "Bestätigen"
+
+#. translators: %s is the volunteer's name
+#: includes/admin/dashboard-tab-timeline.php:324
+#, php-format
+msgid ""
+"This shift also has one other person on it. Apply the new time to both, or "
+"only to %s?"
+msgstr ""
+"Diese Schicht hat noch eine weitere Person. Möchten Sie die neue Zeit für "
+"beide übernehmen oder nur für %s?"
+
+#. translators: %d is the number of other people on the shift, %s is the
+#. volunteer's name
+#: includes/admin/dashboard-tab-timeline.php:326
+#, php-format
+msgid ""
+"This shift also has %d other people on it. Apply the new time to everyone, "
+"or only to %s?"
+msgstr ""
+"Diese Schicht hat noch %d weitere Personen. Möchten Sie die neue Zeit für "
+"alle übernehmen oder nur für %s?"
+
+#: includes/admin/dashboard-tab-timeline.php:327
+msgid "Apply to everyone"
+msgstr "Für alle übernehmen"
+
+#. translators: %s is the volunteer's name
+#: includes/admin/dashboard-tab-timeline.php:329
+#, php-format
+msgid "Only to %s"
+msgstr "Nur für %s"
+
+#: includes/admin/dashboard-tab-timeline.php:330
+msgid "Notify affected volunteers"
+msgstr "Betroffene Volunteers benachrichtigen"
+
+#: includes/admin/dashboard-tab-timeline.php:363
 msgid "Shift not found."
 msgstr "Schicht nicht gefunden."
-
-#: includes/admin/dashboard.php:1236
-msgid "Assigned Volunteers"
-msgstr "Zugewiesene Volunteers"
 
 #: includes/admin/documentation.php:23 includes/admin/documentation.php:24
 msgid "Documentation"
@@ -871,15 +1148,16 @@ msgstr ""
 
 #: includes/admin/documentation.php:73
 msgid ""
-"EventAdmin is a simple yet powerful plugin for managing volunteers at events."
+"EventAdmin is a simple yet powerful plugin for managing volunteers at "
+"events."
 msgstr ""
 "EventAdmin ist ein einfaches, aber leistungsstarkes Plugin zur Verwaltung "
 "von Volunteers bei Veranstaltungen."
 
 #: includes/admin/documentation.php:74
 msgid ""
-"Ideal for clubs, street festivals, and events. Organizers can create shifts, "
-"assign participants, or let volunteers sign up themselves. CSV export, "
+"Ideal for clubs, street festivals, and events. Organizers can create shifts,"
+" assign participants, or let volunteers sign up themselves. CSV export, "
 "limits, visual statistics, and an admin dashboard are included."
 msgstr ""
 "Ideal für Vereine, Straßenfeste und Veranstaltungen. Organisatoren können "
@@ -900,8 +1178,8 @@ msgid ""
 "Frontend view for registered volunteers (registration, shift selection, "
 "profile)"
 msgstr ""
-"Frontend-Ansicht für registrierte Volunteers (Registrierung, Schichtauswahl, "
-"Profil)"
+"Frontend-Ansicht für registrierte Volunteers (Registrierung, Schichtauswahl,"
+" Profil)"
 
 #: includes/admin/documentation.php:81
 msgid "Self-registration and cancellation by volunteers"
@@ -918,7 +1196,8 @@ msgstr ""
 #: includes/admin/documentation.php:83
 msgid "Automatic checks (e.g. max. 2 shifts/year, no overlaps)"
 msgstr ""
-"Automatische Kontrollen (z. B. max. 2 Schichten/Jahr, keine Überschneidungen)"
+"Automatische Kontrollen (z. B. max. 2 Schichten/Jahr, keine "
+"Überschneidungen)"
 
 #: includes/admin/documentation.php:84
 msgid ""
@@ -950,8 +1229,8 @@ msgstr ""
 
 #: includes/admin/documentation.php:88
 msgid ""
-"Per-shift organizer: a linked WordPress user and/or a manual sender name and "
-"email"
+"Per-shift organizer: a linked WordPress user and/or a manual sender name and"
+" email"
 msgstr ""
 "Organisator pro Schicht: ein verknüpfter WordPress-Benutzer und/oder ein "
 "manuell gesetzter Absendername und eine E-Mail-Adresse"
@@ -970,7 +1249,8 @@ msgid ""
 "or Cloudflare Turnstile); blocked attempts are logged"
 msgstr ""
 "Registrierungsformular mit Honeypot und optionalem CAPTCHA (reCAPTCHA, "
-"hCaptcha oder Cloudflare Turnstile); blockierte Versuche werden protokolliert"
+"hCaptcha oder Cloudflare Turnstile); blockierte Versuche werden "
+"protokolliert"
 
 #: includes/admin/documentation.php:91
 msgid ""
@@ -982,8 +1262,8 @@ msgstr ""
 
 #: includes/admin/documentation.php:92
 msgid ""
-"Shift overview with Dashboard, Cards, Table, and Timeline tabs — drag shifts "
-"on the Timeline to reschedule; dashboard stats split open spots into "
+"Shift overview with Dashboard, Cards, Table, and Timeline tabs — drag shifts"
+" on the Timeline to reschedule; dashboard stats split open spots into "
 "required vs. optional"
 msgstr ""
 "Schichtübersicht mit den Tabs Dashboard, Karten, Tabelle und Zeitachse — "
@@ -1035,21 +1315,18 @@ msgstr ""
 "Besucher, Schichtauswahl und Profil für eingeloggte Volunteers)"
 
 #: includes/admin/documentation.php:103
-msgid "Create shift categories under Shifts → Categories"
-msgstr "Erstellen Sie Schichtkategorien unter Schichten → Kategorien"
+msgid "Create shift categories via the \"Departments\" button on the Manager page"
+msgstr ""
+"Legen Sie Schichtkategorien über die Schaltfläche „Abteilungen“ auf der "
+"Manager-Seite an"
 
 #: includes/admin/documentation.php:104
 msgid "Create your first shifts under Shifts → Add New"
 msgstr "Erstellen Sie Ihre ersten Schichten unter Schichten → Neu hinzufügen"
 
-#: includes/admin/documentation.php:107 includes/post-types.php:47
-#: includes/post-types.php:57
-msgid "Departments"
-msgstr "Abteilungen"
-
 #: includes/admin/documentation.php:108
 msgid ""
-"Departments (Shifts → Categories) group shifts, can be nested under a "
+"Departments (Manager → Departments) group shifts, can be nested under a "
 "parent, and each carries a color used for its badge on shift cards and in "
 "the overview. \"Hide from volunteers\" removes a department from the "
 "frontend filter and labels; a shift disappears for volunteers only when "
@@ -1058,13 +1335,13 @@ msgid ""
 "be changed via Quick Edit in the department list, and the shift list itself "
 "can be filtered and sorted by department."
 msgstr ""
-"Abteilungen (Schichten → Kategorien) gruppieren Schichten, können einer "
-"übergeordneten Abteilung untergeordnet werden und tragen jeweils eine Farbe, "
-"die für das Label auf den Schichtkarten und in der Übersicht verwendet wird. "
-"„Vor Volunteers verbergen“ entfernt eine Abteilung aus dem Frontend-Filter "
-"und den Labels; eine Schicht verschwindet für Volunteers nur, wenn jede "
-"Abteilung, zu der sie gehört, verborgen ist (Schichten, für die sich jemand "
-"bereits eingetragen hat, werden nie verborgen). Farbe, übergeordnete "
+"Abteilungen (Manager → Abteilungen) gruppieren Schichten, können einer "
+"übergeordneten Abteilung untergeordnet werden und tragen jeweils eine Farbe,"
+" die für das Label auf den Schichtkarten und in der Übersicht verwendet "
+"wird. „Vor Volunteers verbergen“ entfernt eine Abteilung aus dem Frontend-"
+"Filter und den Labels; eine Schicht verschwindet für Volunteers nur, wenn "
+"jede Abteilung, zu der sie gehört, verborgen ist (Schichten, für die sich "
+"jemand bereits eingetragen hat, werden nie verborgen). Farbe, übergeordnete "
 "Abteilung, Sichtbarkeit und Beschreibung lassen sich auch per "
 "Schnellbearbeitung in der Abteilungsliste ändern, und die Schichtliste "
 "selbst kann nach Abteilung gefiltert und sortiert werden."
@@ -1075,8 +1352,8 @@ msgstr "Schichtübersicht"
 
 #: includes/admin/documentation.php:111
 msgid ""
-"The shift overview (Shifts → Overview) is split into four tabs, each showing "
-"only the filters relevant to it:"
+"The shift overview (Shifts → Overview) is split into four tabs, each showing"
+" only the filters relevant to it:"
 msgstr ""
 "Die Schichtübersicht (Schichten → Übersicht) ist in vier Tabs unterteilt, "
 "die jeweils nur die für sie relevanten Filter zeigen:"
@@ -1086,9 +1363,13 @@ msgid ""
 "registered volunteers, upcoming shifts, and open spots split into required "
 "(below a shift's minimum) and optional (up to the maximum)."
 msgstr ""
-"registrierte Volunteers, kommende Schichten und offene Plätze, aufgeteilt in "
-"„erforderlich“ (unter dem Minimum einer Schicht) und „optional“ (bis zum "
+"registrierte Volunteers, kommende Schichten und offene Plätze, aufgeteilt in"
+" „erforderlich“ (unter dem Minimum einer Schicht) und „optional“ (bis zum "
 "Maximum)."
+
+#: includes/admin/documentation.php:114
+msgid "Cards"
+msgstr "Karten"
 
 #: includes/admin/documentation.php:114
 msgid ""
@@ -1103,14 +1384,18 @@ msgid ""
 "a flat, export-style table; the \"Add volunteer\" button assigns someone "
 "without leaving the page."
 msgstr ""
-"eine flache, exportähnliche Tabelle; die Schaltfläche „Volunteer hinzufügen“ "
-"trägt jemanden ein, ohne die Seite zu verlassen."
+"eine flache, exportähnliche Tabelle; die Schaltfläche „Volunteer hinzufügen“"
+" trägt jemanden ein, ohne die Seite zu verlassen."
+
+#: includes/admin/documentation.php:116
+msgid "Timeline"
+msgstr "Zeitachse"
 
 #: includes/admin/documentation.php:116
 msgid ""
 "a per-volunteer Gantt chart. Drag a shift's bar to move or resize it (with "
-"an Undo after saving), or use the Edit Shift modal for exact times. Unfilled "
-"slots show as red (below minimum) or grey (optional) bars, which can be "
+"an Undo after saving), or use the Edit Shift modal for exact times. Unfilled"
+" slots show as red (below minimum) or grey (optional) bars, which can be "
 "toggled off."
 msgstr ""
 "ein Gantt-Diagramm pro Volunteer. Ziehen Sie den Balken einer Schicht, um "
@@ -1149,7 +1434,7 @@ msgstr ""
 "Von einem Admin ohne E-Mail-Adresse erstellt. Kann sich nicht anmelden und "
 "erhält keine Benachrichtigungen."
 
-#: includes/admin/documentation.php:132 includes/admin/volunteer-list.php:354
+#: includes/admin/documentation.php:132 includes/admin/volunteer-list.php:362
 msgid "Manual"
 msgstr "Manuell"
 
@@ -1161,21 +1446,22 @@ msgstr ""
 "Von einem Admin über das Dashboard-Formular oder die Funktion \"Volunteer-"
 "Rolle vergeben\" hinzugefügt. Wird nie automatisch gelöscht."
 
-#: includes/admin/documentation.php:136 includes/admin/volunteer-list.php:348
+#: includes/admin/documentation.php:136 includes/admin/volunteer-list.php:356
 msgid "Unverified"
 msgstr "Nicht verifiziert"
 
 #: includes/admin/documentation.php:137
 msgid ""
-"Registered via the public form but has not yet clicked the magic login link. "
-"The account is auto-deleted once the link expires (~24 h). The badge "
+"Registered via the public form but has not yet clicked the magic login link."
+" The account is auto-deleted once the link expires (~24 h). The badge "
 "disappears as soon as the link is clicked."
 msgstr ""
-"Über das öffentliche Formular registriert, hat aber noch nicht auf den Magic-"
-"Login-Link geklickt. Das Konto wird automatisch gelöscht, sobald der Link "
-"abläuft (~24 Std.). Der Badge verschwindet, sobald der Link geklickt wurde."
+"Über das öffentliche Formular registriert, hat aber noch nicht auf den "
+"Magic-Login-Link geklickt. Das Konto wird automatisch gelöscht, sobald der "
+"Link abläuft (~24 Std.). Der Badge verschwindet, sobald der Link geklickt "
+"wurde."
 
-#: includes/admin/documentation.php:140 includes/admin/volunteer-list.php:351
+#: includes/admin/documentation.php:140 includes/admin/volunteer-list.php:359
 msgid "Social"
 msgstr "Social Login"
 
@@ -1193,8 +1479,8 @@ msgstr "(kein Badge)"
 
 #: includes/admin/documentation.php:145
 msgid ""
-"Self-registered via the public form and verified by clicking the magic link, "
-"or registered before the badge system was introduced (version 0.9.8)."
+"Self-registered via the public form and verified by clicking the magic link,"
+" or registered before the badge system was introduced (version 0.9.8)."
 msgstr ""
 "Selbst über das öffentliche Formular registriert und per Magic-Link "
 "verifiziert, oder vor Einführung des Badge-Systems registriert (Version "
@@ -1202,7 +1488,8 @@ msgstr ""
 
 #: includes/admin/documentation.php:149
 msgid ""
-"A volunteer can have multiple badges at the same time (e.g. Manual + Social)."
+"A volunteer can have multiple badges at the same time (e.g. Manual + "
+"Social)."
 msgstr ""
 "Ein Volunteer kann gleichzeitig mehrere Badges haben (z.B. Manual + Social)."
 
@@ -1211,8 +1498,8 @@ msgid ""
 "The Send Announcement page (Shifts → Send Announcement) lets you send a "
 "custom email to volunteers. Available recipient options:"
 msgstr ""
-"Die Seite Ankündigung senden (Schichten → Ankündigung senden) ermöglicht das "
-"Versenden einer individuellen E-Mail an Volunteers. Verfügbare "
+"Die Seite Ankündigung senden (Schichten → Ankündigung senden) ermöglicht das"
+" Versenden einer individuellen E-Mail an Volunteers. Verfügbare "
 "Empfängeroptionen:"
 
 #: includes/admin/documentation.php:154
@@ -1229,8 +1516,8 @@ msgstr "Alle Volunteers mit E-Mail-Adresse, unabhängig vom Abonnementstatus."
 
 #: includes/admin/documentation.php:156
 msgid ""
-"Split volunteers by whether they currently have an upcoming shift assigned — "
-"useful for nudging people who haven't signed up yet."
+"Split volunteers by whether they currently have an upcoming shift assigned —"
+" useful for nudging people who haven't signed up yet."
 msgstr ""
 "Teilt Volunteers danach auf, ob ihnen aktuell eine bevorstehende Schicht "
 "zugewiesen ist — nützlich, um Personen zu erinnern, die sich noch nicht "
@@ -1241,8 +1528,8 @@ msgid ""
 "Only the volunteers assigned to a selected shift or department. A live "
 "recipient count is shown once you pick one."
 msgstr ""
-"Nur die Volunteers, die einer ausgewählten Schicht oder Abteilung zugewiesen "
-"sind. Sobald Sie eine auswählen, wird die Empfängerzahl live angezeigt."
+"Nur die Volunteers, die einer ausgewählten Schicht oder Abteilung zugewiesen"
+" sind. Sobald Sie eine auswählen, wird die Empfängerzahl live angezeigt."
 
 #: includes/admin/documentation.php:158
 msgid "Individual volunteer"
@@ -1253,8 +1540,8 @@ msgid ""
 "Click \"Email\" on any volunteer row to open the form pre-filled for that "
 "person."
 msgstr ""
-"Klicken Sie in der Volunteer-Liste auf \"E-Mail\", um das Formular für diese "
-"Person vorausgefüllt zu öffnen."
+"Klicken Sie in der Volunteer-Liste auf \"E-Mail\", um das Formular für diese"
+" Person vorausgefüllt zu öffnen."
 
 #: includes/admin/documentation.php:160
 msgid ""
@@ -1279,8 +1566,8 @@ msgstr ""
 
 #: includes/admin/documentation.php:162
 msgid ""
-"Every sent announcement is recorded in the collapsible Send History table on "
-"the same page. The table can be filtered by typing and sorted by clicking "
+"Every sent announcement is recorded in the collapsible Send History table on"
+" the same page. The table can be filtered by typing and sorted by clicking "
 "column headers."
 msgstr ""
 "Jede gesendete Ankündigung wird in der aufklappbaren Tabelle Sendeverlauf "
@@ -1303,15 +1590,15 @@ msgstr "Erinnerungs- & Benachrichtigungs-E-Mails"
 msgid ""
 "Volunteers are emailed when they are assigned to or removed from a shift, "
 "and again as a reminder a configurable number of days before it starts "
-"(Settings → Communication → Reminders — leave the days field empty to switch "
-"reminders off). All three messages use a rich-text editor and share "
+"(Settings → Communication → Reminders — leave the days field empty to switch"
+" reminders off). All three messages use a rich-text editor and share "
 "placeholders such as {first}, {last}, {title}, {start}, {end}, {desc}, and "
 "{days}. Each shift can override the sender through a linked WordPress user "
 "and/or a manual organizer name and email."
 msgstr ""
 "Volunteers erhalten eine E-Mail, wenn sie einer Schicht zugewiesen oder aus "
-"ihr entfernt werden, und noch einmal als Erinnerung eine einstellbare Anzahl "
-"Tage vor Beginn (Einstellungen → Kommunikation → Erinnerungen — lassen Sie "
+"ihr entfernt werden, und noch einmal als Erinnerung eine einstellbare Anzahl"
+" Tage vor Beginn (Einstellungen → Kommunikation → Erinnerungen — lassen Sie "
 "das Tage-Feld leer, um Erinnerungen abzuschalten). Alle drei Nachrichten "
 "nutzen einen Rich-Text-Editor und teilen sich Platzhalter wie {first}, "
 "{last}, {title}, {start}, {end}, {desc} und {days}. Jede Schicht kann den "
@@ -1343,8 +1630,8 @@ msgstr "Anpassung der E-Mail-Vorlage"
 #: includes/admin/documentation.php:172
 msgid ""
 "All plugin emails use a shared HTML wrapper so registration links, "
-"assignment confirmations, cancellations, and announcements have a consistent "
-"look."
+"assignment confirmations, cancellations, and announcements have a consistent"
+" look."
 msgstr ""
 "Alle Plugin-E-Mails verwenden eine gemeinsame HTML-Vorlage, damit "
 "Registrierungslinks, Anmeldebestätigungen, Abmeldungen und Mitteilungen "
@@ -1364,8 +1651,8 @@ msgid ""
 "Adjust template variables such as heading, preheader, site name, or footer "
 "text before the final HTML is generated."
 msgstr ""
-"Passt Vorlagenvariablen wie Überschrift, Preheader, Website-Name oder Footer-"
-"Text an, bevor das endgültige HTML erzeugt wird."
+"Passt Vorlagenvariablen wie Überschrift, Preheader, Website-Name oder "
+"Footer-Text an, bevor das endgültige HTML erzeugt wird."
 
 #: includes/admin/documentation.php:176
 msgid ""
@@ -1418,8 +1705,8 @@ msgstr ""
 
 #: includes/admin/documentation.php:188
 msgid ""
-"A log of automatically deleted accounts (up to the last 100) is shown at the "
-"bottom of the Volunteers page."
+"A log of automatically deleted accounts (up to the last 100) is shown at the"
+" bottom of the Volunteers page."
 msgstr ""
 "Ein Protokoll der automatisch gelöschten Konten (bis zu den letzten 100) "
 "wird unten auf der Volunteer-Seite angezeigt."
@@ -1466,8 +1753,8 @@ msgid ""
 "\"0\" hides the \"We still need volunteers in:\" intro line (summary style "
 "only)."
 msgstr ""
-"„0“ blendet die Einleitungszeile „Wir suchen noch Helfer:innen in:“ aus (nur "
-"Stil „summary“)."
+"„0“ blendet die Einleitungszeile „Wir suchen noch Helfer:innen in:“ aus (nur"
+" Stil „summary“)."
 
 #: includes/admin/documentation.php:212
 msgid ""
@@ -1478,8 +1765,8 @@ msgstr ""
 
 #: includes/admin/documentation.php:216
 msgid ""
-"\"0\" also includes shifts that have already ended. Default: past shifts are "
-"hidden."
+"\"0\" also includes shifts that have already ended. Default: past shifts are"
+" hidden."
 msgstr ""
 "„0“ zeigt auch Schichten an, die bereits vorbei sind. Standard: vergangene "
 "Schichten werden ausgeblendet."
@@ -1506,7 +1793,8 @@ msgstr "Wie kann ich Volunteers manuell zuweisen?"
 msgid ""
 "In the admin dashboard under “Volunteer Overview” for each shift via form."
 msgstr ""
-"Im Admin-Dashboard unter «Volunteer-Übersicht» für jede Schicht per Formular."
+"Im Admin-Dashboard unter «Volunteer-Übersicht» für jede Schicht per "
+"Formular."
 
 #: includes/admin/documentation.php:229
 msgid "What happens when shifts are full?"
@@ -1514,12 +1802,12 @@ msgstr "Was passiert, wenn alle Schichten belegt sind?"
 
 #: includes/admin/documentation.php:230
 msgid ""
-"By default, full shifts are hidden on the volunteer page. You can optionally "
-"show them in a separate read-only section by enabling \"Show full shifts to "
-"volunteers\" under Settings."
+"By default, full shifts are hidden on the volunteer page. You can optionally"
+" show them in a separate read-only section by enabling \"Show full shifts to"
+" volunteers\" under Settings."
 msgstr ""
-"Standardmäßig sind volle Schichten auf der Volunteer-Seite ausgeblendet. Sie "
-"können diese optional in einem separaten schreibgeschützten Abschnitt "
+"Standardmäßig sind volle Schichten auf der Volunteer-Seite ausgeblendet. Sie"
+" können diese optional in einem separaten schreibgeschützten Abschnitt "
 "anzeigen, indem Sie unter Einstellungen \"Volle Schichten für Volunteers "
 "anzeigen\" aktivieren."
 
@@ -1536,8 +1824,8 @@ msgid ""
 msgstr ""
 "Sie können eine Mindestanzahl von Volunteers pro Schicht festlegen. Das "
 "Admin-Dashboard hebt Schichten, die die Mindestanzahl nicht erreicht haben, "
-"mit einer Unterbesetzungswarnung hervor. Dies ist nur informativ – es werden "
-"keine Anmelderegeln basierend auf der Mindestanzahl durchgesetzt."
+"mit einer Unterbesetzungswarnung hervor. Dies ist nur informativ – es werden"
+" keine Anmelderegeln basierend auf der Mindestanzahl durchgesetzt."
 
 #: includes/admin/documentation.php:235
 msgid "Can visitors see where help is needed before registering?"
@@ -1547,9 +1835,9 @@ msgstr ""
 #: includes/admin/documentation.php:236
 msgid ""
 "Yes. Put the [eventadmin_open_positions] shortcode on any public page. It "
-"lists every department that still has unfilled slots, needs no login, and by "
-"default shows a compact summary — add style=\"list\" for the individual open "
-"shifts."
+"lists every department that still has unfilled slots, needs no login, and by"
+" default shows a compact summary — add style=\"list\" for the individual "
+"open shifts."
 msgstr ""
 "Ja. Platzieren Sie den Shortcode [eventadmin_open_positions] auf einer "
 "beliebigen öffentlichen Seite. Er listet jede Abteilung auf, die noch "
@@ -1631,8 +1919,8 @@ msgid ""
 msgstr ""
 "Abteilungen (mit Farbe und Hierarchie) werden für jede Abteilung mit "
 "mindestens einer Schicht automatisch mit übernommen. Anmeldungen von "
-"Volunteers sind im Export nicht enthalten, da die Benutzer-IDs einer anderen "
-"Website hier keine Bedeutung hätten."
+"Volunteers sind im Export nicht enthalten, da die Benutzer-IDs einer anderen"
+" Website hier keine Bedeutung hätten."
 
 #: includes/admin/import.php:58
 msgid "Import demo data"
@@ -1657,7 +1945,8 @@ msgstr "Verwaiste Zuweisungen aufräumen"
 #: includes/admin/import.php:80
 msgid ""
 "Removes shift assignments for users that no longer exist in WordPress. This "
-"can happen when a user was deleted without the plugin's cleanup hook running."
+"can happen when a user was deleted without the plugin's cleanup hook "
+"running."
 msgstr ""
 "Entfernt Schichtzuweisungen für Benutzer, die in WordPress nicht mehr "
 "vorhanden sind. Dies kann passieren, wenn ein Benutzer gelöscht wurde, ohne "
@@ -1698,8 +1987,8 @@ msgstr "Abbau"
 
 #: includes/admin/import.php:285
 msgid ""
-"Dismantling of booths, tents, tables, etc. This person should be skilled and "
-"have experience in dismantling."
+"Dismantling of booths, tents, tables, etc. This person should be skilled and"
+" have experience in dismantling."
 msgstr ""
 "Abbau von Ständen, Zelten, Tischen usw. Diese Person sollte über "
 "Fachkenntnisse und Erfahrung im Abbau verfügen."
@@ -1760,8 +2049,8 @@ msgstr "Bar"
 
 #: includes/admin/import.php:290
 msgid ""
-"People for the bar, who can also tap beer, are important. This person should "
-"be friendly and good with customers."
+"People for the bar, who can also tap beer, are important. This person should"
+" be friendly and good with customers."
 msgstr ""
 "Mitarbeiter für die Bar, die auch Bier zapfen können, sind wichtig. Diese "
 "Person sollte freundlich sein und gut mit Kunden umgehen können."
@@ -1772,8 +2061,8 @@ msgstr "Pfand"
 
 #: includes/admin/import.php:291
 msgid ""
-"Return of plates and cups. There should always be at least one person at the "
-"deposit stand."
+"Return of plates and cups. There should always be at least one person at the"
+" deposit stand."
 msgstr ""
 "Rückgabe von Tellern und Tassen. Am Pfandständer sollte sich immer "
 "mindestens eine Person befinden."
@@ -1889,72 +2178,121 @@ msgstr "Endzeit der Schicht (formatiert)"
 msgid "Number of days before the shift starts"
 msgstr "Anzahl der Tage bis zum Schichtbeginn"
 
-#: includes/admin/settings.php:375
+#: includes/admin/settings.php:382
 msgid "Registration"
 msgstr "Registrierung"
 
-#: includes/admin/settings.php:382
+#: includes/admin/settings.php:389
 msgid "Suppress WordPress password email"
 msgstr "WordPress-Passwort-E-Mail unterdrücken"
 
-#: includes/admin/settings.php:385 includes/admin/settings.php:427
-#: includes/admin/settings.php:550
+#: includes/admin/settings.php:392 includes/admin/settings.php:434
+#: includes/admin/settings.php:466 includes/admin/settings.php:482
+#: includes/admin/settings.php:498 includes/admin/settings.php:612
 msgid "Yes"
 msgstr "Ja"
 
-#: includes/admin/settings.php:386
+#: includes/admin/settings.php:393
 msgid ""
 "If enabled, WordPress will not send the default \"set your password\" email "
 "to newly registered volunteers."
 msgstr ""
-"Wenn aktiviert, sendet WordPress keine Standard-„Passwort festlegen\"-E-Mail "
-"an neu registrierte Volunteers."
+"Wenn aktiviert, sendet WordPress keine Standard-„Passwort festlegen\"-E-Mail"
+" an neu registrierte Volunteers."
 
-#: includes/admin/settings.php:394
+#: includes/admin/settings.php:401
 msgid "Rules"
 msgstr "Regeln"
 
-#: includes/admin/settings.php:400
+#: includes/admin/settings.php:407
 msgid "Max. shifts per year"
 msgstr "Maximale Anzahl an Schichten pro Jahr"
 
-#: includes/admin/settings.php:401
+#: includes/admin/settings.php:408
 msgid "Max. shifts per month"
 msgstr "Maximale Schichten pro Monat"
 
-#: includes/admin/settings.php:402
+#: includes/admin/settings.php:409
 msgid "Max. shifts per week"
 msgstr "Maximale Anzahl Schichten pro Woche"
 
-#: includes/admin/settings.php:403
+#: includes/admin/settings.php:410
 msgid "Max. shifts per day"
 msgstr "Maximale Anzahl Schichten pro Tag"
 
-#: includes/admin/settings.php:424
+#: includes/admin/settings.php:431
 msgid "Allow overlapping shifts"
 msgstr "Überlappende Schichten zulassen"
 
-#: includes/admin/settings.php:435
+#: includes/admin/settings.php:442
 msgid "Sign out possible up to X hours before start"
 msgstr "Abmeldung bis zu X Stunden vor Beginn möglich"
 
-#: includes/admin/settings.php:437 includes/shiftselector.php:391
+#: includes/admin/settings.php:444 includes/shiftselector.php:391
 msgid "hours"
 msgstr "Std."
 
-#: includes/admin/settings.php:466
+#: includes/admin/settings.php:452
+msgid "Admin menu"
+msgstr "Admin-Menü"
+
+#: includes/admin/settings.php:463
+msgid "Hide \"All Shifts\" menu item"
+msgstr "„Alle Schichten\" im Menü verstecken"
+
+#: includes/admin/settings.php:467
+msgid ""
+"Hides the classic shift list screen from the sidebar — Manager covers the "
+"same day-to-day work. The screen itself still works if you have a direct "
+"link to it."
+msgstr ""
+"Blendet den klassischen Schicht-Listenbildschirm aus der Seitenleiste aus — "
+"Manager deckt dieselbe tägliche Arbeit ab. Der Bildschirm selbst "
+"funktioniert weiterhin, wenn Sie einen direkten Link dazu haben."
+
+#: includes/admin/settings.php:479
+msgid "Hide \"Add Shift\" menu item"
+msgstr "„Schicht hinzufügen\" im Menü verstecken"
+
+#: includes/admin/settings.php:483
+msgid ""
+"Hides the classic \"Add new shift\" screen from the sidebar — Manager's own "
+"\"+ Add shift\" button covers the same task. The screen itself still works "
+"if you have a direct link to it."
+msgstr ""
+"Blendet den klassischen Bildschirm „Neue Schicht hinzufügen\" aus der "
+"Seitenleiste aus — der eigene „+ Schicht hinzufügen\"-Button des Managers "
+"deckt dieselbe Aufgabe ab. Der Bildschirm selbst funktioniert weiterhin, "
+"wenn Sie einen direkten Link dazu haben."
+
+#: includes/admin/settings.php:495
+msgid "Hide \"Departments\" menu item"
+msgstr "Menü-Eintrag „Abteilungen“ verstecken"
+
+#: includes/admin/settings.php:499
+msgid ""
+"Hides the department management screen from the sidebar — Manager's own "
+"\"Departments\" link (in the \"Add shift\" dropdown) covers the same task. "
+"The screen itself still works if you have a direct link to it."
+msgstr ""
+"Blendet den Bildschirm zur Verwaltung der Abteilungen aus der Seitenleiste "
+"aus — der eigene „Abteilungen“-Link des Managers (im „Schicht "
+"hinzufügen“-Dropdown) deckt dieselbe Aufgabe ab. Der Bildschirm selbst "
+"funktioniert weiterhin, wenn Sie einen direkten Link dazu haben."
+
+#: includes/admin/settings.php:528
 msgid "Security"
 msgstr "Sicherheit"
 
-#: includes/admin/settings.php:473
+#: includes/admin/settings.php:535
 msgid "CAPTCHA provider"
 msgstr "CAPTCHA-Anbieter"
 
-#: includes/admin/settings.php:477
+#: includes/admin/settings.php:539
 msgid "None"
 msgstr "Keiner"
 
-#: includes/admin/settings.php:488
+#: includes/admin/settings.php:550
 msgid ""
 "Adds a CAPTCHA challenge to the volunteer registration form to block "
 "automated spam registrations."
@@ -1962,42 +2300,43 @@ msgstr ""
 "Fügt dem Registrierungsformular eine CAPTCHA-Prüfung hinzu, um "
 "automatisierte Spam-Registrierungen zu blockieren."
 
-#. translators: %s = link to the Simple Cloudflare Turnstile plugin on WordPress.org
-#: includes/admin/settings.php:493
+#. translators: %s = link to the Simple Cloudflare Turnstile plugin on
+#. WordPress.org
+#: includes/admin/settings.php:555
 #, php-format
 msgid "Requires the free %s plugin to be installed and activated."
 msgstr ""
 "Erfordert, dass das kostenlose Plugin %s installiert und aktiviert ist."
 
-#: includes/admin/settings.php:497
+#: includes/admin/settings.php:559
 msgid ""
 "The Simple Cloudflare Turnstile plugin is active but has no site key/secret "
 "key configured yet. Until it is configured, registration is blocked for "
 "everyone."
 msgstr ""
 "Das Plugin „Simple Cloudflare Turnstile“ ist aktiv, hat aber noch keinen "
-"Website- oder Geheimschlüssel konfiguriert. Solange das nicht geschieht, ist "
-"die Registrierung für alle blockiert."
+"Website- oder Geheimschlüssel konfiguriert. Solange das nicht geschieht, ist"
+" die Registrierung für alle blockiert."
 
-#: includes/admin/settings.php:506
+#: includes/admin/settings.php:568
 msgid "CAPTCHA site key"
 msgstr "CAPTCHA-Website-Schlüssel"
 
-#: includes/admin/settings.php:509
+#: includes/admin/settings.php:571
 msgid ""
 "Get your keys from the provider's admin console. Not used for Cloudflare "
-"Turnstile — configure its site key in the Simple Cloudflare Turnstile plugin "
-"settings instead."
+"Turnstile — configure its site key in the Simple Cloudflare Turnstile plugin"
+" settings instead."
 msgstr ""
 "Schlüssel im Admin-Bereich des Anbieters abrufen. Wird für Cloudflare "
 "Turnstile nicht verwendet — den Website-Schlüssel stattdessen in den "
 "Einstellungen des Plugins „Simple Cloudflare Turnstile“ konfigurieren."
 
-#: includes/admin/settings.php:517
+#: includes/admin/settings.php:579
 msgid "CAPTCHA secret key"
 msgstr "CAPTCHA-Geheimschlüssel"
 
-#: includes/admin/settings.php:520
+#: includes/admin/settings.php:582
 msgid ""
 "Not used for Cloudflare Turnstile — configure its secret key in the Simple "
 "Cloudflare Turnstile plugin settings instead."
@@ -2006,27 +2345,27 @@ msgstr ""
 "stattdessen in den Einstellungen des Plugins „Simple Cloudflare Turnstile“ "
 "konfigurieren."
 
-#: includes/admin/settings.php:528
+#: includes/admin/settings.php:590
 msgid "reCAPTCHA v3 score threshold"
 msgstr "reCAPTCHA-v3-Schwellenwert"
 
-#: includes/admin/settings.php:532
+#: includes/admin/settings.php:594
 msgid ""
 "Scores below this value are treated as bots (0.0 = all pass, 1.0 = all "
 "blocked). Default: 0.5. Only applies to reCAPTCHA v3."
 msgstr ""
-"Werte unter diesem Schwellenwert werden als Bot behandelt (0.0 = alle durch, "
-"1.0 = alle blockiert). Standard: 0.5. Gilt nur für reCAPTCHA v3."
+"Werte unter diesem Schwellenwert werden als Bot behandelt (0.0 = alle durch,"
+" 1.0 = alle blockiert). Standard: 0.5. Gilt nur für reCAPTCHA v3."
 
-#: includes/admin/settings.php:540
+#: includes/admin/settings.php:602
 msgid "Volunteer Shift Selector"
 msgstr "Volunteer-Schichtauswahl"
 
-#: includes/admin/settings.php:547
+#: includes/admin/settings.php:609
 msgid "Show full shifts to volunteers"
 msgstr "Volle Schichten für Volunteers anzeigen"
 
-#: includes/admin/settings.php:551
+#: includes/admin/settings.php:613
 msgid ""
 "If enabled, a \"Full shifts\" section is shown on the volunteer shift "
 "selector page."
@@ -2034,57 +2373,57 @@ msgstr ""
 "Wenn aktiviert, wird auf der Volunteer-Seite ein Abschnitt \"Volle "
 "Schichten\" angezeigt."
 
-#: includes/admin/settings.php:559
+#: includes/admin/settings.php:621
 msgid "Volunteer shift filters"
 msgstr "Schichtfilter für Volunteers"
 
-#: includes/admin/settings.php:563
+#: includes/admin/settings.php:625
 msgid "Text search"
 msgstr "Textsuche"
 
-#: includes/admin/settings.php:564
+#: includes/admin/settings.php:626
 msgid "Date filter"
 msgstr "Datumsfilter"
 
-#: includes/admin/settings.php:565
+#: includes/admin/settings.php:627
 msgid "Category filter"
 msgstr "Kategoriefilter"
 
-#: includes/admin/settings.php:573
+#: includes/admin/settings.php:635
 msgid "Choose which filter controls appear on the volunteer shift selector."
 msgstr ""
 "Wählen Sie, welche Filter auf der Schichtauswahl für Volunteers angezeigt "
 "werden."
 
-#: includes/admin/settings.php:581
+#: includes/admin/settings.php:643
 msgid "Formatting"
 msgstr "Formatierung"
 
-#: includes/admin/settings.php:588
+#: includes/admin/settings.php:650
 msgid "Date format (shift start)"
 msgstr "Datumsformat (Schichtbeginn)"
 
-#: includes/admin/settings.php:594 includes/admin/settings.php:612
+#: includes/admin/settings.php:656 includes/admin/settings.php:674
 msgid "Example:"
 msgstr "Beispiel:"
 
-#: includes/admin/settings.php:595 includes/admin/settings.php:613
+#: includes/admin/settings.php:657 includes/admin/settings.php:675
 msgid "Default:"
 msgstr "Standard:"
 
-#: includes/admin/settings.php:596 includes/admin/settings.php:614
+#: includes/admin/settings.php:658 includes/admin/settings.php:676
 msgid "Common tokens"
 msgstr "Häufige Platzhalter"
 
-#: includes/admin/settings.php:606
+#: includes/admin/settings.php:668
 msgid "Time format (shift end)"
 msgstr "Zeitformat (Schichtende)"
 
-#: includes/admin/settings.php:624 includes/admin/settings.php:738
+#: includes/admin/settings.php:686 includes/admin/settings.php:800
 msgid "Custom CSS"
 msgstr "Eigenes CSS"
 
-#: includes/admin/settings.php:628
+#: includes/admin/settings.php:690
 msgid ""
 "Additional CSS injected on the frontend. Use this for theme-specific "
 "adjustments without modifying your theme files."
@@ -2092,11 +2431,11 @@ msgstr ""
 "Zusätzliches CSS, das im Frontend eingefügt wird. Verwenden Sie dies für "
 "designspezifische Anpassungen, ohne die Theme-Dateien zu bearbeiten."
 
-#: includes/admin/settings.php:663
+#: includes/admin/settings.php:725
 msgid "Email Design"
 msgstr "E-Mail-Design"
 
-#: includes/admin/settings.php:665
+#: includes/admin/settings.php:727
 msgid ""
 "These apply to every email the plugin sends — sign-up confirmations, "
 "reminders, and announcements."
@@ -2104,49 +2443,49 @@ msgstr ""
 "Diese gelten für jede E-Mail, die das Plugin versendet — "
 "Anmeldebestätigungen, Erinnerungen und Ankündigungen."
 
-#: includes/admin/settings.php:672
+#: includes/admin/settings.php:734
 msgid "Header color"
 msgstr "Kopfbereich-Farbe"
 
-#: includes/admin/settings.php:676
+#: includes/admin/settings.php:738
 msgid "Use a custom color"
 msgstr "Eigene Farbe verwenden"
 
-#: includes/admin/settings.php:678
+#: includes/admin/settings.php:740
 msgid "Default is a dark blue gradient."
 msgstr "Standard ist ein dunkelblauer Verlauf."
 
-#: includes/admin/settings.php:686
+#: includes/admin/settings.php:748
 msgid "Header text color"
 msgstr "Textfarbe im Kopfbereich"
 
-#: includes/admin/settings.php:690
+#: includes/admin/settings.php:752
 msgid "Choose a color that stays readable against your header color/logo."
 msgstr ""
-"Wählen Sie eine Farbe, die vor Ihrer Kopfbereich-Farbe/Ihrem Logo gut lesbar "
-"bleibt."
+"Wählen Sie eine Farbe, die vor Ihrer Kopfbereich-Farbe/Ihrem Logo gut lesbar"
+" bleibt."
 
-#: includes/admin/settings.php:698
+#: includes/admin/settings.php:760
 msgid "Header title"
 msgstr "Titel im Kopfbereich"
 
-#: includes/admin/settings.php:702 includes/admin/settings.php:714
+#: includes/admin/settings.php:764 includes/admin/settings.php:776
 msgid "Leave empty to hide this line."
 msgstr "Leer lassen, um diese Zeile auszublenden."
 
-#: includes/admin/settings.php:710
+#: includes/admin/settings.php:772
 msgid "Header subtitle"
 msgstr "Untertitel im Kopfbereich"
 
-#: includes/admin/settings.php:722
+#: includes/admin/settings.php:784
 msgid "Header logo"
 msgstr "Logo im Kopfbereich"
 
-#: includes/admin/settings.php:730
+#: includes/admin/settings.php:792
 msgid "Footer"
 msgstr "Fusszeile"
 
-#: includes/admin/settings.php:742
+#: includes/admin/settings.php:804
 msgid ""
 "Advanced: extra CSS added to every email. Support varies a lot by email "
 "client (e.g. Outlook ignores it entirely) — use it for minor tweaks, not "
@@ -2157,35 +2496,35 @@ msgstr ""
 "ignoriert Outlook es komplett) — verwenden Sie es für kleine Anpassungen, "
 "nicht für etwas Wesentliches."
 
-#: includes/admin/settings.php:750
+#: includes/admin/settings.php:812
 msgid "Volunteer Notifications"
 msgstr "Volunteer-Benachrichtigungen"
 
-#: includes/admin/settings.php:757
+#: includes/admin/settings.php:819
 msgid "Email Subject (Sign up)"
 msgstr "E-Mail-Betreff (Anmeldung)"
 
-#: includes/admin/settings.php:768
+#: includes/admin/settings.php:830
 msgid "Email Text (Sign up)"
 msgstr "E-Mail-Text (Anmeldung)"
 
-#: includes/admin/settings.php:781
+#: includes/admin/settings.php:843
 msgid "Email Subject (Sign out)"
 msgstr "E-Mail-Betreff (Abmelden)"
 
-#: includes/admin/settings.php:792
+#: includes/admin/settings.php:854
 msgid "Email Text (Sign out)"
 msgstr "E-Mail-Text (Abmelden)"
 
-#: includes/admin/settings.php:805
+#: includes/admin/settings.php:867
 msgid "Shift Reminders"
 msgstr "Schichterinnerungen"
 
-#: includes/admin/settings.php:812
+#: includes/admin/settings.php:874
 msgid "Send reminder X days before start"
 msgstr "Erinnerung X Tage vor Beginn senden"
 
-#: includes/admin/settings.php:816
+#: includes/admin/settings.php:878
 msgid ""
 "Comma-separated whole days, e.g. 7, 1. Negative or zero values are ignored. "
 "Leave empty to turn reminder emails off entirely."
@@ -2193,19 +2532,19 @@ msgstr ""
 "Kommagetrennte ganze Tage, z. B. 7, 1. Negative Werte oder null werden "
 "ignoriert. Leer lassen, um Erinnerungs-E-Mails vollständig zu deaktivieren."
 
-#: includes/admin/settings.php:824
+#: includes/admin/settings.php:886
 msgid "Email Subject (Reminder)"
 msgstr "E-Mail-Betreff (Erinnerung)"
 
-#: includes/admin/settings.php:835
+#: includes/admin/settings.php:897
 msgid "Email Text (Reminder)"
 msgstr "E-Mail-Text (Erinnerung)"
 
-#: includes/admin/settings.php:861
+#: includes/admin/settings.php:923
 msgid "Select logo…"
 msgstr "Logo auswählen…"
 
-#: includes/admin/settings.php:863
+#: includes/admin/settings.php:925
 msgid ""
 "Shown at the top of every email instead of the site name. Recommended: a "
 "wide image with a transparent background, under 200px tall."
@@ -2214,46 +2553,46 @@ msgstr ""
 "ein breites Bild mit transparentem Hintergrund, unter 200px hoch."
 
 #. translators: %s = site name
-#: includes/admin/settings.php:873 includes/notifications.php:378
-#: includes/notifications.php:506
+#: includes/admin/settings.php:935 includes/notifications.php:566
+#: includes/notifications.php:694
 #, php-format
 msgid "This email was sent by %s."
 msgstr "Diese E-Mail wurde von %s gesendet."
 
-#. translators: %s is the default footer text that will be used if this field is left empty
-#: includes/admin/settings.php:886
+#. translators: %s is the default footer text that will be used if this field
+#. is left empty
+#: includes/admin/settings.php:948
 #, php-format
-msgid ""
-"Shown at the bottom of every email. Leave empty to use the default: \"%s\""
+msgid "Shown at the bottom of every email. Leave empty to use the default: \"%s\""
 msgstr ""
 "Wird unten in jeder E-Mail angezeigt. Leer lassen, um den Standard zu "
 "verwenden: „%s“"
 
-#: includes/admin/settings.php:922
+#: includes/admin/settings.php:984
 msgid "Sign up"
 msgstr "Anmelden"
 
-#: includes/admin/settings.php:923
+#: includes/admin/settings.php:985
 msgid "Sign out"
 msgstr "Abmelden"
 
-#: includes/admin/settings.php:924
+#: includes/admin/settings.php:986 includes/admin/user-profile.php:137
 msgid "Reminder"
 msgstr "Erinnerung"
 
-#: includes/admin/settings.php:931
+#: includes/admin/settings.php:993
 msgid "Live preview of emails (with example values):"
 msgstr "Live-Vorschau der E-Mails (mit Beispielwerten):"
 
-#: includes/admin/settings.php:937
+#: includes/admin/settings.php:999
 msgid "Subject:"
 msgstr "Thema:"
 
-#: includes/admin/settings.php:979
+#: includes/admin/settings.php:1041
 msgid "Select a logo image"
 msgstr "Logo-Bild auswählen"
 
-#: includes/admin/settings.php:980
+#: includes/admin/settings.php:1042
 msgid "Use this image"
 msgstr "Dieses Bild verwenden"
 
@@ -2277,47 +2616,72 @@ msgstr "Startzeit:"
 msgid "End time:"
 msgstr "Endzeit:"
 
-#: includes/admin/shift-metaboxes.php:79
-msgid "Organizer user:"
-msgstr "Organisator-User:"
-
-#: includes/admin/shift-metaboxes.php:90
-msgid ""
-"Only staff-side users are shown here by default. If selected, this user is "
-"used as the sender fallback for shift emails unless a custom organizer name/"
-"email is entered below."
-msgstr ""
-"Standardmäßig werden hier nur Benutzer mit Backend-Zugriff angezeigt. Wird "
-"ein Benutzer ausgewählt, dient er als Absender-Fallback für Schicht-E-Mails, "
-"sofern unten kein eigener Organisator-Name/E-Mail eingetragen wird."
-
-#: includes/admin/shift-metaboxes.php:92
-msgid "Organizer name:"
-msgstr "Organisator-Name:"
-
-#: includes/admin/shift-metaboxes.php:94
-msgid "Organizer email:"
-msgstr "Organisator-E-Mail:"
-
-#: includes/admin/shift-metaboxes.php:96
-msgid ""
-"Leave empty to use the linked organizer user or the global notification "
-"sender."
-msgstr ""
-"Leer lassen, um den verknüpften Organisator-User oder den globalen "
-"Benachrichtigungs-Absender zu verwenden."
-
-#: includes/admin/shift-metaboxes.php:173
+#: includes/admin/shift-metaboxes.php:187
 msgid "Duplicate"
 msgstr "Duplikat"
 
-#: includes/admin/shift-metaboxes.php:191
-msgid "Not allowed"
-msgstr "Nicht erlaubt"
-
-#: includes/admin/shift-metaboxes.php:198
+#: includes/admin/shift-metaboxes.php:212
 msgid " (Copy)"
 msgstr " (Kopie)"
+
+#: includes/admin/shift-metaboxes.php:241
+msgid "Assigned Volunteers"
+msgstr "Zugewiesene Volunteers"
+
+#: includes/admin/user-profile.php:109
+msgid "Volunteer activity"
+msgstr "Volunteer-Aktivität"
+
+#: includes/admin/user-profile.php:135
+msgid "Signed up"
+msgstr "Angemeldet"
+
+#: includes/admin/user-profile.php:136
+msgid "Cancelled"
+msgstr "Abgemeldet"
+
+#: includes/admin/user-profile.php:138
+msgid "Announcement"
+msgstr "Ankündigung"
+
+#: includes/admin/user-profile.php:144 includes/admin/volunteer-list.php:279
+msgid "Upcoming shifts"
+msgstr "Bevorstehende Schichten"
+
+#: includes/admin/user-profile.php:153
+msgid "Past shifts"
+msgstr "Vergangene Schichten"
+
+#: includes/admin/user-profile.php:155
+msgid "No past shifts."
+msgstr "Keine vergangenen Schichten."
+
+#. translators: %d: total number of past shifts
+#: includes/admin/user-profile.php:164
+#, php-format
+msgid "Showing the 100 most recent of %d past shifts."
+msgstr "Zeigt die 100 neuesten von %d vergangenen Schichten."
+
+#: includes/admin/user-profile.php:172
+msgid "Notification history"
+msgstr "Benachrichtigungsverlauf"
+
+#: includes/admin/user-profile.php:174
+msgid "No notifications logged yet."
+msgstr "Bisher wurden keine Benachrichtigungen protokolliert."
+
+#: includes/admin/user-profile.php:175
+msgid "Only notifications sent from now on are recorded here."
+msgstr ""
+"Hier werden nur Benachrichtigungen erfasst, die ab jetzt gesendet werden."
+
+#: includes/admin/user-profile.php:179
+msgid "Type"
+msgstr "Typ"
+
+#: includes/admin/user-profile.php:249
+msgid "Open full profile"
+msgstr "Vollständiges Profil öffnen"
 
 #: includes/admin/volunteer-list.php:18 includes/admin/volunteer-list.php:19
 #: includes/admin/volunteer-list.php:87 includes/admin/volunteer-list.php:98
@@ -2366,11 +2730,11 @@ msgstr ""
 "Protokoll der automatisch gelöschten, nicht verifizierten Konten leeren? "
 "Dies kann nicht rückgängig gemacht werden."
 
-#: includes/admin/volunteer-list.php:182 includes/admin/volunteer-list.php:228
+#: includes/admin/volunteer-list.php:182 includes/admin/volunteer-list.php:227
 msgid "Create new volunteer"
 msgstr "Neuen Volunteers erstellen"
 
-#: includes/admin/volunteer-list.php:183 includes/admin/volunteer-list.php:250
+#: includes/admin/volunteer-list.php:183 includes/admin/volunteer-list.php:248
 msgid "Grant volunteer role"
 msgstr "Volunteer-Rolle vergeben"
 
@@ -2390,79 +2754,75 @@ msgstr "Zurücksetzen"
 msgid "Search volunteers…"
 msgstr "Volunteers suchen…"
 
-#: includes/admin/volunteer-list.php:240
+#: includes/admin/volunteer-list.php:239
 msgid "Create volunteer"
 msgstr "Volunteers erstellen"
 
-#: includes/admin/volunteer-list.php:252
+#: includes/admin/volunteer-list.php:250
 msgid "All existing users already have the volunteer role."
 msgstr "Alle bestehenden Benutzer haben bereits die Volunteer-Rolle."
 
-#: includes/admin/volunteer-list.php:258
+#: includes/admin/volunteer-list.php:256
 msgid "— Select user —"
 msgstr "— Benutzer auswählen —"
 
-#: includes/admin/volunteer-list.php:265
+#: includes/admin/volunteer-list.php:263
 msgid "Grant role"
 msgstr "Rolle vergeben"
 
-#: includes/admin/volunteer-list.php:276
+#: includes/admin/volunteer-list.php:278
 msgid "Announcements"
 msgstr "Ankündigungen"
 
-#: includes/admin/volunteer-list.php:277
-msgid "Upcoming shifts"
-msgstr "Bevorstehende Schichten"
-
-#: includes/admin/volunteer-list.php:278
+#: includes/admin/volunteer-list.php:280
 msgid "Registered"
 msgstr "Registriert"
 
-#: includes/admin/volunteer-list.php:279
+#: includes/admin/volunteer-list.php:281
 msgid "Last shift"
 msgstr "Letzte Schicht"
 
-#: includes/admin/volunteer-list.php:287
+#: includes/admin/volunteer-list.php:289
 msgid "Contact"
 msgstr "Kontaktieren"
 
-#: includes/admin/volunteer-list.php:288
+#: includes/admin/volunteer-list.php:290
 msgid "Actions"
 msgstr "Aktionen"
 
-#: includes/admin/volunteer-list.php:292
+#: includes/admin/volunteer-list.php:294
 msgid "No volunteers found."
 msgstr "Keine Volunteers gefunden."
 
-#: includes/admin/volunteer-list.php:379
+#: includes/admin/volunteer-list.php:387
 msgid "Opted out"
 msgstr "Abgemeldet"
 
-#: includes/admin/volunteer-list.php:385
+#: includes/admin/volunteer-list.php:393
 msgid "Email"
 msgstr "E-Mail senden"
 
-#: includes/admin/volunteer-list.php:391
+#: includes/admin/volunteer-list.php:399
 msgid "Remove role"
 msgstr "Rolle entfernen"
 
-#: includes/admin/volunteer-list.php:410
+#: includes/admin/volunteer-list.php:418
 msgid "volunteers"
 msgstr "Volunteers"
 
-#: includes/admin/volunteer-list.php:412
+#: includes/admin/volunteer-list.php:420
 msgid "Role granted. Reloading…"
 msgstr "Rolle vergeben. Wird neu geladen…"
 
-#: includes/admin/volunteer-list.php:413 includes/admin/volunteer-list.php:477
+#: includes/admin/volunteer-list.php:421 includes/admin/volunteer-list.php:485
 msgid "Role removed."
 msgstr "Rolle entfernt."
 
-#: includes/admin/volunteer-list.php:414 includes/admin/volunteer-list.php:545
+#: includes/admin/volunteer-list.php:422 includes/admin/volunteer-list.php:553
 msgid "Volunteer created. Reloading…"
 msgstr "Volunteer erstellt. Wird neu geladen…"
 
-#: includes/admin/volunteer-list.php:415
+#: includes/admin/volunteer-list.php:423
 msgid ""
 "Remove the volunteer role from {name}? They still have {shifts} upcoming "
 "shift(s)."
@@ -2470,27 +2830,27 @@ msgstr ""
 "Die Volunteer-Rolle von {name} entfernen? Diese Person hat noch {shifts} "
 "bevorstehende Schicht(en)."
 
-#: includes/admin/volunteer-list.php:416
+#: includes/admin/volunteer-list.php:424
 msgid "Remove the volunteer role from {name}?"
 msgstr "Die Volunteer-Rolle von {name} entfernen?"
 
-#: includes/admin/volunteer-list.php:443 includes/admin/volunteer-list.php:473
+#: includes/admin/volunteer-list.php:451 includes/admin/volunteer-list.php:481
 msgid "User not found."
 msgstr "Benutzer nicht gefunden."
 
-#: includes/admin/volunteer-list.php:448
+#: includes/admin/volunteer-list.php:456
 msgid "Role granted."
 msgstr "Rolle vergeben."
 
-#: includes/admin/volunteer-list.php:504
+#: includes/admin/volunteer-list.php:512
 msgid "First name is required."
 msgstr "Vorname ist erforderlich."
 
-#: includes/admin/volunteer-list.php:511
+#: includes/admin/volunteer-list.php:519
 msgid "A user with this e-mail already exists."
 msgstr "Ein Benutzer mit dieser E-Mail-Adresse existiert bereits."
 
-#: includes/admin/volunteer-list.php:567
+#: includes/admin/volunteer-list.php:575
 msgid "Log cleared."
 msgstr "Protokoll geleert."
 
@@ -2563,33 +2923,43 @@ msgstr "Sie dürfen nur %1$d Schichten pro %2$s übernehmen."
 #: includes/helpers.php:232
 msgid "This shift overlaps with one you have already taken."
 msgstr ""
-"Diese Schicht überschneidet sich mit einer, die Sie bereits angetreten haben."
+"Diese Schicht überschneidet sich mit einer, die Sie bereits angetreten "
+"haben."
 
 #: includes/helpers.php:268
 msgid "Login link has expired or is invalid."
 msgstr "Der Anmeldelink ist abgelaufen oder ungültig."
 
-#: includes/notifications.php:114
+#: includes/helpers.php:482
+msgid "(hidden from volunteers)"
+msgstr "(vor Volunteers verborgen)"
+
+#: includes/helpers.php:518
+msgid "Close"
+msgstr "Schließen"
+
+#: includes/notifications.php:298
 msgid "assigned"
 msgstr "angemeldet"
 
-#: includes/notifications.php:115
+#: includes/notifications.php:299
 msgid "removed"
 msgstr "abgemeldet"
 
 #. translators: %1$s = action, %2$s = title of shift
-#: includes/notifications.php:122
+#: includes/notifications.php:306
 #, php-format
 msgid "Volunteer was %1$s: %2$s"
 msgstr "Volunteer wurde %1$s: %2$s"
 
-#. translators: %1$s = first name, %2$s = last name, %3$s = action, %4$s = title of shift
-#: includes/notifications.php:128
+#. translators: %1$s = first name, %2$s = last name, %3$s = action, %4$s =
+#. title of shift
+#: includes/notifications.php:312
 #, php-format
 msgid "The volunteer %1$s, %2$s was %3$s for the shift: %4$s"
 msgstr "Der Volunteer %1$s %2$s wurde für die Schicht %4$s %3$s"
 
-#: includes/notifications.php:534
+#: includes/notifications.php:722
 msgid "(no subject)"
 msgstr "(kein Betreff)"
 
@@ -2754,17 +3124,19 @@ msgstr "Hallo %1$s,<br><br>Ihr Login-Link:<br>%2$s"
 msgid "Registration error. Please try again later."
 msgstr "Registrierungsfehler. Bitte versuchen Sie es später erneut."
 
-#. translators: %1$s = first name, %2$s = site name, %3$s = site url, %4$s = login url
+#. translators: %1$s = first name, %2$s = site name, %3$s = site url, %4$s =
+#. login url
 #: includes/registration.php:411
 #, php-format
 msgid ""
 "Hello %1$s,<br><br>Thank you for registering at %2$s (%3$s).<br><br>Here is "
 "your login link:<br>%4$s"
 msgstr ""
-"Hallo %1$s,<br><br>vielen Dank für Ihre Registrierung bei %2$s (%3$s)."
-"<br><br>Hier ist Ihr Anmeldelink:<br>%4$s"
+"Hallo %1$s,<br><br>vielen Dank für Ihre Registrierung bei %2$s "
+"(%3$s).<br><br>Hier ist Ihr Anmeldelink:<br>%4$s"
 
-#. translators: 1: number of open volunteer slots remaining, 2: total number of volunteer slots offered
+#. translators: 1: number of open volunteer slots remaining, 2: total number
+#. of volunteer slots offered
 #: includes/shiftselector.php:42
 #, php-format
 msgid "%1$d/%2$d slots open"
@@ -2833,32 +3205,102 @@ msgid "You are not signed up for this shift."
 msgstr "Sie sind für diese Schicht nicht eingeteilt."
 
 #~ msgid ""
-#~ "New in this release: the [eventadmin_open_positions] shortcode — a "
-#~ "public, no-login overview of where volunteers are still needed, grouped "
-#~ "by department. Put it on your recruitment page so visitors see the gaps "
-#~ "before they sign up."
+#~ "New in this release: shift management now lives on its own \"Manager\" page "
+#~ "(Timeline, Table, and Cards), separate from the Dashboard; classic menu "
+#~ "items like \"All Shifts\" and \"Departments\" can be hidden from the "
+#~ "sidebar; the Timeline's Edit Shift modal gained an organizer section; and "
+#~ "shift/volunteer changes now show up immediately instead of sometimes taking "
+#~ "a few minutes."
+#~ msgstr ""
+#~ "Neu in dieser Version: Die Schichtverwaltung hat jetzt eine eigene Seite "
+#~ "„Manager“ (Zeitachse, Tabelle und Karten), getrennt vom Dashboard; "
+#~ "klassische Menüpunkte wie „Alle Schichten“ und „Abteilungen“ können in der "
+#~ "Seitenleiste ausgeblendet werden; das Bearbeiten-Modal der Zeitachse hat "
+#~ "einen neuen Organisator-Bereich erhalten; und Schicht-/Volunteer-Änderungen "
+#~ "werden jetzt sofort angezeigt, statt manchmal erst nach ein paar Minuten."
+
+#~ msgid ""
+#~ "This release only refreshes the plugin's screenshots and description on "
+#~ "WordPress.org — nothing changed in the plugin itself."
+#~ msgstr ""
+#~ "Diese Version aktualisiert nur die Screenshots und die Beschreibung auf "
+#~ "WordPress.org — am Plugin selbst hat sich nichts geändert."
+
+#~ msgid "Create shift categories under Shifts → Categories"
+#~ msgstr "Erstellen Sie Schichtkategorien unter Schichten → Kategorien"
+
+#~ msgid ""
+#~ "Departments (Shifts → Categories) group shifts, can be nested under a "
+#~ "parent, and each carries a color used for its badge on shift cards and in "
+#~ "the overview. \"Hide from volunteers\" removes a department from the "
+#~ "frontend filter and labels; a shift disappears for volunteers only when "
+#~ "every department it belongs to is hidden (shifts someone already signed up "
+#~ "for are never hidden). Color, parent, visibility, and description can also "
+#~ "be changed via Quick Edit in the department list, and the shift list itself "
+#~ "can be filtered and sorted by department."
+#~ msgstr ""
+#~ "Abteilungen (Schichten → Kategorien) gruppieren Schichten, können einer "
+#~ "übergeordneten Abteilung untergeordnet werden und tragen jeweils eine Farbe,"
+#~ " die für das Label auf den Schichtkarten und in der Übersicht verwendet "
+#~ "wird. „Vor Volunteers verbergen“ entfernt eine Abteilung aus dem Frontend-"
+#~ "Filter und den Labels; eine Schicht verschwindet für Volunteers nur, wenn "
+#~ "jede Abteilung, zu der sie gehört, verborgen ist (Schichten, für die sich "
+#~ "jemand bereits eingetragen hat, werden nie verborgen). Farbe, übergeordnete "
+#~ "Abteilung, Sichtbarkeit und Beschreibung lassen sich auch per "
+#~ "Schnellbearbeitung in der Abteilungsliste ändern, und die Schichtliste "
+#~ "selbst kann nach Abteilung gefiltert und sortiert werden."
+
+#~ msgid "Shift-Manager"
+#~ msgstr "Shift-Manager"
+
+#~ msgid ""
+#~ "Hides the classic shift list screen from the sidebar — Shift-Manager covers "
+#~ "the same day-to-day work. The screen itself still works if you have a direct"
+#~ " link to it."
+#~ msgstr ""
+#~ "Blendet den klassischen Schicht-Listenbildschirm aus der Seitenleiste aus — "
+#~ "der Shift-Manager deckt dieselbe tägliche Arbeit ab. Der Bildschirm selbst "
+#~ "funktioniert weiterhin, wenn Sie einen direkten Link dazu haben."
+
+#~ msgid ""
+#~ "Hides the classic \"Add new shift\" screen from the sidebar — Shift-"
+#~ "Manager's own \"+ Add shift\" button covers the same task. The screen itself"
+#~ " still works if you have a direct link to it."
+#~ msgstr ""
+#~ "Blendet den klassischen Bildschirm „Neue Schicht hinzufügen\" aus der "
+#~ "Seitenleiste aus — der eigene „+ Schicht hinzufügen\"-Button des Shift-"
+#~ "Managers deckt dieselbe Aufgabe ab. Der Bildschirm selbst funktioniert "
+#~ "weiterhin, wenn Sie einen direkten Link dazu haben."
+
+#~ msgid "Selected: {volunteer} — {shift} ({period}, {capacity})"
+#~ msgstr "Ausgewählt: {volunteer} — {shift} ({period}, {capacity})"
+
+#~ msgid ""
+#~ "New in this release: the [eventadmin_open_positions] shortcode — a public, "
+#~ "no-login overview of where volunteers are still needed, grouped by "
+#~ "department. Put it on your recruitment page so visitors see the gaps before "
+#~ "they sign up."
 #~ msgstr ""
 #~ "Neu in dieser Version: der Shortcode [eventadmin_open_positions] — eine "
-#~ "öffentliche Übersicht ohne Login, die zeigt, wo noch Helfer:innen "
-#~ "gebraucht werden, nach Abteilung gruppiert. Platzieren Sie ihn auf Ihrer "
-#~ "Helfer:innen-Seite, damit Besucher:innen die Lücken sehen, bevor sie sich "
-#~ "eintragen."
+#~ "öffentliche Übersicht ohne Login, die zeigt, wo noch Helfer:innen gebraucht "
+#~ "werden, nach Abteilung gruppiert. Platzieren Sie ihn auf Ihrer Helfer:innen-"
+#~ "Seite, damit Besucher:innen die Lücken sehen, bevor sie sich eintragen."
 
 #~ msgid ""
 #~ "New in this release: a redesigned shift overview with Dashboard, Cards, "
-#~ "Table, and Timeline tabs (drag shifts directly on the Timeline to "
-#~ "reschedule them), a reorganized Volunteers page, and richer e-mail design "
-#~ "options including header colors, rich-text templates, and custom CSS."
+#~ "Table, and Timeline tabs (drag shifts directly on the Timeline to reschedule"
+#~ " them), a reorganized Volunteers page, and richer e-mail design options "
+#~ "including header colors, rich-text templates, and custom CSS."
 #~ msgstr ""
 #~ "Neu in dieser Version: eine überarbeitete Schichtübersicht mit den Tabs "
-#~ "Dashboard, Karten, Tabelle und Zeitachse (Schichten direkt auf der "
-#~ "Zeitachse per Drag & Drop verschieben), eine neu strukturierte Volunteers-"
-#~ "Seite sowie umfangreichere E-Mail-Design-Optionen wie Kopfbereich-Farben, "
-#~ "Rich-Text-Vorlagen und eigenes CSS."
+#~ "Dashboard, Karten, Tabelle und Zeitachse (Schichten direkt auf der Zeitachse"
+#~ " per Drag & Drop verschieben), eine neu strukturierte Volunteers-Seite sowie"
+#~ " umfangreichere E-Mail-Design-Optionen wie Kopfbereich-Farben, Rich-Text-"
+#~ "Vorlagen und eigenes CSS."
 
 #~ msgid ""
-#~ "Admin overview with filters (upcoming/past/all, category, volunteer, "
-#~ "date) and sorting"
+#~ "Admin overview with filters (upcoming/past/all, category, volunteer, date) "
+#~ "and sorting"
 #~ msgstr ""
 #~ "Admin-Übersicht mit Filtern (bevorstehend/vergangen/alle, Kategorie, "
 #~ "Volunteers/r, Datum) und Sortierung"
@@ -2866,17 +3308,17 @@ msgstr "Sie sind für diese Schicht nicht eingeteilt."
 #~ msgid ""
 #~ "Dashboard statistics: empty shifts, understaffed shifts, filled/open spots"
 #~ msgstr ""
-#~ "Dashboard-Statistiken: leere Schichten, unterbesetzte Schichten, belegte/"
-#~ "freie Plätze"
+#~ "Dashboard-Statistiken: leere Schichten, unterbesetzte Schichten, "
+#~ "belegte/freie Plätze"
 
 #~ msgid ""
 #~ "New in this release: Cloudflare Turnstile is now available as a CAPTCHA "
 #~ "provider for the volunteer registration form, via the Simple Cloudflare "
 #~ "Turnstile plugin."
 #~ msgstr ""
-#~ "Neu in dieser Version: Cloudflare Turnstile steht jetzt als CAPTCHA-"
-#~ "Anbieter für das Anmeldeformular für Freiwillige zur Verfügung, über das "
-#~ "Plugin Simple Cloudflare Turnstile."
+#~ "Neu in dieser Version: Cloudflare Turnstile steht jetzt als CAPTCHA-Anbieter"
+#~ " für das Anmeldeformular für Freiwillige zur Verfügung, über das Plugin "
+#~ "Simple Cloudflare Turnstile."
 
 #~ msgid "Filter by shift:"
 #~ msgstr "Nach Schicht filtern:"
@@ -2920,8 +3362,7 @@ msgstr "Sie sind für diese Schicht nicht eingeteilt."
 #~ msgid "Comma-separated whole days, e.g. 7, 1"
 #~ msgstr "Durch Kommas getrennte ganze Tage, z. B. 7, 1"
 
-#~ msgid ""
-#~ "Use {first_name} and {last_name} as placeholders in the message body."
+#~ msgid "Use {first_name} and {last_name} as placeholders in the message body."
 #~ msgstr ""
 #~ "Verwenden Sie {first_name} und {last_name} als Platzhalter im "
 #~ "Nachrichtentext."
@@ -2933,10 +3374,9 @@ msgstr "Sie sind für diese Schicht nicht eingeteilt."
 #~ "appear."
 #~ msgstr ""
 #~ "Absendername und Absender-E-Mail können pro Sendung überschrieben werden. "
-#~ "Verwenden Sie {first_name} und {last_name} als "
-#~ "Personalisierungsplatzhalter. HTML-Formatierung wird unterstützt — die "
-#~ "Live-Vorschau unter dem Formular zeigt die E-Mail so, wie sie erscheinen "
-#~ "wird."
+#~ "Verwenden Sie {first_name} und {last_name} als Personalisierungsplatzhalter."
+#~ " HTML-Formatierung wird unterstützt — die Live-Vorschau unter dem Formular "
+#~ "zeigt die E-Mail so, wie sie erscheinen wird."
 
 #~ msgid "Only the volunteers assigned to a selected shift."
 #~ msgstr "Nur die Volunteers, die einer ausgewählten Schicht zugewiesen sind."
@@ -2944,22 +3384,21 @@ msgstr "Sie sind für diese Schicht nicht eingeteilt."
 #~ msgid ""
 #~ "New in this release: fixed a bug where Administrators who also held the "
 #~ "Volunteer role could lose access to wp-admin menu items on sites using a "
-#~ "custom database table prefix, plus completed French and Dutch "
-#~ "translations."
+#~ "custom database table prefix, plus completed French and Dutch translations."
 #~ msgstr ""
-#~ "Neu in dieser Version: ein Fehler wurde behoben, durch den "
-#~ "Administratoren, die zusätzlich die Rolle Volunteer hatten, auf Websites "
-#~ "mit einem individuellen Datenbank-Tabellenpräfix den Zugriff auf "
-#~ "Menüpunkte im wp-admin verlieren konnten; außerdem wurden die "
-#~ "französischen und niederländischen Übersetzungen vervollständigt."
+#~ "Neu in dieser Version: ein Fehler wurde behoben, durch den Administratoren, "
+#~ "die zusätzlich die Rolle Volunteer hatten, auf Websites mit einem "
+#~ "individuellen Datenbank-Tabellenpräfix den Zugriff auf Menüpunkte im wp-"
+#~ "admin verlieren konnten; außerdem wurden die französischen und "
+#~ "niederländischen Übersetzungen vervollständigt."
 
 #~ msgid "Get your keys from the provider's admin console."
 #~ msgstr "Schlüssel im Admin-Bereich des Anbieters abrufen."
 
 #~ msgid ""
 #~ "New in this release: assign existing volunteers directly, add offline "
-#~ "volunteers without an email address, and set a per-shift organizer name "
-#~ "and email for notifications."
+#~ "volunteers without an email address, and set a per-shift organizer name and "
+#~ "email for notifications."
 #~ msgstr ""
 #~ "Neu in dieser Version: bestehende Volunteers direkt zuweisen, Offline-"
 #~ "Volunteers ohne E-Mail-Adresse hinzufügen und einen eigenen Organisator-"
@@ -2969,9 +3408,9 @@ msgstr "Sie sind für diese Schicht nicht eingeteilt."
 #~ "If selected, this user is used as the sender fallback for shift emails "
 #~ "unless a custom organizer name/email is entered below."
 #~ msgstr ""
-#~ "Falls ausgewählt, wird dieser User als Absender-Fallback für Schicht-E-"
-#~ "Mails verwendet, sofern unten kein eigener Organisator-Name bzw. keine "
-#~ "eigene Organisator-E-Mail eingetragen ist."
+#~ "Falls ausgewählt, wird dieser User als Absender-Fallback für Schicht-E-Mails"
+#~ " verwendet, sofern unten kein eigener Organisator-Name bzw. keine eigene "
+#~ "Organisator-E-Mail eingetragen ist."
 
 #~ msgid "Only staff-side users are shown here by default."
 #~ msgstr "Hier werden standardmässig nur interne Benutzer angezeigt."

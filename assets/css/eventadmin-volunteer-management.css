@@ -5,3 +5,13 @@
     font-size: 1em;
     color: #666;
 }
+
+/* The left margin exists to line up with WP admin's own sidebar column on desktop — that
+   sidebar collapses into an off-canvas menu below WP's own mobile breakpoint (782px, same
+   one core's #wpfooter switches at), so the margin has nothing left to line up with there
+   and just eats into the already-narrow content width. */
+@media screen and (max-width: 782px) {
+    .footer-info {
+        margin-left: 0;
+    }
+}

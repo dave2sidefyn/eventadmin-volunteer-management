@@ -254,26 +254,33 @@ function eventadmin_sanitize_reminder_days($value): string
 }
 
 /**
+ * Shared sanitize_callback for every plain "Yes" checkbox setting on this page — an unchecked
+ * checkbox omits its POST field entirely, so $val is only ever '1' (checked) or missing/some
+ * other value, which this normalizes to a real 1/0 for storage.
+ *
+ * @param mixed $val
+ * @return int
+ */
+function eventadmin_sanitize_checkbox_setting($val): int
+{
+    return $val === '1' ? 1 : 0;
+}
+
+/**
  * Registers the settings for the EventAdmin plugin.
  */
 function eventadmin_plugin_register_settings(): void
 {
     register_setting('eventadmin_plugin_settings_general', 'eventadmin_suppress_wp_password_email', [
-        'sanitize_callback' => static function ($val) {
-            return $val === '1' ? 1 : 0;
-        },
+        'sanitize_callback' => 'eventadmin_sanitize_checkbox_setting',
     ]);
 
     register_setting('eventadmin_plugin_settings_general', 'eventadmin_allow_overlap', [
-        'sanitize_callback' => static function ($val) {
-            return $val === '1' ? 1 : 0;
-        },
+        'sanitize_callback' => 'eventadmin_sanitize_checkbox_setting',
     ]);
 
     register_setting('eventadmin_plugin_settings_display', 'eventadmin_show_full_shifts', [
-        'sanitize_callback' => static function ($val) {
-            return $val === '1' ? 1 : 0;
-        },
+        'sanitize_callback' => 'eventadmin_sanitize_checkbox_setting',
     ]);
 
     register_setting('eventadmin_plugin_settings_general', 'eventadmin_unassign_limit_hours', [
@@ -438,6 +445,61 @@ function eventadmin_plugin_register_settings(): void
         },
         'eventadmin-settings-general',
         'eventadmin_general_rules'
+    );
+
+    add_settings_section(
+        'eventadmin_general_admin_menu',
+        esc_html__('Admin menu', 'eventadmin-volunteer-management'),
+        null,
+        'eventadmin-settings-general'
+    );
+
+    register_setting('eventadmin_plugin_settings_general', 'eventadmin_hide_all_shifts_menu', [
+        'sanitize_callback' => 'eventadmin_sanitize_checkbox_setting',
+    ]);
+
+    add_settings_field(
+        'eventadmin_hide_all_shifts_menu',
+        esc_html__('Hide "All Shifts" menu item', 'eventadmin-volunteer-management'),
+        static function () {
+            echo '<input type="checkbox" name="eventadmin_hide_all_shifts_menu" value="1" ' . checked(1, get_option('eventadmin_hide_all_shifts_menu'), false) . '>';
+            echo ' ' . esc_html__('Yes', 'eventadmin-volunteer-management');
+            echo '<p class="description">' . esc_html__('Hides the classic shift list screen from the sidebar — Manager covers the same day-to-day work. The screen itself still works if you have a direct link to it.', 'eventadmin-volunteer-management') . '</p>';
+        },
+        'eventadmin-settings-general',
+        'eventadmin_general_admin_menu'
+    );
+
+    register_setting('eventadmin_plugin_settings_general', 'eventadmin_hide_add_shift_menu', [
+        'sanitize_callback' => 'eventadmin_sanitize_checkbox_setting',
+    ]);
+
+    add_settings_field(
+        'eventadmin_hide_add_shift_menu',
+        esc_html__('Hide "Add Shift" menu item', 'eventadmin-volunteer-management'),
+        static function () {
+            echo '<input type="checkbox" name="eventadmin_hide_add_shift_menu" value="1" ' . checked(1, get_option('eventadmin_hide_add_shift_menu'), false) . '>';
+            echo ' ' . esc_html__('Yes', 'eventadmin-volunteer-management');
+            echo '<p class="description">' . esc_html__('Hides the classic "Add new shift" screen from the sidebar — Manager\'s own "+ Add shift" button covers the same task. The screen itself still works if you have a direct link to it.', 'eventadmin-volunteer-management') . '</p>';
+        },
+        'eventadmin-settings-general',
+        'eventadmin_general_admin_menu'
+    );
+
+    register_setting('eventadmin_plugin_settings_general', 'eventadmin_hide_departments_menu', [
+        'sanitize_callback' => 'eventadmin_sanitize_checkbox_setting',
+    ]);
+
+    add_settings_field(
+        'eventadmin_hide_departments_menu',
+        esc_html__('Hide "Departments" menu item', 'eventadmin-volunteer-management'),
+        static function () {
+            echo '<input type="checkbox" name="eventadmin_hide_departments_menu" value="1" ' . checked(1, get_option('eventadmin_hide_departments_menu'), false) . '>';
+            echo ' ' . esc_html__('Yes', 'eventadmin-volunteer-management');
+            echo '<p class="description">' . esc_html__('Hides the department management screen from the sidebar — Manager\'s own "Departments" link (in the "Add shift" dropdown) covers the same task. The screen itself still works if you have a direct link to it.', 'eventadmin-volunteer-management') . '</p>';
+        },
+        'eventadmin-settings-general',
+        'eventadmin_general_admin_menu'
     );
 
     register_setting('eventadmin_plugin_settings_general', 'eventadmin_captcha_provider', [

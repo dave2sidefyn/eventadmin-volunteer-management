@@ -45,10 +45,42 @@
     height: 100% !important;
 }
 
-.export-form {
-    float: right;
-    margin-top: -1rem;
-    margin-right: 1rem;
+.eventadmin-split-button {
+    position: relative;
+    display: inline-flex;
+    margin-top: 0.75rem;
+    margin-left: 0.75rem;
+}
+
+.eventadmin-split-button .button {
+    border-radius: 0;
+}
+
+.eventadmin-split-button #eventadmin-open-new-shift-modal {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.eventadmin-split-button-toggle {
+    border-top-right-radius: 3px !important;
+    border-bottom-right-radius: 3px !important;
+    /* Its own hairline against the primary button beside it, instead of a doubled-up one
+       from each button's own full border. */
+    border-left: 1px solid rgba(255, 255, 255, .4) !important;
+    padding: 0 8px !important;
+}
+
+.eventadmin-split-button-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 10;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .15);
+    padding: 6px;
+    min-width: 220px;
 }
 
 .form-filters {
@@ -57,6 +89,44 @@
     gap: 1rem;
     align-items: center;
     flex-wrap: wrap;
+}
+
+/* !important: WP core's own .wp-core-ui .button rule (display: inline-block) outranks a
+   plain single-class selector on specificity alone, regardless of source order — this is
+   a deliberate, narrow override of that, not a specificity fight worth avoiding !important for. */
+button.eventadmin-filters-toggle {
+    display: none !important;
+}
+
+/* Narrow/mobile screens: department and date selects can be much wider than their
+   container once a long option (a department name, a full date string) is selected,
+   which forces every filter onto its own row and pushes the actual Timeline content
+   far below the fold. Capping their width lets more of them share a row. On top of that,
+   the whole filter row is collapsed behind a "Filter" toggle by default — showing every
+   dropdown right away is exactly the "so many options" problem on a screen this narrow. */
+@media (max-width: 600px) {
+    button.eventadmin-filters-toggle {
+        display: inline-flex !important;
+        /* !important: same WP core .wp-core-ui .button specificity issue as display above —
+           its own margin rule was winning, so this margin was silently never applying;
+           only looked fine collapsed because the split button below happens to carry its
+           own matching margin-top regardless. */
+        margin: 0 8px 0.75rem 0 !important;
+    }
+
+    .form-filters {
+        display: none;
+        gap: 0.5rem;
+        row-gap: 0.5rem;
+    }
+
+    .form-filters.is-open {
+        display: flex;
+    }
+
+    .form-filters select {
+        max-width: 46vw;
+    }
 }
 
 .shift-entry {
@@ -106,4 +176,48 @@
 
 .manual-volunteer-form {
     margin-bottom: 1rem;
+}
+
+/* Timeline click-to-act popover — a flat, modern menu list rather than a stack of
+   full-width WP core buttons (which render with a heavy blue border/text that reads
+   as very "form-y" for what's really a contextual action list). */
+.eventadmin-timeline-menu-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 10px;
+    margin: 0;
+    border: none;
+    background: none;
+    border-radius: 4px;
+    color: #1d2327;
+    cursor: pointer;
+    line-height: 1.4;
+    transition: background-color 0.1s ease;
+}
+
+.eventadmin-timeline-menu-item:hover,
+.eventadmin-timeline-menu-item:focus {
+    background: #f0f0f1;
+    color: #1d2327;
+    outline: none;
+    box-shadow: none;
+}
+
+.eventadmin-timeline-menu-item.is-destructive {
+    color: #d63638;
+}
+
+.eventadmin-timeline-menu-item.is-destructive:hover,
+.eventadmin-timeline-menu-item.is-destructive:focus {
+    background: #fdecea;
+    color: #d63638;
+}
+
+.eventadmin-timeline-menu-divider {
+    border: none;
+    border-top: 1px solid #dcdcde;
+    margin: 6px 2px;
 }

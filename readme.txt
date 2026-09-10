@@ -4,7 +4,7 @@ Tags: volunteer, volunteers, shift scheduling, event management, roster, sign up
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 2.1.1
+Stable tag: 3.0.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -113,6 +113,21 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 5. Send Announcement — target a recipient group and see a live preview of the email
 
 == Changelog ==
+
+= Version 3.0.0 =
+* New: Shift overview split into two separate admin pages — "Overview" (Dashboard stats only) and a new "Manager" page (with the drag-and-drop timeline, Table, and Cards tabs), each with its own sidebar menu item
+* New: Settings → General → "Admin menu" section can hide the classic "All Shifts", "Add Shift", and "Departments" menu items from the sidebar — all three are hidden by default on new installs, since Manager's own buttons cover the same tasks
+* New: "Departments" management moved from its own sidebar item into the Manager page's "+ Add shift" dropdown, next to "Copy shifts to another day"
+* New: CSV export for all shifts moved into the Table tab
+* New: On narrow screens, the filter row collapses behind a "Show filter" / "Hide filter" toggle instead of showing every dropdown at once
+* New: Advanced, collapsible "Organizer" section (linked user, name, email) in the Timeline's Add/Edit Shift modal — previously only available on the classic shift edit screen
+* New: Hidden departments are now marked "(hidden from volunteers)" in every admin category dropdown
+* New: Deleting a shift, or removing a volunteer from one, now offers a "Notify affected volunteer(s)" option at confirmation time instead of a separate always-visible checkbox
+* Improvement: Timeline tab renamed to "Manager"; tab order is now Manager, Table, Cards (old)
+* Improvement: Timeline's click-to-act popover now shows the shift's date and time directly in the header
+* Fix: New, edited, or deleted shifts, and volunteer assignments, could take up to 5 minutes to appear due to a caching bug
+* Fix: The plugin's admin footer credit line no longer eats horizontal space on mobile
+* Fix: Historical bulk-announcement sends are now reflected in each volunteer's notification log (applied automatically on update), excluding volunteers with no email address on file
 
 = Version 2.1.1 =
 * Maintenance: refreshed the screenshots and description on WordPress.org. No changes to the plugin itself.

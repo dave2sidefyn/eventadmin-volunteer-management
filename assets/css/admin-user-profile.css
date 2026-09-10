@@ -1,0 +1,92 @@
+.eventadmin-profile-activity {
+    max-width: 900px;
+}
+
+.eventadmin-profile-section {
+    background: #fff;
+    border: 1px solid #dcdcde;
+    border-left: 4px solid #0073aa;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .04);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.eventadmin-profile-section h3 {
+    margin: 0 0 .75rem;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.eventadmin-profile-section:last-child {
+    margin-bottom: 1.5rem;
+}
+
+.eventadmin-profile-empty {
+    color: #646970;
+    font-style: italic;
+    margin: 0;
+}
+
+.eventadmin-profile-hint {
+    color: #8c8f94;
+    font-size: 12px;
+    margin: .5rem 0 0;
+}
+
+.eventadmin-profile-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.eventadmin-profile-table th,
+.eventadmin-profile-table td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid #f0f0f1;
+    vertical-align: middle;
+}
+
+.eventadmin-profile-table th {
+    font-weight: 600;
+    color: #1d2327;
+    background: #f6f7f7;
+}
+
+.eventadmin-profile-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.eventadmin-profile-table tbody tr:hover td {
+    background: #f6f7f7;
+}
+
+.eventadmin-profile-type {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.eventadmin-profile-type-assign {
+    background: #edfaef;
+    color: #1e7e34;
+}
+
+.eventadmin-profile-type-unassign {
+    background: #fdecea;
+    color: #c53030;
+}
+
+.eventadmin-profile-type-reminder {
+    background: #e7f3fb;
+    color: #0073aa;
+}
+
+.eventadmin-profile-type-announcement {
+    background: #f2ecfa;
+    color: #6a3fa0;
+}

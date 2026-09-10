@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       EventAdmin – Volunteer Management
  * Description:       Manage volunteers for events directly in WordPress. Create and schedule shifts, allow volunteers to sign up and cancel independently, and configure individual rules – e.g., maximum shifts per person per year.
- * Version:           2.1.1
+ * Version:           3.0.0
  * Author:            David Wiedmer, sidefyn GmbH
  * Author URI:        https://profiles.wordpress.org/davesidefyn/
  * Requires at least: 5.8
@@ -16,11 +16,18 @@
 
 defined('ABSPATH') or die('No script kiddies please!');
 
-define('EVENTADMIN_VERSION', '2.1.1');
+define('EVENTADMIN_VERSION', '3.0.0');
 define('EVENTADMIN_REVIEW_URL', 'https://wordpress.org/plugins/eventadmin-volunteer-management/#reviews');
 define('EVENTADMIN_DONATE_URL', 'https://revolut.me/davidwiedmer');
 
-require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-data.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-menu.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-overview-page.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-tab-dashboard.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-tab-table.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-tab-cards.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-tab-timeline.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-form-handlers.php';
 require_once plugin_dir_path(__FILE__) . 'includes/post-types.php';
 require_once plugin_dir_path(__FILE__) . 'includes/profile.php';
 require_once plugin_dir_path(__FILE__) . 'includes/registration.php';
@@ -37,6 +44,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/admin/category-manager.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/quick-edit.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/bulk-email.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/volunteer-list.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/user-profile.php';
 
 
 /**
@@ -57,6 +65,9 @@ function eventadmin_get_option_defaults(): array
         'eventadmin_limit_per_month'            => 0,
         'eventadmin_limit_per_week'             => 0,
         'eventadmin_limit_per_day'              => 0,
+        'eventadmin_hide_all_shifts_menu'       => 1,
+        'eventadmin_hide_add_shift_menu'        => 1,
+        'eventadmin_hide_departments_menu'      => 1,
         // Display
         'eventadmin_show_full_shifts'           => 0,
         'eventadmin_shift_date_format'          => 'l, j. F Y, H:i',
@@ -271,7 +282,7 @@ function eventadmin_update_notice(): void
 
     $nonce = wp_create_nonce('eventadmin_dismiss_notice');
     ?>
-    <div id="eventadmin-update-notice" style="background:#fff;border-left:4px solid #2271b1;padding:16px 20px;margin:20px 0;box-shadow:0 1px 4px rgba(0,0,0,.08);display:flex;align-items:flex-start;gap:16px;max-width:800px;">
+    <div id="eventadmin-update-notice" style="clear:both;background:#fff;border-left:4px solid #2271b1;padding:16px 20px;margin:20px 20px 20px 0;box-shadow:0 1px 4px rgba(0,0,0,.08);display:flex;align-items:flex-start;gap:16px;">
         <div style="font-size:28px;line-height:1;">🎉</div>
         <div style="flex:1;">
             <?php
@@ -279,7 +290,7 @@ function eventadmin_update_notice(): void
             $notice_title = sprintf(__('EventAdmin %s is here!', 'eventadmin-volunteer-management'), EVENTADMIN_VERSION);
             ?>
             <strong><?php echo esc_html($notice_title); ?></strong><br>
-            <?php echo esc_html__('This release only refreshes the plugin\'s screenshots and description on WordPress.org — nothing changed in the plugin itself.', 'eventadmin-volunteer-management'); ?>
+            <?php echo esc_html__('New in this release: shift management now lives on its own "Manager" page (with the drag-and-drop timeline, Table, and Cards tabs), separate from the Dashboard; classic menu items like "All Shifts" and "Departments" can be hidden from the sidebar; the Timeline\'s Edit Shift modal gained an organizer section; and shift/volunteer changes now show up immediately instead of sometimes taking a few minutes.', 'eventadmin-volunteer-management'); ?>
             <div style="margin-top:10px;">
                 <a href="<?php echo esc_url(EVENTADMIN_REVIEW_URL); ?>" target="_blank" class="button button-primary" style="margin-right:8px;">⭐ <?php echo esc_html__('Rate 5 stars', 'eventadmin-volunteer-management'); ?></a>
                 <a href="<?php echo esc_url(EVENTADMIN_DONATE_URL); ?>" target="_blank" class="button">❤️ <?php echo esc_html__('Donate', 'eventadmin-volunteer-management'); ?></a>

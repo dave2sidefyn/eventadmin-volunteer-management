@@ -114,6 +114,13 @@ jQuery(function ($) {
         });
     });
 
+    // Opens the shared "Volunteer activity" modal (assets/js/volunteer-profile-modal.js)
+    $(document).on('click', '.eventadmin-view-volunteer-profile', function () {
+        if (typeof window.eventadminOpenVolunteerProfileModal === 'function') {
+            window.eventadminOpenVolunteerProfileModal($(this).data('user-id'), $(this).data('name'));
+        }
+    });
+
     // Remove volunteer role
     $(document).on('click', '.eventadmin-remove-role', function () {
         const $btn       = $(this);

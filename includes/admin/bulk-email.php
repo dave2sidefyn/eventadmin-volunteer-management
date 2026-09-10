@@ -424,7 +424,9 @@ function eventadmin_bulk_email_get_recipient_users(string $recipients, int $shif
             'numberposts' => -1,
             'fields'      => 'ids',
             'meta_query'  => [
-                ['key' => 'shift_start', 'value' => current_time('mysql'), 'compare' => '>=', 'type' => 'DATETIME'],
+                // "Upcoming" means the shift hasn't ended yet, so a shift already in
+                // progress still counts — matches the Overview page's own definition.
+                ['key' => 'shift_end', 'value' => current_time('mysql'), 'compare' => '>=', 'type' => 'DATETIME'],
             ],
         ]);
         $assigned_user_ids = [];
@@ -487,7 +489,9 @@ function eventadmin_bulk_email_build_recipient_tooltip(array $users, string $rec
             'numberposts' => -1,
             'fields'      => 'ids',
             'meta_query'  => [
-                ['key' => 'shift_start', 'value' => current_time('mysql'), 'compare' => '>=', 'type' => 'DATETIME'],
+                // "Upcoming" means the shift hasn't ended yet, so a shift already in
+                // progress still counts — matches the Overview page's own definition.
+                ['key' => 'shift_end', 'value' => current_time('mysql'), 'compare' => '>=', 'type' => 'DATETIME'],
             ],
         ];
         if ($recipients === 'category' && $category_id) {
@@ -545,7 +549,9 @@ function eventadmin_bulk_email_format_upcoming_shifts(int $user_id): string
         'meta_type'   => 'DATETIME',
         'order'       => 'ASC',
         'meta_query'  => [
-            ['key' => 'shift_start', 'value' => current_time('mysql'), 'compare' => '>=', 'type' => 'DATETIME'],
+            // "Upcoming" means the shift hasn't ended yet, so a shift already in
+            // progress still counts — matches the Overview page's own definition.
+            ['key' => 'shift_end', 'value' => current_time('mysql'), 'compare' => '>=', 'type' => 'DATETIME'],
             ['key' => 'assigned_user_' . $user_id, 'compare' => 'EXISTS'],
         ],
     ]);
@@ -769,7 +775,11 @@ function eventadmin_bulk_email_batch(): void
             $attachments
         );
 
-        if (!$sent) $failed++;
+        if ($sent) {
+            eventadmin_log_volunteer_notification($user_id, 'announcement', $job['subject']);
+        } else {
+            $failed++;
+        }
     }
 
     $new_offset   = $offset + count($batch);

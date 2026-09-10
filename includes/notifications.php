@@ -86,6 +86,190 @@ function eventadmin_get_shift_email_context(int $user_id, int $shift_id, array $
 }
 
 /**
+ * Appends one entry to a volunteer's own notification history (shown on their profile
+ * page's "Notification history" section) — capped at the 50 most recent, the same limit
+ * already used for the site-wide announcement log.
+ *
+ * $date defaults to now, which is all every real send site uses — it's only settable so
+ * eventadmin_backfill_notification_log() can insert historical entries (reconstructed from
+ * the site-wide send log) at their actual send date instead of "now". Because of that, the
+ * list is re-sorted by date rather than assumed to already be newest-first, and a
+ * date+type+subject duplicate is skipped so re-running that backfill can't double-log.
+ *
+ * @param int $user_id Volunteer ID.
+ * @param string $type One of 'assign', 'unassign', 'reminder', 'announcement'.
+ * @param string $subject The email subject actually sent.
+ * @param int $shift_id Related shift, if any (0 for announcements).
+ * @param string $date 'Y-m-d H:i:s', defaults to now.
+ */
+function eventadmin_log_volunteer_notification(int $user_id, string $type, string $subject, int $shift_id = 0, string $date = ''): void
+{
+    $log = get_user_meta($user_id, 'eventadmin_notification_log', true);
+    if (!is_array($log)) {
+        $log = [];
+    }
+
+    if ($date === '') {
+        $date = current_time('mysql');
+    }
+
+    foreach ($log as $entry) {
+        if (($entry['date'] ?? '') === $date && ($entry['type'] ?? '') === $type && ($entry['subject'] ?? '') === $subject) {
+            return;
+        }
+    }
+
+    $log[] = [
+        'date'     => $date,
+        'type'     => $type,
+        'subject'  => $subject,
+        'shift_id' => $shift_id,
+    ];
+
+    usort($log, static fn($a, $b) => strcmp($b['date'] ?? '', $a['date'] ?? ''));
+
+    update_user_meta($user_id, 'eventadmin_notification_log', array_slice($log, 0, 50));
+}
+
+/**
+ * One-time, best-effort backfill of eventadmin_notification_log from eventadmin_email_log —
+ * the site-wide bulk-announcement history that already existed before per-volunteer logging
+ * was added. That history records each send *job* (subject, date, and a targeting
+ * descriptor like "user:Jane Doe" or "has_shift"), not the actual list of who received it,
+ * so reconstruction is exact for a job that named one specific person, and only
+ * approximate for a job that targeted a whole audience — "who currently matches that
+ * targeting rule" stands in for "who matched it back on the send date", since the plugin
+ * never snapshotted the real recipient list. Runs once per site (tracked by its own
+ * option, independent of the plugin version) the next time it loads.
+ */
+function eventadmin_backfill_notification_log(): void
+{
+    if (get_option('eventadmin_notification_log_backfilled')) {
+        return;
+    }
+
+    $jobs = get_option('eventadmin_email_log', []);
+    if (is_array($jobs)) {
+        foreach ($jobs as $job) {
+            $subject = (string) ($job['subject'] ?? '');
+            $date    = (string) ($job['date'] ?? '');
+            if ($subject === '' || $date === '') {
+                continue;
+            }
+
+            foreach (eventadmin_resolve_backfill_recipients((string) ($job['recipients'] ?? ''), $date) as $user_id) {
+                // An offline volunteer (or one with no stored email) could never actually
+                // have received an email — the real send path already excludes them from
+                // every targeting query, so a match here can only be a stale/wrong one
+                // (e.g. converted to offline since, or a coincidental name match).
+                if (!eventadmin_user_can_receive_email($user_id)) {
+                    continue;
+                }
+                eventadmin_log_volunteer_notification($user_id, 'announcement', $subject, 0, $date);
+            }
+        }
+    }
+
+    update_option('eventadmin_notification_log_backfilled', 1);
+}
+
+add_action('plugins_loaded', 'eventadmin_backfill_notification_log', 20);
+
+/**
+ * Whether a volunteer could actually receive an email at all — offline volunteers (no
+ * login, no real address) never can, and a user record with no stored email address
+ * can't either. Used to keep the notification-log backfill from attributing a
+ * historical announcement to someone who was never a real recipient of it.
+ */
+function eventadmin_user_can_receive_email(int $user_id): bool
+{
+    if (get_user_meta($user_id, 'eventadmin_offline_volunteer', true)) {
+        return false;
+    }
+    $user = get_userdata($user_id);
+    return $user instanceof WP_User && $user->user_email !== '';
+}
+
+/**
+ * Resolves a bulk-email job's targeting descriptor to the user IDs it would match today —
+ * see eventadmin_backfill_notification_log() for why that's exact in the "user:Name" case
+ * and only approximate for the audience-based ones.
+ *
+ * @param string $recipients e.g. 'user:Jane Doe', 'shift:Bar', 'has_shift'.
+ * @param string $date The job's own send date, used as the "upcoming as of" reference point
+ *                      for the audience-based cases (matching eventadmin_bulk_email_batch()'s
+ *                      own shift_end >= now rule, just evaluated at a past "now").
+ * @return int[]
+ */
+function eventadmin_resolve_backfill_recipients(string $recipients, string $date): array
+{
+    if (str_starts_with($recipients, 'user:')) {
+        $name    = trim(substr($recipients, 5));
+        $matches = [];
+        foreach (get_users(['role' => 'eventadmin_volunteer', 'fields' => ['ID', 'first_name', 'last_name', 'display_name']]) as $u) {
+            $full = trim($u->first_name . ' ' . $u->last_name);
+            if ($name !== '' && ($full === $name || $u->display_name === $name)) {
+                $matches[] = (int) $u->ID;
+            }
+        }
+        // A name collision (or no match at all) can't be resolved safely — skip rather
+        // than risk logging the message against the wrong person.
+        return count($matches) === 1 ? $matches : [];
+    }
+
+    if (str_starts_with($recipients, 'shift:')) {
+        $title  = trim(substr($recipients, 6));
+        $shifts = $title === '' ? [] : get_posts([
+            'post_type'   => 'eventadmin_shift',
+            'title'       => $title,
+            'post_status' => ['publish', 'trash'],
+            'numberposts' => -1,
+        ]);
+
+        return eventadmin_collect_assigned_user_ids($shifts);
+    }
+
+    if ($recipients === 'has_shift') {
+        $shifts = get_posts([
+            'post_type'   => 'eventadmin_shift',
+            'post_status' => ['publish', 'trash'],
+            'numberposts' => -1,
+            'meta_query'  => [[
+                'key'     => 'shift_end',
+                'value'   => $date,
+                'compare' => '>=',
+                'type'    => 'DATETIME',
+            ]],
+        ]);
+
+        return eventadmin_collect_assigned_user_ids($shifts);
+    }
+
+    // 'all', 'subscribed', 'no_shift', 'category' etc. have no reliable current-day proxy
+    // (they either depend on state the plugin never stored historically, or are too broad
+    // to attribute to specific people with any confidence) — left unresolved rather than
+    // guessed.
+    return [];
+}
+
+/**
+ * @param WP_Post[] $shifts
+ * @return int[]
+ */
+function eventadmin_collect_assigned_user_ids(array $shifts): array
+{
+    $user_ids = [];
+    foreach ($shifts as $shift) {
+        foreach (get_post_meta($shift->ID) as $key => $val) {
+            if (str_starts_with($key, 'assigned_user_')) {
+                $user_ids[] = absint($val[0]);
+            }
+        }
+    }
+    return array_values(array_unique($user_ids));
+}
+
+/**
  * Sends a notification to the admin and the volunteer when a volunteer signs up for or cancels a shift.
  *
  * @param int $user_id ID of the volunteer
@@ -147,12 +331,14 @@ function eventadmin_send_shift_un_assignment_notification(
 
     // Volunteer notification (skip for offline volunteers who have no real email)
     if ($send_volunteer && !get_user_meta($user_id, 'eventadmin_offline_volunteer', true)) {
+        $volunteer_subject = strtr($subject_template, $replacements);
         eventadmin_send_HTML_e_mail(
             $user->user_email,
-            strtr($subject_template, $replacements),
+            $volunteer_subject,
             wpautop(strtr($message_template, $replacements)),
             $context['headers']
         );
+        eventadmin_log_volunteer_notification($user_id, $action, $volunteer_subject, $shift_id);
     }
 }
 
@@ -180,13 +366,15 @@ function eventadmin_send_shift_reminder_notification(int $user_id, int $shift_id
     $defaults         = eventadmin_get_option_defaults();
     $subject_template = get_option('eventadmin_email_subject_reminder') ?: $defaults['eventadmin_email_subject_reminder'];
     $message_template = get_option('eventadmin_email_text_reminder') ?: $defaults['eventadmin_email_text_reminder'];
+    $subject          = strtr($subject_template, $context['replacements']);
 
     eventadmin_send_HTML_e_mail(
         $context['user']->user_email,
-        strtr($subject_template, $context['replacements']),
+        $subject,
         wpautop(strtr($message_template, $context['replacements'])),
         $context['headers']
     );
+    eventadmin_log_volunteer_notification($user_id, 'reminder', $subject, $shift_id);
 }
 
 /**

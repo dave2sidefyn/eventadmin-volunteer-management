@@ -459,6 +459,14 @@ function eventadmin_get_hierarchical_shift_categories(): array
  * admin department filter/select so children are always shown nested under their parent
  * the same way, instead of each screen re-implementing its own flat option loop.
  *
+ * Every call site of this function is admin-only (Overview filters, the Edit/Add Shift
+ * modal, Quick Edit, bulk email, the volunteer list) — a department hidden from volunteers
+ * (see eventadmin_is_shift_category_hidden(), Shifts → Departments → "Hide from
+ * volunteers") still needs to be selectable and recognizable here, just visibly marked, so
+ * an admin isn't left guessing why a department volunteers keep asking about doesn't show
+ * up for them. The volunteer-facing side (open-positions.php, shiftselector.php,
+ * registration.php) filters hidden departments out entirely and does not use this function.
+ *
  * @param WP_Term[]  $categories  From eventadmin_get_hierarchical_shift_categories().
  * @param string|int $selected    Currently selected value, matched against $value_field.
  * @param string     $value_field 'slug' or 'term_id' — which term property becomes the option value.
@@ -470,7 +478,52 @@ function eventadmin_category_dropdown_options(array $categories, $selected, stri
     foreach ($categories as $cat) {
         $value  = $value_field === 'term_id' ? $cat->term_id : $cat->slug;
         $prefix = $cat->depth > 0 ? str_repeat('&nbsp;&nbsp;&nbsp;', $cat->depth) . '&#8211; ' : '';
-        $html  .= '<option value="' . esc_attr($value) . '"' . selected($selected, $value, false) . '>' . $prefix . esc_html($cat->name) . '</option>';
+        $suffix = eventadmin_is_shift_category_hidden($cat->term_id)
+            ? ' ' . esc_html__('(hidden from volunteers)', 'eventadmin-volunteer-management')
+            : '';
+        $html  .= '<option value="' . esc_attr($value) . '"' . selected($selected, $value, false) . '>' . $prefix . esc_html($cat->name) . $suffix . '</option>';
     }
     return $html;
+}
+
+/**
+ * Echoes the opening markup for the simple centered modal dialog (dark overlay + white box)
+ * shared by every "quick popup form" in the admin — copy shifts, add/move/edit volunteer,
+ * view profile, create volunteer, grant role, etc. Kept in one place instead of repeating
+ * the same overlay/box styling in each of those call sites.
+ *
+ * @param string $overlay_id HTML id for the outer overlay element (shown/hidden by this id).
+ * @param int    $max_width  Box width in pixels — wider for content-heavy modals (e.g. the
+ *                            volunteer profile modal), 480 (the common case) by default.
+ * @return void
+ */
+function eventadmin_render_modal_open(string $overlay_id, int $max_width = 480): void
+{
+    echo '<div id="' . esc_attr($overlay_id) . '" class="eventadmin-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100000;">';
+    echo '<div style="position:relative;background:#fff;max-width:' . esc_attr($max_width) . 'px;margin:60px auto;padding:20px;border-radius:6px;max-height:80vh;overflow-y:auto;">';
+}
+
+/**
+ * Echoes the "×" close button shared by every modal opened via eventadmin_render_modal_open().
+ * Always carries the "eventadmin-modal-close" class (some pages close any open modal via a
+ * single delegated handler on that class); pass $id as well for a page that instead binds
+ * its own dedicated click handler to a specific button.
+ *
+ * @param string $id Optional HTML id, for a page with its own dedicated close handler.
+ * @return void
+ */
+function eventadmin_render_modal_close_button(string $id = ''): void
+{
+    $id_attr = $id !== '' ? ' id="' . esc_attr($id) . '"' : '';
+    echo '<button type="button"' . $id_attr . ' class="eventadmin-modal-close" aria-label="' . esc_attr__('Close', 'eventadmin-volunteer-management') . '" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:24px;line-height:1;cursor:pointer;color:#666;padding:4px 8px;">&times;</button>';
+}
+
+/**
+ * Echoes the closing markup for a modal opened via eventadmin_render_modal_open().
+ *
+ * @return void
+ */
+function eventadmin_render_modal_close(): void
+{
+    echo '</div></div>';
 }
