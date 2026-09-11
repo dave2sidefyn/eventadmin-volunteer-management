@@ -246,10 +246,12 @@ add_action('admin_init', 'eventadmin_admin_dashboard_admin_init');
         $filename = 'eventadmin_' . $title . '.csv';
     }
 
-    header("Content-Type: text/csv");
+    header("Content-Type: text/csv; charset=UTF-8");
     header("Content-Disposition: attachment; filename=$filename");
 
     $out = fopen("php://output", "w");
+    // UTF-8 BOM so Excel (which does not auto-detect CSV encoding) doesn't mangle non-ASCII characters.
+    fwrite($out, "\xEF\xBB\xBF");
     fputcsv($out, [
         esc_html__('Category', 'eventadmin-volunteer-management'),
         esc_html__('Shift', 'eventadmin-volunteer-management'),

@@ -4,7 +4,7 @@ Tags: volunteer, volunteers, shift scheduling, event management, roster, sign up
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.1.0
+Stable tag: 3.1.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -113,6 +113,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 5. Send Announcement — target a recipient group and see a live preview of the email
 
 == Changelog ==
+
+= Version 3.1.1 =
+* Fix: CSV export (per shift and for all shifts) now includes a UTF-8 byte-order mark, so Excel correctly displays accented and non-Latin characters (e.g. ø, å, é) instead of garbled text
 
 = Version 3.1.0 =
 * New: Departments can have a description that assignment, cancellation, and reminder emails pull in automatically — use the {department} and {department_desc} placeholders in the email templates (Settings → Communication) instead of writing a description on every shift

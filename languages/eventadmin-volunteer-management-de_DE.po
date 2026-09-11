@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-09-10T13:27:39+00:00\n"
+"POT-Creation-Date: 2026-09-11T10:16:37+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -65,8 +65,15 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s ist da!"
 
 #: eventadmin-volunteer-management.php:293
-msgid "New in this release: departments can carry a description that assignment, cancellation, and reminder emails pull in automatically via the {department} and {department_desc} placeholders, so you no longer have to describe every single shift; and Tools → EventAdmin Data has a new \"Import volunteers\" screen for bulk-creating volunteer accounts from a CSV file (rows without an email address become offline volunteers)."
-msgstr "Neu in dieser Version: Abteilungen können eine Beschreibung haben, die Zuweisungs-, Abmelde- und Erinnerungs-E-Mails über die Platzhalter {department} und {department_desc} automatisch einfügen – so musst du nicht mehr jede einzelne Schicht beschreiben. Zudem gibt es unter Werkzeuge → EventAdmin Data eine neue Seite „Volunteers importieren“, um Volunteer-Konten aus einer CSV-Datei anzulegen (Zeilen ohne E-Mail-Adresse werden zu Offline-Volunteers)."
+msgid ""
+"Fix in this release: CSV export now saves with a UTF-8 marker, so names, "
+"dates, and special characters (like ø, å, é) display correctly in Excel "
+"instead of as garbled text."
+msgstr ""
+"Neu in dieser Version: Ein Fehler im CSV-Export wurde behoben – die Datei "
+"wird jetzt mit einer UTF-8-Kennung gespeichert, damit Namen, Daten und "
+"Sonderzeichen (wie ø, å, é) in Excel korrekt angezeigt werden, statt als "
+"unleserliche Zeichen."
 
 #: eventadmin-volunteer-management.php:299
 msgid "Dismiss"
@@ -174,7 +181,7 @@ msgstr "Volunteers einer bestimmten Kategorie"
 msgid "— Select category —"
 msgstr "— Kategorie auswählen —"
 
-#: includes/admin/bulk-email.php:187 includes/admin/settings.php:698
+#: includes/admin/bulk-email.php:187 includes/admin/settings.php:700
 msgid "Sender"
 msgstr "Absender"
 
@@ -200,7 +207,7 @@ msgid "Select PDF…"
 msgstr "PDF auswählen…"
 
 #: includes/admin/bulk-email.php:206
-#: includes/admin/dashboard-tab-cards.php:131 includes/admin/settings.php:924
+#: includes/admin/dashboard-tab-cards.php:131 includes/admin/settings.php:926
 msgid "Remove"
 msgstr "Entfernen"
 
@@ -333,12 +340,13 @@ msgstr "Keine bevorstehenden Schichten."
 
 #: includes/admin/bulk-email.php:583 includes/admin/bulk-email.php:618
 #: includes/admin/bulk-email.php:714
-#: includes/admin/dashboard-tab-timeline.php:353 includes/admin/import.php:134
-#: includes/admin/import.php:146 includes/admin/import.php:163
-#: includes/admin/import.php:174 includes/admin/user-profile.php:218
-#: includes/admin/volunteer-list.php:440 includes/admin/volunteer-list.php:470
-#: includes/admin/volunteer-list.php:499 includes/admin/volunteer-list.php:567
-#: includes/shiftselector.php:325 includes/shiftselector.php:373
+#: includes/admin/dashboard-tab-timeline.php:353 includes/admin/import.php:187
+#: includes/admin/import.php:201 includes/admin/import.php:214
+#: includes/admin/import.php:231 includes/admin/import.php:242
+#: includes/admin/user-profile.php:218 includes/admin/volunteer-list.php:440
+#: includes/admin/volunteer-list.php:470 includes/admin/volunteer-list.php:499
+#: includes/admin/volunteer-list.php:567 includes/shiftselector.php:325
+#: includes/shiftselector.php:373
 msgid "Security check failed."
 msgstr "Sicherheitsprüfung fehlgeschlagen."
 
@@ -490,37 +498,37 @@ msgstr "Nicht erlaubt"
 msgid "Please select both a source and a target date."
 msgstr "Bitte wähle sowohl ein Quell- als auch ein Zieldatum aus."
 
-#: includes/admin/dashboard-form-handlers.php:254
+#: includes/admin/dashboard-form-handlers.php:256
 #: includes/admin/dashboard-tab-table.php:31
 #: includes/admin/volunteer-list.php:201
 msgid "Category"
 msgstr "Kategorie"
 
-#: includes/admin/dashboard-form-handlers.php:255
+#: includes/admin/dashboard-form-handlers.php:257
 #: includes/admin/dashboard-tab-table.php:34
 #: includes/admin/user-profile.php:67 includes/post-types.php:18
 #: includes/post-types.php:29
 msgid "Shift"
 msgstr "Schicht"
 
-#: includes/admin/dashboard-form-handlers.php:256
+#: includes/admin/dashboard-form-handlers.php:258
 #: includes/admin/dashboard-tab-table.php:34 includes/admin/quick-edit.php:133
 #: includes/admin/user-profile.php:68
 msgid "Period"
 msgstr "Zeitraum"
 
-#: includes/admin/dashboard-form-handlers.php:257
+#: includes/admin/dashboard-form-handlers.php:259
 #: includes/admin/dashboard-overview-page.php:277
 #: includes/admin/dashboard-tab-cards.php:112
-#: includes/admin/dashboard-tab-table.php:41 includes/admin/settings.php:705
+#: includes/admin/dashboard-tab-table.php:41 includes/admin/settings.php:707
 #: includes/admin/shift-metaboxes.php:268
 #: includes/admin/volunteer-list.php:144 includes/admin/volunteer-list.php:275
 msgid "Name"
 msgstr "Name"
 
-#: includes/admin/dashboard-form-handlers.php:258
+#: includes/admin/dashboard-form-handlers.php:260
 #: includes/admin/dashboard-tab-cards.php:112
-#: includes/admin/dashboard-tab-table.php:42 includes/admin/settings.php:715
+#: includes/admin/dashboard-tab-table.php:42 includes/admin/settings.php:717
 #: includes/admin/shift-metaboxes.php:269
 #: includes/admin/volunteer-list.php:115 includes/admin/volunteer-list.php:145
 #: includes/admin/volunteer-list.php:276 includes/profile.php:62
@@ -528,7 +536,7 @@ msgstr "Name"
 msgid "E-Mail"
 msgstr "E-Mail-Adresse"
 
-#: includes/admin/dashboard-form-handlers.php:259
+#: includes/admin/dashboard-form-handlers.php:261
 #: includes/admin/dashboard-overview-page.php:493
 #: includes/admin/dashboard-tab-cards.php:103
 #: includes/admin/dashboard-tab-cards.php:112
@@ -538,13 +546,13 @@ msgstr "E-Mail-Adresse"
 msgid "Phone"
 msgstr "Telefon"
 
-#: includes/admin/dashboard-form-handlers.php:260
+#: includes/admin/dashboard-form-handlers.php:262
 #: includes/admin/dashboard-tab-timeline.php:196
 #: includes/admin/quick-edit.php:60
 msgid "Start"
 msgstr "Start"
 
-#: includes/admin/dashboard-form-handlers.php:261
+#: includes/admin/dashboard-form-handlers.php:263
 #: includes/admin/dashboard-tab-timeline.php:197
 #: includes/admin/quick-edit.php:61
 msgid "End"
@@ -1579,18 +1587,19 @@ msgid ""
 "(Settings → Communication → Reminders — leave the days field empty to switch"
 " reminders off). All three messages use a rich-text editor and share "
 "placeholders such as {first}, {last}, {title}, {start}, {end}, {desc}, "
-"{department}, {department_desc}, and "
-"{days}. Each shift can override the sender through a linked WordPress user "
-"and/or a manual organizer name and email."
+"{department}, {department_desc}, and {days}. Each shift can override the "
+"sender through a linked WordPress user and/or a manual organizer name and "
+"email."
 msgstr ""
 "Volunteers erhalten eine E-Mail, wenn sie einer Schicht zugewiesen oder aus "
 "ihr entfernt werden, und noch einmal als Erinnerung eine einstellbare Anzahl"
 " Tage vor Beginn (Einstellungen → Kommunikation → Erinnerungen — lasse das "
 "Tage-Feld leer, um Erinnerungen abzuschalten). Alle drei Nachrichten nutzen "
 "einen Rich-Text-Editor und teilen sich Platzhalter wie {first}, {last}, "
-"{title}, {start}, {end}, {desc}, {department}, {department_desc} und {days}. Jede Schicht kann den Absender "
-"über einen verknüpften WordPress-Benutzer und/oder einen manuellen "
-"Organisatornamen und eine E-Mail-Adresse überschreiben."
+"{title}, {start}, {end}, {desc}, {department}, {department_desc} und {days}."
+" Jede Schicht kann den Absender über einen verknüpften WordPress-Benutzer "
+"und/oder einen manuellen Organisatornamen und eine E-Mail-Adresse "
+"überschreiben."
 
 #: includes/admin/documentation.php:168
 msgid "E-mail Design"
@@ -1908,27 +1917,66 @@ msgstr ""
 "Volunteers sind im Export nicht enthalten, da die Benutzer-IDs einer anderen"
 " Website hier keine Bedeutung hätten."
 
-#: includes/admin/import.php:58
+#: includes/admin/import.php:58 includes/admin/import.php:74
+msgid "Import volunteers"
+msgstr "Volunteers importieren"
+
+#: includes/admin/import.php:59
+msgid ""
+"Upload a CSV file to create volunteer accounts in bulk. The first row must "
+"be a header row; columns can be in any order and the delimiter may be a "
+"comma or a semicolon."
+msgstr ""
+"Lade eine CSV-Datei hoch, um Volunteer-Konten auf einmal anzulegen. Die "
+"erste Zeile muss eine Kopfzeile sein; die Spalten können in beliebiger "
+"Reihenfolge stehen und als Trennzeichen sind Komma oder Semikolon möglich."
+
+#: includes/admin/import.php:61
+msgid ""
+"Recognised columns: <code>first_name</code>, <code>last_name</code>, "
+"<code>email</code>, <code>phone</code>. Only <code>first_name</code> is "
+"required; <code>last_name</code>, <code>email</code> and <code>phone</code> "
+"are optional."
+msgstr ""
+"Erkannte Spalten: <code>first_name</code>, <code>last_name</code>, "
+"<code>email</code>, <code>phone</code>. Nur <code>first_name</code> ist "
+"erforderlich; <code>last_name</code>, <code>email</code> und "
+"<code>phone</code> sind optional."
+
+#: includes/admin/import.php:64
+msgid ""
+"A row with no e-mail address creates an offline volunteer (no login, no "
+"notifications). A row whose e-mail already belongs to a user is reported and"
+" skipped – no existing account is changed. New volunteers are created "
+"without a notification e-mail."
+msgstr ""
+"Eine Zeile ohne E-Mail-Adresse legt einen Offline-Volunteer an (kein Login, "
+"keine Benachrichtigungen). Eine Zeile, deren E-Mail-Adresse bereits zu einem"
+" Benutzer gehört, wird gemeldet und übersprungen – kein bestehendes Konto "
+"wird geändert. Neue Volunteers werden ohne Benachrichtigungs-E-Mail "
+"angelegt."
+
+#: includes/admin/import.php:79
 msgid "Import demo data"
 msgstr "Demodaten importieren"
 
-#: includes/admin/import.php:63
+#: includes/admin/import.php:84
 msgid "Start import"
 msgstr "Import starten"
 
-#: includes/admin/import.php:68
+#: includes/admin/import.php:89
 msgid "Delete all data"
 msgstr "Alle Daten löschen"
 
-#: includes/admin/import.php:74
+#: includes/admin/import.php:95
 msgid "Delete all"
 msgstr "Alles löschen"
 
-#: includes/admin/import.php:79
+#: includes/admin/import.php:100
 msgid "Clean up orphaned assignments"
 msgstr "Verwaiste Zuweisungen aufräumen"
 
-#: includes/admin/import.php:80
+#: includes/admin/import.php:101
 msgid ""
 "Removes shift assignments for users that no longer exist in WordPress. This "
 "can happen when a user was deleted without the plugin's cleanup hook "
@@ -1938,40 +1986,54 @@ msgstr ""
 "vorhanden sind. Dies kann passieren, wenn ein Benutzer gelöscht wurde, ohne "
 "zuvor aus den Schichten ausgetragen zu werden."
 
-#: includes/admin/import.php:84
+#: includes/admin/import.php:105
 msgid "No orphaned assignments found."
 msgstr "Keine verwaisten Zuweisungen gefunden."
 
 #. translators: %d: number of orphaned assignments found
-#: includes/admin/import.php:88
+#: includes/admin/import.php:109
 #, php-format
 msgid "%d orphaned assignment(s) found."
 msgstr "%d verwaiste Zuweisung(en) gefunden."
 
-#: includes/admin/import.php:98
+#: includes/admin/import.php:119
 msgid "Remove orphaned assignments"
 msgstr "Verwaiste Zuweisungen entfernen"
 
-#: includes/admin/import.php:104
+#: includes/admin/import.php:125
 msgid "Departments were imported successfully."
 msgstr "Die Abteilungen wurden erfolgreich importiert."
 
-#: includes/admin/import.php:108
+#: includes/admin/import.php:129
 msgid "All departments and shifts have been deleted."
 msgstr "Alle Abteilungen und Schichten wurden gelöscht."
 
 #. translators: %d: number of removed orphaned assignments
-#: includes/admin/import.php:115
+#: includes/admin/import.php:136
 #, php-format
 msgid "%d orphaned assignment(s) removed."
 msgstr "%d verwaiste Zuweisung(en) entfernt."
 
-#: includes/admin/import.php:285 includes/admin/import.php:306
-#: includes/admin/import.php:311
+#. translators: %d: number of volunteer accounts created
+#: includes/admin/import.php:152
+#, php-format
+msgid "%d volunteer(s) imported."
+msgstr "%d Volunteer(s) importiert."
+
+#: includes/admin/import.php:161
+msgid "Skipped – e-mail already in use:"
+msgstr "Übersprungen – E-Mail-Adresse bereits vergeben:"
+
+#: includes/admin/import.php:162
+msgid "Skipped – invalid rows:"
+msgstr "Übersprungen – ungültige Zeilen:"
+
+#: includes/admin/import.php:353 includes/admin/import.php:374
+#: includes/admin/import.php:379
 msgid "Dismantling"
 msgstr "Abbau"
 
-#: includes/admin/import.php:285
+#: includes/admin/import.php:353
 msgid ""
 "Dismantling of booths, tents, tables, etc. This person should be skilled and"
 " have experience in dismantling."
@@ -1979,12 +2041,12 @@ msgstr ""
 "Abbau von Ständen, Zelten, Tischen usw. Diese Person sollte über "
 "Fachkenntnisse und Erfahrung im Abbau verfügen."
 
-#: includes/admin/import.php:286 includes/admin/import.php:318
-#: includes/admin/import.php:325
+#: includes/admin/import.php:354 includes/admin/import.php:386
+#: includes/admin/import.php:393
 msgid "Setup"
 msgstr "Aufstellen"
 
-#: includes/admin/import.php:286
+#: includes/admin/import.php:354
 msgid ""
 "Setup of booths, tents, tables, etc. This person should be skilled and have "
 "experience in setup."
@@ -1992,11 +2054,11 @@ msgstr ""
 "Aufbau von Ständen, Zelten, Tischen usw. Diese Person sollte über "
 "entsprechende Kenntnisse und Erfahrung im Aufbau verfügen."
 
-#: includes/admin/import.php:287
+#: includes/admin/import.php:355
 msgid "Merchandise"
 msgstr "Waren"
 
-#: includes/admin/import.php:287
+#: includes/admin/import.php:355
 msgid ""
 "Sale of merchandise items such as T-shirts, hoodies, mugs, etc. This person "
 "should be friendly and good with customers."
@@ -2004,11 +2066,11 @@ msgstr ""
 "Verkauf von Merchandising-Artikeln wie T-Shirts, Hoodies, Tassen usw. Diese "
 "Person sollte freundlich sein und gut mit Kunden umgehen können."
 
-#: includes/admin/import.php:288
+#: includes/admin/import.php:356
 msgid "Floater"
 msgstr "Springer"
 
-#: includes/admin/import.php:288
+#: includes/admin/import.php:356
 msgid ""
 "Help with various tasks that do not fit into another category. This person "
 "should be flexible and willing to take on different tasks."
@@ -2017,11 +2079,11 @@ msgstr ""
 "Diese Person sollte flexibel sein und bereit, unterschiedliche Aufgaben zu "
 "übernehmen."
 
-#: includes/admin/import.php:289
+#: includes/admin/import.php:357
 msgid "Trash Hero"
 msgstr "Müllheld"
 
-#: includes/admin/import.php:289
+#: includes/admin/import.php:357
 msgid ""
 "Collecting trash, disposing of waste, ensuring cleanliness. This person "
 "should always have a trash bag and gloves."
@@ -2029,11 +2091,11 @@ msgstr ""
 "Müll sammeln, Abfall entsorgen, für Sauberkeit sorgen. Diese Person sollte "
 "immer einen Müllsack und Handschuhe dabei haben."
 
-#: includes/admin/import.php:290
+#: includes/admin/import.php:358
 msgid "Bar"
 msgstr "Bar"
 
-#: includes/admin/import.php:290
+#: includes/admin/import.php:358
 msgid ""
 "People for the bar, who can also tap beer, are important. This person should"
 " be friendly and good with customers."
@@ -2041,11 +2103,11 @@ msgstr ""
 "Mitarbeiter für die Bar, die auch Bier zapfen können, sind wichtig. Diese "
 "Person sollte freundlich sein und gut mit Kunden umgehen können."
 
-#: includes/admin/import.php:291
+#: includes/admin/import.php:359
 msgid "Deposit"
 msgstr "Pfand"
 
-#: includes/admin/import.php:291
+#: includes/admin/import.php:359
 msgid ""
 "Return of plates and cups. There should always be at least one person at the"
 " deposit stand."
@@ -2053,41 +2115,83 @@ msgstr ""
 "Rückgabe von Tellern und Tassen. Am Pfandständer sollte sich immer "
 "mindestens eine Person befinden."
 
-#: includes/admin/import.php:292
+#: includes/admin/import.php:360
 msgid "Grill"
 msgstr "Grill"
 
-#: includes/admin/import.php:292
+#: includes/admin/import.php:360
 msgid "- Grilling sausages, possibly also burgers\n"
 msgstr ""
 "- Würstchen grillen, eventuell auch Burger\n"
 "\n"
 
-#: includes/admin/import.php:307
+#: includes/admin/import.php:375
 msgid "Volunteers needed for dismantling the event."
 msgstr "Volunteers werden für den Abbau der Veranstaltung benötigt."
 
-#: includes/admin/import.php:313
+#: includes/admin/import.php:381
 msgid "Setup Early Morning"
 msgstr "Aufbau am frühen Morgen"
 
-#: includes/admin/import.php:314 includes/admin/import.php:321
+#: includes/admin/import.php:382 includes/admin/import.php:389
 msgid "Volunteers needed for setting up the event."
 msgstr "Volunteers werden für die Organisation der Veranstaltung benötigt."
 
-#: includes/admin/import.php:320
+#: includes/admin/import.php:388
 msgid "Setup Morning"
 msgstr "Aufbau am Morgen"
 
-#: includes/admin/import.php:367
+#: includes/admin/import.php:434
+msgid "No file was uploaded."
+msgstr "Es wurde keine Datei hochgeladen."
+
+#: includes/admin/import.php:439
+msgid "The file could not be uploaded. Please try again."
+msgstr "Die Datei konnte nicht hochgeladen werden. Bitte versuche es erneut."
+
+#: includes/admin/import.php:446
+msgid "Please upload a .csv file."
+msgstr "Bitte lade eine .csv-Datei hoch."
+
+#: includes/admin/import.php:495
+msgid "The file could not be read."
+msgstr "Die Datei konnte nicht gelesen werden."
+
+#: includes/admin/import.php:507
+msgid "The file is empty."
+msgstr "Die Datei ist leer."
+
+#: includes/admin/import.php:514
+msgid "The header row must contain a \"first_name\" column."
+msgstr "Die Kopfzeile muss eine Spalte „first_name“ enthalten."
+
+#. translators: %d: CSV line number
+#: includes/admin/import.php:547
+#, php-format
+msgid "Row %d: first name is required."
+msgstr "Zeile %d: Vorname ist erforderlich."
+
+#. translators: %d: CSV line number
+#: includes/admin/import.php:556
+#, php-format
+msgid "Row %d: invalid e-mail address."
+msgstr "Zeile %d: ungültige E-Mail-Adresse."
+
+#. translators: 1: CSV line number, 2: e-mail address
+#: includes/admin/import.php:562 includes/admin/import.php:579
+#, php-format
+msgid "Row %1$d: %2$s"
+msgstr "Zeile %1$d: %2$s"
+
+#: includes/admin/import.php:614
 msgid "Do you want to import the sample data for EventAdmin?"
 msgstr "Möchtest du die Beispieldaten für EventAdmin importieren?"
 
-#: includes/admin/import.php:368
+#: includes/admin/import.php:615
 msgid "Yes, please import"
 msgstr "Ja, bitte importieren"
 
-#: includes/admin/import.php:369
+#: includes/admin/import.php:616
 msgid "No, thanks"
 msgstr "Nein, danke"
 
@@ -2172,21 +2276,21 @@ msgstr "Schichtende (formatiert)"
 msgid "Number of days before the shift starts"
 msgstr "Anzahl Tage bis zum Schichtbeginn"
 
-#: includes/admin/settings.php:382
+#: includes/admin/settings.php:384
 msgid "Registration"
 msgstr "Registrierung"
 
-#: includes/admin/settings.php:389
+#: includes/admin/settings.php:391
 msgid "Suppress WordPress password email"
 msgstr "WordPress-Passwort-E-Mail unterdrücken"
 
-#: includes/admin/settings.php:392 includes/admin/settings.php:434
-#: includes/admin/settings.php:466 includes/admin/settings.php:482
-#: includes/admin/settings.php:498 includes/admin/settings.php:612
+#: includes/admin/settings.php:394 includes/admin/settings.php:436
+#: includes/admin/settings.php:468 includes/admin/settings.php:484
+#: includes/admin/settings.php:500 includes/admin/settings.php:614
 msgid "Yes"
 msgstr "Ja"
 
-#: includes/admin/settings.php:393
+#: includes/admin/settings.php:395
 msgid ""
 "If enabled, WordPress will not send the default \"set your password\" email "
 "to newly registered volunteers."
@@ -2194,47 +2298,47 @@ msgstr ""
 "Wenn aktiviert, sendet WordPress keine Standard-„Passwort festlegen\"-E-Mail"
 " an neu registrierte Volunteers."
 
-#: includes/admin/settings.php:401
+#: includes/admin/settings.php:403
 msgid "Rules"
 msgstr "Regeln"
 
-#: includes/admin/settings.php:407
+#: includes/admin/settings.php:409
 msgid "Max. shifts per year"
 msgstr "Maximale Anzahl an Schichten pro Jahr"
 
-#: includes/admin/settings.php:408
+#: includes/admin/settings.php:410
 msgid "Max. shifts per month"
 msgstr "Maximale Schichten pro Monat"
 
-#: includes/admin/settings.php:409
+#: includes/admin/settings.php:411
 msgid "Max. shifts per week"
 msgstr "Maximale Anzahl Schichten pro Woche"
 
-#: includes/admin/settings.php:410
+#: includes/admin/settings.php:412
 msgid "Max. shifts per day"
 msgstr "Maximale Anzahl Schichten pro Tag"
 
-#: includes/admin/settings.php:431
+#: includes/admin/settings.php:433
 msgid "Allow overlapping shifts"
 msgstr "Überlappende Schichten zulassen"
 
-#: includes/admin/settings.php:442
+#: includes/admin/settings.php:444
 msgid "Sign out possible up to X hours before start"
 msgstr "Abmeldung bis zu X Stunden vor Beginn möglich"
 
-#: includes/admin/settings.php:444 includes/shiftselector.php:391
+#: includes/admin/settings.php:446 includes/shiftselector.php:391
 msgid "hours"
 msgstr "Stunden"
 
-#: includes/admin/settings.php:452
+#: includes/admin/settings.php:454
 msgid "Admin menu"
 msgstr "Admin-Menü"
 
-#: includes/admin/settings.php:463
+#: includes/admin/settings.php:465
 msgid "Hide \"All Shifts\" menu item"
 msgstr "„Alle Schichten\" im Menü verstecken"
 
-#: includes/admin/settings.php:467
+#: includes/admin/settings.php:469
 msgid ""
 "Hides the classic shift list screen from the sidebar — Manager covers the "
 "same day-to-day work. The screen itself still works if you have a direct "
@@ -2244,11 +2348,11 @@ msgstr ""
 "Manager deckt dieselbe tägliche Arbeit ab. Der Bildschirm selbst "
 "funktioniert weiterhin, wenn du einen direkten Link dazu hast."
 
-#: includes/admin/settings.php:479
+#: includes/admin/settings.php:481
 msgid "Hide \"Add Shift\" menu item"
 msgstr "„Schicht hinzufügen\" im Menü verstecken"
 
-#: includes/admin/settings.php:483
+#: includes/admin/settings.php:485
 msgid ""
 "Hides the classic \"Add new shift\" screen from the sidebar — Manager's own "
 "\"+ Add shift\" button covers the same task. The screen itself still works "
@@ -2259,11 +2363,11 @@ msgstr ""
 "deckt dieselbe Aufgabe ab. Der Bildschirm selbst funktioniert weiterhin, "
 "wenn du einen direkten Link dazu hast."
 
-#: includes/admin/settings.php:495
+#: includes/admin/settings.php:497
 msgid "Hide \"Departments\" menu item"
 msgstr "Menü-Eintrag „Abteilungen“ verstecken"
 
-#: includes/admin/settings.php:499
+#: includes/admin/settings.php:501
 msgid ""
 "Hides the department management screen from the sidebar — Manager's own "
 "\"Departments\" link (in the \"Add shift\" dropdown) covers the same task. "
@@ -2274,19 +2378,19 @@ msgstr ""
 "hinzufügen“-Dropdown) deckt dieselbe Aufgabe ab. Der Bildschirm selbst "
 "funktioniert weiterhin, wenn du einen direkten Link dazu hast."
 
-#: includes/admin/settings.php:528
+#: includes/admin/settings.php:530
 msgid "Security"
 msgstr "Sicherheit"
 
-#: includes/admin/settings.php:535
+#: includes/admin/settings.php:537
 msgid "CAPTCHA provider"
 msgstr "CAPTCHA-Anbieter"
 
-#: includes/admin/settings.php:539
+#: includes/admin/settings.php:541
 msgid "None"
 msgstr "Keiner"
 
-#: includes/admin/settings.php:550
+#: includes/admin/settings.php:552
 msgid ""
 "Adds a CAPTCHA challenge to the volunteer registration form to block "
 "automated spam registrations."
@@ -2296,13 +2400,13 @@ msgstr ""
 
 #. translators: %s = link to the Simple Cloudflare Turnstile plugin on
 #. WordPress.org
-#: includes/admin/settings.php:555
+#: includes/admin/settings.php:557
 #, php-format
 msgid "Requires the free %s plugin to be installed and activated."
 msgstr ""
 "Erfordert, dass das kostenlose Plugin %s installiert und aktiviert ist."
 
-#: includes/admin/settings.php:559
+#: includes/admin/settings.php:561
 msgid ""
 "The Simple Cloudflare Turnstile plugin is active but has no site key/secret "
 "key configured yet. Until it is configured, registration is blocked for "
@@ -2312,11 +2416,11 @@ msgstr ""
 "Website- oder Geheimschlüssel konfiguriert. Solange das nicht geschieht, ist"
 " die Registrierung für alle blockiert."
 
-#: includes/admin/settings.php:568
+#: includes/admin/settings.php:570
 msgid "CAPTCHA site key"
 msgstr "CAPTCHA-Website-Schlüssel"
 
-#: includes/admin/settings.php:571
+#: includes/admin/settings.php:573
 msgid ""
 "Get your keys from the provider's admin console. Not used for Cloudflare "
 "Turnstile — configure its site key in the Simple Cloudflare Turnstile plugin"
@@ -2326,11 +2430,11 @@ msgstr ""
 "Turnstile nicht verwendet — den Website-Schlüssel stattdessen in den "
 "Einstellungen des Plugins „Simple Cloudflare Turnstile“ konfigurieren."
 
-#: includes/admin/settings.php:579
+#: includes/admin/settings.php:581
 msgid "CAPTCHA secret key"
 msgstr "CAPTCHA-Geheimschlüssel"
 
-#: includes/admin/settings.php:582
+#: includes/admin/settings.php:584
 msgid ""
 "Not used for Cloudflare Turnstile — configure its secret key in the Simple "
 "Cloudflare Turnstile plugin settings instead."
@@ -2339,11 +2443,11 @@ msgstr ""
 "stattdessen in den Einstellungen des Plugins „Simple Cloudflare Turnstile“ "
 "konfigurieren."
 
-#: includes/admin/settings.php:590
+#: includes/admin/settings.php:592
 msgid "reCAPTCHA v3 score threshold"
 msgstr "reCAPTCHA-v3-Schwellenwert"
 
-#: includes/admin/settings.php:594
+#: includes/admin/settings.php:596
 msgid ""
 "Scores below this value are treated as bots (0.0 = all pass, 1.0 = all "
 "blocked). Default: 0.5. Only applies to reCAPTCHA v3."
@@ -2351,15 +2455,15 @@ msgstr ""
 "Werte unter diesem Schwellenwert werden als Bot behandelt (0.0 = alle durch,"
 " 1.0 = alle blockiert). Standard: 0.5. Gilt nur für reCAPTCHA v3."
 
-#: includes/admin/settings.php:602
+#: includes/admin/settings.php:604
 msgid "Volunteer Shift Selector"
 msgstr "Volunteer-Schichtauswahl"
 
-#: includes/admin/settings.php:609
+#: includes/admin/settings.php:611
 msgid "Show full shifts to volunteers"
 msgstr "Volle Schichten für Volunteers anzeigen"
 
-#: includes/admin/settings.php:613
+#: includes/admin/settings.php:615
 msgid ""
 "If enabled, a \"Full shifts\" section is shown on the volunteer shift "
 "selector page."
@@ -2367,56 +2471,56 @@ msgstr ""
 "Wenn aktiviert, wird auf der Volunteer-Seite ein Abschnitt „Volle "
 "Schichten\" angezeigt."
 
-#: includes/admin/settings.php:621
+#: includes/admin/settings.php:623
 msgid "Volunteer shift filters"
 msgstr "Schichtfilter für Volunteers"
 
-#: includes/admin/settings.php:625
+#: includes/admin/settings.php:627
 msgid "Text search"
 msgstr "Textsuche"
 
-#: includes/admin/settings.php:626
+#: includes/admin/settings.php:628
 msgid "Date filter"
 msgstr "Datumsfilter"
 
-#: includes/admin/settings.php:627
+#: includes/admin/settings.php:629
 msgid "Category filter"
 msgstr "Kategoriefilter"
 
-#: includes/admin/settings.php:635
+#: includes/admin/settings.php:637
 msgid "Choose which filter controls appear on the volunteer shift selector."
 msgstr ""
 "Wähle, welche Filter auf der Schichtauswahl für Volunteers angezeigt werden."
 
-#: includes/admin/settings.php:643
+#: includes/admin/settings.php:645
 msgid "Formatting"
 msgstr "Formatierung"
 
-#: includes/admin/settings.php:650
+#: includes/admin/settings.php:652
 msgid "Date format (shift start)"
 msgstr "Datumsformat (Schichtbeginn)"
 
-#: includes/admin/settings.php:656 includes/admin/settings.php:674
+#: includes/admin/settings.php:658 includes/admin/settings.php:676
 msgid "Example:"
 msgstr "Beispiel:"
 
-#: includes/admin/settings.php:657 includes/admin/settings.php:675
+#: includes/admin/settings.php:659 includes/admin/settings.php:677
 msgid "Default:"
 msgstr "Standard:"
 
-#: includes/admin/settings.php:658 includes/admin/settings.php:676
+#: includes/admin/settings.php:660 includes/admin/settings.php:678
 msgid "Common tokens"
 msgstr "Häufige Platzhalter"
 
-#: includes/admin/settings.php:668
+#: includes/admin/settings.php:670
 msgid "Time format (shift end)"
 msgstr "Zeitformat (Schichtende)"
 
-#: includes/admin/settings.php:686 includes/admin/settings.php:800
+#: includes/admin/settings.php:688 includes/admin/settings.php:802
 msgid "Custom CSS"
 msgstr "Eigenes CSS"
 
-#: includes/admin/settings.php:690
+#: includes/admin/settings.php:692
 msgid ""
 "Additional CSS injected on the frontend. Use this for theme-specific "
 "adjustments without modifying your theme files."
@@ -2424,11 +2528,11 @@ msgstr ""
 "Zusätzliches CSS, das im Frontend eingefügt wird. Verwende dies für "
 "designspezifische Anpassungen, ohne die Theme-Dateien zu bearbeiten."
 
-#: includes/admin/settings.php:725
+#: includes/admin/settings.php:727
 msgid "Email Design"
 msgstr "E-Mail-Design"
 
-#: includes/admin/settings.php:727
+#: includes/admin/settings.php:729
 msgid ""
 "These apply to every email the plugin sends — sign-up confirmations, "
 "reminders, and announcements."
@@ -2436,49 +2540,49 @@ msgstr ""
 "Diese gelten für jede E-Mail, die das Plugin versendet — "
 "Anmeldebestätigungen, Erinnerungen und Ankündigungen."
 
-#: includes/admin/settings.php:734
+#: includes/admin/settings.php:736
 msgid "Header color"
 msgstr "Kopfbereich-Farbe"
 
-#: includes/admin/settings.php:738
+#: includes/admin/settings.php:740
 msgid "Use a custom color"
 msgstr "Eigene Farbe verwenden"
 
-#: includes/admin/settings.php:740
+#: includes/admin/settings.php:742
 msgid "Default is a dark blue gradient."
 msgstr "Standard ist ein dunkelblauer Verlauf."
 
-#: includes/admin/settings.php:748
+#: includes/admin/settings.php:750
 msgid "Header text color"
 msgstr "Textfarbe im Kopfbereich"
 
-#: includes/admin/settings.php:752
+#: includes/admin/settings.php:754
 msgid "Choose a color that stays readable against your header color/logo."
 msgstr ""
 "Wähle eine Farbe, die vor deiner Kopfbereich-Farbe/deinem Logo gut lesbar "
 "bleibt."
 
-#: includes/admin/settings.php:760
+#: includes/admin/settings.php:762
 msgid "Header title"
 msgstr "Titel im Kopfbereich"
 
-#: includes/admin/settings.php:764 includes/admin/settings.php:776
+#: includes/admin/settings.php:766 includes/admin/settings.php:778
 msgid "Leave empty to hide this line."
 msgstr "Leer lassen, um diese Zeile auszublenden."
 
-#: includes/admin/settings.php:772
+#: includes/admin/settings.php:774
 msgid "Header subtitle"
 msgstr "Untertitel im Kopfbereich"
 
-#: includes/admin/settings.php:784
+#: includes/admin/settings.php:786
 msgid "Header logo"
 msgstr "Logo im Kopfbereich"
 
-#: includes/admin/settings.php:792
+#: includes/admin/settings.php:794
 msgid "Footer"
 msgstr "Fusszeile"
 
-#: includes/admin/settings.php:804
+#: includes/admin/settings.php:806
 msgid ""
 "Advanced: extra CSS added to every email. Support varies a lot by email "
 "client (e.g. Outlook ignores it entirely) — use it for minor tweaks, not "
@@ -2489,35 +2593,35 @@ msgstr ""
 "ignoriert Outlook es komplett) — verwende es für kleine Anpassungen, nicht "
 "für etwas Wesentliches."
 
-#: includes/admin/settings.php:812
+#: includes/admin/settings.php:814
 msgid "Volunteer Notifications"
 msgstr "Volunteer-Benachrichtigungen"
 
-#: includes/admin/settings.php:819
+#: includes/admin/settings.php:821
 msgid "Email Subject (Sign up)"
 msgstr "E-Mail-Betreff (Anmeldung)"
 
-#: includes/admin/settings.php:830
+#: includes/admin/settings.php:832
 msgid "Email Text (Sign up)"
 msgstr "E-Mail-Text (Anmeldung)"
 
-#: includes/admin/settings.php:843
+#: includes/admin/settings.php:845
 msgid "Email Subject (Sign out)"
 msgstr "E-Mail-Betreff (Abmelden)"
 
-#: includes/admin/settings.php:854
+#: includes/admin/settings.php:856
 msgid "Email Text (Sign out)"
 msgstr "E-Mail-Text (Abmelden)"
 
-#: includes/admin/settings.php:867
+#: includes/admin/settings.php:869
 msgid "Shift Reminders"
 msgstr "Schichterinnerungen"
 
-#: includes/admin/settings.php:874
+#: includes/admin/settings.php:876
 msgid "Send reminder X days before start"
 msgstr "Erinnerung X Tage vor Beginn senden"
 
-#: includes/admin/settings.php:878
+#: includes/admin/settings.php:880
 msgid ""
 "Comma-separated whole days, e.g. 7, 1. Negative or zero values are ignored. "
 "Leave empty to turn reminder emails off entirely."
@@ -2525,19 +2629,19 @@ msgstr ""
 "Kommagetrennte ganze Tage, z. B. 7, 1. Negative Werte oder null werden "
 "ignoriert. Leer lassen, um Erinnerungs-E-Mails vollständig zu deaktivieren."
 
-#: includes/admin/settings.php:886
+#: includes/admin/settings.php:888
 msgid "Email Subject (Reminder)"
 msgstr "E-Mail-Betreff (Erinnerung)"
 
-#: includes/admin/settings.php:897
+#: includes/admin/settings.php:899
 msgid "Email Text (Reminder)"
 msgstr "E-Mail-Text (Erinnerung)"
 
-#: includes/admin/settings.php:923
+#: includes/admin/settings.php:925
 msgid "Select logo…"
 msgstr "Logo auswählen…"
 
-#: includes/admin/settings.php:925
+#: includes/admin/settings.php:927
 msgid ""
 "Shown at the top of every email instead of the site name. Recommended: a "
 "wide image with a transparent background, under 200px tall."
@@ -2546,46 +2650,46 @@ msgstr ""
 "ein breites Bild mit transparentem Hintergrund, unter 200px hoch."
 
 #. translators: %s = site name
-#: includes/admin/settings.php:935 includes/notifications.php:566
-#: includes/notifications.php:694
+#: includes/admin/settings.php:937 includes/notifications.php:607
+#: includes/notifications.php:735
 #, php-format
 msgid "This email was sent by %s."
 msgstr "Diese E-Mail wurde von %s gesendet."
 
 #. translators: %s is the default footer text that will be used if this field
 #. is left empty
-#: includes/admin/settings.php:948
+#: includes/admin/settings.php:950
 #, php-format
 msgid "Shown at the bottom of every email. Leave empty to use the default: \"%s\""
 msgstr ""
 "Wird unten in jeder E-Mail angezeigt. Leer lassen, um den Standard zu "
 "verwenden: „%s“"
 
-#: includes/admin/settings.php:984
+#: includes/admin/settings.php:986
 msgid "Sign up"
 msgstr "Anmelden"
 
-#: includes/admin/settings.php:985
+#: includes/admin/settings.php:987
 msgid "Sign out"
 msgstr "Abmelden"
 
-#: includes/admin/settings.php:986 includes/admin/user-profile.php:137
+#: includes/admin/settings.php:988 includes/admin/user-profile.php:137
 msgid "Reminder"
 msgstr "Erinnerung"
 
-#: includes/admin/settings.php:993
+#: includes/admin/settings.php:995
 msgid "Live preview of emails (with example values):"
 msgstr "Live-Vorschau von E-Mails (mit Beispieldaten):"
 
-#: includes/admin/settings.php:999
+#: includes/admin/settings.php:1001
 msgid "Subject:"
 msgstr "Betreff:"
 
-#: includes/admin/settings.php:1041
+#: includes/admin/settings.php:1043
 msgid "Select a logo image"
 msgstr "Logo-Bild auswählen"
 
-#: includes/admin/settings.php:1042
+#: includes/admin/settings.php:1044
 msgid "Use this image"
 msgstr "Dieses Bild verwenden"
 
@@ -2930,28 +3034,28 @@ msgstr "(vor Volunteers verborgen)"
 msgid "Close"
 msgstr "Schließen"
 
-#: includes/notifications.php:298
+#: includes/notifications.php:339
 msgid "assigned"
 msgstr "angemeldet"
 
-#: includes/notifications.php:299
+#: includes/notifications.php:340
 msgid "removed"
 msgstr "abgemeldet"
 
 #. translators: %1$s = action, %2$s = title of shift
-#: includes/notifications.php:306
+#: includes/notifications.php:347
 #, php-format
 msgid "Volunteer was %1$s: %2$s"
 msgstr "Volunteer wurde %1$s: %2$s"
 
 #. translators: %1$s = first name, %2$s = last name, %3$s = action, %4$s =
 #. title of shift
-#: includes/notifications.php:312
+#: includes/notifications.php:353
 #, php-format
 msgid "The volunteer %1$s, %2$s was %3$s for the shift: %4$s"
 msgstr "Der Volunteer %1$s %2$s wurde für die Schicht %4$s %3$s"
 
-#: includes/notifications.php:722
+#: includes/notifications.php:763
 msgid "(no subject)"
 msgstr "(kein Betreff)"
 
@@ -3196,73 +3300,21 @@ msgstr "Du wurdest erfolgreich abgemeldet."
 msgid "You are not signed up for this shift."
 msgstr "Du bist für diese Schicht nicht eingeteilt."
 
-#: includes/admin/import.php
-msgid "Import volunteers"
-msgstr "Volunteers importieren"
-
-#: includes/admin/import.php
-msgid "Upload a CSV file to create volunteer accounts in bulk. The first row must be a header row; columns can be in any order and the delimiter may be a comma or a semicolon."
-msgstr "Lade eine CSV-Datei hoch, um Volunteer-Konten auf einmal anzulegen. Die erste Zeile muss eine Kopfzeile sein; die Spalten können in beliebiger Reihenfolge stehen und als Trennzeichen sind Komma oder Semikolon möglich."
-
-#: includes/admin/import.php
-msgid "Recognised columns: <code>first_name</code>, <code>last_name</code>, <code>email</code>, <code>phone</code>. Only <code>first_name</code> is required; <code>last_name</code>, <code>email</code> and <code>phone</code> are optional."
-msgstr "Erkannte Spalten: <code>first_name</code>, <code>last_name</code>, <code>email</code>, <code>phone</code>. Nur <code>first_name</code> ist erforderlich; <code>last_name</code>, <code>email</code> und <code>phone</code> sind optional."
-
-#: includes/admin/import.php
-msgid "A row with no e-mail address creates an offline volunteer (no login, no notifications). A row whose e-mail already belongs to a user is reported and skipped – no existing account is changed. New volunteers are created without a notification e-mail."
-msgstr "Eine Zeile ohne E-Mail-Adresse legt einen Offline-Volunteer an (kein Login, keine Benachrichtigungen). Eine Zeile, deren E-Mail-Adresse bereits zu einem Benutzer gehört, wird gemeldet und übersprungen – kein bestehendes Konto wird geändert. Neue Volunteers werden ohne Benachrichtigungs-E-Mail angelegt."
-
-#: includes/admin/import.php
-#, php-format
-msgid "%d volunteer(s) imported."
-msgstr "%d Volunteer(s) importiert."
-
-#: includes/admin/import.php
-msgid "Skipped – e-mail already in use:"
-msgstr "Übersprungen – E-Mail-Adresse bereits vergeben:"
-
-#: includes/admin/import.php
-msgid "Skipped – invalid rows:"
-msgstr "Übersprungen – ungültige Zeilen:"
-
-#: includes/admin/import.php
-msgid "No file was uploaded."
-msgstr "Es wurde keine Datei hochgeladen."
-
-#: includes/admin/import.php
-msgid "The file could not be uploaded. Please try again."
-msgstr "Die Datei konnte nicht hochgeladen werden. Bitte versuche es erneut."
-
-#: includes/admin/import.php
-msgid "Please upload a .csv file."
-msgstr "Bitte lade eine .csv-Datei hoch."
-
-#: includes/admin/import.php
-msgid "The file could not be read."
-msgstr "Die Datei konnte nicht gelesen werden."
-
-#: includes/admin/import.php
-msgid "The file is empty."
-msgstr "Die Datei ist leer."
-
-#: includes/admin/import.php
-msgid "The header row must contain a \"first_name\" column."
-msgstr "Die Kopfzeile muss eine Spalte „first_name“ enthalten."
-
-#: includes/admin/import.php
-#, php-format
-msgid "Row %d: invalid e-mail address."
-msgstr "Zeile %d: ungültige E-Mail-Adresse."
-
-#: includes/admin/import.php
-#, php-format
-msgid "Row %d: first name is required."
-msgstr "Zeile %d: Vorname ist erforderlich."
-
-#: includes/admin/import.php
-#, php-format
-msgid "Row %1$d: %2$s"
-msgstr "Zeile %1$d: %2$s"
+#~ msgid ""
+#~ "New in this release: departments can carry a description that assignment, "
+#~ "cancellation, and reminder emails pull in automatically via the {department}"
+#~ " and {department_desc} placeholders, so you no longer have to describe every"
+#~ " single shift; and Tools → EventAdmin Data has a new \"Import volunteers\" "
+#~ "screen for bulk-creating volunteer accounts from a CSV file (rows without an"
+#~ " email address become offline volunteers)."
+#~ msgstr ""
+#~ "Neu in dieser Version: Abteilungen können eine Beschreibung haben, die "
+#~ "Zuweisungs-, Abmelde- und Erinnerungs-E-Mails über die Platzhalter "
+#~ "{department} und {department_desc} automatisch einfügen – so musst du nicht "
+#~ "mehr jede einzelne Schicht beschreiben. Zudem gibt es unter Werkzeuge → "
+#~ "EventAdmin Data eine neue Seite „Volunteers importieren“, um Volunteer-"
+#~ "Konten aus einer CSV-Datei anzulegen (Zeilen ohne E-Mail-Adresse werden zu "
+#~ "Offline-Volunteers)."
 
 #~ msgid ""
 #~ "New in this release: shift management now lives on its own \"Manager\" page "
