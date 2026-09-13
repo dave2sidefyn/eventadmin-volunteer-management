@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-09-11T10:16:37+00:00\n"
+"POT-Creation-Date: 2026-09-13T06:48:39+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: nl_NL_formal\n"
 "MIME-Version: 1.0\n"
@@ -339,13 +339,13 @@ msgstr "Geen aankomende diensten."
 
 #: includes/admin/bulk-email.php:583 includes/admin/bulk-email.php:618
 #: includes/admin/bulk-email.php:714
-#: includes/admin/dashboard-tab-timeline.php:353 includes/admin/import.php:187
-#: includes/admin/import.php:201 includes/admin/import.php:214
-#: includes/admin/import.php:231 includes/admin/import.php:242
-#: includes/admin/user-profile.php:218 includes/admin/volunteer-list.php:440
-#: includes/admin/volunteer-list.php:470 includes/admin/volunteer-list.php:499
-#: includes/admin/volunteer-list.php:567 includes/shiftselector.php:325
-#: includes/shiftselector.php:373
+#: includes/admin/dashboard-tab-timeline.php:353 includes/admin/import.php:243
+#: includes/admin/import.php:257 includes/admin/import.php:272
+#: includes/admin/import.php:285 includes/admin/import.php:302
+#: includes/admin/import.php:313 includes/admin/user-profile.php:218
+#: includes/admin/volunteer-list.php:440 includes/admin/volunteer-list.php:470
+#: includes/admin/volunteer-list.php:499 includes/admin/volunteer-list.php:567
+#: includes/shiftselector.php:325 includes/shiftselector.php:373
 msgid "Security check failed."
 msgstr "Beveiligingscontrole mislukt."
 
@@ -1943,27 +1943,74 @@ msgstr ""
 "hoort, wordt gemeld en overgeslagen – er wordt geen bestaand account "
 "gewijzigd. Nieuwe vrijwilligers worden aangemaakt zonder notificatie-e-mail."
 
-#: includes/admin/import.php:79
+#: includes/admin/import.php:79 includes/admin/import.php:98
+msgid "Import shifts"
+msgstr "Diensten importeren"
+
+#: includes/admin/import.php:80
+msgid ""
+"Upload a CSV file to create shifts in bulk. The first row must be a header "
+"row; columns can be in any order and the delimiter may be a comma or a "
+"semicolon."
+msgstr ""
+"Upload een CSV-bestand om in bulk diensten aan te maken. De eerste rij moet "
+"een koprij zijn; de kolommen mogen in willekeurige volgorde staan en het "
+"scheidingsteken mag een komma of een puntkomma zijn."
+
+#: includes/admin/import.php:82
+msgid ""
+"Required columns: <code>title</code>, <code>start</code>, <code>end</code>, "
+"<code>max_volunteers</code>. Optional columns: <code>details</code>, "
+"<code>department</code>, <code>min_volunteers</code>, "
+"<code>organizer_user</code>, <code>organizer_name</code>, "
+"<code>organizer_email</code>."
+msgstr ""
+"Verplichte kolommen: <code>title</code>, <code>start</code>, "
+"<code>end</code>, <code>max_volunteers</code>. Optionele kolommen: "
+"<code>details</code>, <code>department</code>, <code>min_volunteers</code>, "
+"<code>organizer_user</code>, <code>organizer_name</code>, "
+"<code>organizer_email</code>."
+
+#: includes/admin/import.php:86
+msgid ""
+"<code>start</code> and <code>end</code> accept most common date/time formats"
+" (e.g. <code>2026-09-20 09:00</code>). <code>department</code> is matched to"
+" an existing department by name and created automatically if it does not "
+"exist yet. <code>organizer_user</code> is matched against an existing "
+"WordPress user by user ID, e-mail address, or username, in that order – if "
+"it cannot be matched, the shift is still created without a linked organizer "
+"user."
+msgstr ""
+"<code>start</code> en <code>end</code> accepteren de meeste gangbare "
+"datum-/tijdnotaties (bijv. <code>2026-09-20 09:00</code>). "
+"<code>department</code> wordt op naam gekoppeld aan een bestaande afdeling "
+"en automatisch aangemaakt als deze nog niet bestaat. "
+"<code>organizer_user</code> wordt gekoppeld aan een bestaande WordPress-"
+"gebruiker op basis van gebruikers-ID, e-mailadres of gebruikersnaam, in die "
+"volgorde – als er geen koppeling wordt gevonden, wordt de dienst toch "
+"aangemaakt zonder gekoppelde organisator."
+
+#: includes/admin/import.php:103
 msgid "Import demo data"
 msgstr "Demodata importeren"
 
-#: includes/admin/import.php:84
+#: includes/admin/import.php:108
 msgid "Start import"
 msgstr "Importeren starten"
 
-#: includes/admin/import.php:89
+#: includes/admin/import.php:113
 msgid "Delete all data"
 msgstr "Alle gegevens verwijderen"
 
-#: includes/admin/import.php:95
+#: includes/admin/import.php:119
 msgid "Delete all"
 msgstr "Alles verwijderen"
 
-#: includes/admin/import.php:100
+#: includes/admin/import.php:124
 msgid "Clean up orphaned assignments"
 msgstr "Verweesde toewijzingen opruimen"
 
-#: includes/admin/import.php:101
+#: includes/admin/import.php:125
 msgid ""
 "Removes shift assignments for users that no longer exist in WordPress. This "
 "can happen when a user was deleted without the plugin's cleanup hook "
@@ -1973,54 +2020,64 @@ msgstr ""
 "WordPress. Dit kan gebeuren als een gebruiker is verwijderd zonder eerst uit"
 " de diensten te worden uitgeschreven."
 
-#: includes/admin/import.php:105
+#: includes/admin/import.php:129
 msgid "No orphaned assignments found."
 msgstr "Geen verweesde toewijzingen gevonden."
 
 #. translators: %d: number of orphaned assignments found
-#: includes/admin/import.php:109
+#: includes/admin/import.php:133
 #, php-format
 msgid "%d orphaned assignment(s) found."
 msgstr "%d verweesde toewijzing(en) gevonden."
 
-#: includes/admin/import.php:119
+#: includes/admin/import.php:143
 msgid "Remove orphaned assignments"
 msgstr "Verweesde toewijzingen verwijderen"
 
-#: includes/admin/import.php:125
+#: includes/admin/import.php:149
 msgid "Departments were imported successfully."
 msgstr "De afdelingen zijn succesvol geïmporteerd."
 
-#: includes/admin/import.php:129
+#: includes/admin/import.php:153
 msgid "All departments and shifts have been deleted."
 msgstr "Alle afdelingen en diensten zijn verwijderd."
 
 #. translators: %d: number of removed orphaned assignments
-#: includes/admin/import.php:136
+#: includes/admin/import.php:160
 #, php-format
 msgid "%d orphaned assignment(s) removed."
 msgstr "%d verweesde toewijzing(en) verwijderd."
 
 #. translators: %d: number of volunteer accounts created
-#: includes/admin/import.php:152
+#: includes/admin/import.php:176
 #, php-format
 msgid "%d volunteer(s) imported."
 msgstr "%d vrijwilliger(s) geïmporteerd."
 
-#: includes/admin/import.php:161
+#: includes/admin/import.php:185
 msgid "Skipped – e-mail already in use:"
 msgstr "Overgeslagen – e-mailadres al in gebruik:"
 
-#: includes/admin/import.php:162
+#: includes/admin/import.php:186 includes/admin/import.php:218
 msgid "Skipped – invalid rows:"
 msgstr "Overgeslagen – ongeldige rijen:"
 
-#: includes/admin/import.php:353 includes/admin/import.php:374
-#: includes/admin/import.php:379
+#. translators: %d: number of shifts created
+#: includes/admin/import.php:208
+#, php-format
+msgid "%d shift(s) imported."
+msgstr "%d dienst(en) geïmporteerd."
+
+#: includes/admin/import.php:217
+msgid "Notes:"
+msgstr "Opmerkingen:"
+
+#: includes/admin/import.php:424 includes/admin/import.php:445
+#: includes/admin/import.php:450
 msgid "Dismantling"
 msgstr "Afbouw"
 
-#: includes/admin/import.php:353
+#: includes/admin/import.php:424
 msgid ""
 "Dismantling of booths, tents, tables, etc. This person should be skilled and"
 " have experience in dismantling."
@@ -2028,12 +2085,12 @@ msgstr ""
 "Afbouw van stands, tenten, tafels, etc. Deze persoon moet vaardig zijn en "
 "ervaring hebben met afbouw."
 
-#: includes/admin/import.php:354 includes/admin/import.php:386
-#: includes/admin/import.php:393
+#: includes/admin/import.php:425 includes/admin/import.php:457
+#: includes/admin/import.php:464
 msgid "Setup"
 msgstr "Opbouw"
 
-#: includes/admin/import.php:354
+#: includes/admin/import.php:425
 msgid ""
 "Setup of booths, tents, tables, etc. This person should be skilled and have "
 "experience in setup."
@@ -2041,11 +2098,11 @@ msgstr ""
 "Opbouw van stands, tenten, tafels, etc. Deze persoon moet vaardig zijn en "
 "ervaring hebben met opbouw."
 
-#: includes/admin/import.php:355
+#: includes/admin/import.php:426
 msgid "Merchandise"
 msgstr "Merchandise"
 
-#: includes/admin/import.php:355
+#: includes/admin/import.php:426
 msgid ""
 "Sale of merchandise items such as T-shirts, hoodies, mugs, etc. This person "
 "should be friendly and good with customers."
@@ -2053,11 +2110,11 @@ msgstr ""
 "Verkoop van merchandise zoals T-shirts, hoodies, mokken, etc. Deze persoon "
 "moet vriendelijk zijn en goed met klanten kunnen omgaan."
 
-#: includes/admin/import.php:356
+#: includes/admin/import.php:427
 msgid "Floater"
 msgstr "Springplank"
 
-#: includes/admin/import.php:356
+#: includes/admin/import.php:427
 msgid ""
 "Help with various tasks that do not fit into another category. This person "
 "should be flexible and willing to take on different tasks."
@@ -2065,11 +2122,11 @@ msgstr ""
 "Hulp bij diverse taken die niet in een andere categorie passen. Deze persoon"
 " moet flexibel zijn en bereid zijn om verschillende taken op zich te nemen."
 
-#: includes/admin/import.php:357
+#: includes/admin/import.php:428
 msgid "Trash Hero"
 msgstr "Afvalheld"
 
-#: includes/admin/import.php:357
+#: includes/admin/import.php:428
 msgid ""
 "Collecting trash, disposing of waste, ensuring cleanliness. This person "
 "should always have a trash bag and gloves."
@@ -2077,11 +2134,11 @@ msgstr ""
 "Afval verzamelen, afval afvoeren, zorgen voor netheid. Deze persoon moet "
 "altijd een vuilniszak en handschoenen bij zich hebben."
 
-#: includes/admin/import.php:358
+#: includes/admin/import.php:429
 msgid "Bar"
 msgstr "Bar"
 
-#: includes/admin/import.php:358
+#: includes/admin/import.php:429
 msgid ""
 "People for the bar, who can also tap beer, are important. This person should"
 " be friendly and good with customers."
@@ -2089,11 +2146,11 @@ msgstr ""
 "Medewerkers voor de bar die ook bier kunnen tappen zijn belangrijk. Deze "
 "persoon moet vriendelijk zijn en goed met klanten kunnen omgaan."
 
-#: includes/admin/import.php:359
+#: includes/admin/import.php:430
 msgid "Deposit"
 msgstr "Statiegeld"
 
-#: includes/admin/import.php:359
+#: includes/admin/import.php:430
 msgid ""
 "Return of plates and cups. There should always be at least one person at the"
 " deposit stand."
@@ -2101,81 +2158,151 @@ msgstr ""
 "Retourneren van borden en bekers. Er moet altijd minstens één persoon bij de"
 " statiegeldbalie staan."
 
-#: includes/admin/import.php:360
+#: includes/admin/import.php:431
 msgid "Grill"
 msgstr "Grill"
 
-#: includes/admin/import.php:360
+#: includes/admin/import.php:431
 msgid "- Grilling sausages, possibly also burgers\n"
 msgstr "- Worstjes grillen, eventueel ook burgers\n"
 
-#: includes/admin/import.php:375
+#: includes/admin/import.php:446
 msgid "Volunteers needed for dismantling the event."
 msgstr "Volunteers nodig voor de afbouw van het evenement."
 
-#: includes/admin/import.php:381
+#: includes/admin/import.php:452
 msgid "Setup Early Morning"
 msgstr "Opbouw vroege ochtend"
 
-#: includes/admin/import.php:382 includes/admin/import.php:389
+#: includes/admin/import.php:453 includes/admin/import.php:460
 msgid "Volunteers needed for setting up the event."
 msgstr "Volunteers nodig voor de opbouw van het evenement."
 
-#: includes/admin/import.php:388
+#: includes/admin/import.php:459
 msgid "Setup Morning"
 msgstr "Opbouw ochtend"
 
-#: includes/admin/import.php:434
+#: includes/admin/import.php:505 includes/admin/import.php:684
 msgid "No file was uploaded."
 msgstr "Er is geen bestand geüpload."
 
-#: includes/admin/import.php:439
+#: includes/admin/import.php:510 includes/admin/import.php:689
 msgid "The file could not be uploaded. Please try again."
 msgstr "Het bestand kon niet worden geüpload. Probeer het opnieuw."
 
-#: includes/admin/import.php:446
+#: includes/admin/import.php:517 includes/admin/import.php:696
 msgid "Please upload a .csv file."
 msgstr "Upload een .csv-bestand."
 
-#: includes/admin/import.php:495
+#: includes/admin/import.php:566 includes/admin/import.php:754
 msgid "The file could not be read."
 msgstr "Het bestand kon niet worden gelezen."
 
-#: includes/admin/import.php:507
+#: includes/admin/import.php:578 includes/admin/import.php:766
 msgid "The file is empty."
 msgstr "Het bestand is leeg."
 
-#: includes/admin/import.php:514
+#: includes/admin/import.php:585
 msgid "The header row must contain a \"first_name\" column."
 msgstr "De koprij moet een kolom \"first_name\" bevatten."
 
 #. translators: %d: CSV line number
-#: includes/admin/import.php:547
+#: includes/admin/import.php:618
 #, php-format
 msgid "Row %d: first name is required."
 msgstr "Rij %d: voornaam is verplicht."
 
 #. translators: %d: CSV line number
-#: includes/admin/import.php:556
+#: includes/admin/import.php:627
 #, php-format
 msgid "Row %d: invalid e-mail address."
 msgstr "Rij %d: ongeldig e-mailadres."
 
 #. translators: 1: CSV line number, 2: e-mail address
-#: includes/admin/import.php:562 includes/admin/import.php:579
+#: includes/admin/import.php:633 includes/admin/import.php:650
+#: includes/admin/import.php:857
 #, php-format
 msgid "Row %1$d: %2$s"
 msgstr "Rij %1$d: %2$s"
 
-#: includes/admin/import.php:614
+#. translators: %s: required column name, e.g. "title"
+#: includes/admin/import.php:775
+#, php-format
+msgid "The header row must contain a \"%s\" column."
+msgstr "De koprij moet een kolom \"%s\" bevatten."
+
+#. translators: %d: CSV line number
+#: includes/admin/import.php:807
+#, php-format
+msgid "Row %d: title is required."
+msgstr "Rij %d: titel is verplicht."
+
+#. translators: %d: CSV line number
+#: includes/admin/import.php:814
+#, php-format
+msgid "Row %d: start date/time is missing or not recognised."
+msgstr "Rij %d: startdatum/-tijd ontbreekt of wordt niet herkend."
+
+#. translators: %d: CSV line number
+#: includes/admin/import.php:821
+#, php-format
+msgid "Row %d: end date/time is missing or not recognised."
+msgstr "Rij %d: einddatum/-tijd ontbreekt of wordt niet herkend."
+
+#. translators: %d: CSV line number
+#: includes/admin/import.php:827
+#, php-format
+msgid "Row %d: end must be after start."
+msgstr "Rij %d: einde moet na de start liggen."
+
+#. translators: %d: CSV line number
+#: includes/admin/import.php:833
+#, php-format
+msgid "Row %d: max_volunteers must be a whole number of 1 or more."
+msgstr "Rij %d: max_volunteers moet een geheel getal van 1 of hoger zijn."
+
+#. translators: %d: CSV line number
+#: includes/admin/import.php:841
+#, php-format
+msgid "Row %d: min_volunteers cannot be greater than max_volunteers."
+msgstr "Rij %d: min_volunteers mag niet groter zijn dan max_volunteers."
+
+#: includes/admin/import.php:859
+msgid "the shift could not be created."
+msgstr "de dienst kon niet worden aangemaakt."
+
+#. translators: 1: CSV line number, 2: department name
+#: includes/admin/import.php:881
+#, php-format
+msgid ""
+"Row %1$d: could not create department \"%2$s\", shift left without a "
+"department."
+msgstr ""
+"Rij %1$d: afdeling \"%2$s\" kon niet worden aangemaakt, dienst is opgeslagen"
+" zonder afdeling."
+
+#. translators: %s: department name
+#: includes/admin/import.php:885
+#, php-format
+msgid "Created new department \"%s\"."
+msgstr "Nieuwe afdeling \"%s\" aangemaakt."
+
+#. translators: 1: CSV line number, 2: the organizer_user value from the row
+#: includes/admin/import.php:913
+#, php-format
+msgid "Row %1$d: organizer user \"%2$s\" was not found and was left unset."
+msgstr ""
+"Rij %1$d: organisatiegebruiker \"%2$s\" is niet gevonden en is leeg gelaten."
+
+#: includes/admin/import.php:945
 msgid "Do you want to import the sample data for EventAdmin?"
 msgstr "Wilt u de voorbeelddata voor EventAdmin importeren?"
 
-#: includes/admin/import.php:615
+#: includes/admin/import.php:946
 msgid "Yes, please import"
 msgstr "Ja, importeren alstublieft"
 
-#: includes/admin/import.php:616
+#: includes/admin/import.php:947
 msgid "No, thanks"
 msgstr "Nee, bedankt"
 

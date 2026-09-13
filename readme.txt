@@ -7,6 +7,7 @@ Requires PHP: 8.0
 Stable tag: 3.1.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
+Donate link: https://revolut.me/davidwiedmer
 
 A self-service volunteer roster for events: create shifts, let volunteers sign up themselves, set limits, export CSV, and track it on a dashboard.
 

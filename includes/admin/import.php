@@ -76,6 +76,30 @@ Anna,Muster,anna@example.com,+41 79 123 45 67</pre>
     </div>
 
     <div class="wrap">
+        <h1><?php esc_attr_e('Import shifts', 'eventadmin-volunteer-management'); ?></h1>
+        <p><?php esc_html_e('Upload a CSV file to create shifts in bulk. The first row must be a header row; columns can be in any order and the delimiter may be a comma or a semicolon.', 'eventadmin-volunteer-management'); ?></p>
+        <p><?php echo wp_kses(
+            __('Required columns: <code>title</code>, <code>start</code>, <code>end</code>, <code>max_volunteers</code>. Optional columns: <code>details</code>, <code>department</code>, <code>min_volunteers</code>, <code>organizer_user</code>, <code>organizer_name</code>, <code>organizer_email</code>.', 'eventadmin-volunteer-management'),
+            ['code' => []]
+        ); ?></p>
+        <p><?php echo wp_kses(
+            __('<code>start</code> and <code>end</code> accept most common date/time formats (e.g. <code>2026-09-20 09:00</code>). <code>department</code> is matched to an existing department by name and created automatically if it does not exist yet. <code>organizer_user</code> is matched against an existing WordPress user by user ID, e-mail address, or username, in that order – if it cannot be matched, the shift is still created without a linked organizer user.', 'eventadmin-volunteer-management'),
+            ['code' => []]
+        ); ?></p>
+        <pre style="background:#f6f7f7;border:1px solid #dcdcde;padding:8px 12px;display:inline-block;">title,details,start,end,department,min_volunteers,max_volunteers,organizer_user,organizer_name,organizer_email
+Bar shift,Serve drinks and keep the bar tidy,2026-09-20 18:00,2026-09-20 22:00,Bar,1,3,stein@example.com,Stein Selseth,stein@example.com</pre>
+        <form method="post" action="" enctype="multipart/form-data">
+            <?php wp_nonce_field('eventadmin_import_shifts', 'eventadmin_import_shifts_nonce'); ?>
+            <input type="hidden" name="eventadmin_import_shifts_action" value="1">
+            <p>
+                <input type="file" name="eventadmin_shift_csv" accept=".csv,text/csv" required>
+            </p>
+            <p><input type="submit" class="button button-primary"
+                      value="<?php esc_attr_e('Import shifts', 'eventadmin-volunteer-management'); ?>"></p>
+        </form>
+    </div>
+
+    <div class="wrap">
         <h1><?php esc_attr_e('Import demo data', 'eventadmin-volunteer-management'); ?></h1>
         <form method="post" action="">
             <?php wp_nonce_field('eventadmin_import_shift_cats', 'eventadmin_import_nonce'); ?>
@@ -169,6 +193,38 @@ Anna,Muster,anna@example.com,+41 79 123 45 67</pre>
 
         echo '</div>';
     }
+
+    if (isset($_GET['shiftimport']) && $_GET['shiftimport'] === 'done') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $result = get_transient('eventadmin_shift_import_result_' . get_current_user_id());
+        delete_transient('eventadmin_shift_import_result_' . get_current_user_id());
+
+        if (!is_array($result)) {
+            $result = ['created' => 0, 'errors' => [], 'warnings' => []];
+        }
+
+        $class = !empty($result['errors']) ? 'notice-warning' : 'notice-success';
+        echo '<div class="notice ' . esc_attr($class) . ' is-dismissible"><p>' . sprintf(
+            /* translators: %d: number of shifts created */
+            esc_html__('%d shift(s) imported.', 'eventadmin-volunteer-management'),
+            (int) $result['created']
+        ) . '</p>';
+
+        foreach (['warnings', 'errors'] as $group) {
+            if (empty($result[$group])) {
+                continue;
+            }
+            $label = $group === 'warnings'
+                ? esc_html__('Notes:', 'eventadmin-volunteer-management')
+                : esc_html__('Skipped – invalid rows:', 'eventadmin-volunteer-management');
+            echo '<p><strong>' . $label . '</strong></p><ul style="list-style:disc;margin-left:20px;">';
+            foreach ($result[$group] as $line) {
+                echo '<li>' . esc_html($line) . '</li>';
+            }
+            echo '</ul>';
+        }
+
+        echo '</div>';
+    }
 }
 
 /**
@@ -205,6 +261,21 @@ function eventadmin_import_admin_init(): void
         set_transient('eventadmin_volunteer_import_result_' . get_current_user_id(), $result, MINUTE_IN_SECONDS);
 
         wp_safe_redirect(admin_url('tools.php?page=eventadmin-import&volimport=done'));
+        exit;
+    }
+
+    if (!empty($_POST['eventadmin_import_shifts_action'])) {
+        if (
+            !isset($_POST['eventadmin_import_shifts_nonce']) ||
+            !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['eventadmin_import_shifts_nonce'])), 'eventadmin_import_shifts')
+        ) {
+            wp_die(esc_html__('Security check failed.', 'eventadmin-volunteer-management'));
+        }
+
+        $result = eventadmin_import_shifts_from_upload();
+        set_transient('eventadmin_shift_import_result_' . get_current_user_id(), $result, MINUTE_IN_SECONDS);
+
+        wp_safe_redirect(admin_url('tools.php?page=eventadmin-import&shiftimport=done'));
         exit;
     }
 
@@ -592,6 +663,266 @@ function eventadmin_import_volunteers_from_csv(string $path): array
     }
 
     remove_filter('wp_new_user_notification_email', $suppress_cb, 999);
+    fclose($handle);
+
+    return $result;
+}
+
+/**
+ * Validates the uploaded shift CSV and hands it to the parser.
+ *
+ * @return array{created: int, errors: string[], warnings: string[]}
+ */
+function eventadmin_import_shifts_from_upload(): array
+{
+    $empty = ['created' => 0, 'errors' => [], 'warnings' => []];
+
+    if (
+        empty($_FILES['eventadmin_shift_csv']['tmp_name']) ||
+        !is_uploaded_file($_FILES['eventadmin_shift_csv']['tmp_name'])
+    ) {
+        $empty['errors'][] = esc_html__('No file was uploaded.', 'eventadmin-volunteer-management');
+        return $empty;
+    }
+
+    if ((int) ($_FILES['eventadmin_shift_csv']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        $empty['errors'][] = esc_html__('The file could not be uploaded. Please try again.', 'eventadmin-volunteer-management');
+        return $empty;
+    }
+
+    // sanitize_text_field() is fine here: filenames only, no path.
+    $name = sanitize_file_name((string) ($_FILES['eventadmin_shift_csv']['name'] ?? ''));
+    if (strtolower((string) pathinfo($name, PATHINFO_EXTENSION)) !== 'csv') {
+        $empty['errors'][] = esc_html__('Please upload a .csv file.', 'eventadmin-volunteer-management');
+        return $empty;
+    }
+
+    return eventadmin_import_shifts_from_csv($_FILES['eventadmin_shift_csv']['tmp_name']);
+}
+
+/**
+ * Maps a raw CSV header cell to one of the canonical shift field keys, or '' when
+ * it is not recognised.
+ */
+function eventadmin_normalize_shift_csv_header(string $raw): string
+{
+    $key = strtolower(trim($raw));
+    $key = preg_replace('/^\xEF\xBB\xBF/', '', $key);      // strip UTF-8 BOM
+    $key = preg_replace('/[\s_\-.]+/', '', (string) $key); // collapse separators
+
+    $map = [
+        'title'            => ['title', 'shifttitle', 'name', 'titel', 'titre', 'tittel'],
+        'details'          => ['details', 'description', 'desc', 'beschreibung', 'beschrijving', 'beskrivelse'],
+        'start'            => ['start', 'from', 'shiftstart', 'startdate', 'startdatetime', 'startzeit', 'startdatum', 'starttid', 'datedebut'],
+        'end'              => ['end', 'to', 'shiftend', 'enddate', 'enddatetime', 'endzeit', 'einddatum', 'sluttid', 'datefin'],
+        'department'       => ['department', 'category', 'shiftcategory', 'abteilung', 'departement', 'afdeling', 'avdeling'],
+        'min_volunteers'   => ['minvolunteers', 'min', 'minimum'],
+        'max_volunteers'   => ['maxvolunteers', 'max', 'maximum'],
+        'organizer_user'   => ['organizeruser', 'organizer', 'verantwortlicher', 'organisateur', 'organisator'],
+        'organizer_name'   => ['organizername'],
+        'organizer_email'  => ['organizeremail'],
+    ];
+
+    foreach ($map as $canonical => $aliases) {
+        if (in_array($key, $aliases, true)) {
+            return $canonical;
+        }
+    }
+
+    return '';
+}
+
+/**
+ * Parses a shift CSV file and creates one eventadmin_shift post per row.
+ *
+ * Required columns: title, start, end, max_volunteers. A department is matched
+ * against an existing department by name (case-insensitive) and automatically
+ * created when no matching term exists yet. organizer_user is resolved against
+ * an existing user by numeric ID, then e-mail address, then username, in that
+ * order; when it does not resolve, the row is still imported but without a
+ * linked organizer user (see eventadmin_save_shift_organizer_fields()).
+ *
+ * @param string $path Absolute path to the uploaded CSV file.
+ * @return array{created: int, errors: string[], warnings: string[]}
+ */
+function eventadmin_import_shifts_from_csv(string $path): array
+{
+    $result = ['created' => 0, 'errors' => [], 'warnings' => []];
+
+    $handle = fopen($path, 'r');
+    if ($handle === false) {
+        $result['errors'][] = esc_html__('The file could not be read.', 'eventadmin-volunteer-management');
+        return $result;
+    }
+
+    // Detect the delimiter from the header line, then rewind to parse it properly.
+    $first_line = (string) fgets($handle);
+    $delimiter  = substr_count($first_line, ';') > substr_count($first_line, ',') ? ';' : ',';
+    rewind($handle);
+
+    $header = fgetcsv($handle, 0, $delimiter, '"', '');
+    if (!is_array($header)) {
+        fclose($handle);
+        $result['errors'][] = esc_html__('The file is empty.', 'eventadmin-volunteer-management');
+        return $result;
+    }
+
+    $columns = array_map('eventadmin_normalize_shift_csv_header', $header);
+    foreach (['title', 'start', 'end', 'max_volunteers'] as $required_column) {
+        if (!in_array($required_column, $columns, true)) {
+            fclose($handle);
+            /* translators: %s: required column name, e.g. "title" */
+            $result['errors'][] = sprintf(esc_html__('The header row must contain a "%s" column.', 'eventadmin-volunteer-management'), $required_column);
+            return $result;
+        }
+    }
+
+    // Departments matched or created during this import, name (lowercased) => term_id,
+    // so the same new department name in multiple rows is only created once per file.
+    $department_cache = [];
+
+    $line = 1; // header consumed
+    while (($row = fgetcsv($handle, 0, $delimiter, '"', '')) !== false) {
+        $line++;
+
+        // Skip blank lines.
+        if ($row === [null] || implode('', array_map('strval', $row)) === '') {
+            continue;
+        }
+
+        $fields = [
+            'title' => '', 'details' => '', 'start' => '', 'end' => '', 'department' => '',
+            'min_volunteers' => '', 'max_volunteers' => '',
+            'organizer_user' => '', 'organizer_name' => '', 'organizer_email' => '',
+        ];
+        foreach ($columns as $index => $canonical) {
+            if ($canonical !== '' && isset($row[$index])) {
+                $fields[$canonical] = trim((string) $row[$index]);
+            }
+        }
+
+        $title = sanitize_text_field($fields['title']);
+        if ($title === '') {
+            /* translators: %d: CSV line number */
+            $result['errors'][] = sprintf(esc_html__('Row %d: title is required.', 'eventadmin-volunteer-management'), $line);
+            continue;
+        }
+
+        $start = eventadmin_normalize_datetime_input($fields['start']);
+        if ($start === '') {
+            /* translators: %d: CSV line number */
+            $result['errors'][] = sprintf(esc_html__('Row %d: start date/time is missing or not recognised.', 'eventadmin-volunteer-management'), $line);
+            continue;
+        }
+
+        $end = eventadmin_normalize_datetime_input($fields['end']);
+        if ($end === '') {
+            /* translators: %d: CSV line number */
+            $result['errors'][] = sprintf(esc_html__('Row %d: end date/time is missing or not recognised.', 'eventadmin-volunteer-management'), $line);
+            continue;
+        }
+
+        if (strtotime($end) <= strtotime($start)) {
+            /* translators: %d: CSV line number */
+            $result['errors'][] = sprintf(esc_html__('Row %d: end must be after start.', 'eventadmin-volunteer-management'), $line);
+            continue;
+        }
+
+        if ($fields['max_volunteers'] === '' || !ctype_digit($fields['max_volunteers']) || (int) $fields['max_volunteers'] < 1) {
+            /* translators: %d: CSV line number */
+            $result['errors'][] = sprintf(esc_html__('Row %d: max_volunteers must be a whole number of 1 or more.', 'eventadmin-volunteer-management'), $line);
+            continue;
+        }
+        $max_volunteers = (int) $fields['max_volunteers'];
+
+        $min_volunteers = ($fields['min_volunteers'] !== '' && ctype_digit($fields['min_volunteers'])) ? (int) $fields['min_volunteers'] : 0;
+        if ($min_volunteers > $max_volunteers) {
+            /* translators: %d: CSV line number */
+            $result['errors'][] = sprintf(esc_html__('Row %d: min_volunteers cannot be greater than max_volunteers.', 'eventadmin-volunteer-management'), $line);
+            continue;
+        }
+
+        $details = $fields['details'] !== '' ? wp_kses_post($fields['details']) : '';
+
+        $shift_id = wp_insert_post([
+            'post_type'    => 'eventadmin_shift',
+            'post_status'  => 'publish',
+            'post_title'   => $title,
+            'post_content' => $details,
+        ]);
+
+        if (!$shift_id || is_wp_error($shift_id)) {
+            /* translators: 1: CSV line number, 2: error message */
+            $result['errors'][] = sprintf(
+                esc_html__('Row %1$d: %2$s', 'eventadmin-volunteer-management'),
+                $line,
+                is_wp_error($shift_id) ? $shift_id->get_error_message() : esc_html__('the shift could not be created.', 'eventadmin-volunteer-management')
+            );
+            continue;
+        }
+
+        update_post_meta($shift_id, 'shift_start', $start);
+        update_post_meta($shift_id, 'shift_end', $end);
+        update_post_meta($shift_id, 'min_volunteers', $min_volunteers);
+        update_post_meta($shift_id, 'max_volunteers', $max_volunteers);
+
+        if ($fields['department'] !== '') {
+            $dept_key = strtolower($fields['department']);
+            if (isset($department_cache[$dept_key])) {
+                $term_id = $department_cache[$dept_key];
+            } else {
+                $term    = get_term_by('name', $fields['department'], 'eventadmin_shift_category');
+                $term_id = $term instanceof WP_Term ? $term->term_id : 0;
+
+                if (!$term_id) {
+                    $inserted = wp_insert_term(sanitize_text_field($fields['department']), 'eventadmin_shift_category');
+                    if (is_wp_error($inserted)) {
+                        /* translators: 1: CSV line number, 2: department name */
+                        $result['warnings'][] = sprintf(esc_html__('Row %1$d: could not create department "%2$s", shift left without a department.', 'eventadmin-volunteer-management'), $line, $fields['department']);
+                    } else {
+                        $term_id = (int) $inserted['term_id'];
+                        /* translators: %s: department name */
+                        $result['warnings'][] = sprintf(esc_html__('Created new department "%s".', 'eventadmin-volunteer-management'), $fields['department']);
+                    }
+                }
+                $department_cache[$dept_key] = $term_id;
+            }
+            if ($term_id > 0) {
+                wp_set_object_terms($shift_id, [$term_id], 'eventadmin_shift_category');
+            }
+        }
+
+        // Organizer user: numeric ID, then e-mail address, then username, in that order.
+        $organizer_user_id = 0;
+        if ($fields['organizer_user'] !== '') {
+            $identifier = $fields['organizer_user'];
+            $user       = null;
+            if (ctype_digit($identifier)) {
+                $user = get_userdata((int) $identifier) ?: null;
+            }
+            if (!$user && is_email($identifier)) {
+                $user = get_user_by('email', $identifier) ?: null;
+            }
+            if (!$user) {
+                $user = get_user_by('login', $identifier) ?: null;
+            }
+            if ($user instanceof WP_User) {
+                $organizer_user_id = $user->ID;
+            } else {
+                /* translators: 1: CSV line number, 2: the organizer_user value from the row */
+                $result['warnings'][] = sprintf(esc_html__('Row %1$d: organizer user "%2$s" was not found and was left unset.', 'eventadmin-volunteer-management'), $line, $identifier);
+            }
+        }
+
+        eventadmin_save_shift_organizer_fields($shift_id, [
+            'shift_organizer_user_id' => $organizer_user_id,
+            'shift_organizer_name'    => $fields['organizer_name'],
+            'shift_organizer_email'   => $fields['organizer_email'],
+        ]);
+
+        $result['created']++;
+    }
+
     fclose($handle);
 
     return $result;
