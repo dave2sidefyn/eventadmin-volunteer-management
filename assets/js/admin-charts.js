@@ -648,6 +648,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     shift_id: shiftId,
                     start: tsToDatetimeString(startTs),
                     end: tsToDatetimeString(endTs),
+                    // Lets eventadmin_ajax_update_shift() tell a drag/resize save apart from
+                    // the Edit Shift modal's form submit, for the Getting Started checklist
+                    // (includes/admin/getting-started-checklist.php).
+                    reschedule_source: 'drag',
                 }),
             })
                 .then((r) => r.json())

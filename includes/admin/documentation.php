@@ -22,7 +22,7 @@ function eventadmin_documentation_admin_menu(): void
         'edit.php?post_type=eventadmin_shift',
         esc_html__('Documentation', 'eventadmin-volunteer-management'),
         esc_html__('Documentation' , 'eventadmin-volunteer-management'),
-        'manage_options',
+        'read',
         'eventadmin-documentation',
         'eventadmin_plugin_documentation_page'
     );
@@ -104,6 +104,35 @@ function eventadmin_plugin_documentation_page()
             <li><?php echo esc_html__('Create your first shifts under Shifts → Add New', 'eventadmin-volunteer-management'); ?></li>
         </ol>
 
+        <h3><?php echo esc_html__('User Roles', 'eventadmin-volunteer-management'); ?></h3>
+        <p><?php echo esc_html__('Besides the Volunteer role, the plugin offers two roles for delegating day-to-day work without handing out full Administrator access:', 'eventadmin-volunteer-management'); ?></p>
+        <table class="widefat striped" style="max-width:800px;margin-bottom:16px;">
+            <thead><tr>
+                <th><?php echo esc_html__('Role', 'eventadmin-volunteer-management'); ?></th>
+                <th><?php echo esc_html__('Can do', 'eventadmin-volunteer-management'); ?></th>
+            </tr></thead>
+            <tbody>
+                <tr>
+                    <td><strong><?php echo esc_html__('Volunteer', 'eventadmin-volunteer-management'); ?></strong></td>
+                    <td><?php echo esc_html__('Sign up for and cancel shifts, edit their own profile. No access to wp-admin beyond that.', 'eventadmin-volunteer-management'); ?></td>
+                </tr>
+                <tr>
+                    <td><strong><?php echo esc_html__('Shift Manager', 'eventadmin-volunteer-management'); ?></strong></td>
+                    <td><?php echo esc_html__('Create, edit, and delete shifts and departments, and manage volunteers (assign them to shifts, edit their department links). Cannot access Import or Settings.', 'eventadmin-volunteer-management'); ?></td>
+                </tr>
+                <tr>
+                    <td><strong><?php echo esc_html__('Volunteer Manager', 'eventadmin-volunteer-management'); ?></strong></td>
+                    <td><?php echo esc_html__('Manage volunteers (edit their department links) and send announcements. Cannot create, edit, or delete shifts, and cannot access Import or Settings.', 'eventadmin-volunteer-management'); ?></td>
+                </tr>
+                <tr>
+                    <td><strong><?php echo esc_html__('Administrator', 'eventadmin-volunteer-management'); ?></strong></td>
+                    <td><?php echo esc_html__('Full access to everything, including Import and Settings.', 'eventadmin-volunteer-management'); ?></td>
+                </tr>
+            </tbody>
+        </table>
+        <p><?php echo esc_html__('Assign a role under Users → All Users → edit the user → Role.', 'eventadmin-volunteer-management'); ?></p>
+        <p><strong><?php echo esc_html__('Important:', 'eventadmin-volunteer-management'); ?></strong> <?php echo esc_html__('a WordPress account can only have one role at a time through that Role dropdown — picking a new role there replaces the old one, it does not add to it. So switching an Administrator to Shift Manager or Volunteer Manager removes their Administrator access; only do this for accounts that should not have full admin access. The one exception is the Volunteer role: use the "Grant volunteer role" / "Remove role" buttons on the Volunteers page instead of the Role dropdown to add or remove it without disturbing whatever other role the account already has — for example, to let a Shift Manager or Volunteer Manager also show up on the Volunteers page itself, so they can be assigned to a shift or receive department-targeted announcements.', 'eventadmin-volunteer-management'); ?></p>
+
         <h3><?php echo esc_html__('Departments', 'eventadmin-volunteer-management'); ?></h3>
         <p><?php echo esc_html__('Departments (Manager → Departments) group shifts, can be nested under a parent, and each carries a color used for its badge on shift cards and in the overview. "Hide from volunteers" removes a department from the frontend filter and labels; a shift disappears for volunteers only when every department it belongs to is hidden (shifts someone already signed up for are never hidden). Color, parent, visibility, and description can also be changed via Quick Edit in the department list, and the shift list itself can be filtered and sorted by department.', 'eventadmin-volunteer-management'); ?></p>
 
@@ -155,6 +184,7 @@ function eventadmin_plugin_documentation_page()
             <li><strong><?php echo esc_html__('All volunteers', 'eventadmin-volunteer-management'); ?></strong> – <?php echo esc_html__('Every volunteer with an email address, regardless of opt-in status.', 'eventadmin-volunteer-management'); ?></li>
             <li><strong><?php echo esc_html__('Volunteers without any upcoming shift', 'eventadmin-volunteer-management'); ?></strong> / <strong><?php echo esc_html__('Volunteers with at least one upcoming shift', 'eventadmin-volunteer-management'); ?></strong> – <?php echo esc_html__('Split volunteers by whether they currently have an upcoming shift assigned — useful for nudging people who haven\'t signed up yet.', 'eventadmin-volunteer-management'); ?></li>
             <li><strong><?php echo esc_html__('Volunteers of a specific shift', 'eventadmin-volunteer-management'); ?></strong> / <strong><?php echo esc_html__('Volunteers of a specific category', 'eventadmin-volunteer-management'); ?></strong> – <?php echo esc_html__('Only the volunteers assigned to a selected shift or department. A live recipient count is shown once you pick one.', 'eventadmin-volunteer-management'); ?></li>
+            <li><strong><?php echo esc_html__('Volunteers linked to a department', 'eventadmin-volunteer-management'); ?></strong> – <?php echo esc_html__('Every volunteer linked to a department (Volunteers page → Edit), regardless of shift history or opt-in status — useful for announcing new shifts to a department before anyone has signed up for one.', 'eventadmin-volunteer-management'); ?></li>
             <li><strong><?php echo esc_html__('Individual volunteer', 'eventadmin-volunteer-management'); ?></strong> – <?php echo esc_html__('Click "Email" on any volunteer row to open the form pre-filled for that person.', 'eventadmin-volunteer-management'); ?></li>
         </ul>
         <p><?php echo esc_html__('The From name and From email can be overridden per send. Use {first_name} and {last_name} as personalisation placeholders, and {shifts} to list each recipient\'s own upcoming shifts. HTML formatting is supported — the live preview below the form renders the email as it will appear.', 'eventadmin-volunteer-management'); ?></p>

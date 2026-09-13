@@ -145,6 +145,13 @@ function eventadmin_get_shift_email_context(int $user_id, int $shift_id, array $
  */
 function eventadmin_log_volunteer_notification(int $user_id, string $type, string $subject, int $shift_id = 0, string $date = ''): void
 {
+    // For the Getting Started checklist (includes/admin/getting-started-checklist.php) — the
+    // one place every actually-sent assignment confirmation passes through, regardless of
+    // whether it came from self-signup (shiftselector.php) or a manual admin assignment.
+    if ($type === 'assign' && !get_option('eventadmin_sent_assign_confirmation')) {
+        update_option('eventadmin_sent_assign_confirmation', 1);
+    }
+
     $log = get_user_meta($user_id, 'eventadmin_notification_log', true);
     if (!is_array($log)) {
         $log = [];
@@ -716,7 +723,7 @@ function eventadmin_ajax_render_email_preview(): void
         wp_send_json_error();
     }
 
-    if (!current_user_can('manage_options')) {
+    if (!current_user_can('eventadmin_manage_volunteers')) {
         wp_send_json_error();
     }
 

@@ -27,7 +27,7 @@ function eventadmin_dashboard_admin_menu(): void
         'edit.php?post_type=eventadmin_shift',
         esc_html__('Overview', 'eventadmin-volunteer-management'),
         esc_html__('Overview', 'eventadmin-volunteer-management'),
-        'edit_posts',
+        'eventadmin_manage_shifts',
         'eventadmin-overview',
         'eventadmin_admin_overview_page'
     );
@@ -36,7 +36,7 @@ function eventadmin_dashboard_admin_menu(): void
         'edit.php?post_type=eventadmin_shift',
         esc_html__('Manager', 'eventadmin-volunteer-management'),
         esc_html__('Manager', 'eventadmin-volunteer-management'),
-        'edit_posts',
+        'eventadmin_manage_shifts',
         'eventadmin-shift-manager',
         'eventadmin_admin_shift_manager_page'
     );
@@ -61,31 +61,52 @@ function eventadmin_dashboard_admin_menu(): void
     }
     array_splice($submenu['edit.php?post_type=eventadmin_shift'], 0, 0, $ordered);
 
+}
+
+add_action('admin_menu', 'eventadmin_dashboard_admin_menu', 100);
+
+/**
+ * Hides the classic "All Shifts"/"Add Shift"/"Departments" menu items with CSS instead of
+ * removing them from $submenu. Removing an entry (whether via array_filter() as this used
+ * to do, or WordPress's own remove_submenu_page() — it does the same unset() internally)
+ * breaks get_admin_page_parent()'s only way of resolving post-new.php?post_type=
+ * eventadmin_shift back to its parent menu. Once that lookup fails, WordPress falls back to
+ * an unscoped nopriv check keyed on the bare pagenow ("post-new.php"), which any role
+ * without the generic edit_posts capability already fails for WordPress's own native "Add
+ * Post" screen — incorrectly denying access to our own Add Shift screen too, for a role
+ * such as eventadmin_shift_manager that deliberately never gets edit_posts. Hiding with CSS
+ * keeps $submenu intact so page resolution and capability checks keep working, while still
+ * decluttering the sidebar for whoever enabled the setting.
+ *
+ * @return void
+ */
+function eventadmin_hide_shift_menu_items_css(): void
+{
+    $rules = [];
+
     if (get_option('eventadmin_hide_all_shifts_menu')) {
-        $submenu['edit.php?post_type=eventadmin_shift'] = array_values(array_filter(
-            $submenu['edit.php?post_type=eventadmin_shift'],
-            static fn($item) => ($item[2] ?? '') !== 'edit.php?post_type=eventadmin_shift'
-        ));
+        $rules[] = '#adminmenu li:has(> a[href="edit.php?post_type=eventadmin_shift"])';
     }
 
     if (get_option('eventadmin_hide_add_shift_menu')) {
-        $submenu['edit.php?post_type=eventadmin_shift'] = array_values(array_filter(
-            $submenu['edit.php?post_type=eventadmin_shift'],
-            static fn($item) => ($item[2] ?? '') !== 'post-new.php?post_type=eventadmin_shift'
-        ));
+        $rules[] = '#adminmenu li:has(> a[href="post-new.php?post_type=eventadmin_shift"])';
     }
 
     if (get_option('eventadmin_hide_departments_menu')) {
         // WordPress builds this particular submenu entry's URL with an HTML-escaped "&amp;"
-        // (unlike the two plain-string slugs filtered above), so match on the path alone.
-        $submenu['edit.php?post_type=eventadmin_shift'] = array_values(array_filter(
-            $submenu['edit.php?post_type=eventadmin_shift'],
-            static fn($item) => !str_starts_with($item[2] ?? '', 'edit-tags.php?taxonomy=eventadmin_shift_category')
-        ));
+        // (unlike the two plain-string slugs above), so match on the path prefix instead of
+        // the full string — the browser decodes the entity before CSS attribute matching.
+        $rules[] = '#adminmenu li:has(> a[href^="edit-tags.php?taxonomy=eventadmin_shift_category"])';
     }
+
+    if (!$rules) {
+        return;
+    }
+
+    echo '<style>' . implode(',', $rules) . '{display:none!important;}</style>';
 }
 
-add_action('admin_menu', 'eventadmin_dashboard_admin_menu', 100);
+add_action('admin_head', 'eventadmin_hide_shift_menu_items_css');
 
 /**
  * Displays the Overview page — dashboard stats only, no tabs (there's only one view here).

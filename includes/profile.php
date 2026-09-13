@@ -85,7 +85,7 @@ function eventadmin_profile_shortcode(): bool|string|null
                     true
                 );
                 ?>
-                <details class="eventadmin-departments-toggle"<?php echo !empty($linked_departments) ? ' open' : ''; ?>>
+                <details class="eventadmin-departments-toggle eventadmin-department-checklist"<?php echo !empty($linked_departments) ? ' open' : ''; ?>>
                     <summary><?php esc_html_e('Advanced: notify me about specific departments', 'eventadmin-volunteer-management'); ?></summary>
                     <p><?php esc_html_e('Also notify me about new shifts in:', 'eventadmin-volunteer-management'); ?></p>
                     <?php foreach ($departments as $department) : ?>

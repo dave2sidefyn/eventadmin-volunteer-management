@@ -121,6 +121,13 @@ jQuery(function ($) {
         }
     });
 
+    // Opens the shared "Edit departments" modal (assets/js/edit-departments-modal.js)
+    $(document).on('click', '.eventadmin-edit-departments', function () {
+        if (typeof window.eventadminOpenEditDepartmentsModal === 'function') {
+            window.eventadminOpenEditDepartmentsModal($(this).data('user-id'), $(this).data('name'));
+        }
+    });
+
     // Remove volunteer role
     $(document).on('click', '.eventadmin-remove-role', function () {
         const $btn       = $(this);

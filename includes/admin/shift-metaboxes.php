@@ -201,7 +201,7 @@ add_filter('post_row_actions', 'eventadmin_add_duplicate_button', 10, 2);
 #[NoReturn] function eventadmin_duplicate_shift(): void
 {
 
-    if (!current_user_can('edit_posts') || !isset($_REQUEST['_wpnonce']) || !isset($_GET['post']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_REQUEST['_wpnonce'])), 'duplicate_shift_' . absint(wp_unslash($_GET['post'])))) {
+    if (!current_user_can('eventadmin_manage_shifts') || !isset($_REQUEST['_wpnonce']) || !isset($_GET['post']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_REQUEST['_wpnonce'])), 'duplicate_shift_' . absint(wp_unslash($_GET['post'])))) {
         wp_die(esc_html__('Not allowed', 'eventadmin-volunteer-management'));
     }
     $post_id = absint($_GET['post']);

@@ -396,6 +396,14 @@ function eventadmin_ajax_update_shift(): void
         $time_changed = true;
     }
 
+    // For the Getting Started checklist (includes/admin/getting-started-checklist.php) —
+    // reschedule_source is only ever sent by the drag/resize save in admin-charts.js, never
+    // by the Edit Shift modal's form submit, which is what makes this endpoint's own request
+    // shape the only reliable place to detect "the admin actually tried dragging a shift".
+    if (($_POST['reschedule_source'] ?? '') === 'drag' && !get_option('eventadmin_used_drag_reschedule')) {
+        update_option('eventadmin_used_drag_reschedule', 1);
+    }
+
     if (isset($_POST['min'])) {
         update_post_meta($shift_id, 'min_volunteers', absint($_POST['min']));
     }
@@ -472,7 +480,7 @@ function eventadmin_ajax_create_shift(): void
 {
     eventadmin_ajax_verify_timeline_nonce();
 
-    if (!current_user_can('edit_posts')) {
+    if (!current_user_can('eventadmin_manage_shifts')) {
         wp_send_json_error(['message' => esc_html__('Not allowed', 'eventadmin-volunteer-management')]);
     }
 

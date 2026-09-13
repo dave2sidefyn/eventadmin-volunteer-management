@@ -113,85 +113,6 @@ function eventadmin_render_volunteer_profile_section(WP_User $user): void
 add_action('edit_user_profile', 'eventadmin_render_volunteer_profile_section');
 
 /**
- * Renders an editable "Departments" checklist on user-edit.php when an admin is viewing
- * another EventAdmin volunteer's profile. Sets the same eventadmin_department link the
- * volunteer can also set themselves via the front-end [eventadmin_profile] form (see
- * includes/profile.php) — used to target department-specific announcements
- * (includes/admin/bulk-email.php), independent of any shift the volunteer has actually
- * worked. Deliberately not shown on `show_user_profile` (a volunteer's own profile page)
- * — same admin-only-here reasoning as eventadmin_render_volunteer_profile_section() above.
- *
- * @param WP_User $user
- */
-function eventadmin_render_volunteer_departments_section(WP_User $user): void
-{
-    if (!in_array('eventadmin_volunteer', (array) $user->roles, true)) {
-        return;
-    }
-
-    $categories = eventadmin_get_hierarchical_shift_categories();
-    if (empty($categories)) {
-        return;
-    }
-
-    $linked = eventadmin_get_volunteer_department_ids($user->ID);
-
-    echo '<h2>' . esc_html__('Departments', 'eventadmin-volunteer-management') . '</h2>';
-    wp_nonce_field('eventadmin_save_volunteer_departments', 'eventadmin_volunteer_departments_nonce');
-    echo '<table class="form-table"><tr><th>' . esc_html__('Linked departments', 'eventadmin-volunteer-management') . '</th><td>';
-    echo '<p class="description" style="margin-top:0;">' . esc_html__('Used to target this volunteer with department-specific announcements (Tools → Send Announcement), independent of any shift they have actually signed up for. The volunteer can also set this themselves from their own profile page. Checking (or unchecking) a department also checks/unchecks every department nested under it.', 'eventadmin-volunteer-management') . '</p>';
-    foreach ($categories as $cat) {
-        $margin_left = $cat->depth > 0 ? $cat->depth * 20 : 0;
-        $hidden_suffix = eventadmin_is_shift_category_hidden($cat->term_id)
-            ? ' <em>' . esc_html__('(hidden from volunteers)', 'eventadmin-volunteer-management') . '</em>'
-            : '';
-        echo '<label style="display:block;margin:4px 0 4px ' . esc_attr($margin_left) . 'px;">';
-        echo '<input type="checkbox" class="eventadmin-department-checkbox" data-depth="' . esc_attr($cat->depth) . '" name="eventadmin_department[]" value="' . esc_attr($cat->term_id) . '"' . checked(in_array($cat->term_id, $linked, true), true, false) . '> ';
-        echo esc_html($cat->name) . $hidden_suffix;
-        echo '</label>';
-    }
-    echo '</td></tr></table>';
-
-    wp_enqueue_script(
-        'eventadmin-department-checkboxes',
-        plugin_dir_url(__FILE__) . '../../assets/js/department-checkboxes.js',
-        [],
-        '1.0',
-        true
-    );
-}
-
-add_action('edit_user_profile', 'eventadmin_render_volunteer_departments_section');
-
-/**
- * Saves the "Departments" checklist from user-edit.php. edit_user_profile_update only
- * fires when an admin is editing someone ELSE's profile (never on personal_options_update,
- * a volunteer's own profile save) — matching this field's admin-side placement above.
- *
- * @param int $user_id
- */
-function eventadmin_save_volunteer_departments(int $user_id): void
-{
-    if (
-        !isset($_POST['eventadmin_volunteer_departments_nonce']) ||
-        !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['eventadmin_volunteer_departments_nonce'])), 'eventadmin_save_volunteer_departments')
-    ) {
-        return;
-    }
-
-    if (!current_user_can('edit_user', $user_id)) {
-        return;
-    }
-
-    $posted = (isset($_POST['eventadmin_department']) && is_array($_POST['eventadmin_department']))
-        ? wp_unslash($_POST['eventadmin_department'])
-        : [];
-    eventadmin_save_volunteer_department_ids($user_id, $posted);
-}
-
-add_action('edit_user_profile_update', 'eventadmin_save_volunteer_departments');
-
-/**
  * Renders the actual "Upcoming shifts / Past shifts / Notification history" cards —
  * shared by the user-edit.php section above and the Timeline view's "View profile"
  * modal (fetched there via AJAX, see eventadmin_ajax_get_volunteer_profile()).
@@ -302,6 +223,11 @@ function eventadmin_ajax_get_volunteer_profile(): void
 
     if (!$user || !current_user_can('edit_user', $user_id)) {
         wp_send_json_error(['message' => esc_html__('Not allowed', 'eventadmin-volunteer-management')]);
+    }
+
+    // For the Getting Started checklist (includes/admin/getting-started-checklist.php).
+    if (!get_option('eventadmin_viewed_volunteer_profile')) {
+        update_option('eventadmin_viewed_volunteer_profile', 1);
     }
 
     ob_start();

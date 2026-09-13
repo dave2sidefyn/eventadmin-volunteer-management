@@ -607,6 +607,7 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
     }
 
     if ($view === 'dashboard') {
+        eventadmin_render_getting_started_checklist();
         eventadmin_render_dashboard_stats_tab($total_users);
         echo '</div>';
         return;

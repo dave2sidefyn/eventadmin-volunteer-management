@@ -68,6 +68,28 @@ function eventadmin_get_current_settings_tab(): ?array
 }
 
 /**
+ * Records that a settings tab has been saved at least once, for the Getting Started
+ * checklist (includes/admin/getting-started-checklist.php) — options.php redirects back
+ * here with settings-updated=true on a successful save, which is the only reliable signal
+ * that the admin actually looked at (and confirmed) this tab rather than just its defaults.
+ *
+ * @return void
+ */
+function eventadmin_mark_settings_tab_reviewed(): void
+{
+    if (!isset($_GET['settings-updated']) || $_GET['settings-updated'] !== 'true') {
+        return;
+    }
+
+    $tab = isset($_GET['tab']) ? sanitize_key(wp_unslash($_GET['tab'])) : 'general';
+    if (!array_key_exists($tab, eventadmin_get_settings_tabs())) {
+        return;
+    }
+
+    update_option('eventadmin_settings_reviewed_' . $tab, 1);
+}
+
+/**
  * Renders the Communication tab's settings sections grouped into sub-tabs (General / Shift
  * Confirmations / Reminders), navigated via a WP-native "subsubsub" link row — the same
  * style as the "All | Mine | Trash" links above a post list — instead of one long page.
@@ -163,6 +185,8 @@ function eventadmin_plugin_settings_page(): void
     if (!$current) {
         return;
     }
+
+    eventadmin_mark_settings_tab_reviewed();
 
     $tabs = eventadmin_get_settings_tabs();
     ?>

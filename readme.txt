@@ -4,7 +4,7 @@ Tags: volunteer, volunteers, shift scheduling, event management, roster, sign up
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.1.1
+Stable tag: 3.2.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -114,6 +114,16 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 5. Send Announcement — target a recipient group and see a live preview of the email
 
 == Changelog ==
+
+= Version 3.2.0 =
+* New: Two new roles — "Shift Manager" (shift/department CRUD, manage volunteers) and "Volunteer Manager" (manage volunteers, send announcements) — for delegating day-to-day work without handing out full Administrator access. See the in-plugin Documentation page for exactly what each role can do
+* New: Volunteers can be linked to one or more departments — from the Volunteers page ("Edit" next to their department badges) or by the volunteer themselves on their own profile page — independent of any shift they've actually signed up for
+* New: Send Announcement gained a "Volunteers linked to a department" recipient option, so you can notify just that department (e.g. "new shifts are up") without emailing everyone
+* New: Tools → EventAdmin Data → "Import shifts" — bulk-create shifts from a CSV file (columns for title, details, start/end date and time, department, min/max volunteers, and organizer user/name/email)
+* New: A "Getting started" checklist appears on the Overview dashboard for sites still finishing setup — walks through the essentials and points out less obvious features (drag-to-reschedule, email template customization, delegating roles, and more); disappears once everything's done, or can be hidden manually
+* New: A "Settings" link now appears directly on the plugin's row on the Plugins screen
+* Fix: Hiding "All Shifts"/"Add Shift"/"Departments" from the admin menu (Settings → General) now uses CSS instead of removing the items from WordPress's own menu structure — removing them could incorrectly deny the new Shift Manager role access to "Add Shift"
+* Fix: Editing a volunteer's department links no longer requires the broad `edit_users` capability — the control moved from the native user-edit screen onto the Volunteers list itself, so the Volunteer Manager role can use it
 
 = Version 3.1.1 =
 * Fix: CSV export (per shift and for all shifts) now includes a UTF-8 byte-order mark, so Excel correctly displays accented and non-Latin characters (e.g. ø, å, é) instead of garbled text
@@ -346,6 +356,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Shift management, volunteer registration, dashboard, export, rules
 
 == Upgrade Notice ==
+
+= 3.2.0 =
+Adds two new roles (Shift Manager, Volunteer Manager) for delegating work, volunteer-department linking with targeted announcements, CSV shift import, and a "Getting started" checklist. No breaking changes.
 
 = 3.1.0 =
 Adds department descriptions in emails (the {department_desc} placeholder) and a CSV "Import volunteers" tool under Tools → EventAdmin Data. No breaking changes.

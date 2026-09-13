@@ -161,6 +161,117 @@ function eventadmin_register_custom_role(): void
 add_action('init', 'eventadmin_register_custom_role');
 
 /**
+ * Registers the "Shift Manager" and "Volunteer Manager" roles, and grants their custom
+ * capabilities to Administrator too — WordPress does not automatically add a newly
+ * registered capability to Administrator, it has to be granted explicitly like any
+ * other role. Follows the same self-healing pattern as eventadmin_register_custom_role()
+ * above (add_role(), then sync name/capabilities on every load if it already exists)
+ * rather than a one-off activation hook, so an update that adds a capability reaches
+ * sites that installed an earlier version without requiring reactivation.
+ *
+ * @return void
+ */
+function eventadmin_register_management_roles(): void
+{
+    // Primitive capabilities WordPress derives for the eventadmin_shift post type now that
+    // it has its own capability_type (see eventadmin_register_post_types() in
+    // post-types.php) — map_meta_cap resolves checks like current_user_can('edit_post', $id)
+    // against these, but a role still needs each primitive granted directly.
+    $shift_caps = [
+        'edit_eventadmin_shifts'             => true,
+        'edit_others_eventadmin_shifts'      => true,
+        'edit_private_eventadmin_shifts'     => true,
+        'edit_published_eventadmin_shifts'   => true,
+        'publish_eventadmin_shifts'          => true,
+        'read_private_eventadmin_shifts'     => true,
+        'delete_eventadmin_shifts'           => true,
+        'delete_others_eventadmin_shifts'    => true,
+        'delete_private_eventadmin_shifts'   => true,
+        'delete_published_eventadmin_shifts' => true,
+    ];
+
+    $management_caps = array_merge($shift_caps, [
+        'eventadmin_manage_shifts'      => true,
+        'eventadmin_manage_volunteers'  => true,
+        'eventadmin_manage_departments' => true,
+    ]);
+
+    $roles = [
+        'eventadmin_shift_manager' => [
+            'display_name' => esc_html__('Shift Manager', 'eventadmin-volunteer-management'),
+            'caps' => array_merge($management_caps, ['read' => true]),
+        ],
+        'eventadmin_volunteer_manager' => [
+            'display_name' => esc_html__('Volunteer Manager', 'eventadmin-volunteer-management'),
+            'caps' => [
+                'read'                         => true,
+                'eventadmin_manage_volunteers' => true,
+            ],
+        ],
+        'administrator' => [
+            'display_name' => null, // Never renamed.
+            'caps'         => $management_caps,
+        ],
+    ];
+
+    // Reads and writes the raw wp_user_roles option directly, once, rather than going
+    // through add_role()/WP_Role::add_cap()/remove_cap() for the "role already exists,
+    // keep it in sync" path — those were observed, in testing, to sometimes update the
+    // live WP_Roles/WP_Role object cache (so current_user_can() looks right for the rest
+    // of that request) without the underlying update_option() call actually landing,
+    // leaving the persisted option stale. A single direct read-modify-write avoids
+    // relying on that object-caching layer for correctness. add_role() is still used
+    // below for a genuinely new role, since that also needs to populate the in-memory
+    // WP_Roles::$role_objects/$role_names caches other code reads this same request.
+    $stored  = get_option(wp_roles()->role_key, []);
+    $changed = false;
+
+    foreach ($roles as $slug => $role_def) {
+        if (!isset($stored[$slug])) {
+            if ($slug === 'administrator') {
+                continue; // Never happens, but nothing to "create" for a core role.
+            }
+            add_role($slug, $role_def['display_name'], $role_def['caps']);
+            $stored  = get_option(wp_roles()->role_key, []);
+            $changed = true;
+            continue;
+        }
+
+        if ($role_def['display_name'] !== null && $stored[$slug]['name'] !== $role_def['display_name']) {
+            $stored[$slug]['name'] = $role_def['display_name'];
+            $changed                = true;
+        }
+
+        foreach (array_keys($role_def['caps']) as $cap) {
+            if (empty($stored[$slug]['capabilities'][$cap])) {
+                $stored[$slug]['capabilities'][$cap] = true;
+                $changed                              = true;
+            }
+        }
+
+        // Cleans up manage_categories, granted to eventadmin_shift_manager by an earlier
+        // version of this function before eventadmin_shift_category got its own
+        // capabilities — that generic capability is shared with the site's own blog post
+        // categories, so leaving it granted would be scope creep.
+        if ($slug === 'eventadmin_shift_manager' && isset($stored[$slug]['capabilities']['manage_categories'])) {
+            unset($stored[$slug]['capabilities']['manage_categories']);
+            $changed = true;
+        }
+    }
+
+    if ($changed) {
+        update_option(wp_roles()->role_key, $stored);
+        // Rebuild the live WP_Roles cache from what was just persisted, so
+        // current_user_can() reflects the change for the rest of this request too,
+        // instead of only from the next request onward.
+        wp_roles()->roles = $stored;
+        wp_roles()->init_roles();
+    }
+}
+
+add_action('init', 'eventadmin_register_management_roles');
+
+/**
  * Checks if a user can take a shift
  * @param int $user_id The user ID
  * @param int $shift_id The shift ID
@@ -258,6 +369,12 @@ function eventadmin_magic_login_check(): void
             wp_set_auth_cookie($user_id, true);
             delete_user_meta($user_id, 'magic_login_token');
             delete_user_meta($user_id, 'magic_login_expire');
+
+            // For the Getting Started checklist (includes/admin/getting-started-checklist.php)
+            // — confirms the magic-login flow actually works end to end, whoever used it.
+            if (!get_option('eventadmin_magic_login_used')) {
+                update_option('eventadmin_magic_login_used', 1);
+            }
             $redirect_to = isset($_GET['redirect_to']) ? esc_url_raw(wp_unslash($_GET['redirect_to'])) : site_url('/');
             if (!str_starts_with($redirect_to, home_url())) {
                 $redirect_to = home_url('/');

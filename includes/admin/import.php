@@ -244,6 +244,12 @@ function eventadmin_import_admin_init(): void
         }
 
         eventadmin_import_shift_categories();
+        // For the Getting Started checklist (includes/admin/getting-started-checklist.php) —
+        // only the three real-data import actions count, not the demo-data yes/no notice
+        // further below, which imports nothing of the admin's own.
+        if (!get_option('eventadmin_used_import_tool')) {
+            update_option('eventadmin_used_import_tool', 1);
+        }
 
         wp_safe_redirect(admin_url('tools.php?page=eventadmin-import&import=success'));
         exit;
@@ -259,6 +265,9 @@ function eventadmin_import_admin_init(): void
 
         $result = eventadmin_import_volunteers_from_upload();
         set_transient('eventadmin_volunteer_import_result_' . get_current_user_id(), $result, MINUTE_IN_SECONDS);
+        if (!get_option('eventadmin_used_import_tool')) {
+            update_option('eventadmin_used_import_tool', 1);
+        }
 
         wp_safe_redirect(admin_url('tools.php?page=eventadmin-import&volimport=done'));
         exit;
@@ -274,6 +283,9 @@ function eventadmin_import_admin_init(): void
 
         $result = eventadmin_import_shifts_from_upload();
         set_transient('eventadmin_shift_import_result_' . get_current_user_id(), $result, MINUTE_IN_SECONDS);
+        if (!get_option('eventadmin_used_import_tool')) {
+            update_option('eventadmin_used_import_tool', 1);
+        }
 
         wp_safe_redirect(admin_url('tools.php?page=eventadmin-import&shiftimport=done'));
         exit;
@@ -941,10 +953,17 @@ function eventadmin_admin_notices(): void
     $url_yes = wp_nonce_url(add_query_arg('eventadmin_import_demo', 'yes', admin_url()), 'eventadmin_import_demo', 'eventadmin_import_demo_nonce');
     $url_no = wp_nonce_url(add_query_arg('eventadmin_import_demo', 'no', admin_url()), 'eventadmin_import_demo', 'eventadmin_import_demo_nonce');
 
+    $documentation_url = admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-documentation');
+
     echo '<div class="notice notice-info is-dismissible">';
     echo '<p>' . esc_html__('Do you want to import the sample data for EventAdmin?', 'eventadmin-volunteer-management') . '</p>';
     echo '<p><a href="' . esc_url($url_yes) . '" class="button-primary">' . esc_html__('Yes, please import', 'eventadmin-volunteer-management') . '</a> ';
     echo '<a href="' . esc_url($url_no) . '" class="button">' . esc_html__('No, thanks', 'eventadmin-volunteer-management') . '</a></p>';
+    echo '<p>' . wp_kses(sprintf(
+        /* translators: %s: link to the Documentation page */
+        __('New here? Check the %s for setup steps and an overview of user roles.', 'eventadmin-volunteer-management'),
+        '<a href="' . esc_url($documentation_url) . '">' . esc_html__('Documentation page', 'eventadmin-volunteer-management') . '</a>'
+    ), ['a' => ['href' => []]]) . '</p>';
     echo '</div>';
 }
 

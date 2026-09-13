@@ -17,7 +17,7 @@ function eventadmin_volunteer_list_admin_menu(): void
         'edit.php?post_type=eventadmin_shift',
         esc_html__('Volunteers', 'eventadmin-volunteer-management'),
         esc_html__('Volunteers', 'eventadmin-volunteer-management'),
-        'edit_posts',
+        'eventadmin_manage_volunteers',
         'eventadmin-volunteers',
         'eventadmin_volunteer_list_page'
     );
@@ -270,6 +270,44 @@ function eventadmin_volunteer_list_page(): void
     eventadmin_render_volunteer_profile_modal_markup();
     eventadmin_enqueue_volunteer_profile_modal_script();
 
+    // "Edit departments" modal — AJAX-filled per volunteer, same shared-shell pattern as the
+    // "View profile" modal above (see eventadmin_ajax_get_volunteer_departments() /
+    // eventadmin_ajax_save_volunteer_departments() below).
+    eventadmin_render_modal_open('eventadmin-edit-departments-modal');
+    eventadmin_render_modal_close_button('eventadmin-edit-departments-close');
+    echo '<h2 id="eventadmin-edit-departments-heading" style="margin-top:0;"></h2>';
+    echo '<form id="eventadmin-edit-departments-form">';
+    wp_nonce_field('eventadmin_edit_volunteer_departments', 'eventadmin_edit_departments_nonce');
+    echo '<input type="hidden" name="user_id" id="eventadmin-edit-departments-user-id" value="">';
+    echo '<div id="eventadmin-edit-departments-body"></div>';
+    echo '<p><button type="submit" class="button button-primary">' . esc_html__('Save', 'eventadmin-volunteer-management') . '</button> <span id="eventadmin-edit-departments-result" style="margin-left:8px;"></span></p>';
+    echo '</form>';
+    eventadmin_render_modal_close();
+
+    wp_enqueue_script(
+        'eventadmin-department-checkboxes',
+        plugin_dir_url(__FILE__) . '../../assets/js/department-checkboxes.js',
+        [],
+        '1.0',
+        true
+    );
+    wp_enqueue_script(
+        'eventadmin-edit-departments-modal',
+        plugin_dir_url(__FILE__) . '../../assets/js/edit-departments-modal.js',
+        [],
+        '1.0',
+        true
+    );
+    wp_localize_script('eventadmin-edit-departments-modal', 'EVENTADMIN_EDIT_DEPARTMENTS', [
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce('eventadmin_edit_volunteer_departments'),
+        'i18n'     => [
+            'loading' => esc_html__('Loading…', 'eventadmin-volunteer-management'),
+            'error'   => esc_html__('An error occurred. Please try again.', 'eventadmin-volunteer-management'),
+            'saved'   => esc_html__('Saved. Reloading…', 'eventadmin-volunteer-management'),
+        ],
+    ]);
+
     // Volunteer table
     $sortable_cols = [
         'name'          => esc_html__('Name', 'eventadmin-volunteer-management'),
@@ -393,16 +431,17 @@ function eventadmin_volunteer_list_page(): void
         echo '<td>' . esc_html($shift_count) . '</td>';
         echo '<td>' . esc_html($registered_label) . '</td>';
         echo '<td>' . esc_html($last_shift_label) . '</td>';
+        echo '<td>';
         if (empty($department_terms)) {
-            echo '<td><span style="color:#999;">—</span></td>';
+            echo '<span style="color:#999;">—</span> ';
         } else {
-            echo '<td>';
             foreach ($department_terms as $term) {
                 $color = get_term_meta($term->term_id, 'term_color', true) ?: '#777';
-                echo '<span style="background:' . esc_attr($color) . ';color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;display:inline-block;margin:1px 2px 1px 0;">' . esc_html($term->name) . '</span>';
+                echo '<span style="background:' . esc_attr($color) . ';color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;display:inline-block;margin:1px 2px 1px 0;">' . esc_html($term->name) . '</span> ';
             }
-            echo '</td>';
         }
+        echo '<button type="button" class="button-link eventadmin-edit-departments" data-user-id="' . esc_attr($volunteer->ID) . '" data-name="' . esc_attr($profile_trigger_name) . '" style="font-size:11px;">' . esc_html__('Edit', 'eventadmin-volunteer-management') . '</button>';
+        echo '</td>';
         echo '<td>' . ($is_offline
             ? '—'
             : '<a href="' . esc_url(admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-bulk-email&recipient_user_id=' . $volunteer->ID)) . '" class="button button-small">' . esc_html__('Email', 'eventadmin-volunteer-management') . '</a>') . '</td>';
@@ -455,7 +494,7 @@ function eventadmin_grant_volunteer_role_handler(): void
         wp_send_json_error(['message' => esc_html__('Security check failed.', 'eventadmin-volunteer-management')]);
     }
 
-    if (!current_user_can('edit_posts')) {
+    if (!current_user_can('eventadmin_manage_volunteers')) {
         wp_send_json_error(['message' => esc_html__('Insufficient permissions.', 'eventadmin-volunteer-management')]);
     }
 
@@ -485,7 +524,7 @@ function eventadmin_remove_volunteer_role_handler(): void
         wp_send_json_error(['message' => esc_html__('Security check failed.', 'eventadmin-volunteer-management')]);
     }
 
-    if (!current_user_can('edit_posts')) {
+    if (!current_user_can('eventadmin_manage_volunteers')) {
         wp_send_json_error(['message' => esc_html__('Insufficient permissions.', 'eventadmin-volunteer-management')]);
     }
 
@@ -514,7 +553,7 @@ function eventadmin_create_volunteer_handler(): void
         wp_send_json_error(['message' => esc_html__('Security check failed.', 'eventadmin-volunteer-management')]);
     }
 
-    if (!current_user_can('edit_posts')) {
+    if (!current_user_can('eventadmin_manage_volunteers')) {
         wp_send_json_error(['message' => esc_html__('Insufficient permissions.', 'eventadmin-volunteer-management')]);
     }
 
@@ -582,7 +621,7 @@ function eventadmin_clear_cleanup_log_handler(): void
         wp_send_json_error(['message' => esc_html__('Security check failed.', 'eventadmin-volunteer-management')]);
     }
 
-    if (!current_user_can('edit_posts')) {
+    if (!current_user_can('eventadmin_manage_volunteers')) {
         wp_send_json_error(['message' => esc_html__('Insufficient permissions.', 'eventadmin-volunteer-management')]);
     }
 
@@ -591,3 +630,113 @@ function eventadmin_clear_cleanup_log_handler(): void
 }
 
 add_action('wp_ajax_eventadmin_clear_cleanup_log', 'eventadmin_clear_cleanup_log_handler');
+
+/**
+ * Renders the department checklist body (hint + hierarchical checkboxes) for the
+ * "Edit departments" modal — moved here from a section on user-edit.php, since that
+ * native screen requires the broad edit_users capability just to open, which the
+ * eventadmin_volunteer_manager role should not need for something this narrow.
+ * Cascading behaviour (checking a parent also checks everything nested under it) comes
+ * from assets/js/department-checkboxes.js via the shared .eventadmin-department-checkbox
+ * class and data-depth attribute.
+ *
+ * @param int[] $linked Currently linked department term IDs.
+ * @return void
+ */
+function eventadmin_render_department_checklist(array $linked): void
+{
+    $categories = eventadmin_get_hierarchical_shift_categories();
+    if (empty($categories)) {
+        echo '<p>' . esc_html__('No departments exist yet.', 'eventadmin-volunteer-management') . '</p>';
+        return;
+    }
+
+    echo '<p class="description" style="margin-top:0;">' . esc_html__('Checking (or unchecking) a department also checks/unchecks every department nested under it.', 'eventadmin-volunteer-management') . '</p>';
+    echo '<div class="eventadmin-department-checklist">';
+    foreach ($categories as $cat) {
+        $margin_left = $cat->depth > 0 ? $cat->depth * 20 : 0;
+        $hidden_suffix = eventadmin_is_shift_category_hidden($cat->term_id)
+            ? ' <em>' . esc_html__('(hidden from volunteers)', 'eventadmin-volunteer-management') . '</em>'
+            : '';
+        echo '<label style="display:block;margin:4px 0 4px ' . esc_attr($margin_left) . 'px;">';
+        echo '<input type="checkbox" class="eventadmin-department-checkbox" data-depth="' . esc_attr($cat->depth) . '" name="eventadmin_department[]" value="' . esc_attr($cat->term_id) . '"' . checked(in_array($cat->term_id, $linked, true), true, false) . '> ';
+        echo esc_html($cat->name) . $hidden_suffix;
+        echo '</label>';
+    }
+    echo '</div>';
+}
+
+/**
+ * Resolves and validates the target volunteer for both department-modal AJAX handlers
+ * below — shared so the two stay in sync on what counts as a valid target.
+ *
+ * @param int $user_id
+ * @return WP_User|null
+ */
+function eventadmin_get_department_modal_target(int $user_id): ?WP_User
+{
+    $user = $user_id ? get_userdata($user_id) : false;
+    return ($user && in_array('eventadmin_volunteer', (array) $user->roles, true)) ? $user : null;
+}
+
+/**
+ * AJAX: returns the department checklist for one volunteer, for the "Edit departments"
+ * modal's initial fetch.
+ */
+function eventadmin_ajax_get_volunteer_departments(): void
+{
+    if (
+        !isset($_POST['nonce']) ||
+        !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'eventadmin_edit_volunteer_departments')
+    ) {
+        wp_send_json_error(['message' => esc_html__('Security check failed.', 'eventadmin-volunteer-management')]);
+    }
+
+    if (!current_user_can('eventadmin_manage_volunteers')) {
+        wp_send_json_error(['message' => esc_html__('Not allowed', 'eventadmin-volunteer-management')]);
+    }
+
+    $user = eventadmin_get_department_modal_target(isset($_POST['user_id']) ? absint($_POST['user_id']) : 0);
+    if (!$user) {
+        wp_send_json_error(['message' => esc_html__('Volunteer not found.', 'eventadmin-volunteer-management')]);
+    }
+
+    ob_start();
+    eventadmin_render_department_checklist(eventadmin_get_volunteer_department_ids($user->ID));
+    $html = ob_get_clean();
+
+    wp_send_json_success(['html' => $html]);
+}
+
+add_action('wp_ajax_eventadmin_get_volunteer_departments', 'eventadmin_ajax_get_volunteer_departments');
+
+/**
+ * AJAX: saves the department checklist submitted from the "Edit departments" modal.
+ */
+function eventadmin_ajax_save_volunteer_departments(): void
+{
+    if (
+        !isset($_POST['nonce']) ||
+        !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'eventadmin_edit_volunteer_departments')
+    ) {
+        wp_send_json_error(['message' => esc_html__('Security check failed.', 'eventadmin-volunteer-management')]);
+    }
+
+    if (!current_user_can('eventadmin_manage_volunteers')) {
+        wp_send_json_error(['message' => esc_html__('Not allowed', 'eventadmin-volunteer-management')]);
+    }
+
+    $user = eventadmin_get_department_modal_target(isset($_POST['user_id']) ? absint($_POST['user_id']) : 0);
+    if (!$user) {
+        wp_send_json_error(['message' => esc_html__('Volunteer not found.', 'eventadmin-volunteer-management')]);
+    }
+
+    $posted = (isset($_POST['eventadmin_department']) && is_array($_POST['eventadmin_department']))
+        ? wp_unslash($_POST['eventadmin_department'])
+        : [];
+    eventadmin_save_volunteer_department_ids($user->ID, $posted);
+
+    wp_send_json_success();
+}
+
+add_action('wp_ajax_eventadmin_save_volunteer_departments', 'eventadmin_ajax_save_volunteer_departments');

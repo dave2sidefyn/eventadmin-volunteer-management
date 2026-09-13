@@ -57,7 +57,13 @@ No custom database tables – everything uses WP post meta, user meta, and optio
 
 ### User Roles
 - `eventadmin_volunteer` – custom role; read-only WP access, admin bar hidden
-- `administrator` – full plugin access
+- `eventadmin_shift_manager` – custom role; `eventadmin_manage_shifts` + `eventadmin_manage_volunteers` + `eventadmin_manage_departments` (shift CRUD, Volunteers screen, departments) — no Import or Settings access
+- `eventadmin_volunteer_manager` – custom role; `eventadmin_manage_volunteers` only (Volunteers screen, Send Announcement) — no shift CRUD, no Import or Settings access
+- `administrator` – full plugin access; also explicitly granted both custom capabilities above (WordPress does not auto-grant new capabilities to Administrator)
+
+`eventadmin_shift` uses its own capability type (`capability_type => 'eventadmin_shift'`, `map_meta_cap => true`) rather than the default `post` one, so shift permissions are independent of blog-post editing rights. `eventadmin_shift_category` likewise declares its own `capabilities` (`eventadmin_manage_departments` for manage/edit/delete terms, `eventadmin_manage_shifts` for assigning them) instead of falling back to the generic `manage_categories`/`edit_terms`/etc., which are shared with the site's own blog post categories. Both custom roles and their capabilities are registered/synced in `eventadmin_register_management_roles()` in `includes/helpers.php`.
+
+The Settings → General "hide All Shifts/Add Shift/Departments menu" options (`admin/dashboard-menu.php`) hide those items with CSS rather than removing them from `$submenu`. Removing an item from `$submenu` — whether via `array_filter()` or WordPress's own `remove_submenu_page()`, which does the same `unset()` — breaks `get_admin_page_parent()`'s only way of resolving `post-new.php?post_type=eventadmin_shift` back to its parent menu, which for a role without the generic `edit_posts` capability (e.g. `eventadmin_shift_manager`) falls through to an unscoped WordPress core nopriv check keyed on the bare `post-new.php` pagenow and incorrectly denies access. Keep hiding these CSS-only.
 
 ### Frontend Shortcodes
 - `[eventadmin_cockpit]` – main volunteer-facing page

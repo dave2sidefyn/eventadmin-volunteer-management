@@ -20,7 +20,7 @@ function eventadmin_bulk_email_admin_menu(): void
         'edit.php?post_type=eventadmin_shift',
         esc_html__('Send Announcement', 'eventadmin-volunteer-management'),
         esc_html__('Send Announcement', 'eventadmin-volunteer-management'),
-        'manage_options',
+        'eventadmin_manage_volunteers',
         'eventadmin-bulk-email',
         'eventadmin_bulk_email_page'
     );
@@ -618,7 +618,7 @@ function eventadmin_bulk_email_count(): void
         wp_send_json_error(['message' => esc_html__('Security check failed.', 'eventadmin-volunteer-management')]);
     }
 
-    if (!current_user_can('manage_options')) {
+    if (!current_user_can('eventadmin_manage_volunteers')) {
         wp_send_json_error(['message' => esc_html__('Insufficient permissions.', 'eventadmin-volunteer-management')]);
     }
 
@@ -654,7 +654,7 @@ function eventadmin_bulk_email_init(): void
         wp_send_json_error(['message' => esc_html__('Security check failed.', 'eventadmin-volunteer-management')]);
     }
 
-    if (!current_user_can('manage_options')) {
+    if (!current_user_can('eventadmin_manage_volunteers')) {
         wp_send_json_error(['message' => esc_html__('Insufficient permissions.', 'eventadmin-volunteer-management')]);
     }
 
@@ -758,7 +758,7 @@ function eventadmin_bulk_email_batch(): void
         wp_send_json_error(['message' => esc_html__('Security check failed.', 'eventadmin-volunteer-management')]);
     }
 
-    if (!current_user_can('manage_options')) {
+    if (!current_user_can('eventadmin_manage_volunteers')) {
         wp_send_json_error(['message' => esc_html__('Insufficient permissions.', 'eventadmin-volunteer-management')]);
     }
 

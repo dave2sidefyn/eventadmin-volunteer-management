@@ -33,6 +33,12 @@ function eventadmin_register_post_types(): void
         'exclude_from_search' => true,  // Not included in site search
         'show_ui' => true,              // Still visible in backend
         'show_in_menu' => true,
+        // Its own capability type (rather than the default 'post' one) so shift permissions
+        // can be granted to the eventadmin_shift_manager role independent of blog post
+        // editing rights — see eventadmin_register_management_roles() in helpers.php, which
+        // grants the resulting edit_eventadmin_shifts/etc. primitives.
+        'capability_type' => 'eventadmin_shift',
+        'map_meta_cap' => true,
         'menu_position' => 20,
         'menu_icon' => 'dashicons-calendar-alt',
         'supports' => ['title', 'editor'],
@@ -64,7 +70,19 @@ function eventadmin_register_post_types(): void
         // (includes/admin/quick-edit.php) instead of this plain-text default one.
         'show_admin_column' => false,
         'rewrite' => false,
-        'show_in_rest' => true
+        'show_in_rest' => true,
+        // Without this, WordPress falls back to the generic manage_categories/edit_terms/
+        // delete_terms/assign_terms capabilities — the SAME ones that gate the site's own
+        // blog post categories, since that taxonomy also never declares its own. Granting
+        // eventadmin_shift_manager department access would otherwise also hand them
+        // unrelated blog-category management. assign_terms reuses eventadmin_manage_shifts
+        // since assigning a department to a shift is just part of editing that shift.
+        'capabilities' => [
+            'manage_terms' => 'eventadmin_manage_departments',
+            'edit_terms'   => 'eventadmin_manage_departments',
+            'delete_terms' => 'eventadmin_manage_departments',
+            'assign_terms' => 'eventadmin_manage_shifts',
+        ],
     ]);
 
 }

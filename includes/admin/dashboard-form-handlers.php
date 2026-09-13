@@ -196,7 +196,7 @@ function eventadmin_admin_dashboard_admin_init(): void
 
     if (isset($_POST['eventadmin_copy_shifts_day']) &&
         check_admin_referer('eventadmin_copy_shifts', 'eventadmin_copy_shifts_nonce')) {
-        if (!current_user_can('edit_posts')) {
+        if (!current_user_can('eventadmin_manage_shifts')) {
             wp_die(esc_html__('Not allowed', 'eventadmin-volunteer-management'));
         }
 
