@@ -455,6 +455,43 @@ function eventadmin_get_hierarchical_shift_categories(): array
 }
 
 /**
+ * Returns the department term IDs a volunteer is linked to — set either by an admin
+ * (includes/admin/user-profile.php) or by the volunteer themselves (includes/profile.php).
+ * Used to target department-specific announcements (includes/admin/bulk-email.php)
+ * independent of whether the volunteer has ever actually worked a shift there.
+ *
+ * @param int $user_id
+ * @return int[]
+ */
+function eventadmin_get_volunteer_department_ids(int $user_id): array
+{
+    return array_values(array_unique(array_map('absint', get_user_meta($user_id, 'eventadmin_department'))));
+}
+
+/**
+ * Replaces a volunteer's department links with the given, already-unslashed term IDs —
+ * validated against the real eventadmin_shift_category list so a stray/removed term ID
+ * can't linger in user meta. Shared by the admin save handler (user-profile.php) and the
+ * volunteer's own front-end profile form (profile.php).
+ *
+ * @param int   $user_id
+ * @param array $term_ids Raw (but already wp_unslash()ed) values, e.g. from $_POST.
+ * @return void
+ */
+function eventadmin_save_volunteer_department_ids(int $user_id, array $term_ids): void
+{
+    delete_user_meta($user_id, 'eventadmin_department');
+
+    $valid_terms = wp_list_pluck(eventadmin_get_hierarchical_shift_categories(), 'term_id');
+    foreach ($term_ids as $term_id) {
+        $term_id = absint($term_id);
+        if (in_array($term_id, $valid_terms, true)) {
+            add_user_meta($user_id, 'eventadmin_department', $term_id);
+        }
+    }
+}
+
+/**
  * Builds indented <option> markup for a hierarchical department dropdown. Shared by every
  * admin department filter/select so children are always shown nested under their parent
  * the same way, instead of each screen re-implementing its own flat option loop.

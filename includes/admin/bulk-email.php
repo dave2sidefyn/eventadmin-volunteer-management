@@ -179,6 +179,17 @@ function eventadmin_bulk_email_page(): void
         echo '</select>';
         echo ' <span id="eventadmin-category-recipient-count" style="color:#666;font-style:italic;"></span>';
         echo '</div>';
+        echo '<br><label><input type="radio" name="bulk_email_recipients" value="department_link"> ';
+        echo esc_html__('Volunteers linked to a department', 'eventadmin-volunteer-management');
+        echo '</label> ';
+        echo '<span class="dashicons dashicons-editor-help" style="cursor:help;color:#666;vertical-align:middle;" title="' . esc_attr__('Everyone linked to the department (admin-assigned or self-subscribed via their profile), regardless of whether they have worked a shift there or opted out of general announcements. Includes volunteers linked to any sub-department.', 'eventadmin-volunteer-management') . '"></span>';
+        echo '<div id="eventadmin-department-select-wrap" style="margin-top:8px;display:none;">';
+        echo '<select name="bulk_email_department_id">';
+        echo '<option value="">' . esc_html__('— Select department —', 'eventadmin-volunteer-management') . '</option>';
+        echo eventadmin_category_dropdown_options($all_categories, 0, 'term_id');
+        echo '</select>';
+        echo ' <span id="eventadmin-department-recipient-count" style="color:#666;font-style:italic;"></span>';
+        echo '</div>';
     }
     echo '</div>'; // end Recipients cell
 
@@ -300,6 +311,9 @@ function eventadmin_bulk_email_render_history_tab(array $log): void
             } elseif (str_starts_with($entry_recip, 'category:')) {
                 /* translators: %s is the category name */
                 $recipients_label = sprintf(__('Category: %s', 'eventadmin-volunteer-management'), substr($entry_recip, 9));
+            } elseif (str_starts_with($entry_recip, 'department:')) {
+                /* translators: %s is the department name */
+                $recipients_label = sprintf(__('Department: %s', 'eventadmin-volunteer-management'), substr($entry_recip, 11));
             } elseif (str_starts_with($entry_recip, 'user:')) {
                 $recipients_label = substr($entry_recip, 5);
             } else {
@@ -348,15 +362,36 @@ function eventadmin_bulk_email_render_history_tab(array $log): void
  * Resolves the WP_User objects for a given recipient selection.
  * Shared by the job initializer and the live recipient-count lookup.
  *
- * @param string $recipients  One of 'all', 'subscribed', 'shift', 'category', 'user'.
+ * @param string $recipients  One of 'all', 'subscribed', 'shift', 'category', 'user', 'department_link'.
  * @param int    $shift_id    Shift post ID (for 'shift').
  * @param int    $category_id Term ID (for 'category').
  * @param int    $target_user_id User ID (for 'user').
+ * @param int    $department_id Term ID (for 'department_link').
  * @return WP_User[]
  */
-function eventadmin_bulk_email_get_recipient_users(string $recipients, int $shift_id, int $category_id, int $target_user_id): array
+function eventadmin_bulk_email_get_recipient_users(string $recipients, int $shift_id, int $category_id, int $target_user_id, int $department_id = 0): array
 {
     $offline_exclude = ['key' => 'eventadmin_offline_volunteer', 'compare' => 'NOT EXISTS'];
+
+    if ($recipients === 'department_link') {
+        // Everyone linked to this department (admin-assigned or self-subscribed), regardless
+        // of shift history or the general 'subscribed' announcements opt-in — linking to a
+        // department is its own, separate signal of interest. Picking a parent department
+        // also reaches everyone linked to one of its sub-departments (e.g. selecting "Bar"
+        // includes volunteers linked only to "Bier-Bar"), matching how the 'category' option
+        // above already behaves via tax_query's own default child-inclusion.
+        if (!$department_id) return [];
+        $children       = get_term_children($department_id, 'eventadmin_shift_category');
+        $department_ids = array_merge([$department_id], is_array($children) ? $children : []);
+        return get_users([
+            'role'       => 'eventadmin_volunteer',
+            'meta_query' => [
+                'relation' => 'AND',
+                $offline_exclude,
+                ['key' => 'eventadmin_department', 'value' => $department_ids, 'compare' => 'IN'],
+            ],
+        ]);
+    }
 
     if ($recipients === 'subscribed') {
         // Users who opted in (meta=1) or have no preference set (meta doesn't exist); never offline
@@ -587,16 +622,17 @@ function eventadmin_bulk_email_count(): void
         wp_send_json_error(['message' => esc_html__('Insufficient permissions.', 'eventadmin-volunteer-management')]);
     }
 
-    $raw_recip   = isset($_POST['bulk_email_recipients']) ? sanitize_text_field(wp_unslash($_POST['bulk_email_recipients'])) : '';
-    $recipients  = in_array($raw_recip, ['shift', 'category'], true) ? $raw_recip : '';
-    $shift_id    = isset($_POST['bulk_email_shift_id'])    ? absint($_POST['bulk_email_shift_id'])    : 0;
-    $category_id = isset($_POST['bulk_email_category_id']) ? absint($_POST['bulk_email_category_id']) : 0;
+    $raw_recip     = isset($_POST['bulk_email_recipients']) ? sanitize_text_field(wp_unslash($_POST['bulk_email_recipients'])) : '';
+    $recipients    = in_array($raw_recip, ['shift', 'category', 'department_link'], true) ? $raw_recip : '';
+    $shift_id      = isset($_POST['bulk_email_shift_id'])      ? absint($_POST['bulk_email_shift_id'])      : 0;
+    $category_id   = isset($_POST['bulk_email_category_id'])   ? absint($_POST['bulk_email_category_id'])   : 0;
+    $department_id = isset($_POST['bulk_email_department_id']) ? absint($_POST['bulk_email_department_id']) : 0;
 
     if (!$recipients) {
         wp_send_json_error(['message' => esc_html__('Invalid recipient type.', 'eventadmin-volunteer-management')]);
     }
 
-    $users = eventadmin_bulk_email_get_recipient_users($recipients, $shift_id, $category_id, 0);
+    $users = eventadmin_bulk_email_get_recipient_users($recipients, $shift_id, $category_id, 0, $department_id);
 
     wp_send_json_success([
         'count'   => count($users),
@@ -627,10 +663,11 @@ function eventadmin_bulk_email_init(): void
     $from_name  = isset($_POST['bulk_email_from_name'])  ? sanitize_text_field(wp_unslash($_POST['bulk_email_from_name'])) : get_bloginfo('name');
     $from_email = isset($_POST['bulk_email_from_email']) ? sanitize_email(wp_unslash($_POST['bulk_email_from_email'])) : get_option('admin_email');
     $raw_recip  = isset($_POST['bulk_email_recipients']) ? sanitize_text_field(wp_unslash($_POST['bulk_email_recipients'])) : 'subscribed';
-    $recipients  = in_array($raw_recip, ['all', 'subscribed', 'shift', 'user', 'category', 'no_shift', 'has_shift'], true) ? $raw_recip : 'subscribed';
+    $recipients  = in_array($raw_recip, ['all', 'subscribed', 'shift', 'user', 'category', 'no_shift', 'has_shift', 'department_link'], true) ? $raw_recip : 'subscribed';
     $shift_id    = isset($_POST['bulk_email_shift_id'])    ? absint($_POST['bulk_email_shift_id'])    : 0;
     $category_id = isset($_POST['bulk_email_category_id']) ? absint($_POST['bulk_email_category_id']) : 0;
     $target_user_id = isset($_POST['bulk_email_user_id']) ? absint($_POST['bulk_email_user_id']) : 0;
+    $department_id  = isset($_POST['bulk_email_department_id']) ? absint($_POST['bulk_email_department_id']) : 0;
     $attachment_id  = isset($_POST['bulk_email_attachment_id']) ? absint($_POST['bulk_email_attachment_id']) : 0;
 
     if (!$subject || !$body) {
@@ -643,6 +680,10 @@ function eventadmin_bulk_email_init(): void
 
     if ($recipients === 'category' && !$category_id) {
         wp_send_json_error(['message' => esc_html__('Please select a category.', 'eventadmin-volunteer-management')]);
+    }
+
+    if ($recipients === 'department_link' && !$department_id) {
+        wp_send_json_error(['message' => esc_html__('Please select a department.', 'eventadmin-volunteer-management')]);
     }
 
     if ($recipients === 'user' && !$target_user_id) {
@@ -664,13 +705,16 @@ function eventadmin_bulk_email_init(): void
         $attachment_name = basename($resolved_path);
     }
 
-    $users    = eventadmin_bulk_email_get_recipient_users($recipients, $shift_id, $category_id, $target_user_id);
+    $users    = eventadmin_bulk_email_get_recipient_users($recipients, $shift_id, $category_id, $target_user_id, $department_id);
     $user_ids = wp_list_pluck($users, 'ID');
     if ($recipients === 'shift') {
         $recipients_meta = 'shift:' . get_the_title($shift_id);
     } elseif ($recipients === 'category') {
         $cat_term        = get_term($category_id);
         $recipients_meta = 'category:' . ($cat_term && !is_wp_error($cat_term) ? $cat_term->name : '#' . $category_id);
+    } elseif ($recipients === 'department_link') {
+        $dept_term       = get_term($department_id);
+        $recipients_meta = 'department:' . ($dept_term && !is_wp_error($dept_term) ? $dept_term->name : '#' . $department_id);
     } elseif ($recipients === 'user') {
         $target_user     = get_userdata($target_user_id);
         $target_name     = $target_user ? (trim($target_user->first_name . ' ' . $target_user->last_name) ?: $target_user->user_login) : '#' . $target_user_id;

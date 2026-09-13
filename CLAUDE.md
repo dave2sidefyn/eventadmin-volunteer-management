@@ -26,7 +26,7 @@ This is a traditional WordPress plugin. To develop:
 - **Post type:** `eventadmin_shift` – represents a single shift; not publicly queryable
 - **Taxonomy:** `eventadmin_shift_category` – hierarchical departments with color term meta (`term_color`)
 - **Shift meta keys:** `shift_start`, `shift_end`, `max_volunteers`, `assigned_user_{USER_ID}` (one entry per assigned volunteer)
-- **User meta keys:** `eventadmin_phone`, `magic_login_token`, `magic_login_expire`
+- **User meta keys:** `eventadmin_phone`, `magic_login_token`, `magic_login_expire`, `eventadmin_department` (department term ID, one entry per linked department — admin-assigned via user-edit.php or self-subscribed via `[eventadmin_profile]`; used to target department-specific announcements independent of shift history)
 - **Plugin options:** prefixed `eventadmin_*` (limits, notification templates, sender config)
 
 No custom database tables – everything uses WP post meta, user meta, and options.

@@ -286,12 +286,13 @@ function eventadmin_volunteer_list_page(): void
         echo '<th data-sort="' . esc_attr($col) . '" style="cursor:pointer;user-select:none;" title="' . esc_attr__('Click to sort', 'eventadmin-volunteer-management') . '">';
         echo $label . ' <span class="eventadmin-sort-icon" style="opacity:.4;">↕</span></th>';
     }
+    echo '<th>' . esc_html__('Departments', 'eventadmin-volunteer-management') . '</th>';
     echo '<th>' . esc_html__('Contact', 'eventadmin-volunteer-management') . '</th>';
     echo '<th>' . esc_html__('Actions', 'eventadmin-volunteer-management') . '</th>';
     echo '</tr></thead><tbody>';
 
     if (empty($volunteers)) {
-        echo '<tr><td colspan="9"><em>' . esc_html__('No volunteers found.', 'eventadmin-volunteer-management') . '</em></td></tr>';
+        echo '<tr><td colspan="10"><em>' . esc_html__('No volunteers found.', 'eventadmin-volunteer-management') . '</em></td></tr>';
     }
 
     // Pre-fetch social login user IDs in one query to avoid N+1.
@@ -310,6 +311,10 @@ function eventadmin_volunteer_list_page(): void
         $announcements_raw = get_user_meta($volunteer->ID, 'eventadmin_announcements', true);
         $subscribed        = ($announcements_raw === '0') ? false : true;
         $is_offline        = (bool) get_user_meta($volunteer->ID, 'eventadmin_offline_volunteer', true) || empty($volunteer->user_email);
+        $department_terms  = array_filter(array_map(
+            fn($term_id) => get_term($term_id, 'eventadmin_shift_category'),
+            eventadmin_get_volunteer_department_ids($volunteer->ID)
+        ), fn($term) => $term instanceof WP_Term);
 
         // Fetch every shift assigned to this volunteer (past and future), newest first, to
         // derive both the upcoming-shift count and the most recent past shift in one query.
@@ -388,6 +393,16 @@ function eventadmin_volunteer_list_page(): void
         echo '<td>' . esc_html($shift_count) . '</td>';
         echo '<td>' . esc_html($registered_label) . '</td>';
         echo '<td>' . esc_html($last_shift_label) . '</td>';
+        if (empty($department_terms)) {
+            echo '<td><span style="color:#999;">—</span></td>';
+        } else {
+            echo '<td>';
+            foreach ($department_terms as $term) {
+                $color = get_term_meta($term->term_id, 'term_color', true) ?: '#777';
+                echo '<span style="background:' . esc_attr($color) . ';color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;display:inline-block;margin:1px 2px 1px 0;">' . esc_html($term->name) . '</span>';
+            }
+            echo '</td>';
+        }
         echo '<td>' . ($is_offline
             ? '—'
             : '<a href="' . esc_url(admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-bulk-email&recipient_user_id=' . $volunteer->ID)) . '" class="button button-small">' . esc_html__('Email', 'eventadmin-volunteer-management') . '</a>') . '</td>';

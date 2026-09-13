@@ -18,9 +18,10 @@ jQuery(function ($) {
         $('.bulk-email-count[data-for="' + val + '"]').show();
         $('#eventadmin-shift-select-wrap').toggle(val === 'shift');
         $('#eventadmin-category-select-wrap').toggle(val === 'category');
+        $('#eventadmin-department-select-wrap').toggle(val === 'department_link');
     });
 
-    // Live recipient count when a specific shift or category is picked
+    // Live recipient count when a specific shift, category or department is picked
     function fetchRecipientCount(recipients, id, $target) {
         if (!id) {
             $target.text('').removeAttr('title').css('cursor', '');
@@ -28,11 +29,12 @@ jQuery(function ($) {
         }
         $target.text(cfg.i18n.counting);
         $.post(cfg.ajax_url, {
-            action:                'eventadmin_bulk_email_count',
-            _ajax_nonce:           cfg.nonce_batch,
-            bulk_email_recipients: recipients,
-            bulk_email_shift_id:   recipients === 'shift'    ? id : '',
-            bulk_email_category_id: recipients === 'category' ? id : '',
+            action:                  'eventadmin_bulk_email_count',
+            _ajax_nonce:             cfg.nonce_batch,
+            bulk_email_recipients:   recipients,
+            bulk_email_shift_id:     recipients === 'shift'          ? id : '',
+            bulk_email_category_id:  recipients === 'category'       ? id : '',
+            bulk_email_department_id: recipients === 'department_link' ? id : '',
         })
         .done(function (res) {
             if (res.success) {
@@ -55,6 +57,9 @@ jQuery(function ($) {
     });
     $('[name="bulk_email_category_id"]').on('change', function () {
         fetchRecipientCount('category', $(this).val(), $('#eventadmin-category-recipient-count'));
+    });
+    $('[name="bulk_email_department_id"]').on('change', function () {
+        fetchRecipientCount('department_link', $(this).val(), $('#eventadmin-department-recipient-count'));
     });
 
     // Attachment: WP media picker restricted to PDFs
@@ -113,6 +118,7 @@ jQuery(function ($) {
             bulk_email_recipients:       $form.find('[name="bulk_email_recipients"]:checked').val(),
             bulk_email_shift_id:         $form.find('[name="bulk_email_shift_id"]').val(),
             bulk_email_category_id:      $form.find('[name="bulk_email_category_id"]').val(),
+            bulk_email_department_id:    $form.find('[name="bulk_email_department_id"]').val(),
             bulk_email_user_id:          $form.find('[name="bulk_email_user_id"]').val(),
             bulk_email_attachment_id:    $form.find('[name="bulk_email_attachment_id"]').val(),
         })

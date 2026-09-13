@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-09-13T06:48:39+00:00\n"
+"POT-Creation-Date: 2026-09-13T09:22:00+00:00\n"
 "PO-Revision-Date: 2026-09-10 15:00:00+0000\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
@@ -104,8 +104,8 @@ msgstr "({failed} kunne ikke leveres)"
 #: includes/admin/dashboard-tab-timeline.php:304
 #: includes/admin/dashboard-tab-timeline.php:493
 #: includes/admin/dashboard-tab-timeline.php:599
-#: includes/admin/user-profile.php:273 includes/admin/volunteer-list.php:168
-#: includes/admin/volunteer-list.php:419
+#: includes/admin/user-profile.php:352 includes/admin/volunteer-list.php:168
+#: includes/admin/volunteer-list.php:434
 msgid "An error occurred. Please try again."
 msgstr "Det oppstod en feil. Prøv igjen."
 
@@ -133,7 +133,7 @@ msgstr "Velg en PDF som skal legges ved"
 msgid "Use this PDF"
 msgstr "Bruk denne PDF-en"
 
-#: includes/admin/bulk-email.php:103 includes/admin/bulk-email.php:272
+#: includes/admin/bulk-email.php:103 includes/admin/bulk-email.php:283
 msgid "Recipients"
 msgstr "Mottakere"
 
@@ -179,49 +179,69 @@ msgstr "Frivillige i en bestemt avdeling"
 msgid "— Select category —"
 msgstr "— Velg avdeling —"
 
-#: includes/admin/bulk-email.php:187 includes/admin/settings.php:700
+#: includes/admin/bulk-email.php:183
+msgid "Volunteers linked to a department"
+msgstr "Frivillige knyttet til en avdeling"
+
+#: includes/admin/bulk-email.php:185
+msgid ""
+"Everyone linked to the department (admin-assigned or self-subscribed via "
+"their profile), regardless of whether they have worked a shift there or "
+"opted out of general announcements. Includes volunteers linked to any sub-"
+"department."
+msgstr ""
+"Alle som er knyttet til denne avdelingen (tildelt av en administrator eller "
+"selv-abonnert via egen profil) – uansett om de har jobbet en vakt der eller "
+"har meldt seg av generelle kunngjøringer. Inkluderer også frivillige som er "
+"knyttet til en underavdeling."
+
+#: includes/admin/bulk-email.php:188
+msgid "— Select department —"
+msgstr "— Velg avdeling —"
+
+#: includes/admin/bulk-email.php:198 includes/admin/settings.php:700
 msgid "Sender"
 msgstr "Avsender"
 
-#: includes/admin/bulk-email.php:188
+#: includes/admin/bulk-email.php:199
 msgid "From name"
 msgstr "Fra-navn"
 
-#: includes/admin/bulk-email.php:190
+#: includes/admin/bulk-email.php:201
 msgid "From email"
 msgstr "Fra-e-post"
 
-#: includes/admin/bulk-email.php:196 includes/admin/bulk-email.php:271
-#: includes/admin/user-profile.php:180
+#: includes/admin/bulk-email.php:207 includes/admin/bulk-email.php:282
+#: includes/admin/user-profile.php:259
 msgid "Subject"
 msgstr "Emne"
 
-#: includes/admin/bulk-email.php:202
+#: includes/admin/bulk-email.php:213
 msgid "Attachment (optional)"
 msgstr "Vedlegg (valgfritt)"
 
-#: includes/admin/bulk-email.php:204
+#: includes/admin/bulk-email.php:215
 msgid "Select PDF…"
 msgstr "Velg PDF …"
 
-#: includes/admin/bulk-email.php:206
+#: includes/admin/bulk-email.php:217
 #: includes/admin/dashboard-tab-cards.php:131 includes/admin/settings.php:926
 msgid "Remove"
 msgstr "Fjern"
 
-#: includes/admin/bulk-email.php:207
+#: includes/admin/bulk-email.php:218
 msgid "The PDF will be attached to every email in this announcement."
 msgstr "PDF-en legges ved alle e-postene i denne kunngjøringen."
 
-#: includes/admin/bulk-email.php:212 includes/admin/bulk-email.php:277
+#: includes/admin/bulk-email.php:223 includes/admin/bulk-email.php:288
 msgid "Message"
 msgstr "Melding"
 
-#: includes/admin/bulk-email.php:224 includes/admin/bulk-email.php:229
+#: includes/admin/bulk-email.php:235 includes/admin/bulk-email.php:240
 msgid "Preview (example data)"
 msgstr "Forhåndsvisning (eksempeldata)"
 
-#: includes/admin/bulk-email.php:225
+#: includes/admin/bulk-email.php:236
 msgid ""
 "Use {first_name} and {last_name} as placeholders in the message body. Use "
 "{shifts} to list each recipient's own upcoming shifts."
@@ -229,82 +249,88 @@ msgstr ""
 "Bruk {first_name} og {last_name} som plassholdere i meldingsteksten. Bruk "
 "{shifts} for å liste opp mottakerens egne kommende vakter."
 
-#: includes/admin/bulk-email.php:227
+#: includes/admin/bulk-email.php:238
 msgid "From:"
 msgstr "Fra:"
 
-#: includes/admin/bulk-email.php:228 includes/admin/bulk-email.php:335
+#: includes/admin/bulk-email.php:239 includes/admin/bulk-email.php:349
 msgid "Attachment:"
 msgstr "Vedlegg:"
 
-#: includes/admin/bulk-email.php:235
+#: includes/admin/bulk-email.php:246
 msgid "Start sending"
 msgstr "Start utsending"
 
-#: includes/admin/bulk-email.php:240
+#: includes/admin/bulk-email.php:251
 msgid "Sending in progress…"
 msgstr "Sender …"
 
-#: includes/admin/bulk-email.php:262
+#: includes/admin/bulk-email.php:273
 msgid "No announcements sent yet."
 msgstr "Ingen kunngjøringer sendt ennå."
 
-#: includes/admin/bulk-email.php:265
+#: includes/admin/bulk-email.php:276
 msgid "Filter…"
 msgstr "Filtrer …"
 
-#: includes/admin/bulk-email.php:270
+#: includes/admin/bulk-email.php:281
 #: includes/admin/dashboard-overview-page.php:276
-#: includes/admin/user-profile.php:178 includes/admin/volunteer-list.php:114
+#: includes/admin/user-profile.php:257 includes/admin/volunteer-list.php:114
 #: includes/admin/volunteer-list.php:143
 msgid "Date"
 msgstr "Dato"
 
-#: includes/admin/bulk-email.php:273
+#: includes/admin/bulk-email.php:284
 msgid "From"
 msgstr "Fra"
 
-#: includes/admin/bulk-email.php:274
+#: includes/admin/bulk-email.php:285
 msgid "Sent to"
 msgstr "Sendt til"
 
-#: includes/admin/bulk-email.php:275
+#: includes/admin/bulk-email.php:286
 msgid "Failed"
 msgstr "Mislyktes"
 
-#: includes/admin/bulk-email.php:276
+#: includes/admin/bulk-email.php:287
 msgid "Sent by"
 msgstr "Sendt av"
 
-#: includes/admin/bulk-email.php:280 includes/admin/volunteer-list.php:286
+#: includes/admin/bulk-email.php:291 includes/admin/volunteer-list.php:286
 msgid "Click to sort"
 msgstr "Klikk for å sortere"
 
-#: includes/admin/bulk-email.php:292 includes/admin/volunteer-list.php:386
+#: includes/admin/bulk-email.php:303 includes/admin/volunteer-list.php:391
 msgid "Subscribed"
 msgstr "Påmeldt"
 
-#: includes/admin/bulk-email.php:294
+#: includes/admin/bulk-email.php:305
 msgid "Without an upcoming shift"
 msgstr "Uten kommende vakt"
 
-#: includes/admin/bulk-email.php:296
+#: includes/admin/bulk-email.php:307
 msgid "With an upcoming shift"
 msgstr "Med kommende vakt"
 
 #. translators: %s is the shift title
-#: includes/admin/bulk-email.php:299
+#: includes/admin/bulk-email.php:310
 #, php-format
 msgid "Shift: %s"
 msgstr "Vakt: %s"
 
 #. translators: %s is the category name
-#: includes/admin/bulk-email.php:302
+#: includes/admin/bulk-email.php:313
 #, php-format
 msgid "Category: %s"
 msgstr "Avdeling: %s"
 
-#: includes/admin/bulk-email.php:306
+#. translators: %s is the department name
+#: includes/admin/bulk-email.php:316
+#, php-format
+msgid "Department: %s"
+msgstr "Avdeling: %s"
+
+#: includes/admin/bulk-email.php:320
 #: includes/admin/dashboard-overview-page.php:222
 #: includes/admin/dashboard-overview-page.php:230
 #: includes/admin/dashboard-overview-page.php:242
@@ -314,97 +340,101 @@ msgid "All"
 msgstr "Alle"
 
 #. translators: 1: volunteer name, 2: number of shifts
-#: includes/admin/bulk-email.php:517
+#: includes/admin/bulk-email.php:552
 #, php-format
 msgid "%1$s (%2$d shifts)"
 msgstr "%1$s (%2$d vakter)"
 
 #. translators: %s is the volunteer name
-#: includes/admin/bulk-email.php:524
+#: includes/admin/bulk-email.php:559
 #, php-format
 msgid "%s (Offline — will NOT be notified)"
 msgstr "%s (Offline – vil IKKE bli varslet)"
 
 #. translators: %d is the number of additional recipients not listed
-#: includes/admin/bulk-email.php:530
+#: includes/admin/bulk-email.php:565
 #, php-format
 msgid "…and %d more"
 msgstr "… og %d til"
 
-#: includes/admin/bulk-email.php:560 includes/admin/user-profile.php:146
+#: includes/admin/bulk-email.php:595 includes/admin/user-profile.php:225
 msgid "No upcoming shifts."
 msgstr "Ingen kommende vakter."
 
-#: includes/admin/bulk-email.php:583 includes/admin/bulk-email.php:618
-#: includes/admin/bulk-email.php:714
+#: includes/admin/bulk-email.php:618 includes/admin/bulk-email.php:654
+#: includes/admin/bulk-email.php:758
 #: includes/admin/dashboard-tab-timeline.php:353 includes/admin/import.php:243
 #: includes/admin/import.php:257 includes/admin/import.php:272
 #: includes/admin/import.php:285 includes/admin/import.php:302
-#: includes/admin/import.php:313 includes/admin/user-profile.php:218
-#: includes/admin/volunteer-list.php:440 includes/admin/volunteer-list.php:470
-#: includes/admin/volunteer-list.php:499 includes/admin/volunteer-list.php:567
+#: includes/admin/import.php:313 includes/admin/user-profile.php:297
+#: includes/admin/volunteer-list.php:455 includes/admin/volunteer-list.php:485
+#: includes/admin/volunteer-list.php:514 includes/admin/volunteer-list.php:582
 #: includes/shiftselector.php:325 includes/shiftselector.php:373
 msgid "Security check failed."
 msgstr "Sikkerhetssjekken feilet."
 
-#: includes/admin/bulk-email.php:587 includes/admin/bulk-email.php:622
-#: includes/admin/bulk-email.php:718 includes/admin/volunteer-list.php:444
-#: includes/admin/volunteer-list.php:474 includes/admin/volunteer-list.php:503
-#: includes/admin/volunteer-list.php:571
+#: includes/admin/bulk-email.php:622 includes/admin/bulk-email.php:658
+#: includes/admin/bulk-email.php:762 includes/admin/volunteer-list.php:459
+#: includes/admin/volunteer-list.php:489 includes/admin/volunteer-list.php:518
+#: includes/admin/volunteer-list.php:586
 msgid "Insufficient permissions."
 msgstr "Utilstrekkelige rettigheter."
 
-#: includes/admin/bulk-email.php:596
+#: includes/admin/bulk-email.php:632
 msgid "Invalid recipient type."
 msgstr "Ugyldig mottakertype."
 
-#: includes/admin/bulk-email.php:637
+#: includes/admin/bulk-email.php:674
 msgid "Subject and message are required."
 msgstr "Emne og melding er påkrevd."
 
-#: includes/admin/bulk-email.php:641
+#: includes/admin/bulk-email.php:678
 msgid "Please select a shift."
 msgstr "Velg en vakt."
 
-#: includes/admin/bulk-email.php:645
+#: includes/admin/bulk-email.php:682
 msgid "Please select a category."
 msgstr "Velg en avdeling."
 
-#: includes/admin/bulk-email.php:649
+#: includes/admin/bulk-email.php:686
+msgid "Please select a department."
+msgstr "Velg en avdeling."
+
+#: includes/admin/bulk-email.php:690
 msgid "No recipient specified."
 msgstr "Ingen mottaker angitt."
 
-#: includes/admin/bulk-email.php:657
+#: includes/admin/bulk-email.php:698
 msgid "The selected attachment is not a valid PDF."
 msgstr "Det valgte vedlegget er ikke en gyldig PDF."
 
-#: includes/admin/bulk-email.php:661
+#: includes/admin/bulk-email.php:702
 msgid "The selected attachment could not be found."
 msgstr "Det valgte vedlegget ble ikke funnet."
 
-#: includes/admin/bulk-email.php:725
+#: includes/admin/bulk-email.php:769
 msgid "Job not found or expired."
 msgstr "Jobben ble ikke funnet eller er utløpt."
 
 #. translators: %d is the number of failed deliveries
-#: includes/admin/bulk-email.php:814
+#: includes/admin/bulk-email.php:858
 #, php-format
 msgid "%d emails could not be delivered."
 msgstr "%d e-poster kunne ikke leveres."
 
-#: includes/admin/bulk-email.php:817
+#: includes/admin/bulk-email.php:861
 msgid "All emails were delivered successfully."
 msgstr "Alle e-poster ble levert."
 
 #. translators: %s is the email subject that was sent
-#: includes/admin/bulk-email.php:823
+#: includes/admin/bulk-email.php:867
 #, php-format
 msgid "[%s] Announcement sent: %s"
 msgstr "[%s] Kunngjøring sendt: %s"
 
 #. translators: 1: blog name, 2: email subject, 3: sent count, 4: delivery
 #. note
-#: includes/admin/bulk-email.php:829
+#: includes/admin/bulk-email.php:873
 #, php-format
 msgid ""
 "Your announcement <strong>%2$s</strong> was sent on %1$s.<br><br>Recipients:"
@@ -413,7 +443,7 @@ msgstr ""
 "Kunngjøringen din <strong>%2$s</strong> ble sendt %1$s.<br><br>Mottakere: "
 "%3$d<br>%4$s"
 
-#: includes/admin/bulk-email.php:841
+#: includes/admin/bulk-email.php:885
 msgid "Announcement delivery summary"
 msgstr "Leveringssammendrag for kunngjøring"
 
@@ -485,7 +515,7 @@ msgstr "Ugyldig frivillig valgt."
 
 #: includes/admin/dashboard-form-handlers.php:200
 #: includes/admin/dashboard-tab-timeline.php:476
-#: includes/admin/shift-metaboxes.php:205 includes/admin/user-profile.php:225
+#: includes/admin/shift-metaboxes.php:205 includes/admin/user-profile.php:304
 msgid "Not allowed"
 msgstr "Ikke tillatt"
 
@@ -526,7 +556,7 @@ msgstr "Navn"
 #: includes/admin/dashboard-tab-table.php:42 includes/admin/settings.php:717
 #: includes/admin/shift-metaboxes.php:269
 #: includes/admin/volunteer-list.php:115 includes/admin/volunteer-list.php:145
-#: includes/admin/volunteer-list.php:276 includes/profile.php:62
+#: includes/admin/volunteer-list.php:276 includes/profile.php:69
 #: includes/registration.php:263
 msgid "E-Mail"
 msgstr "E-post"
@@ -726,14 +756,14 @@ msgstr "eller legg til en ny frivillig under"
 
 #: includes/admin/dashboard-overview-page.php:490
 #: includes/admin/dashboard-tab-cards.php:100
-#: includes/admin/volunteer-list.php:231 includes/profile.php:50
+#: includes/admin/volunteer-list.php:231 includes/profile.php:57
 #: includes/registration.php:254
 msgid "First name"
 msgstr "Fornavn"
 
 #: includes/admin/dashboard-overview-page.php:491
 #: includes/admin/dashboard-tab-cards.php:101
-#: includes/admin/volunteer-list.php:232 includes/profile.php:55
+#: includes/admin/volunteer-list.php:232 includes/profile.php:62
 #: includes/registration.php:257
 msgid "Last name"
 msgstr "Etternavn"
@@ -779,7 +809,8 @@ msgid "More options"
 msgstr "Flere valg"
 
 #: includes/admin/dashboard-overview-page.php:643
-#: includes/admin/documentation.php:107 includes/post-types.php:47
+#: includes/admin/documentation.php:107 includes/admin/user-profile.php:139
+#: includes/admin/volunteer-list.php:289 includes/post-types.php:47
 #: includes/post-types.php:57
 msgid "Departments"
 msgstr "Avdelinger"
@@ -815,7 +846,7 @@ msgstr "Handling"
 
 #: includes/admin/dashboard-tab-cards.php:116
 #: includes/admin/documentation.php:128 includes/admin/shift-metaboxes.php:283
-#: includes/admin/volunteer-list.php:353
+#: includes/admin/volunteer-list.php:358
 msgid "Offline"
 msgstr "Offline"
 
@@ -956,7 +987,7 @@ msgstr ""
 "La stå tom for å bruke den tilknyttede arrangør-brukeren eller den globale "
 "varslingsavsenderen."
 
-#: includes/admin/dashboard-tab-timeline.php:234 includes/profile.php:75
+#: includes/admin/dashboard-tab-timeline.php:234 includes/profile.php:106
 msgid "Save"
 msgstr "Lagre"
 
@@ -1000,7 +1031,7 @@ msgid "View profile"
 msgstr "Vis profil"
 
 #: includes/admin/dashboard-tab-timeline.php:315
-#: includes/admin/user-profile.php:272
+#: includes/admin/user-profile.php:351
 msgid "Loading…"
 msgstr "Laster …"
 
@@ -1409,7 +1440,7 @@ msgstr ""
 "Opprettet av en administrator uten e-postadresse. Kan ikke logge inn og "
 "mottar ingen varsler."
 
-#: includes/admin/documentation.php:132 includes/admin/volunteer-list.php:362
+#: includes/admin/documentation.php:132 includes/admin/volunteer-list.php:367
 msgid "Manual"
 msgstr "Manuell"
 
@@ -1421,7 +1452,7 @@ msgstr ""
 "Lagt til av en administrator via dashboard-skjemaet eller funksjonen «Tildel"
 " frivillig-rolle». Slettes aldri automatisk."
 
-#: includes/admin/documentation.php:136 includes/admin/volunteer-list.php:356
+#: includes/admin/documentation.php:136 includes/admin/volunteer-list.php:361
 msgid "Unverified"
 msgstr "Ubekreftet"
 
@@ -1435,7 +1466,7 @@ msgstr ""
 "magiske innloggingslenken. Kontoen slettes automatisk når lenken utløper "
 "(~24 t). Merket forsvinner så snart lenken klikkes."
 
-#: includes/admin/documentation.php:140 includes/admin/volunteer-list.php:359
+#: includes/admin/documentation.php:140 includes/admin/volunteer-list.php:364
 msgid "Social"
 msgstr "Sosial"
 
@@ -2749,7 +2780,7 @@ msgstr "Påmelding"
 msgid "Sign out"
 msgstr "Avmelding"
 
-#: includes/admin/settings.php:988 includes/admin/user-profile.php:137
+#: includes/admin/settings.php:988 includes/admin/user-profile.php:216
 msgid "Reminder"
 msgstr "Påminnelse"
 
@@ -2805,53 +2836,75 @@ msgstr "Tilknyttede frivillige"
 msgid "Volunteer activity"
 msgstr "Frivillig-aktivitet"
 
-#: includes/admin/user-profile.php:135
+#: includes/admin/user-profile.php:141
+msgid "Linked departments"
+msgstr "Tilknyttede avdelinger"
+
+#: includes/admin/user-profile.php:142
+msgid ""
+"Used to target this volunteer with department-specific announcements (Tools "
+"→ Send Announcement), independent of any shift they have actually signed up "
+"for. The volunteer can also set this themselves from their own profile page."
+" Checking (or unchecking) a department also checks/unchecks every department"
+" nested under it."
+msgstr ""
+"Brukes til å målrette denne frivillige med avdelingsspesifikke kunngjøringer"
+" (Verktøy → Send kunngjøring), uansett om vedkommende allerede har meldt seg"
+" på en vakt der. Den frivillige kan også angi dette selv fra sin egen "
+"profil. Å krysse av (eller fjerne krysset for) en avdeling krysser "
+"automatisk av eller fjerner krysset for alle avdelinger under den også."
+
+#: includes/admin/user-profile.php:146 includes/helpers.php:519
+msgid "(hidden from volunteers)"
+msgstr "(skjult for frivillige)"
+
+#: includes/admin/user-profile.php:214
 msgid "Signed up"
 msgstr "Påmeldt"
 
-#: includes/admin/user-profile.php:136
+#: includes/admin/user-profile.php:215
 msgid "Cancelled"
 msgstr "Avmeldt"
 
-#: includes/admin/user-profile.php:138
+#: includes/admin/user-profile.php:217
 msgid "Announcement"
 msgstr "Kunngjøring"
 
-#: includes/admin/user-profile.php:144 includes/admin/volunteer-list.php:279
+#: includes/admin/user-profile.php:223 includes/admin/volunteer-list.php:279
 msgid "Upcoming shifts"
 msgstr "Kommende vakter"
 
-#: includes/admin/user-profile.php:153
+#: includes/admin/user-profile.php:232
 msgid "Past shifts"
 msgstr "Tidligere vakter"
 
-#: includes/admin/user-profile.php:155
+#: includes/admin/user-profile.php:234
 msgid "No past shifts."
 msgstr "Ingen tidligere vakter."
 
 #. translators: %d: total number of past shifts
-#: includes/admin/user-profile.php:164
+#: includes/admin/user-profile.php:243
 #, php-format
 msgid "Showing the 100 most recent of %d past shifts."
 msgstr "Viser de 100 nyeste av %d tidligere vakter."
 
-#: includes/admin/user-profile.php:172
+#: includes/admin/user-profile.php:251
 msgid "Notification history"
 msgstr "Varslingshistorikk"
 
-#: includes/admin/user-profile.php:174
+#: includes/admin/user-profile.php:253
 msgid "No notifications logged yet."
 msgstr "Ingen varsler logget ennå."
 
-#: includes/admin/user-profile.php:175
+#: includes/admin/user-profile.php:254
 msgid "Only notifications sent from now on are recorded here."
 msgstr "Kun varsler sendt fra nå av registreres her."
 
-#: includes/admin/user-profile.php:179
+#: includes/admin/user-profile.php:258
 msgid "Type"
 msgstr "Type"
 
-#: includes/admin/user-profile.php:249
+#: includes/admin/user-profile.php:328
 msgid "Open full profile"
 msgstr "Åpne full profil"
 
@@ -2954,47 +3007,47 @@ msgstr "Registrert"
 msgid "Last shift"
 msgstr "Siste vakt"
 
-#: includes/admin/volunteer-list.php:289
+#: includes/admin/volunteer-list.php:290
 msgid "Contact"
 msgstr "Kontakt"
 
-#: includes/admin/volunteer-list.php:290
+#: includes/admin/volunteer-list.php:291
 msgid "Actions"
 msgstr "Handlinger"
 
-#: includes/admin/volunteer-list.php:294
+#: includes/admin/volunteer-list.php:295
 msgid "No volunteers found."
 msgstr "Ingen frivillige funnet."
 
-#: includes/admin/volunteer-list.php:387
+#: includes/admin/volunteer-list.php:392
 msgid "Opted out"
 msgstr "Reservert seg"
 
-#: includes/admin/volunteer-list.php:393
+#: includes/admin/volunteer-list.php:408
 msgid "Email"
 msgstr "E-post"
 
-#: includes/admin/volunteer-list.php:399
+#: includes/admin/volunteer-list.php:414
 msgid "Remove role"
 msgstr "Fjern rolle"
 
-#: includes/admin/volunteer-list.php:418
+#: includes/admin/volunteer-list.php:433
 msgid "volunteers"
 msgstr "frivillige"
 
-#: includes/admin/volunteer-list.php:420
+#: includes/admin/volunteer-list.php:435
 msgid "Role granted. Reloading…"
 msgstr "Rolle tildelt. Laster på nytt …"
 
-#: includes/admin/volunteer-list.php:421 includes/admin/volunteer-list.php:485
+#: includes/admin/volunteer-list.php:436 includes/admin/volunteer-list.php:500
 msgid "Role removed."
 msgstr "Rolle fjernet."
 
-#: includes/admin/volunteer-list.php:422 includes/admin/volunteer-list.php:553
+#: includes/admin/volunteer-list.php:437 includes/admin/volunteer-list.php:568
 msgid "Volunteer created. Reloading…"
 msgstr "Frivillig opprettet. Laster på nytt …"
 
-#: includes/admin/volunteer-list.php:423
+#: includes/admin/volunteer-list.php:438
 msgid ""
 "Remove the volunteer role from {name}? They still have {shifts} upcoming "
 "shift(s)."
@@ -3002,27 +3055,27 @@ msgstr ""
 "Fjerne frivillig-rollen fra {name}? Vedkommende har fortsatt {shifts} "
 "kommende vakt(er)."
 
-#: includes/admin/volunteer-list.php:424
+#: includes/admin/volunteer-list.php:439
 msgid "Remove the volunteer role from {name}?"
 msgstr "Fjerne frivillig-rollen fra {name}?"
 
-#: includes/admin/volunteer-list.php:451 includes/admin/volunteer-list.php:481
+#: includes/admin/volunteer-list.php:466 includes/admin/volunteer-list.php:496
 msgid "User not found."
 msgstr "Fant ikke brukeren."
 
-#: includes/admin/volunteer-list.php:456
+#: includes/admin/volunteer-list.php:471
 msgid "Role granted."
 msgstr "Rolle tildelt."
 
-#: includes/admin/volunteer-list.php:512
+#: includes/admin/volunteer-list.php:527
 msgid "First name is required."
 msgstr "Fornavn er påkrevd."
 
-#: includes/admin/volunteer-list.php:519
+#: includes/admin/volunteer-list.php:534
 msgid "A user with this e-mail already exists."
 msgstr "En bruker med denne e-posten finnes allerede."
 
-#: includes/admin/volunteer-list.php:575
+#: includes/admin/volunteer-list.php:590
 msgid "Log cleared."
 msgstr "Logg tømt."
 
@@ -3100,11 +3153,7 @@ msgstr "Denne vakten overlapper med en du allerede har tatt."
 msgid "Login link has expired or is invalid."
 msgstr "Innloggingslenken er utløpt eller ugyldig."
 
-#: includes/helpers.php:482
-msgid "(hidden from volunteers)"
-msgstr "(skjult for frivillige)"
-
-#: includes/helpers.php:518
+#: includes/helpers.php:555
 msgid "Close"
 msgstr "Lukk"
 
@@ -3225,11 +3274,11 @@ msgstr "Legg til ny avdeling"
 msgid "New Department Name"
 msgstr "Nytt avdelingsnavn"
 
-#: includes/profile.php:38
+#: includes/profile.php:45
 msgid "✅ Your profile was saved successfully."
 msgstr "✅ Profilen din ble lagret."
 
-#: includes/profile.php:44
+#: includes/profile.php:51
 msgid ""
 "<strong>Profile incomplete:</strong> Please enter your phone number so we "
 "can reach you in case of last-minute changes."
@@ -3237,15 +3286,23 @@ msgstr ""
 "<strong>Profil ufullstendig:</strong> Vennligst oppgi telefonnummeret ditt "
 "slik at vi kan nå deg ved endringer i siste liten."
 
-#: includes/profile.php:59 includes/registration.php:260
+#: includes/profile.php:66 includes/registration.php:260
 msgid "Phone number"
 msgstr "Telefonnummer"
 
-#: includes/profile.php:69
+#: includes/profile.php:76
 msgid "Receive announcements about new shifts and events"
 msgstr "Motta kunngjøringer om nye vakter og arrangementer"
 
-#: includes/profile.php:111
+#: includes/profile.php:89
+msgid "Advanced: notify me about specific departments"
+msgstr "Avansert: varsle meg om bestemte avdelinger"
+
+#: includes/profile.php:90
+msgid "Also notify me about new shifts in:"
+msgstr "Varsle meg også om nye vakter i:"
+
+#: includes/profile.php:142
 msgid "This email address is already used by another user."
 msgstr "Denne e-postadressen brukes allerede av en annen bruker."
 
@@ -3372,6 +3429,25 @@ msgstr "Du har blitt fjernet."
 #: includes/shiftselector.php:417
 msgid "You are not signed up for this shift."
 msgstr "Du er ikke påmeldt denne vakten."
+
+#~ msgid ""
+#~ "Everyone linked to the department (admin-assigned or self-subscribed via "
+#~ "their profile), regardless of whether they have worked a shift there or "
+#~ "opted out of general announcements."
+#~ msgstr ""
+#~ "Alle som er knyttet til denne avdelingen (tildelt av en administrator eller "
+#~ "selv-abonnert via egen profil) – uansett om de har jobbet en vakt der eller "
+#~ "har meldt seg av generelle kunngjøringer."
+
+#~ msgid ""
+#~ "Used to target this volunteer with department-specific announcements (Tools "
+#~ "→ Send Announcement), independent of any shift they have actually signed up "
+#~ "for. The volunteer can also set this themselves from their own profile page."
+#~ msgstr ""
+#~ "Brukes til å målrette denne frivillige med avdelingsspesifikke kunngjøringer"
+#~ " (Verktøy → Send kunngjøring), uansett om vedkommende allerede har meldt seg"
+#~ " på en vakt der. Den frivillige kan også angi dette selv fra sin egen "
+#~ "profil."
 
 #~ msgid ""
 #~ "New in this release: departments can carry a description that assignment, "

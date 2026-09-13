@@ -25,6 +25,13 @@ function eventadmin_profile_shortcode(): bool|string|null
     $announcements = get_user_meta($user->ID, 'eventadmin_announcements', true);
     // Default: opted-in (empty meta = 1)
     $announcements = ($announcements === '0') ? 0 : 1;
+    // Departments hidden from volunteers (Shifts → Departments → "Hide from volunteers")
+    // aren't offered here either — a volunteer can't subscribe to something they can't see.
+    $departments = array_values(array_filter(
+        eventadmin_get_hierarchical_shift_categories(),
+        fn($term) => !eventadmin_is_shift_category_hidden($term->term_id)
+    ));
+    $linked_departments = eventadmin_get_volunteer_department_ids($user->ID);
 
     ob_start(); ?>
     <div class="eventadmin-form-wrapper">
@@ -68,6 +75,30 @@ function eventadmin_profile_shortcode(): bool|string|null
                 <input type="checkbox" name="eventadmin_announcements" value="1"<?php checked($announcements, 1); ?>>
                 <?php esc_html_e('Receive announcements about new shifts and events', 'eventadmin-volunteer-management'); ?>
             </label>
+
+            <?php if (!empty($departments)) :
+                wp_enqueue_script(
+                    'eventadmin-department-checkboxes',
+                    plugin_dir_url(__FILE__) . '../assets/js/department-checkboxes.js',
+                    [],
+                    '1.0',
+                    true
+                );
+                ?>
+                <details class="eventadmin-departments-toggle"<?php echo !empty($linked_departments) ? ' open' : ''; ?>>
+                    <summary><?php esc_html_e('Advanced: notify me about specific departments', 'eventadmin-volunteer-management'); ?></summary>
+                    <p><?php esc_html_e('Also notify me about new shifts in:', 'eventadmin-volunteer-management'); ?></p>
+                    <?php foreach ($departments as $department) : ?>
+                        <label class="eventadmin-checkbox-label"<?php echo $department->depth > 0 ? ' style="margin-left:' . esc_attr($department->depth * 20) . 'px;"' : ''; ?>>
+                            <input type="checkbox" class="eventadmin-department-checkbox" data-depth="<?php echo esc_attr($department->depth); ?>"
+                                   name="eventadmin_department[]"
+                                   value="<?php echo esc_attr($department->term_id); ?>"
+                                <?php checked(in_array($department->term_id, $linked_departments, true)); ?>>
+                            <?php echo esc_html($department->name); ?>
+                        </label>
+                    <?php endforeach; ?>
+                </details>
+            <?php endif; ?>
 
             <?php wp_nonce_field('eventadmin_profile_update', 'eventadmin_profile_nonce'); ?>
 
@@ -123,6 +154,18 @@ function eventadmin_handle_profile_update(): void
 
     $announcements = isset($_POST['eventadmin_announcements']) ? 1 : 0;
     update_user_meta($user_id, 'eventadmin_announcements', $announcements);
+
+    $posted_departments = (isset($_POST['eventadmin_department']) && is_array($_POST['eventadmin_department']))
+        ? wp_unslash($_POST['eventadmin_department'])
+        : [];
+    // Departments hidden from volunteers aren't rendered as checkboxes above, so preserve
+    // any existing link to one (e.g. set by an admin) instead of this form silently
+    // dropping it just because it wasn't offered as an option to toggle.
+    $preserved_hidden_departments = array_filter(
+        eventadmin_get_volunteer_department_ids($user_id),
+        'eventadmin_is_shift_category_hidden'
+    );
+    eventadmin_save_volunteer_department_ids($user_id, array_merge($posted_departments, $preserved_hidden_departments));
 
     if (!empty($password)) {
         wp_set_password($password, $user_id);

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-09-13T06:48:39+00:00\n"
+"POT-Creation-Date: 2026-09-13T09:22:00+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: nl_NL_formal\n"
 "MIME-Version: 1.0\n"
@@ -106,8 +106,8 @@ msgstr "({failed} kon niet worden afgeleverd)"
 #: includes/admin/dashboard-tab-timeline.php:304
 #: includes/admin/dashboard-tab-timeline.php:493
 #: includes/admin/dashboard-tab-timeline.php:599
-#: includes/admin/user-profile.php:273 includes/admin/volunteer-list.php:168
-#: includes/admin/volunteer-list.php:419
+#: includes/admin/user-profile.php:352 includes/admin/volunteer-list.php:168
+#: includes/admin/volunteer-list.php:434
 msgid "An error occurred. Please try again."
 msgstr "Er is een fout opgetreden. Probeer het opnieuw."
 
@@ -135,7 +135,7 @@ msgstr "Selecteer een PDF om bij te voegen"
 msgid "Use this PDF"
 msgstr "Deze PDF gebruiken"
 
-#: includes/admin/bulk-email.php:103 includes/admin/bulk-email.php:272
+#: includes/admin/bulk-email.php:103 includes/admin/bulk-email.php:283
 msgid "Recipients"
 msgstr "Ontvangers"
 
@@ -181,49 +181,69 @@ msgstr "Vrijwilligers van een specifieke categorie"
 msgid "— Select category —"
 msgstr "— Categorie selecteren —"
 
-#: includes/admin/bulk-email.php:187 includes/admin/settings.php:700
+#: includes/admin/bulk-email.php:183
+msgid "Volunteers linked to a department"
+msgstr "Vrijwilligers gekoppeld aan een afdeling"
+
+#: includes/admin/bulk-email.php:185
+msgid ""
+"Everyone linked to the department (admin-assigned or self-subscribed via "
+"their profile), regardless of whether they have worked a shift there or "
+"opted out of general announcements. Includes volunteers linked to any sub-"
+"department."
+msgstr ""
+"Iedereen die aan deze afdeling gekoppeld is (door een beheerder toegewezen "
+"of zelf geabonneerd via het eigen profiel) – ongeacht of ze daar al een "
+"dienst hebben gedraaid of zich hebben afgemeld voor algemene aankondigingen."
+" Omvat ook vrijwilligers die aan een subafdeling gekoppeld zijn."
+
+#: includes/admin/bulk-email.php:188
+msgid "— Select department —"
+msgstr "— Afdeling selecteren —"
+
+#: includes/admin/bulk-email.php:198 includes/admin/settings.php:700
 msgid "Sender"
 msgstr "Afzender"
 
-#: includes/admin/bulk-email.php:188
+#: includes/admin/bulk-email.php:199
 msgid "From name"
 msgstr "Afzendernaam"
 
-#: includes/admin/bulk-email.php:190
+#: includes/admin/bulk-email.php:201
 msgid "From email"
 msgstr "Afzender-e-mail"
 
-#: includes/admin/bulk-email.php:196 includes/admin/bulk-email.php:271
-#: includes/admin/user-profile.php:180
+#: includes/admin/bulk-email.php:207 includes/admin/bulk-email.php:282
+#: includes/admin/user-profile.php:259
 msgid "Subject"
 msgstr "Onderwerp"
 
-#: includes/admin/bulk-email.php:202
+#: includes/admin/bulk-email.php:213
 msgid "Attachment (optional)"
 msgstr "Bijlage (optioneel)"
 
-#: includes/admin/bulk-email.php:204
+#: includes/admin/bulk-email.php:215
 msgid "Select PDF…"
 msgstr "PDF selecteren…"
 
-#: includes/admin/bulk-email.php:206
+#: includes/admin/bulk-email.php:217
 #: includes/admin/dashboard-tab-cards.php:131 includes/admin/settings.php:926
 msgid "Remove"
 msgstr "Verwijderen"
 
-#: includes/admin/bulk-email.php:207
+#: includes/admin/bulk-email.php:218
 msgid "The PDF will be attached to every email in this announcement."
 msgstr "De PDF wordt bijgevoegd bij elke e-mail van deze aankondiging."
 
-#: includes/admin/bulk-email.php:212 includes/admin/bulk-email.php:277
+#: includes/admin/bulk-email.php:223 includes/admin/bulk-email.php:288
 msgid "Message"
 msgstr "Bericht"
 
-#: includes/admin/bulk-email.php:224 includes/admin/bulk-email.php:229
+#: includes/admin/bulk-email.php:235 includes/admin/bulk-email.php:240
 msgid "Preview (example data)"
 msgstr "Voorbeeld (voorbeelddata)"
 
-#: includes/admin/bulk-email.php:225
+#: includes/admin/bulk-email.php:236
 msgid ""
 "Use {first_name} and {last_name} as placeholders in the message body. Use "
 "{shifts} to list each recipient's own upcoming shifts."
@@ -231,82 +251,88 @@ msgstr ""
 "Gebruik {first_name} en {last_name} als plaatshouders in de berichttekst. "
 "Gebruik {shifts} om de aankomende diensten van elke ontvanger weer te geven."
 
-#: includes/admin/bulk-email.php:227
+#: includes/admin/bulk-email.php:238
 msgid "From:"
 msgstr "Van:"
 
-#: includes/admin/bulk-email.php:228 includes/admin/bulk-email.php:335
+#: includes/admin/bulk-email.php:239 includes/admin/bulk-email.php:349
 msgid "Attachment:"
 msgstr "Bijlage:"
 
-#: includes/admin/bulk-email.php:235
+#: includes/admin/bulk-email.php:246
 msgid "Start sending"
 msgstr "Verzenden starten"
 
-#: includes/admin/bulk-email.php:240
+#: includes/admin/bulk-email.php:251
 msgid "Sending in progress…"
 msgstr "Verzenden bezig…"
 
-#: includes/admin/bulk-email.php:262
+#: includes/admin/bulk-email.php:273
 msgid "No announcements sent yet."
 msgstr "Nog geen aankondigingen verzonden."
 
-#: includes/admin/bulk-email.php:265
+#: includes/admin/bulk-email.php:276
 msgid "Filter…"
 msgstr "Filteren…"
 
-#: includes/admin/bulk-email.php:270
+#: includes/admin/bulk-email.php:281
 #: includes/admin/dashboard-overview-page.php:276
-#: includes/admin/user-profile.php:178 includes/admin/volunteer-list.php:114
+#: includes/admin/user-profile.php:257 includes/admin/volunteer-list.php:114
 #: includes/admin/volunteer-list.php:143
 msgid "Date"
 msgstr "Datum"
 
-#: includes/admin/bulk-email.php:273
+#: includes/admin/bulk-email.php:284
 msgid "From"
 msgstr "Van"
 
-#: includes/admin/bulk-email.php:274
+#: includes/admin/bulk-email.php:285
 msgid "Sent to"
 msgstr "Verzonden aan"
 
-#: includes/admin/bulk-email.php:275
+#: includes/admin/bulk-email.php:286
 msgid "Failed"
 msgstr "Mislukt"
 
-#: includes/admin/bulk-email.php:276
+#: includes/admin/bulk-email.php:287
 msgid "Sent by"
 msgstr "Verzonden door"
 
-#: includes/admin/bulk-email.php:280 includes/admin/volunteer-list.php:286
+#: includes/admin/bulk-email.php:291 includes/admin/volunteer-list.php:286
 msgid "Click to sort"
 msgstr "Klik om te sorteren"
 
-#: includes/admin/bulk-email.php:292 includes/admin/volunteer-list.php:386
+#: includes/admin/bulk-email.php:303 includes/admin/volunteer-list.php:391
 msgid "Subscribed"
 msgstr "Aangemeld"
 
-#: includes/admin/bulk-email.php:294
+#: includes/admin/bulk-email.php:305
 msgid "Without an upcoming shift"
 msgstr "Zonder aankomende dienst"
 
-#: includes/admin/bulk-email.php:296
+#: includes/admin/bulk-email.php:307
 msgid "With an upcoming shift"
 msgstr "Met aankomende dienst"
 
 #. translators: %s is the shift title
-#: includes/admin/bulk-email.php:299
+#: includes/admin/bulk-email.php:310
 #, php-format
 msgid "Shift: %s"
 msgstr "Dienst: %s"
 
 #. translators: %s is the category name
-#: includes/admin/bulk-email.php:302
+#: includes/admin/bulk-email.php:313
 #, php-format
 msgid "Category: %s"
 msgstr "Categorie: %s"
 
-#: includes/admin/bulk-email.php:306
+#. translators: %s is the department name
+#: includes/admin/bulk-email.php:316
+#, php-format
+msgid "Department: %s"
+msgstr "Afdeling: %s"
+
+#: includes/admin/bulk-email.php:320
 #: includes/admin/dashboard-overview-page.php:222
 #: includes/admin/dashboard-overview-page.php:230
 #: includes/admin/dashboard-overview-page.php:242
@@ -316,97 +342,101 @@ msgid "All"
 msgstr "Alle"
 
 #. translators: 1: volunteer name, 2: number of shifts
-#: includes/admin/bulk-email.php:517
+#: includes/admin/bulk-email.php:552
 #, php-format
 msgid "%1$s (%2$d shifts)"
 msgstr "%1$s (%2$d diensten)"
 
 #. translators: %s is the volunteer name
-#: includes/admin/bulk-email.php:524
+#: includes/admin/bulk-email.php:559
 #, php-format
 msgid "%s (Offline — will NOT be notified)"
 msgstr "%s (Offline – wordt NIET op de hoogte gebracht)"
 
 #. translators: %d is the number of additional recipients not listed
-#: includes/admin/bulk-email.php:530
+#: includes/admin/bulk-email.php:565
 #, php-format
 msgid "…and %d more"
 msgstr "…en %d meer"
 
-#: includes/admin/bulk-email.php:560 includes/admin/user-profile.php:146
+#: includes/admin/bulk-email.php:595 includes/admin/user-profile.php:225
 msgid "No upcoming shifts."
 msgstr "Geen aankomende diensten."
 
-#: includes/admin/bulk-email.php:583 includes/admin/bulk-email.php:618
-#: includes/admin/bulk-email.php:714
+#: includes/admin/bulk-email.php:618 includes/admin/bulk-email.php:654
+#: includes/admin/bulk-email.php:758
 #: includes/admin/dashboard-tab-timeline.php:353 includes/admin/import.php:243
 #: includes/admin/import.php:257 includes/admin/import.php:272
 #: includes/admin/import.php:285 includes/admin/import.php:302
-#: includes/admin/import.php:313 includes/admin/user-profile.php:218
-#: includes/admin/volunteer-list.php:440 includes/admin/volunteer-list.php:470
-#: includes/admin/volunteer-list.php:499 includes/admin/volunteer-list.php:567
+#: includes/admin/import.php:313 includes/admin/user-profile.php:297
+#: includes/admin/volunteer-list.php:455 includes/admin/volunteer-list.php:485
+#: includes/admin/volunteer-list.php:514 includes/admin/volunteer-list.php:582
 #: includes/shiftselector.php:325 includes/shiftselector.php:373
 msgid "Security check failed."
 msgstr "Beveiligingscontrole mislukt."
 
-#: includes/admin/bulk-email.php:587 includes/admin/bulk-email.php:622
-#: includes/admin/bulk-email.php:718 includes/admin/volunteer-list.php:444
-#: includes/admin/volunteer-list.php:474 includes/admin/volunteer-list.php:503
-#: includes/admin/volunteer-list.php:571
+#: includes/admin/bulk-email.php:622 includes/admin/bulk-email.php:658
+#: includes/admin/bulk-email.php:762 includes/admin/volunteer-list.php:459
+#: includes/admin/volunteer-list.php:489 includes/admin/volunteer-list.php:518
+#: includes/admin/volunteer-list.php:586
 msgid "Insufficient permissions."
 msgstr "Onvoldoende rechten."
 
-#: includes/admin/bulk-email.php:596
+#: includes/admin/bulk-email.php:632
 msgid "Invalid recipient type."
 msgstr "Ongeldig ontvangertype."
 
-#: includes/admin/bulk-email.php:637
+#: includes/admin/bulk-email.php:674
 msgid "Subject and message are required."
 msgstr "Onderwerp en bericht zijn verplicht."
 
-#: includes/admin/bulk-email.php:641
+#: includes/admin/bulk-email.php:678
 msgid "Please select a shift."
 msgstr "Selecteer een dienst."
 
-#: includes/admin/bulk-email.php:645
+#: includes/admin/bulk-email.php:682
 msgid "Please select a category."
 msgstr "Selecteer een categorie."
 
-#: includes/admin/bulk-email.php:649
+#: includes/admin/bulk-email.php:686
+msgid "Please select a department."
+msgstr "Selecteer een afdeling."
+
+#: includes/admin/bulk-email.php:690
 msgid "No recipient specified."
 msgstr "Geen ontvanger opgegeven."
 
-#: includes/admin/bulk-email.php:657
+#: includes/admin/bulk-email.php:698
 msgid "The selected attachment is not a valid PDF."
 msgstr "De geselecteerde bijlage is geen geldige PDF."
 
-#: includes/admin/bulk-email.php:661
+#: includes/admin/bulk-email.php:702
 msgid "The selected attachment could not be found."
 msgstr "De geselecteerde bijlage kon niet worden gevonden."
 
-#: includes/admin/bulk-email.php:725
+#: includes/admin/bulk-email.php:769
 msgid "Job not found or expired."
 msgstr "Taak niet gevonden of verlopen."
 
 #. translators: %d is the number of failed deliveries
-#: includes/admin/bulk-email.php:814
+#: includes/admin/bulk-email.php:858
 #, php-format
 msgid "%d emails could not be delivered."
 msgstr "%d e-mails konden niet worden afgeleverd."
 
-#: includes/admin/bulk-email.php:817
+#: includes/admin/bulk-email.php:861
 msgid "All emails were delivered successfully."
 msgstr "Alle e-mails zijn succesvol afgeleverd."
 
 #. translators: %s is the email subject that was sent
-#: includes/admin/bulk-email.php:823
+#: includes/admin/bulk-email.php:867
 #, php-format
 msgid "[%s] Announcement sent: %s"
 msgstr "[%s] Aankondiging verzonden: %s"
 
 #. translators: 1: blog name, 2: email subject, 3: sent count, 4: delivery
 #. note
-#: includes/admin/bulk-email.php:829
+#: includes/admin/bulk-email.php:873
 #, php-format
 msgid ""
 "Your announcement <strong>%2$s</strong> was sent on %1$s.<br><br>Recipients:"
@@ -415,7 +445,7 @@ msgstr ""
 "Uw aankondiging <strong>%2$s</strong> is verzonden op "
 "%1$s.<br><br>Ontvangers: %3$d<br>%4$s"
 
-#: includes/admin/bulk-email.php:841
+#: includes/admin/bulk-email.php:885
 msgid "Announcement delivery summary"
 msgstr "Samenvatting van de aankondigingsbezorging"
 
@@ -489,7 +519,7 @@ msgstr "Ongeldige vrijwilliger geselecteerd."
 
 #: includes/admin/dashboard-form-handlers.php:200
 #: includes/admin/dashboard-tab-timeline.php:476
-#: includes/admin/shift-metaboxes.php:205 includes/admin/user-profile.php:225
+#: includes/admin/shift-metaboxes.php:205 includes/admin/user-profile.php:304
 msgid "Not allowed"
 msgstr "Niet toegestaan"
 
@@ -530,7 +560,7 @@ msgstr "Naam"
 #: includes/admin/dashboard-tab-table.php:42 includes/admin/settings.php:717
 #: includes/admin/shift-metaboxes.php:269
 #: includes/admin/volunteer-list.php:115 includes/admin/volunteer-list.php:145
-#: includes/admin/volunteer-list.php:276 includes/profile.php:62
+#: includes/admin/volunteer-list.php:276 includes/profile.php:69
 #: includes/registration.php:263
 msgid "E-Mail"
 msgstr "E-mailadres"
@@ -730,14 +760,14 @@ msgstr "of voeg hieronder een nieuwe vrijwilliger toe"
 
 #: includes/admin/dashboard-overview-page.php:490
 #: includes/admin/dashboard-tab-cards.php:100
-#: includes/admin/volunteer-list.php:231 includes/profile.php:50
+#: includes/admin/volunteer-list.php:231 includes/profile.php:57
 #: includes/registration.php:254
 msgid "First name"
 msgstr "Voornaam"
 
 #: includes/admin/dashboard-overview-page.php:491
 #: includes/admin/dashboard-tab-cards.php:101
-#: includes/admin/volunteer-list.php:232 includes/profile.php:55
+#: includes/admin/volunteer-list.php:232 includes/profile.php:62
 #: includes/registration.php:257
 msgid "Last name"
 msgstr "Achternaam"
@@ -783,7 +813,8 @@ msgid "More options"
 msgstr "Meer opties"
 
 #: includes/admin/dashboard-overview-page.php:643
-#: includes/admin/documentation.php:107 includes/post-types.php:47
+#: includes/admin/documentation.php:107 includes/admin/user-profile.php:139
+#: includes/admin/volunteer-list.php:289 includes/post-types.php:47
 #: includes/post-types.php:57
 msgid "Departments"
 msgstr "Afdelingen"
@@ -819,7 +850,7 @@ msgstr "Actie"
 
 #: includes/admin/dashboard-tab-cards.php:116
 #: includes/admin/documentation.php:128 includes/admin/shift-metaboxes.php:283
-#: includes/admin/volunteer-list.php:353
+#: includes/admin/volunteer-list.php:358
 msgid "Offline"
 msgstr "Offline"
 
@@ -961,7 +992,7 @@ msgstr ""
 "Laat leeg om de gekoppelde organisator-gebruiker of de algemene "
 "meldingsafzender te gebruiken."
 
-#: includes/admin/dashboard-tab-timeline.php:234 includes/profile.php:75
+#: includes/admin/dashboard-tab-timeline.php:234 includes/profile.php:106
 msgid "Save"
 msgstr "Opslaan"
 
@@ -1005,7 +1036,7 @@ msgid "View profile"
 msgstr "Profiel bekijken"
 
 #: includes/admin/dashboard-tab-timeline.php:315
-#: includes/admin/user-profile.php:272
+#: includes/admin/user-profile.php:351
 msgid "Loading…"
 msgstr "Laden…"
 
@@ -1421,7 +1452,7 @@ msgstr ""
 "Aangemaakt door een beheerder zonder e-mailadres. Kan niet inloggen en "
 "ontvangt geen meldingen."
 
-#: includes/admin/documentation.php:132 includes/admin/volunteer-list.php:362
+#: includes/admin/documentation.php:132 includes/admin/volunteer-list.php:367
 msgid "Manual"
 msgstr "Handmatig"
 
@@ -1433,7 +1464,7 @@ msgstr ""
 "Toegevoegd door een beheerder via het dashboardformulier of de functie "
 "\"Vrijwilligersrol toewijzen\". Wordt nooit automatisch verwijderd."
 
-#: includes/admin/documentation.php:136 includes/admin/volunteer-list.php:356
+#: includes/admin/documentation.php:136 includes/admin/volunteer-list.php:361
 msgid "Unverified"
 msgstr "Niet geverifieerd"
 
@@ -1447,7 +1478,7 @@ msgstr ""
 "login-link geklikt. Het account wordt automatisch verwijderd zodra de link "
 "verloopt (~24 u). De badge verdwijnt zodra op de link is geklikt."
 
-#: includes/admin/documentation.php:140 includes/admin/volunteer-list.php:359
+#: includes/admin/documentation.php:140 includes/admin/volunteer-list.php:364
 msgid "Social"
 msgstr "Sociale login"
 
@@ -2780,7 +2811,7 @@ msgstr "Aanmelden"
 msgid "Sign out"
 msgstr "Afmelden"
 
-#: includes/admin/settings.php:988 includes/admin/user-profile.php:137
+#: includes/admin/settings.php:988 includes/admin/user-profile.php:216
 msgid "Reminder"
 msgstr "Herinnering"
 
@@ -2836,54 +2867,77 @@ msgstr "Toegewezen Volunteers"
 msgid "Volunteer activity"
 msgstr "Vrijwilligersactiviteit"
 
-#: includes/admin/user-profile.php:135
+#: includes/admin/user-profile.php:141
+msgid "Linked departments"
+msgstr "Gekoppelde afdelingen"
+
+#: includes/admin/user-profile.php:142
+msgid ""
+"Used to target this volunteer with department-specific announcements (Tools "
+"→ Send Announcement), independent of any shift they have actually signed up "
+"for. The volunteer can also set this themselves from their own profile page."
+" Checking (or unchecking) a department also checks/unchecks every department"
+" nested under it."
+msgstr ""
+"Wordt gebruikt om deze vrijwilliger gericht te bereiken met "
+"afdelingsspecifieke aankondigingen (Extra → Aankondiging versturen), "
+"ongeacht of hij of zij zich al voor een dienst daar heeft aangemeld. De "
+"vrijwilliger kan dit ook zelf instellen via het eigen profiel. Het aan- of "
+"uitvinken van een afdeling vinkt ook automatisch alle afdelingen daaronder "
+"aan of uit."
+
+#: includes/admin/user-profile.php:146 includes/helpers.php:519
+msgid "(hidden from volunteers)"
+msgstr "(verborgen voor vrijwilligers)"
+
+#: includes/admin/user-profile.php:214
 msgid "Signed up"
 msgstr "Aangemeld"
 
-#: includes/admin/user-profile.php:136
+#: includes/admin/user-profile.php:215
 msgid "Cancelled"
 msgstr "Afgemeld"
 
-#: includes/admin/user-profile.php:138
+#: includes/admin/user-profile.php:217
 msgid "Announcement"
 msgstr "Aankondiging"
 
-#: includes/admin/user-profile.php:144 includes/admin/volunteer-list.php:279
+#: includes/admin/user-profile.php:223 includes/admin/volunteer-list.php:279
 msgid "Upcoming shifts"
 msgstr "Aankomende diensten"
 
-#: includes/admin/user-profile.php:153
+#: includes/admin/user-profile.php:232
 msgid "Past shifts"
 msgstr "Afgelopen diensten"
 
-#: includes/admin/user-profile.php:155
+#: includes/admin/user-profile.php:234
 msgid "No past shifts."
 msgstr "Geen afgelopen diensten."
 
 #. translators: %d: total number of past shifts
-#: includes/admin/user-profile.php:164
+#: includes/admin/user-profile.php:243
 #, php-format
 msgid "Showing the 100 most recent of %d past shifts."
 msgstr "Toont de 100 meest recente van %d afgelopen diensten."
 
-#: includes/admin/user-profile.php:172
+#: includes/admin/user-profile.php:251
 msgid "Notification history"
 msgstr "Meldingsgeschiedenis"
 
-#: includes/admin/user-profile.php:174
+#: includes/admin/user-profile.php:253
 msgid "No notifications logged yet."
 msgstr "Er zijn nog geen meldingen geregistreerd."
 
-#: includes/admin/user-profile.php:175
+#: includes/admin/user-profile.php:254
 msgid "Only notifications sent from now on are recorded here."
 msgstr ""
 "Hier worden alleen meldingen vastgelegd die vanaf nu worden verzonden."
 
-#: includes/admin/user-profile.php:179
+#: includes/admin/user-profile.php:258
 msgid "Type"
 msgstr "Type"
 
-#: includes/admin/user-profile.php:249
+#: includes/admin/user-profile.php:328
 msgid "Open full profile"
 msgstr "Volledig profiel openen"
 
@@ -2986,47 +3040,47 @@ msgstr "Geregistreerd"
 msgid "Last shift"
 msgstr "Laatste dienst"
 
-#: includes/admin/volunteer-list.php:289
+#: includes/admin/volunteer-list.php:290
 msgid "Contact"
 msgstr "Contact"
 
-#: includes/admin/volunteer-list.php:290
+#: includes/admin/volunteer-list.php:291
 msgid "Actions"
 msgstr "Acties"
 
-#: includes/admin/volunteer-list.php:294
+#: includes/admin/volunteer-list.php:295
 msgid "No volunteers found."
 msgstr "Geen Volunteers gevonden."
 
-#: includes/admin/volunteer-list.php:387
+#: includes/admin/volunteer-list.php:392
 msgid "Opted out"
 msgstr "Afgemeld"
 
-#: includes/admin/volunteer-list.php:393
+#: includes/admin/volunteer-list.php:408
 msgid "Email"
 msgstr "E-mail versturen"
 
-#: includes/admin/volunteer-list.php:399
+#: includes/admin/volunteer-list.php:414
 msgid "Remove role"
 msgstr "Rol verwijderen"
 
-#: includes/admin/volunteer-list.php:418
+#: includes/admin/volunteer-list.php:433
 msgid "volunteers"
 msgstr "vrijwilligers"
 
-#: includes/admin/volunteer-list.php:420
+#: includes/admin/volunteer-list.php:435
 msgid "Role granted. Reloading…"
 msgstr "Rol toegekend. Opnieuw laden…"
 
-#: includes/admin/volunteer-list.php:421 includes/admin/volunteer-list.php:485
+#: includes/admin/volunteer-list.php:436 includes/admin/volunteer-list.php:500
 msgid "Role removed."
 msgstr "Rol verwijderd."
 
-#: includes/admin/volunteer-list.php:422 includes/admin/volunteer-list.php:553
+#: includes/admin/volunteer-list.php:437 includes/admin/volunteer-list.php:568
 msgid "Volunteer created. Reloading…"
 msgstr "Vrijwilliger aangemaakt. Wordt herladen…"
 
-#: includes/admin/volunteer-list.php:423
+#: includes/admin/volunteer-list.php:438
 msgid ""
 "Remove the volunteer role from {name}? They still have {shifts} upcoming "
 "shift(s)."
@@ -3034,27 +3088,27 @@ msgstr ""
 "De vrijwilligersrol van {name} verwijderen? Deze persoon heeft nog {shifts} "
 "aankomende dienst(en)."
 
-#: includes/admin/volunteer-list.php:424
+#: includes/admin/volunteer-list.php:439
 msgid "Remove the volunteer role from {name}?"
 msgstr "De vrijwilligersrol van {name} verwijderen?"
 
-#: includes/admin/volunteer-list.php:451 includes/admin/volunteer-list.php:481
+#: includes/admin/volunteer-list.php:466 includes/admin/volunteer-list.php:496
 msgid "User not found."
 msgstr "Gebruiker niet gevonden."
 
-#: includes/admin/volunteer-list.php:456
+#: includes/admin/volunteer-list.php:471
 msgid "Role granted."
 msgstr "Rol toegekend."
 
-#: includes/admin/volunteer-list.php:512
+#: includes/admin/volunteer-list.php:527
 msgid "First name is required."
 msgstr "Voornaam is verplicht."
 
-#: includes/admin/volunteer-list.php:519
+#: includes/admin/volunteer-list.php:534
 msgid "A user with this e-mail already exists."
 msgstr "Er bestaat al een gebruiker met dit e-mailadres."
 
-#: includes/admin/volunteer-list.php:575
+#: includes/admin/volunteer-list.php:590
 msgid "Log cleared."
 msgstr "Logboek gewist."
 
@@ -3132,11 +3186,7 @@ msgstr "Deze dienst overlapt met een dienst waarvoor u al bent aangemeld."
 msgid "Login link has expired or is invalid."
 msgstr "De inloglink is verlopen of ongeldig."
 
-#: includes/helpers.php:482
-msgid "(hidden from volunteers)"
-msgstr "(verborgen voor vrijwilligers)"
-
-#: includes/helpers.php:518
+#: includes/helpers.php:555
 msgid "Close"
 msgstr "Sluiten"
 
@@ -3257,11 +3307,11 @@ msgstr "Nieuwe afdeling toevoegen"
 msgid "New Department Name"
 msgstr "Nieuwe afdelingsnaam"
 
-#: includes/profile.php:38
+#: includes/profile.php:45
 msgid "✅ Your profile was saved successfully."
 msgstr "✅ Uw profiel is succesvol opgeslagen."
 
-#: includes/profile.php:44
+#: includes/profile.php:51
 msgid ""
 "<strong>Profile incomplete:</strong> Please enter your phone number so we "
 "can reach you in case of last-minute changes."
@@ -3269,15 +3319,23 @@ msgstr ""
 "<strong>Profiel onvolledig:</strong> Voer uw telefoonnummer in zodat we u "
 "kunnen bereiken bij last-minutewijzigingen."
 
-#: includes/profile.php:59 includes/registration.php:260
+#: includes/profile.php:66 includes/registration.php:260
 msgid "Phone number"
 msgstr "Telefoonnummer"
 
-#: includes/profile.php:69
+#: includes/profile.php:76
 msgid "Receive announcements about new shifts and events"
 msgstr "Aankondigingen over nieuwe diensten en evenementen ontvangen"
 
-#: includes/profile.php:111
+#: includes/profile.php:89
+msgid "Advanced: notify me about specific departments"
+msgstr "Geavanceerd: meldingen voor specifieke afdelingen"
+
+#: includes/profile.php:90
+msgid "Also notify me about new shifts in:"
+msgstr "Stuur me ook een melding bij nieuwe diensten in:"
+
+#: includes/profile.php:142
 msgid "This email address is already used by another user."
 msgstr "Dit e-mailadres is al in gebruik door een andere gebruiker."
 
@@ -3404,6 +3462,25 @@ msgstr "U bent succesvol afgemeld."
 #: includes/shiftselector.php:417
 msgid "You are not signed up for this shift."
 msgstr "U bent niet aangemeld voor deze dienst."
+
+#~ msgid ""
+#~ "Everyone linked to the department (admin-assigned or self-subscribed via "
+#~ "their profile), regardless of whether they have worked a shift there or "
+#~ "opted out of general announcements."
+#~ msgstr ""
+#~ "Iedereen die aan deze afdeling gekoppeld is (door een beheerder toegewezen "
+#~ "of zelf geabonneerd via het eigen profiel) – ongeacht of ze daar al een "
+#~ "dienst hebben gedraaid of zich hebben afgemeld voor algemene aankondigingen."
+
+#~ msgid ""
+#~ "Used to target this volunteer with department-specific announcements (Tools "
+#~ "→ Send Announcement), independent of any shift they have actually signed up "
+#~ "for. The volunteer can also set this themselves from their own profile page."
+#~ msgstr ""
+#~ "Wordt gebruikt om deze vrijwilliger gericht te bereiken met "
+#~ "afdelingsspecifieke aankondigingen (Extra → Aankondiging versturen), "
+#~ "ongeacht of hij of zij zich al voor een dienst daar heeft aangemeld. De "
+#~ "vrijwilliger kan dit ook zelf instellen via het eigen profiel."
 
 #~ msgid ""
 #~ "New in this release: departments can carry a description that assignment, "

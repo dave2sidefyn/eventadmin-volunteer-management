@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-09-13T06:48:39+00:00\n"
+"POT-Creation-Date: 2026-09-13T09:22:00+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
@@ -106,8 +106,8 @@ msgstr "({failed} n'ont pas pu être envoyés)"
 #: includes/admin/dashboard-tab-timeline.php:304
 #: includes/admin/dashboard-tab-timeline.php:493
 #: includes/admin/dashboard-tab-timeline.php:599
-#: includes/admin/user-profile.php:273 includes/admin/volunteer-list.php:168
-#: includes/admin/volunteer-list.php:419
+#: includes/admin/user-profile.php:352 includes/admin/volunteer-list.php:168
+#: includes/admin/volunteer-list.php:434
 msgid "An error occurred. Please try again."
 msgstr "Une erreur s'est produite. Veuillez réessayer."
 
@@ -135,7 +135,7 @@ msgstr "Sélectionner un PDF à joindre"
 msgid "Use this PDF"
 msgstr "Utiliser ce PDF"
 
-#: includes/admin/bulk-email.php:103 includes/admin/bulk-email.php:272
+#: includes/admin/bulk-email.php:103 includes/admin/bulk-email.php:283
 msgid "Recipients"
 msgstr "Destinataires"
 
@@ -181,49 +181,69 @@ msgstr "Bénévoles d'une catégorie spécifique"
 msgid "— Select category —"
 msgstr "— Sélectionner une catégorie —"
 
-#: includes/admin/bulk-email.php:187 includes/admin/settings.php:700
+#: includes/admin/bulk-email.php:183
+msgid "Volunteers linked to a department"
+msgstr "Bénévoles liés à un département"
+
+#: includes/admin/bulk-email.php:185
+msgid ""
+"Everyone linked to the department (admin-assigned or self-subscribed via "
+"their profile), regardless of whether they have worked a shift there or "
+"opted out of general announcements. Includes volunteers linked to any sub-"
+"department."
+msgstr ""
+"Toute personne liée à ce département (assignée par un administrateur ou "
+"abonnée elle-même via son profil) – qu'elle ait déjà effectué un créneau "
+"dans ce département ou qu'elle se soit désabonnée des annonces générales. "
+"Inclut également les bénévoles liés à un sous-département."
+
+#: includes/admin/bulk-email.php:188
+msgid "— Select department —"
+msgstr "— Sélectionner un département —"
+
+#: includes/admin/bulk-email.php:198 includes/admin/settings.php:700
 msgid "Sender"
 msgstr "Expéditeur"
 
-#: includes/admin/bulk-email.php:188
+#: includes/admin/bulk-email.php:199
 msgid "From name"
 msgstr "Nom de l'expéditeur"
 
-#: includes/admin/bulk-email.php:190
+#: includes/admin/bulk-email.php:201
 msgid "From email"
 msgstr "E-mail de l'expéditeur"
 
-#: includes/admin/bulk-email.php:196 includes/admin/bulk-email.php:271
-#: includes/admin/user-profile.php:180
+#: includes/admin/bulk-email.php:207 includes/admin/bulk-email.php:282
+#: includes/admin/user-profile.php:259
 msgid "Subject"
 msgstr "Objet"
 
-#: includes/admin/bulk-email.php:202
+#: includes/admin/bulk-email.php:213
 msgid "Attachment (optional)"
 msgstr "Pièce jointe (facultatif)"
 
-#: includes/admin/bulk-email.php:204
+#: includes/admin/bulk-email.php:215
 msgid "Select PDF…"
 msgstr "Sélectionner un PDF…"
 
-#: includes/admin/bulk-email.php:206
+#: includes/admin/bulk-email.php:217
 #: includes/admin/dashboard-tab-cards.php:131 includes/admin/settings.php:926
 msgid "Remove"
 msgstr "Retirer"
 
-#: includes/admin/bulk-email.php:207
+#: includes/admin/bulk-email.php:218
 msgid "The PDF will be attached to every email in this announcement."
 msgstr "Le PDF sera joint à chaque e-mail de cette annonce."
 
-#: includes/admin/bulk-email.php:212 includes/admin/bulk-email.php:277
+#: includes/admin/bulk-email.php:223 includes/admin/bulk-email.php:288
 msgid "Message"
 msgstr "Message"
 
-#: includes/admin/bulk-email.php:224 includes/admin/bulk-email.php:229
+#: includes/admin/bulk-email.php:235 includes/admin/bulk-email.php:240
 msgid "Preview (example data)"
 msgstr "Aperçu (données exemple)"
 
-#: includes/admin/bulk-email.php:225
+#: includes/admin/bulk-email.php:236
 msgid ""
 "Use {first_name} and {last_name} as placeholders in the message body. Use "
 "{shifts} to list each recipient's own upcoming shifts."
@@ -232,82 +252,88 @@ msgstr ""
 "message. Utilisez {shifts} pour lister les créneaux à venir propres à chaque"
 " destinataire."
 
-#: includes/admin/bulk-email.php:227
+#: includes/admin/bulk-email.php:238
 msgid "From:"
 msgstr "De :"
 
-#: includes/admin/bulk-email.php:228 includes/admin/bulk-email.php:335
+#: includes/admin/bulk-email.php:239 includes/admin/bulk-email.php:349
 msgid "Attachment:"
 msgstr "Pièce jointe :"
 
-#: includes/admin/bulk-email.php:235
+#: includes/admin/bulk-email.php:246
 msgid "Start sending"
 msgstr "Démarrer l'envoi"
 
-#: includes/admin/bulk-email.php:240
+#: includes/admin/bulk-email.php:251
 msgid "Sending in progress…"
 msgstr "Envoi en cours…"
 
-#: includes/admin/bulk-email.php:262
+#: includes/admin/bulk-email.php:273
 msgid "No announcements sent yet."
 msgstr "Aucune annonce envoyée pour l'instant."
 
-#: includes/admin/bulk-email.php:265
+#: includes/admin/bulk-email.php:276
 msgid "Filter…"
 msgstr "Filtrer…"
 
-#: includes/admin/bulk-email.php:270
+#: includes/admin/bulk-email.php:281
 #: includes/admin/dashboard-overview-page.php:276
-#: includes/admin/user-profile.php:178 includes/admin/volunteer-list.php:114
+#: includes/admin/user-profile.php:257 includes/admin/volunteer-list.php:114
 #: includes/admin/volunteer-list.php:143
 msgid "Date"
 msgstr "Date"
 
-#: includes/admin/bulk-email.php:273
+#: includes/admin/bulk-email.php:284
 msgid "From"
 msgstr "De"
 
-#: includes/admin/bulk-email.php:274
+#: includes/admin/bulk-email.php:285
 msgid "Sent to"
 msgstr "Envoyé à"
 
-#: includes/admin/bulk-email.php:275
+#: includes/admin/bulk-email.php:286
 msgid "Failed"
 msgstr "Échoué"
 
-#: includes/admin/bulk-email.php:276
+#: includes/admin/bulk-email.php:287
 msgid "Sent by"
 msgstr "Envoyé par"
 
-#: includes/admin/bulk-email.php:280 includes/admin/volunteer-list.php:286
+#: includes/admin/bulk-email.php:291 includes/admin/volunteer-list.php:286
 msgid "Click to sort"
 msgstr "Cliquer pour trier"
 
-#: includes/admin/bulk-email.php:292 includes/admin/volunteer-list.php:386
+#: includes/admin/bulk-email.php:303 includes/admin/volunteer-list.php:391
 msgid "Subscribed"
 msgstr "Inscrit"
 
-#: includes/admin/bulk-email.php:294
+#: includes/admin/bulk-email.php:305
 msgid "Without an upcoming shift"
 msgstr "Sans créneau à venir"
 
-#: includes/admin/bulk-email.php:296
+#: includes/admin/bulk-email.php:307
 msgid "With an upcoming shift"
 msgstr "Avec un créneau à venir"
 
 #. translators: %s is the shift title
-#: includes/admin/bulk-email.php:299
+#: includes/admin/bulk-email.php:310
 #, php-format
 msgid "Shift: %s"
 msgstr "Service : %s"
 
 #. translators: %s is the category name
-#: includes/admin/bulk-email.php:302
+#: includes/admin/bulk-email.php:313
 #, php-format
 msgid "Category: %s"
 msgstr "Catégorie : %s"
 
-#: includes/admin/bulk-email.php:306
+#. translators: %s is the department name
+#: includes/admin/bulk-email.php:316
+#, php-format
+msgid "Department: %s"
+msgstr "Département : %s"
+
+#: includes/admin/bulk-email.php:320
 #: includes/admin/dashboard-overview-page.php:222
 #: includes/admin/dashboard-overview-page.php:230
 #: includes/admin/dashboard-overview-page.php:242
@@ -317,97 +343,101 @@ msgid "All"
 msgstr "Tous"
 
 #. translators: 1: volunteer name, 2: number of shifts
-#: includes/admin/bulk-email.php:517
+#: includes/admin/bulk-email.php:552
 #, php-format
 msgid "%1$s (%2$d shifts)"
 msgstr "%1$s (%2$d créneaux)"
 
 #. translators: %s is the volunteer name
-#: includes/admin/bulk-email.php:524
+#: includes/admin/bulk-email.php:559
 #, php-format
 msgid "%s (Offline — will NOT be notified)"
 msgstr "%s (Hors ligne – ne sera PAS notifié)"
 
 #. translators: %d is the number of additional recipients not listed
-#: includes/admin/bulk-email.php:530
+#: includes/admin/bulk-email.php:565
 #, php-format
 msgid "…and %d more"
 msgstr "…et %d de plus"
 
-#: includes/admin/bulk-email.php:560 includes/admin/user-profile.php:146
+#: includes/admin/bulk-email.php:595 includes/admin/user-profile.php:225
 msgid "No upcoming shifts."
 msgstr "Aucun créneau à venir."
 
-#: includes/admin/bulk-email.php:583 includes/admin/bulk-email.php:618
-#: includes/admin/bulk-email.php:714
+#: includes/admin/bulk-email.php:618 includes/admin/bulk-email.php:654
+#: includes/admin/bulk-email.php:758
 #: includes/admin/dashboard-tab-timeline.php:353 includes/admin/import.php:243
 #: includes/admin/import.php:257 includes/admin/import.php:272
 #: includes/admin/import.php:285 includes/admin/import.php:302
-#: includes/admin/import.php:313 includes/admin/user-profile.php:218
-#: includes/admin/volunteer-list.php:440 includes/admin/volunteer-list.php:470
-#: includes/admin/volunteer-list.php:499 includes/admin/volunteer-list.php:567
+#: includes/admin/import.php:313 includes/admin/user-profile.php:297
+#: includes/admin/volunteer-list.php:455 includes/admin/volunteer-list.php:485
+#: includes/admin/volunteer-list.php:514 includes/admin/volunteer-list.php:582
 #: includes/shiftselector.php:325 includes/shiftselector.php:373
 msgid "Security check failed."
 msgstr "Vérification de sécurité échouée."
 
-#: includes/admin/bulk-email.php:587 includes/admin/bulk-email.php:622
-#: includes/admin/bulk-email.php:718 includes/admin/volunteer-list.php:444
-#: includes/admin/volunteer-list.php:474 includes/admin/volunteer-list.php:503
-#: includes/admin/volunteer-list.php:571
+#: includes/admin/bulk-email.php:622 includes/admin/bulk-email.php:658
+#: includes/admin/bulk-email.php:762 includes/admin/volunteer-list.php:459
+#: includes/admin/volunteer-list.php:489 includes/admin/volunteer-list.php:518
+#: includes/admin/volunteer-list.php:586
 msgid "Insufficient permissions."
 msgstr "Permissions insuffisantes."
 
-#: includes/admin/bulk-email.php:596
+#: includes/admin/bulk-email.php:632
 msgid "Invalid recipient type."
 msgstr "Type de destinataire invalide."
 
-#: includes/admin/bulk-email.php:637
+#: includes/admin/bulk-email.php:674
 msgid "Subject and message are required."
 msgstr "L'objet et le message sont obligatoires."
 
-#: includes/admin/bulk-email.php:641
+#: includes/admin/bulk-email.php:678
 msgid "Please select a shift."
 msgstr "Veuillez sélectionner un service."
 
-#: includes/admin/bulk-email.php:645
+#: includes/admin/bulk-email.php:682
 msgid "Please select a category."
 msgstr "Veuillez sélectionner une catégorie."
 
-#: includes/admin/bulk-email.php:649
+#: includes/admin/bulk-email.php:686
+msgid "Please select a department."
+msgstr "Veuillez sélectionner un département."
+
+#: includes/admin/bulk-email.php:690
 msgid "No recipient specified."
 msgstr "Aucun destinataire spécifié."
 
-#: includes/admin/bulk-email.php:657
+#: includes/admin/bulk-email.php:698
 msgid "The selected attachment is not a valid PDF."
 msgstr "La pièce jointe sélectionnée n'est pas un PDF valide."
 
-#: includes/admin/bulk-email.php:661
+#: includes/admin/bulk-email.php:702
 msgid "The selected attachment could not be found."
 msgstr "La pièce jointe sélectionnée est introuvable."
 
-#: includes/admin/bulk-email.php:725
+#: includes/admin/bulk-email.php:769
 msgid "Job not found or expired."
 msgstr "Tâche introuvable ou expirée."
 
 #. translators: %d is the number of failed deliveries
-#: includes/admin/bulk-email.php:814
+#: includes/admin/bulk-email.php:858
 #, php-format
 msgid "%d emails could not be delivered."
 msgstr "%d e-mails n'ont pas pu être envoyés."
 
-#: includes/admin/bulk-email.php:817
+#: includes/admin/bulk-email.php:861
 msgid "All emails were delivered successfully."
 msgstr "Tous les e-mails ont été envoyés avec succès."
 
 #. translators: %s is the email subject that was sent
-#: includes/admin/bulk-email.php:823
+#: includes/admin/bulk-email.php:867
 #, php-format
 msgid "[%s] Announcement sent: %s"
 msgstr "[%s] Annonce envoyée : %s"
 
 #. translators: 1: blog name, 2: email subject, 3: sent count, 4: delivery
 #. note
-#: includes/admin/bulk-email.php:829
+#: includes/admin/bulk-email.php:873
 #, php-format
 msgid ""
 "Your announcement <strong>%2$s</strong> was sent on %1$s.<br><br>Recipients:"
@@ -416,7 +446,7 @@ msgstr ""
 "Votre annonce <strong>%2$s</strong> a été envoyée le "
 "%1$s.<br><br>Destinataires : %3$d<br>%4$s"
 
-#: includes/admin/bulk-email.php:841
+#: includes/admin/bulk-email.php:885
 msgid "Announcement delivery summary"
 msgstr "Résumé de l'envoi de l'annonce"
 
@@ -489,7 +519,7 @@ msgstr "Bénévole sélectionné invalide."
 
 #: includes/admin/dashboard-form-handlers.php:200
 #: includes/admin/dashboard-tab-timeline.php:476
-#: includes/admin/shift-metaboxes.php:205 includes/admin/user-profile.php:225
+#: includes/admin/shift-metaboxes.php:205 includes/admin/user-profile.php:304
 msgid "Not allowed"
 msgstr "Non autorisé"
 
@@ -530,7 +560,7 @@ msgstr "Nom"
 #: includes/admin/dashboard-tab-table.php:42 includes/admin/settings.php:717
 #: includes/admin/shift-metaboxes.php:269
 #: includes/admin/volunteer-list.php:115 includes/admin/volunteer-list.php:145
-#: includes/admin/volunteer-list.php:276 includes/profile.php:62
+#: includes/admin/volunteer-list.php:276 includes/profile.php:69
 #: includes/registration.php:263
 msgid "E-Mail"
 msgstr "E-Mail"
@@ -730,14 +760,14 @@ msgstr "ou ajoutez un nouveau bénévole ci-dessous"
 
 #: includes/admin/dashboard-overview-page.php:490
 #: includes/admin/dashboard-tab-cards.php:100
-#: includes/admin/volunteer-list.php:231 includes/profile.php:50
+#: includes/admin/volunteer-list.php:231 includes/profile.php:57
 #: includes/registration.php:254
 msgid "First name"
 msgstr "Prénom"
 
 #: includes/admin/dashboard-overview-page.php:491
 #: includes/admin/dashboard-tab-cards.php:101
-#: includes/admin/volunteer-list.php:232 includes/profile.php:55
+#: includes/admin/volunteer-list.php:232 includes/profile.php:62
 #: includes/registration.php:257
 msgid "Last name"
 msgstr "Nom de famille"
@@ -783,7 +813,8 @@ msgid "More options"
 msgstr "Plus d'options"
 
 #: includes/admin/dashboard-overview-page.php:643
-#: includes/admin/documentation.php:107 includes/post-types.php:47
+#: includes/admin/documentation.php:107 includes/admin/user-profile.php:139
+#: includes/admin/volunteer-list.php:289 includes/post-types.php:47
 #: includes/post-types.php:57
 msgid "Departments"
 msgstr "Départements"
@@ -819,7 +850,7 @@ msgstr "Action"
 
 #: includes/admin/dashboard-tab-cards.php:116
 #: includes/admin/documentation.php:128 includes/admin/shift-metaboxes.php:283
-#: includes/admin/volunteer-list.php:353
+#: includes/admin/volunteer-list.php:358
 msgid "Offline"
 msgstr "Hors ligne"
 
@@ -961,7 +992,7 @@ msgstr ""
 "Laissez vide pour utiliser l'utilisateur organisateur lié ou l'expéditeur de"
 " notification global."
 
-#: includes/admin/dashboard-tab-timeline.php:234 includes/profile.php:75
+#: includes/admin/dashboard-tab-timeline.php:234 includes/profile.php:106
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -1005,7 +1036,7 @@ msgid "View profile"
 msgstr "Voir le profil"
 
 #: includes/admin/dashboard-tab-timeline.php:315
-#: includes/admin/user-profile.php:272
+#: includes/admin/user-profile.php:351
 msgid "Loading…"
 msgstr "Chargement…"
 
@@ -1430,7 +1461,7 @@ msgstr ""
 "Créé par un administrateur sans adresse e-mail. Ne peut pas se connecter et "
 "ne reçoit pas de notifications."
 
-#: includes/admin/documentation.php:132 includes/admin/volunteer-list.php:362
+#: includes/admin/documentation.php:132 includes/admin/volunteer-list.php:367
 msgid "Manual"
 msgstr "Manuel"
 
@@ -1442,7 +1473,7 @@ msgstr ""
 "Ajouté par un administrateur via le formulaire du tableau de bord ou la "
 "fonction « Attribuer le rôle bénévole ». Jamais supprimé automatiquement."
 
-#: includes/admin/documentation.php:136 includes/admin/volunteer-list.php:356
+#: includes/admin/documentation.php:136 includes/admin/volunteer-list.php:361
 msgid "Unverified"
 msgstr "Non vérifié"
 
@@ -1456,7 +1487,7 @@ msgstr ""
 "connexion magique. Le compte est supprimé automatiquement à l'expiration du "
 "lien (~24 h). Le badge disparaît dès que le lien est cliqué."
 
-#: includes/admin/documentation.php:140 includes/admin/volunteer-list.php:359
+#: includes/admin/documentation.php:140 includes/admin/volunteer-list.php:364
 msgid "Social"
 msgstr "Connexion sociale"
 
@@ -2804,7 +2835,7 @@ msgstr "S'inscrire"
 msgid "Sign out"
 msgstr "Se désinscrire"
 
-#: includes/admin/settings.php:988 includes/admin/user-profile.php:137
+#: includes/admin/settings.php:988 includes/admin/user-profile.php:216
 msgid "Reminder"
 msgstr "Rappel"
 
@@ -2860,55 +2891,78 @@ msgstr "Bénévoles assignés"
 msgid "Volunteer activity"
 msgstr "Activité du bénévole"
 
-#: includes/admin/user-profile.php:135
+#: includes/admin/user-profile.php:141
+msgid "Linked departments"
+msgstr "Départements liés"
+
+#: includes/admin/user-profile.php:142
+msgid ""
+"Used to target this volunteer with department-specific announcements (Tools "
+"→ Send Announcement), independent of any shift they have actually signed up "
+"for. The volunteer can also set this themselves from their own profile page."
+" Checking (or unchecking) a department also checks/unchecks every department"
+" nested under it."
+msgstr ""
+"Permet de cibler ce bénévole avec des annonces spécifiques à un département "
+"(Outils → Envoyer une annonce), qu'il se soit déjà inscrit à un créneau dans"
+" ce département ou non. Le bénévole peut également définir cela lui-même "
+"depuis son propre profil. Cocher (ou décocher) un département coche ou "
+"décoche aussi automatiquement tous les départements qui lui sont "
+"subordonnés."
+
+#: includes/admin/user-profile.php:146 includes/helpers.php:519
+msgid "(hidden from volunteers)"
+msgstr "(masqué aux bénévoles)"
+
+#: includes/admin/user-profile.php:214
 msgid "Signed up"
 msgstr "Inscrit"
 
-#: includes/admin/user-profile.php:136
+#: includes/admin/user-profile.php:215
 msgid "Cancelled"
 msgstr "Annulé"
 
-#: includes/admin/user-profile.php:138
+#: includes/admin/user-profile.php:217
 msgid "Announcement"
 msgstr "Annonce"
 
-#: includes/admin/user-profile.php:144 includes/admin/volunteer-list.php:279
+#: includes/admin/user-profile.php:223 includes/admin/volunteer-list.php:279
 msgid "Upcoming shifts"
 msgstr "Créneaux à venir"
 
-#: includes/admin/user-profile.php:153
+#: includes/admin/user-profile.php:232
 msgid "Past shifts"
 msgstr "Créneaux passés"
 
-#: includes/admin/user-profile.php:155
+#: includes/admin/user-profile.php:234
 msgid "No past shifts."
 msgstr "Aucun créneau passé."
 
 #. translators: %d: total number of past shifts
-#: includes/admin/user-profile.php:164
+#: includes/admin/user-profile.php:243
 #, php-format
 msgid "Showing the 100 most recent of %d past shifts."
 msgstr "Affiche les 100 créneaux les plus récents sur %d créneaux passés."
 
-#: includes/admin/user-profile.php:172
+#: includes/admin/user-profile.php:251
 msgid "Notification history"
 msgstr "Historique des notifications"
 
-#: includes/admin/user-profile.php:174
+#: includes/admin/user-profile.php:253
 msgid "No notifications logged yet."
 msgstr "Aucune notification enregistrée pour le moment."
 
-#: includes/admin/user-profile.php:175
+#: includes/admin/user-profile.php:254
 msgid "Only notifications sent from now on are recorded here."
 msgstr ""
 "Seules les notifications envoyées à partir de maintenant sont enregistrées "
 "ici."
 
-#: includes/admin/user-profile.php:179
+#: includes/admin/user-profile.php:258
 msgid "Type"
 msgstr "Type"
 
-#: includes/admin/user-profile.php:249
+#: includes/admin/user-profile.php:328
 msgid "Open full profile"
 msgstr "Ouvrir le profil complet"
 
@@ -3011,47 +3065,47 @@ msgstr "Inscrit"
 msgid "Last shift"
 msgstr "Dernier créneau"
 
-#: includes/admin/volunteer-list.php:289
+#: includes/admin/volunteer-list.php:290
 msgid "Contact"
 msgstr "Contacter"
 
-#: includes/admin/volunteer-list.php:290
+#: includes/admin/volunteer-list.php:291
 msgid "Actions"
 msgstr "Actions"
 
-#: includes/admin/volunteer-list.php:294
+#: includes/admin/volunteer-list.php:295
 msgid "No volunteers found."
 msgstr "Aucun bénévole trouvé."
 
-#: includes/admin/volunteer-list.php:387
+#: includes/admin/volunteer-list.php:392
 msgid "Opted out"
 msgstr "Désabonné"
 
-#: includes/admin/volunteer-list.php:393
+#: includes/admin/volunteer-list.php:408
 msgid "Email"
 msgstr "E-mail"
 
-#: includes/admin/volunteer-list.php:399
+#: includes/admin/volunteer-list.php:414
 msgid "Remove role"
 msgstr "Supprimer le rôle"
 
-#: includes/admin/volunteer-list.php:418
+#: includes/admin/volunteer-list.php:433
 msgid "volunteers"
 msgstr "bénévoles"
 
-#: includes/admin/volunteer-list.php:420
+#: includes/admin/volunteer-list.php:435
 msgid "Role granted. Reloading…"
 msgstr "Rôle attribué. Rechargement…"
 
-#: includes/admin/volunteer-list.php:421 includes/admin/volunteer-list.php:485
+#: includes/admin/volunteer-list.php:436 includes/admin/volunteer-list.php:500
 msgid "Role removed."
 msgstr "Rôle supprimé."
 
-#: includes/admin/volunteer-list.php:422 includes/admin/volunteer-list.php:553
+#: includes/admin/volunteer-list.php:437 includes/admin/volunteer-list.php:568
 msgid "Volunteer created. Reloading…"
 msgstr "Bénévole créé. Rechargement…"
 
-#: includes/admin/volunteer-list.php:423
+#: includes/admin/volunteer-list.php:438
 msgid ""
 "Remove the volunteer role from {name}? They still have {shifts} upcoming "
 "shift(s)."
@@ -3059,27 +3113,27 @@ msgstr ""
 "Supprimer le rôle de bénévole de {name} ? Cette personne a encore {shifts} "
 "service(s) à venir."
 
-#: includes/admin/volunteer-list.php:424
+#: includes/admin/volunteer-list.php:439
 msgid "Remove the volunteer role from {name}?"
 msgstr "Supprimer le rôle de bénévole de {name} ?"
 
-#: includes/admin/volunteer-list.php:451 includes/admin/volunteer-list.php:481
+#: includes/admin/volunteer-list.php:466 includes/admin/volunteer-list.php:496
 msgid "User not found."
 msgstr "Utilisateur introuvable."
 
-#: includes/admin/volunteer-list.php:456
+#: includes/admin/volunteer-list.php:471
 msgid "Role granted."
 msgstr "Rôle attribué."
 
-#: includes/admin/volunteer-list.php:512
+#: includes/admin/volunteer-list.php:527
 msgid "First name is required."
 msgstr "Le prénom est obligatoire."
 
-#: includes/admin/volunteer-list.php:519
+#: includes/admin/volunteer-list.php:534
 msgid "A user with this e-mail already exists."
 msgstr "Un utilisateur avec cet e-mail existe déjà."
 
-#: includes/admin/volunteer-list.php:575
+#: includes/admin/volunteer-list.php:590
 msgid "Log cleared."
 msgstr "Journal vidé."
 
@@ -3157,11 +3211,7 @@ msgstr "Ce créneau chevauche un créneau que vous avez déjà pris."
 msgid "Login link has expired or is invalid."
 msgstr "Le lien de connexion a expiré ou est invalide."
 
-#: includes/helpers.php:482
-msgid "(hidden from volunteers)"
-msgstr "(masqué aux bénévoles)"
-
-#: includes/helpers.php:518
+#: includes/helpers.php:555
 msgid "Close"
 msgstr "Fermer"
 
@@ -3282,11 +3332,11 @@ msgstr "Ajouter un département"
 msgid "New Department Name"
 msgstr "Nouveau nom de département"
 
-#: includes/profile.php:38
+#: includes/profile.php:45
 msgid "✅ Your profile was saved successfully."
 msgstr "✅ Votre profil a été enregistré avec succès."
 
-#: includes/profile.php:44
+#: includes/profile.php:51
 msgid ""
 "<strong>Profile incomplete:</strong> Please enter your phone number so we "
 "can reach you in case of last-minute changes."
@@ -3295,15 +3345,23 @@ msgstr ""
 "téléphone afin que nous puissions vous contacter en cas de changements de "
 "dernière minute."
 
-#: includes/profile.php:59 includes/registration.php:260
+#: includes/profile.php:66 includes/registration.php:260
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: includes/profile.php:69
+#: includes/profile.php:76
 msgid "Receive announcements about new shifts and events"
 msgstr "Recevoir des annonces sur les nouveaux créneaux et événements"
 
-#: includes/profile.php:111
+#: includes/profile.php:89
+msgid "Advanced: notify me about specific departments"
+msgstr "Avancé : être notifié pour des départements spécifiques"
+
+#: includes/profile.php:90
+msgid "Also notify me about new shifts in:"
+msgstr "Me notifier aussi des nouveaux créneaux dans :"
+
+#: includes/profile.php:142
 msgid "This email address is already used by another user."
 msgstr "Cette adresse e-mail est déjà utilisée par un autre utilisateur."
 
@@ -3430,6 +3488,25 @@ msgstr "Vous avez été désinscrit avec succès."
 #: includes/shiftselector.php:417
 msgid "You are not signed up for this shift."
 msgstr "Vous n'êtes pas inscrit à ce créneau."
+
+#~ msgid ""
+#~ "Everyone linked to the department (admin-assigned or self-subscribed via "
+#~ "their profile), regardless of whether they have worked a shift there or "
+#~ "opted out of general announcements."
+#~ msgstr ""
+#~ "Toute personne liée à ce département (assignée par un administrateur ou "
+#~ "abonnée elle-même via son profil) – qu'elle ait déjà effectué un créneau "
+#~ "dans ce département ou qu'elle se soit désabonnée des annonces générales."
+
+#~ msgid ""
+#~ "Used to target this volunteer with department-specific announcements (Tools "
+#~ "→ Send Announcement), independent of any shift they have actually signed up "
+#~ "for. The volunteer can also set this themselves from their own profile page."
+#~ msgstr ""
+#~ "Permet de cibler ce bénévole avec des annonces spécifiques à un département "
+#~ "(Outils → Envoyer une annonce), qu'il se soit déjà inscrit à un créneau dans"
+#~ " ce département ou non. Le bénévole peut également définir cela lui-même "
+#~ "depuis son propre profil."
 
 #~ msgid ""
 #~ "New in this release: departments can carry a description that assignment, "
