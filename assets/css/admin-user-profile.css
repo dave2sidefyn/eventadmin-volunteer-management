@@ -143,6 +143,19 @@
     white-space: nowrap;
 }
 
+/* Only the first N entries (see $visible in eventadmin_render_activity_feed()) show until
+   the "Show more" toggle adds .eventadmin-activity-feed-expanded to the section. Needs the
+   extra ".eventadmin-activity-feed" ancestor class to out-specificity ".eventadmin-activity-
+   feed li" above (a class+element selector otherwise beats this class-only one and the
+   "display: flex" it sets always wins, regardless of source order). */
+.eventadmin-activity-feed .eventadmin-activity-feed-extra {
+    display: none;
+}
+
+.eventadmin-activity-feed-expanded .eventadmin-activity-feed-extra {
+    display: flex;
+}
+
 .eventadmin-phone-edit .button {
     margin: 0;
 }

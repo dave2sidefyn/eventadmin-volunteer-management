@@ -196,19 +196,21 @@ function eventadmin_enqueue_quick_edit_scripts($hook): void
 {
     global $post_type;
     if ($hook === 'edit.php' && $post_type === 'eventadmin_shift') {
+        $quick_edit_js_path = plugin_dir_path(__FILE__) . '../../assets/js/quick-edit.js';
         wp_enqueue_script(
             'eventadmin-quick-edit',
             plugin_dir_url(__FILE__) . '../../assets/js/quick-edit.js',
             ['jquery'],
-            '1.0',
+            file_exists($quick_edit_js_path) ? filemtime($quick_edit_js_path) : null,
             true
         );
 
+        $quick_edit_css_path = plugin_dir_path(__FILE__) . '../../assets/css/quick-edit.css';
         wp_enqueue_style(
             'eventadmin-quick-edit',
             plugin_dir_url(__FILE__) . '../../assets/css/quick-edit.css',
             [],
-            '1.0'
+            file_exists($quick_edit_css_path) ? filemtime($quick_edit_css_path) : null
         );
     }
 }

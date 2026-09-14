@@ -109,6 +109,27 @@ function eventadmin_hide_shift_menu_items_css(): void
 add_action('admin_head', 'eventadmin_hide_shift_menu_items_css');
 
 /**
+ * Keeps the "Shifts" top-level menu icon (see the 'menu_icon' in eventadmin_register_shift_post_type()
+ * / includes/post-types.php) at full opacity at all times. WordPress dims every non-current
+ * menu item's <img> icon to opacity:.6 at rest (the same treatment its own dashicon sprites
+ * get), which is fine for those — a thin monochrome glyph dimming to grey barely changes how
+ * it reads — but our icon was specifically recolored (see the menu_icon comment) so its
+ * checkmark cutout stays legible at any opacity; there's no reason to still dim it, so this
+ * overrides that one rule for just this one menu item's icon rather than sidebar-wide.
+ *
+ * "menu-icon-eventadmin_shift" is a stable class WordPress itself adds to this <li> (derived
+ * from the post type slug), present regardless of whether "Shifts" is the current section.
+ *
+ * @return void
+ */
+function eventadmin_shift_menu_icon_full_opacity_css(): void
+{
+    echo '<style>#adminmenu .menu-icon-eventadmin_shift .wp-menu-image img{opacity:1!important;}</style>';
+}
+
+add_action('admin_head', 'eventadmin_shift_menu_icon_full_opacity_css');
+
+/**
  * Displays the Overview page — dashboard stats only, no tabs (there's only one view here).
  *
  * @return void
@@ -157,20 +178,142 @@ function eventadmin_admin_enqueue_dashboard_scripts(): void
         true
     );
 
+    $admin_charts_js_path = plugin_dir_path(__FILE__) . '../../assets/js/admin-charts.js';
     wp_enqueue_script(
         'eventadmin-admin-charts',
         plugin_dir_url(__FILE__) . '../../assets/js/admin-charts.js',
         ['chart-js'],
-        '1.0',
+        file_exists($admin_charts_js_path) ? filemtime($admin_charts_js_path) : null,
         true
     );
 
+    $admin_dashboard_css_path = plugin_dir_path(__FILE__) . '../../assets/css/admin-dashboard.css';
     wp_enqueue_style(
         'eventadmin-admin-dashboard',
         plugin_dir_url(__FILE__) . '../../assets/css/admin-dashboard.css',
         [],
-        '1.0'
+        file_exists($admin_dashboard_css_path) ? filemtime($admin_dashboard_css_path) : null
     );
 }
 
 add_action('admin_enqueue_scripts', 'eventadmin_admin_enqueue_dashboard_scripts');
+
+/**
+ * Registers the "EventAdmin Volunteer Management" wp-admin Dashboard widget — a compact,
+ * chart-free glance at the same KPI numbers and "Recent activity" feed as the Overview
+ * page's Dashboard tab, so they surface right where an admin lands after login instead of
+ * only on a page they have to remember to visit. Gated behind the same capabilities that
+ * gate the Overview/Volunteers pages themselves, so it only appears for someone who could
+ * already see this data there.
+ *
+ * Stats are computed once here (rather than inside the render callback) so the count that
+ * matters most — shifts still missing a required volunteer — can lead the widget's own
+ * title bar, visible even when the widget is collapsed; the same numbers are then handed
+ * to the render callback via $callback_args instead of being recomputed.
+ *
+ * @return void
+ */
+function eventadmin_register_dashboard_widget(): void
+{
+    if (!current_user_can('eventadmin_manage_shifts') && !current_user_can('eventadmin_manage_volunteers')) {
+        return;
+    }
+
+    $total_users = count(get_users(['role' => 'eventadmin_volunteer']));
+    $stats       = eventadmin_calculate_dashboard_stats($total_users, 3);
+
+    $plugin_title = esc_html__('EventAdmin – Volunteer Management', 'eventadmin-volunteer-management');
+    $widget_title = $stats['required_open_shifts'] > 0
+        ? $stats['required_open_shifts'] . ' ' . esc_html__('Open (required)', 'eventadmin-volunteer-management') . ' — ' . $plugin_title
+        : $plugin_title;
+
+    wp_add_dashboard_widget(
+        'eventadmin_volunteer_management_dashboard_widget',
+        $widget_title,
+        'eventadmin_render_dashboard_widget',
+        null,
+        ['total_users' => $total_users, 'stats' => $stats]
+    );
+}
+
+add_action('wp_dashboard_setup', 'eventadmin_register_dashboard_widget');
+
+/**
+ * Renders the Dashboard widget's content: a flat, narrow-width-friendly KPI row (no
+ * shadowed cards — the Overview page's own .eventadmin-dashboard-box styling reads as too
+ * heavy once squeezed into a ~350px widget column), a "Next shifts" mini-agenda (the
+ * soonest few upcoming shifts, each flagging its own still-needed count so the single most
+ * urgent gap surfaces even if it's not the very next shift chronologically), the same
+ * "Recent activity" feed/toggle used on the Overview page, and a link into the full page.
+ *
+ * @param mixed $post
+ * @param array{args: array{total_users: int, stats: array}} $box
+ * @return void
+ */
+function eventadmin_render_dashboard_widget($post, array $box): void
+{
+    $total_users = $box['args']['total_users'];
+    $stats       = $box['args']['stats'];
+
+    echo '<div class="eventadmin-widget-stats">';
+    $flat_stats = [
+        esc_html__('Open (required)', 'eventadmin-volunteer-management')        => [$stats['required_open_shifts'], true],
+        esc_html__('Upcoming shifts', 'eventadmin-volunteer-management')         => [$stats['total_shifts'], false],
+        rtrim(esc_html__('Volunteers without upcoming shift:', 'eventadmin-volunteer-management'), ':') => [$stats['volunteers_without_shift'], false],
+    ];
+    foreach ($flat_stats as $label => [$value, $is_urgent_metric]) {
+        $urgent_class = ($is_urgent_metric && $value > 0) ? ' eventadmin-widget-stat-urgent' : '';
+        echo '<div class="eventadmin-widget-stat' . esc_attr($urgent_class) . '">';
+        echo '<span class="eventadmin-widget-stat-value">' . esc_html($value) . '</span>';
+        echo '<span class="eventadmin-widget-stat-label">' . $label . '</span>';
+        echo '</div>';
+    }
+    echo '</div>';
+
+    if (!empty($stats['next_shifts'])) {
+        echo '<div class="eventadmin-widget-section-title">' . esc_html__('Next shifts', 'eventadmin-volunteer-management') . '</div>';
+        echo '<ul class="eventadmin-widget-agenda">';
+        foreach ($stats['next_shifts'] as $shift) {
+            $needs_help = $shift['required_open'] > 0;
+            echo '<li class="' . ($needs_help ? 'eventadmin-widget-agenda-urgent' : '') . '">';
+            echo '<span class="eventadmin-widget-agenda-title"><a href="' . esc_url((string) get_edit_post_link($shift['id'])) . '">' . esc_html($shift['title']) . '</a>'
+                . '<br><span class="eventadmin-widget-agenda-when">' . esc_html(eventadmin_get_formatted_zeitraum($shift['start'], $shift['end'])) . '</span></span>';
+            echo '<span class="eventadmin-widget-agenda-meta">' . ($needs_help
+                ? esc_html(eventadmin_open_positions_format_count($shift['required_open']))
+                : esc_html($shift['assigned'] . '/' . $shift['max'])) . '</span>';
+            echo '</li>';
+        }
+        echo '</ul>';
+    }
+
+    eventadmin_render_activity_feed();
+
+    echo '<p class="eventadmin-widget-footer-link"><a href="' . esc_url(admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-overview')) . '">' . esc_html__('View full Overview', 'eventadmin-volunteer-management') . '</a></p>';
+}
+
+/**
+ * Enqueues the Dashboard widget's own flat, narrow-width layout styles — kept in its own
+ * stylesheet (dashboard-menu.css) rather than admin-dashboard.css, whose .eventadmin-
+ * dashboard-box "card" styling this widget deliberately does not reuse — plus the activity-
+ * feed styles, handled by eventadmin_enqueue_volunteer_profile_styles() in user-profile.php,
+ * whose allowed screens include 'dashboard'. Nothing here needs Chart.js.
+ *
+ * @param string $hook
+ * @return void
+ */
+function eventadmin_enqueue_dashboard_widget_styles(string $hook): void
+{
+    if ($hook !== 'index.php') {
+        return;
+    }
+
+    $dashboard_widget_css_path = plugin_dir_path(__FILE__) . '../../assets/css/dashboard-menu.css';
+    wp_enqueue_style(
+        'eventadmin-dashboard-widget',
+        plugin_dir_url(__FILE__) . '../../assets/css/dashboard-menu.css',
+        [],
+        file_exists($dashboard_widget_css_path) ? filemtime($dashboard_widget_css_path) : null
+    );
+}
+
+add_action('admin_enqueue_scripts', 'eventadmin_enqueue_dashboard_widget_styles');

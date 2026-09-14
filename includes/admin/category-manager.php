@@ -237,11 +237,12 @@ function eventadmin_enqueue_category_color_reset_script(): void
         return;
     }
 
+    $category_manager_css_path = plugin_dir_path(__FILE__) . '../../assets/css/category-manager.css';
     wp_enqueue_style(
         'eventadmin-category-manager',
         plugin_dir_url(__FILE__) . '../../assets/css/category-manager.css',
         [],
-        '1.0'
+        file_exists($category_manager_css_path) ? filemtime($category_manager_css_path) : null
     );
 
     wp_add_inline_script('jquery', '

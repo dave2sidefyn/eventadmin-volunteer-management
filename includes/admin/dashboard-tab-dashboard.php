@@ -12,18 +12,30 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Renders the "Dashboard" tab: summary boxes + utilization charts for upcoming shifts.
+ * Computes the KPI numbers and per-department breakdown behind the Dashboard tab's stat
+ * boxes and utilization charts — split out from eventadmin_render_dashboard_stats_tab() so
+ * the same numbers can back a lighter-weight presentation elsewhere (the wp-admin "At a
+ * Glance"-style dashboard widget, see eventadmin_render_dashboard_widget() in
+ * dashboard-menu.php) without also requiring Chart.js just to read five numbers.
  *
  * @param int $total_users Registered volunteer count.
- * @return void
+ * @param int $next_shifts_limit How many of the soonest upcoming shifts to summarize into
+ *                                 'next_shifts' (each with its own fill/required-open state)
+ *                                 — used by the Dashboard widget's mini-agenda; 0 skips it.
+ * @return array{total_shifts:int, filled_shifts:int, open_shifts:int, required_open_shifts:int, optional_open_shifts:int, volunteers_without_shift:int, category_counts:array, next_shifts:array}
  */
-function eventadmin_render_dashboard_stats_tab(int $total_users): void
+function eventadmin_calculate_dashboard_stats(int $total_users, int $next_shifts_limit = 0): array
 {
     // Stats are always based on upcoming shifts only — "upcoming" here means the shift
-    // hasn't ended yet, so a shift already in progress still counts.
+    // hasn't ended yet, so a shift already in progress still counts. Ordered soonest-first
+    // so 'next_shifts' below can just take the first N without a second query/sort.
     $upcoming_shifts = get_posts([
         'post_type'   => 'eventadmin_shift',
         'numberposts' => -1,
+        'meta_key'    => 'shift_start',
+        'orderby'     => 'meta_value',
+        'meta_type'   => 'DATETIME',
+        'order'       => 'ASC',
         'meta_query'  => [[
             'key'     => 'shift_end',
             'value'   => current_time('Y-m-d\TH:i'),
@@ -36,6 +48,7 @@ function eventadmin_render_dashboard_stats_tab(int $total_users): void
     $open_shifts         = 0;
     $assigned_user_ids   = [];
     $category_counts     = [];
+    $next_shifts         = [];
 
     $required_open_shifts = 0;
     $optional_open_shifts = 0;
@@ -53,6 +66,18 @@ function eventadmin_render_dashboard_stats_tab(int $total_users): void
         $required_open_shifts += $required_open;
         $optional_open_shifts += $optional_open;
         $filled_shifts        += $assigned;
+
+        if (count($next_shifts) < $next_shifts_limit) {
+            $next_shifts[] = [
+                'id'            => $shift->ID,
+                'title'         => $shift->post_title,
+                'start'         => get_post_meta($shift->ID, 'shift_start', true),
+                'end'           => get_post_meta($shift->ID, 'shift_end', true),
+                'assigned'      => $assigned,
+                'max'           => $max,
+                'required_open' => $required_open,
+            ];
+        }
 
         $meta = get_post_meta($shift->ID);
         foreach ($meta as $key => $val) {
@@ -72,8 +97,30 @@ function eventadmin_render_dashboard_stats_tab(int $total_users): void
         }
     }
 
-    $unique_assigned      = array_unique($assigned_user_ids);
-    $volunteers_without_shift = $total_users - count($unique_assigned);
+    $unique_assigned = array_unique($assigned_user_ids);
+
+    return [
+        'total_shifts'             => $total_shifts,
+        'filled_shifts'            => $filled_shifts,
+        'open_shifts'              => $open_shifts,
+        'required_open_shifts'     => $required_open_shifts,
+        'optional_open_shifts'     => $optional_open_shifts,
+        'volunteers_without_shift' => $total_users - count($unique_assigned),
+        'category_counts'          => $category_counts,
+        'next_shifts'              => $next_shifts,
+    ];
+}
+
+/**
+ * Renders the "Dashboard" tab: summary boxes + utilization charts for upcoming shifts.
+ *
+ * @param int $total_users Registered volunteer count.
+ * @return void
+ */
+function eventadmin_render_dashboard_stats_tab(int $total_users): void
+{
+    $stats           = eventadmin_calculate_dashboard_stats($total_users);
+    $category_counts = $stats['category_counts'];
 
     // JSON for JS
     $chart_data = [
@@ -90,12 +137,12 @@ function eventadmin_render_dashboard_stats_tab(int $total_users): void
         ],
         'stats'       => [
             'total_users'             => $total_users,
-            'total_shifts'            => $total_shifts,
-            'filled_shifts'           => $filled_shifts,
-            'open_shifts'             => $open_shifts,
-            'required_open_shifts'    => $required_open_shifts,
-            'optional_open_shifts'    => $optional_open_shifts,
-            'volunteers_without_shift' => $volunteers_without_shift,
+            'total_shifts'            => $stats['total_shifts'],
+            'filled_shifts'           => $stats['filled_shifts'],
+            'open_shifts'             => $stats['open_shifts'],
+            'required_open_shifts'    => $stats['required_open_shifts'],
+            'optional_open_shifts'    => $stats['optional_open_shifts'],
+            'volunteers_without_shift' => $stats['volunteers_without_shift'],
         ],
     ];
 
@@ -107,10 +154,10 @@ function eventadmin_render_dashboard_stats_tab(int $total_users): void
         <div class="eventadmin-dashboard-chart">
             <div class="eventadmin-dashboard-summary">
                 <div class="eventadmin-dashboard-box"><strong>' . esc_html__('Registered Volunteers:', 'eventadmin-volunteer-management') . '</strong><br>' . esc_html($total_users) . '</div>
-                <div class="eventadmin-dashboard-box"><strong>' . esc_html__('Volunteers without upcoming shift:', 'eventadmin-volunteer-management') . '</strong><br>' . esc_html($volunteers_without_shift) . '</div>
-                <div class="eventadmin-dashboard-box"><strong>' . esc_html__('Upcoming shifts:', 'eventadmin-volunteer-management') . '</strong><br>' . esc_html($total_shifts) . '</div>
-                <div class="eventadmin-dashboard-box"><strong>' . esc_html__('Filled spots:', 'eventadmin-volunteer-management') . '</strong><br>' . esc_html($filled_shifts) . '</div>
-                <div class="eventadmin-dashboard-box"><strong>' . esc_html__('Open spots:', 'eventadmin-volunteer-management') . '</strong><br>' . esc_html($open_shifts) . '</div>
+                <div class="eventadmin-dashboard-box"><strong>' . esc_html__('Volunteers without upcoming shift:', 'eventadmin-volunteer-management') . '</strong><br>' . esc_html($stats['volunteers_without_shift']) . '</div>
+                <div class="eventadmin-dashboard-box"><strong>' . esc_html__('Upcoming shifts:', 'eventadmin-volunteer-management') . '</strong><br>' . esc_html($stats['total_shifts']) . '</div>
+                <div class="eventadmin-dashboard-box"><strong>' . esc_html__('Filled spots:', 'eventadmin-volunteer-management') . '</strong><br>' . esc_html($stats['filled_shifts']) . '</div>
+                <div class="eventadmin-dashboard-box"><strong>' . esc_html__('Open spots:', 'eventadmin-volunteer-management') . '</strong><br>' . esc_html($stats['open_shifts']) . '</div>
             </div>
             <div class="chart-box single">
                 <canvas id="eventadmin-chart-auslastung"></canvas>
@@ -244,10 +291,16 @@ function eventadmin_activity_feed_entry_text(array $entry): string
  * own "Notification history" (includes/admin/user-profile.php), which only records what was
  * actually emailed and therefore misses offline volunteers.
  *
- * @param int $limit
+ * Only the first $visible entries show by default; the rest ($visible..$limit) render into
+ * the same list but hidden, revealed by the "Show more" toggle below it — no AJAX/pagination
+ * needed since the underlying log is already capped at 200 entries in one wp_options row
+ * (a small, fixed dataset, not something that grows without bound).
+ *
+ * @param int $limit   Maximum entries to fetch/render (hidden ones included).
+ * @param int $visible How many of those are visible before "Show more" is clicked.
  * @return void
  */
-function eventadmin_render_activity_feed(int $limit = 20): void
+function eventadmin_render_activity_feed(int $limit = 20, int $visible = 5): void
 {
     $log = get_option('eventadmin_activity_log', []);
     if (!is_array($log)) {
@@ -275,6 +328,7 @@ function eventadmin_render_activity_feed(int $limit = 20): void
     }
 
     echo '<ul class="eventadmin-activity-feed">';
+    $rendered = 0;
     foreach (array_slice($log, 0, $limit) as $entry) {
         $text = eventadmin_activity_feed_entry_text($entry);
         if ($text === '') {
@@ -289,10 +343,29 @@ function eventadmin_render_activity_feed(int $limit = 20): void
             )
             : '';
 
-        echo '<li><span class="eventadmin-activity-feed-text">' . wp_kses($text, $allowed_html) . '</span>'
+        $extra_class = $rendered >= $visible ? ' eventadmin-activity-feed-extra' : '';
+        echo '<li class="' . esc_attr(trim($extra_class)) . '"><span class="eventadmin-activity-feed-text">' . wp_kses($text, $allowed_html) . '</span>'
             . ($when ? ' <span class="eventadmin-activity-feed-time">' . esc_html($when) . '</span>' : '')
             . '</li>';
+        $rendered++;
     }
     echo '</ul>';
+
+    if ($rendered > $visible) {
+        echo '<p><button type="button" class="button-link eventadmin-activity-feed-toggle">' . esc_html__('Show more', 'eventadmin-volunteer-management') . '</button></p>';
+        echo '<script>
+            document.querySelectorAll(".eventadmin-activity-feed-toggle").forEach(function (btn) {
+                var i18n = {
+                    more: ' . wp_json_encode(esc_html__('Show more', 'eventadmin-volunteer-management')) . ',
+                    less: ' . wp_json_encode(esc_html__('Show less', 'eventadmin-volunteer-management')) . '
+                };
+                btn.addEventListener("click", function () {
+                    var section  = btn.closest(".eventadmin-activity-feed-section");
+                    var expanded = section.classList.toggle("eventadmin-activity-feed-expanded");
+                    btn.textContent = expanded ? i18n.less : i18n.more;
+                });
+            });
+        </script>';
+    }
     echo '</div>';
 }

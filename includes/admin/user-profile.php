@@ -178,9 +178,10 @@ function eventadmin_phone_tel_href(string $phone): string
 /**
  * Renders the "Volunteer details" summary table at the top of the profile activity view —
  * everything an admin needs at a glance to answer a volunteer's question without hunting
- * across the Volunteers list, their user-edit.php fields, and the Departments column. Phone
- * and the announcements opt-in are editable inline (AJAX, see volunteer-profile-modal.js);
- * badges are shown next to the section heading by the caller, not as a row here.
+ * across the Volunteers list, their user-edit.php fields, and the Departments column. Phone,
+ * the announcements opt-in, and the department links are all editable inline/via-modal here
+ * (AJAX, see volunteer-profile-modal.js and edit-departments-modal.js); badges are shown
+ * next to the section heading by the caller, not as a row here.
  *
  * @param WP_User $user
  * @return string
@@ -194,6 +195,7 @@ function eventadmin_render_volunteer_summary(WP_User $user): string
         fn($term_id) => get_term($term_id, 'eventadmin_shift_category'),
         eventadmin_get_volunteer_department_ids($user->ID)
     ), fn($term) => $term instanceof WP_Term);
+    $profile_trigger_name = trim($user->first_name . ' ' . $user->last_name) ?: $user->user_login;
 
     $registered_ts = strtotime($user->user_registered . ' UTC') ?: 0;
     $registered    = $registered_ts
@@ -218,13 +220,21 @@ function eventadmin_render_volunteer_summary(WP_User $user): string
         . ($subscribed ? esc_html__('Unsubscribe', 'eventadmin-volunteer-management') : esc_html__('Subscribe', 'eventadmin-volunteer-management'))
         . '</button>';
 
+    // Opens the shared "Edit departments" modal (see eventadmin_render_edit_departments_modal()
+    // in includes/admin/volunteer-list.php) — the same modal the Volunteers list Departments
+    // column uses, so a department link made here or there stays in the one place.
+    $departments_display = ($department_terms
+        ? esc_html(implode(', ', array_map(fn($t) => $t->name, $department_terms)))
+        : '<span class="eventadmin-profile-muted">' . esc_html__('(none)', 'eventadmin-volunteer-management') . '</span>')
+        . ' <button type="button" class="button-link eventadmin-profile-edit-trigger eventadmin-edit-departments" data-user-id="' . esc_attr($user->ID) . '" data-name="' . esc_attr($profile_trigger_name) . '">'
+        . esc_html__('Edit', 'eventadmin-volunteer-management')
+        . '</button>';
+
     $rows = [
         esc_html__('E-Mail', 'eventadmin-volunteer-management')       => $user->user_email ? esc_html($user->user_email) : '—',
         esc_html__('Phone', 'eventadmin-volunteer-management')        => $phone_display,
         esc_html__('Registered', 'eventadmin-volunteer-management')   => esc_html($registered),
-        esc_html__('Departments', 'eventadmin-volunteer-management')  => $department_terms
-            ? esc_html(implode(', ', array_map(fn($t) => $t->name, $department_terms)))
-            : '—',
+        esc_html__('Departments', 'eventadmin-volunteer-management')  => $departments_display,
         esc_html__('Announcements', 'eventadmin-volunteer-management') => $announcements_display,
     ];
 
@@ -479,11 +489,12 @@ function eventadmin_render_volunteer_profile_modal_markup(): void
  */
 function eventadmin_enqueue_volunteer_profile_modal_script(): void
 {
+    $volunteer_profile_modal_js_path = plugin_dir_path(__FILE__) . '../../assets/js/volunteer-profile-modal.js';
     wp_enqueue_script(
         'eventadmin-volunteer-profile-modal',
         plugin_dir_url(__FILE__) . '../../assets/js/volunteer-profile-modal.js',
         [],
-        '1.0',
+        file_exists($volunteer_profile_modal_js_path) ? filemtime($volunteer_profile_modal_js_path) : null,
         true
     );
     wp_localize_script('eventadmin-volunteer-profile-modal', 'EVENTADMIN_VOLUNTEER_PROFILE', [
@@ -505,12 +516,14 @@ function eventadmin_enqueue_volunteer_profile_modal_script(): void
 }
 
 /**
- * Renders and enqueues the pair of modals shared by every screen that can show a "View
- * profile" popup — the volunteer profile modal itself, and the shared shift modal (see
+ * Renders and enqueues the trio of modals shared by every screen that can show a "View
+ * profile" popup — the volunteer profile modal itself, the shared shift modal (see
  * includes/admin/shift-details-modal.php) it can navigate into from a volunteer's
- * Upcoming/Past shifts table (and back again from that shift's own volunteer roster). Used
- * on the Volunteers list, Manager/Timeline, user-edit.php, and the Overview dashboard's
- * activity feed — always as a pair, since either modal's content can link into the other.
+ * Upcoming/Past shifts table (and back again from that shift's own volunteer roster), and
+ * the "Edit departments" modal (see includes/admin/volunteer-list.php) its Departments row
+ * can open. Used on the Volunteers list, Manager/Timeline, user-edit.php, and the Overview
+ * dashboard's activity feed — always together, since any one modal's content can link into
+ * another.
  *
  * @param array<string, mixed> $shift_modal_extra Passed through to
  *                              eventadmin_enqueue_shift_details_modal_script() — only the
@@ -524,27 +537,31 @@ function eventadmin_render_shared_volunteer_modals(array $shift_modal_extra = []
     eventadmin_enqueue_volunteer_profile_modal_script();
     eventadmin_render_shift_details_modal_markup();
     eventadmin_enqueue_shift_details_modal_script($shift_modal_extra);
+    eventadmin_render_edit_departments_modal();
 }
 
 /**
  * Enqueues the "Volunteer activity" section's stylesheet — on the Edit User screen (where
- * it renders directly on the page), and on the Manager, Volunteers and Overview screens,
- * where the "View profile" and "Shift details" modals reuse the same markup/classes for
- * their AJAX-fetched content.
+ * it renders directly on the page), on the Manager, Volunteers and Overview screens, where
+ * the "View profile" and "Shift details" modals reuse the same markup/classes for their
+ * AJAX-fetched content, and on wp-admin's own Dashboard ('dashboard'), whose EventAdmin
+ * widget (see eventadmin_render_dashboard_widget() in dashboard-menu.php) reuses the same
+ * "Recent activity" feed markup and "Show more" toggle.
  */
 function eventadmin_enqueue_volunteer_profile_styles(): void
 {
     $screen = get_current_screen();
-    $allowed_screens = ['user-edit', 'eventadmin_shift_page_eventadmin-shift-manager', 'eventadmin_shift_page_eventadmin-volunteers', 'eventadmin_shift_page_eventadmin-overview'];
+    $allowed_screens = ['user-edit', 'dashboard', 'eventadmin_shift_page_eventadmin-shift-manager', 'eventadmin_shift_page_eventadmin-volunteers', 'eventadmin_shift_page_eventadmin-overview'];
     if (!$screen || !in_array($screen->id, $allowed_screens, true)) {
         return;
     }
 
+    $admin_user_profile_css_path = plugin_dir_path(__FILE__) . '../../assets/css/admin-user-profile.css';
     wp_enqueue_style(
         'eventadmin-admin-user-profile',
         plugin_dir_url(__FILE__) . '../../assets/css/admin-user-profile.css',
         [],
-        '1.0'
+        file_exists($admin_user_profile_css_path) ? filemtime($admin_user_profile_css_path) : null
     );
 }
 

@@ -1,0 +1,91 @@
+/* wp-admin Dashboard widget ("EventAdmin – Volunteer Management") — see
+   eventadmin_render_dashboard_widget() in includes/admin/dashboard-menu.php. Deliberately
+   flatter than the Overview page's own .eventadmin-dashboard-box "card" styling (no
+   shadow/border-card chrome), since a ~300-350px widget column makes that read as heavy —
+   this follows the plainer number-then-caption look native widgets like "At a Glance" use. */
+
+.eventadmin-widget-stats {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.eventadmin-widget-stat {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+}
+
+.eventadmin-widget-stat-value {
+    display: block;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #1d2327;
+}
+
+.eventadmin-widget-stat-urgent .eventadmin-widget-stat-value {
+    color: #d63638;
+}
+
+.eventadmin-widget-stat-label {
+    display: block;
+    margin-top: 2px;
+    font-size: 11px;
+    line-height: 1.3;
+    color: #646970;
+}
+
+.eventadmin-widget-section-title {
+    margin: 4px 0 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #646970;
+}
+
+.eventadmin-widget-agenda {
+    list-style: none;
+    margin: 0 0 14px;
+    padding: 0;
+}
+
+.eventadmin-widget-agenda li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid #f0f0f1;
+    font-size: 13px;
+}
+
+.eventadmin-widget-agenda li:last-child {
+    border-bottom: none;
+}
+
+.eventadmin-widget-agenda-title {
+    min-width: 0;
+}
+
+.eventadmin-widget-agenda-when {
+    color: #646970;
+    font-size: 12px;
+}
+
+.eventadmin-widget-agenda-meta {
+    flex-shrink: 0;
+    color: #646970;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.eventadmin-widget-agenda-urgent .eventadmin-widget-agenda-meta {
+    color: #d63638;
+    font-weight: 600;
+}
+
+.eventadmin-widget-footer-link {
+    margin: 12px 0 0;
+}

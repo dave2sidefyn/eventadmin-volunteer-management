@@ -40,7 +40,21 @@ function eventadmin_register_post_types(): void
         'capability_type' => 'eventadmin_shift',
         'map_meta_cap' => true,
         'menu_position' => 20,
-        'menu_icon' => 'dashicons-calendar-alt',
+        // The plugin's own logo (also used as the WordPress.org listing icon, see
+        // .wordpress-org/icon-*.png) rather than a generic dashicon, so the "Shifts" menu
+        // is recognizable as EventAdmin's at a glance in a sidebar full of grey icons.
+        // WordPress renders a custom menu_icon URL as a plain <img> with no size constraint
+        // of its own (confirmed in-browser — unlike its built-in dashicon sprites, nothing
+        // scales this down), so this points at a copy pre-sized to the expected 20x20 slot
+        // rather than the full-resolution source, which rendered enormous and broke the
+        // sidebar layout. That copy is also a recolored white silhouette rather than the
+        // brand-blue original: the calendar's dark-navy outline all but disappears against
+        // the near-black sidebar at full opacity, and WP dims every non-current menu <img>
+        // to opacity:0.6 at rest (same as its own dashicons), which turned a flat white
+        // "badge" backdrop into a muddy grey box — recoloring the outline/body white and
+        // cutting the banner+checkmark through as a transparent gap (rather than a drawn
+        // blue mark) keeps that cutout crisp at any opacity, dimmed or not.
+        'menu_icon' => plugin_dir_url(__FILE__) . '../assets/img/eventadmin-icon-menu.png',
         'supports' => ['title', 'editor'],
         'has_archive' => false,
         'rewrite' => false,             // Disable pretty permalinks

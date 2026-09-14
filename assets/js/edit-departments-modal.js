@@ -54,6 +54,17 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.target === modal) closeModal();
     });
 
+    // Opens this modal from any ".eventadmin-edit-departments" trigger on the page —
+    // the Volunteers list Departments column, and the "Departments" row inside the
+    // shared "View profile" modal (see eventadmin_render_volunteer_summary() in
+    // includes/admin/user-profile.php). Delegated on document since the profile
+    // modal's own trigger is injected via AJAX after this listener is attached.
+    document.addEventListener('click', function (e) {
+        var trigger = e.target.closest('.eventadmin-edit-departments');
+        if (!trigger) return;
+        window.eventadminOpenEditDepartmentsModal(trigger.dataset.userId, trigger.dataset.name);
+    });
+
     form.addEventListener('submit', function (e) {
         e.preventDefault();
 

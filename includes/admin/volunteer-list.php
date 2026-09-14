@@ -7,8 +7,25 @@
  * @namespace EventAdmin\VolunteerManagement
  */
 
+use JetBrains\PhpStorm\NoReturn;
+
 if (!defined('ABSPATH')) {
     exit;
+}
+
+/**
+ * Renders a small "copy to clipboard" icon button (see the .eventadmin-copy-value click
+ * handler in assets/js/volunteer-list.js) for a value the Volunteers list truncates for
+ * display — e-mail, phone — but still needs to be copyable in full without selecting text.
+ *
+ * @param string $raw_value Unescaped value to copy (e.g. the full e-mail address or phone number).
+ * @param string $label     Already-escaped title/aria-label text (e.g. from esc_attr__()).
+ * @return string
+ */
+function eventadmin_render_copy_value_button(string $raw_value, string $label): string
+{
+    return '<button type="button" class="button-link eventadmin-copy-value" data-copy="' . esc_attr($raw_value) . '" title="' . $label . '" aria-label="' . $label . '" style="flex-shrink:0;line-height:1;">'
+        . '<span class="dashicons dashicons-clipboard" style="font-size:16px;width:16px;height:16px;vertical-align:text-bottom;"></span></button>';
 }
 
 function eventadmin_volunteer_list_admin_menu(): void
@@ -60,7 +77,11 @@ function eventadmin_volunteer_list_page(): void
         $volunteers = array_filter($volunteers, fn($u) => in_array($u->ID, $shift_user_ids, true));
     }
 
-    // Filter by category
+    // Filter by department: matches volunteers with an assigned shift in the category
+    // (or a sub-category) as well as volunteers explicitly linked to it via the "Edit
+    // Departments" modal, since linking is meant to work independent of shift history
+    // (see the same union in eventadmin_bulk_email_get_recipient_users()'s 'department_link'
+    // branch in bulk-email.php).
     if ($selected_category) {
         $cat_shifts = get_posts([
             'post_type'   => 'eventadmin_shift',
@@ -76,7 +97,16 @@ function eventadmin_volunteer_list_page(): void
                 }
             }
         }
-        $cat_user_ids = array_unique($cat_user_ids);
+
+        $children        = get_term_children($selected_category, 'eventadmin_shift_category');
+        $department_ids  = array_merge([$selected_category], is_array($children) ? $children : []);
+        $linked_user_ids = get_users([
+            'role'       => 'eventadmin_volunteer',
+            'fields'     => 'ID',
+            'meta_query' => [['key' => 'eventadmin_department', 'value' => $department_ids, 'compare' => 'IN']],
+        ]);
+
+        $cat_user_ids = array_unique(array_merge($cat_user_ids, array_map('absint', $linked_user_ids)));
         $volunteers   = array_filter($volunteers, fn($u) => in_array($u->ID, $cat_user_ids, true));
     }
 
@@ -154,11 +184,12 @@ function eventadmin_volunteer_list_page(): void
             echo '</tbody></table>';
             echo '</div>';
 
+            $volunteer_list_js_path = plugin_dir_path(__FILE__) . '../../assets/js/volunteer-list.js';
             wp_enqueue_script(
                 'eventadmin-volunteer-list',
                 plugin_dir_url(__FILE__) . '../../assets/js/volunteer-list.js',
                 ['jquery'],
-                '1.0',
+                file_exists($volunteer_list_js_path) ? filemtime($volunteer_list_js_path) : null,
                 true
             );
             wp_localize_script('eventadmin-volunteer-list', 'EVENTADMIN_VOL', [
@@ -181,6 +212,13 @@ function eventadmin_volunteer_list_page(): void
     echo '<div class="eventadmin-vol-actions" style="display:flex;gap:8px;flex-wrap:wrap;">';
     echo '<button type="button" class="button button-primary eventadmin-modal-open" data-target="#eventadmin-create-volunteer-modal">' . esc_html__('Create new volunteer', 'eventadmin-volunteer-management') . '</button>';
     echo '<button type="button" class="button eventadmin-modal-open" data-target="#eventadmin-grant-role-modal">' . esc_html__('Grant volunteer role', 'eventadmin-volunteer-management') . '</button>';
+    // Exports the whole roster (every online volunteer), independent of the on-page shift/
+    // category filter or the client-side search box — see eventadmin_export_volunteers_csv().
+    echo '<form method="post" style="display:inline;margin:0;">';
+    wp_nonce_field('eventadmin_export_volunteers', 'eventadmin_export_volunteers_nonce');
+    echo '<input type="hidden" name="eventadmin_export_volunteers" value="1">';
+    echo '<button type="submit" class="button">' . esc_html__('Export CSV', 'eventadmin-volunteer-management') . '</button>';
+    echo '</form>';
     echo '</div>';
 
     echo '<form method="get" action="edit.php" id="eventadmin-volunteers-filters" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0;">';
@@ -266,47 +304,9 @@ function eventadmin_volunteer_list_page(): void
     }
     eventadmin_render_modal_close();
 
-    // "View profile" + "Shift details" modals — shared with the Timeline view and
-    // user-edit.php (see includes/admin/user-profile.php).
+    // "View profile" + "Shift details" + "Edit departments" modals — shared with the
+    // Timeline view and user-edit.php (see includes/admin/user-profile.php).
     eventadmin_render_shared_volunteer_modals();
-
-    // "Edit departments" modal — AJAX-filled per volunteer, same shared-shell pattern as the
-    // "View profile" modal above (see eventadmin_ajax_get_volunteer_departments() /
-    // eventadmin_ajax_save_volunteer_departments() below).
-    eventadmin_render_modal_open('eventadmin-edit-departments-modal');
-    eventadmin_render_modal_close_button('eventadmin-edit-departments-close');
-    echo '<h2 id="eventadmin-edit-departments-heading" style="margin-top:0;"></h2>';
-    echo '<form id="eventadmin-edit-departments-form">';
-    wp_nonce_field('eventadmin_edit_volunteer_departments', 'eventadmin_edit_departments_nonce');
-    echo '<input type="hidden" name="user_id" id="eventadmin-edit-departments-user-id" value="">';
-    echo '<div id="eventadmin-edit-departments-body"></div>';
-    echo '<p><button type="submit" class="button button-primary">' . esc_html__('Save', 'eventadmin-volunteer-management') . '</button> <span id="eventadmin-edit-departments-result" style="margin-left:8px;"></span></p>';
-    echo '</form>';
-    eventadmin_render_modal_close();
-
-    wp_enqueue_script(
-        'eventadmin-department-checkboxes',
-        plugin_dir_url(__FILE__) . '../../assets/js/department-checkboxes.js',
-        [],
-        '1.0',
-        true
-    );
-    wp_enqueue_script(
-        'eventadmin-edit-departments-modal',
-        plugin_dir_url(__FILE__) . '../../assets/js/edit-departments-modal.js',
-        [],
-        '1.0',
-        true
-    );
-    wp_localize_script('eventadmin-edit-departments-modal', 'EVENTADMIN_EDIT_DEPARTMENTS', [
-        'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce'    => wp_create_nonce('eventadmin_edit_volunteer_departments'),
-        'i18n'     => [
-            'loading' => esc_html__('Loading…', 'eventadmin-volunteer-management'),
-            'error'   => esc_html__('An error occurred. Please try again.', 'eventadmin-volunteer-management'),
-            'saved'   => esc_html__('Saved. Reloading…', 'eventadmin-volunteer-management'),
-        ],
-    ]);
 
     // Volunteer table
     $sortable_cols = [
@@ -325,12 +325,11 @@ function eventadmin_volunteer_list_page(): void
         echo $label . ' <span class="eventadmin-sort-icon" style="opacity:.4;">↕</span></th>';
     }
     echo '<th>' . esc_html__('Departments', 'eventadmin-volunteer-management') . '</th>';
-    echo '<th>' . esc_html__('Contact', 'eventadmin-volunteer-management') . '</th>';
     echo '<th>' . esc_html__('Actions', 'eventadmin-volunteer-management') . '</th>';
     echo '</tr></thead><tbody>';
 
     if (empty($volunteers)) {
-        echo '<tr><td colspan="10"><em>' . esc_html__('No volunteers found.', 'eventadmin-volunteer-management') . '</em></td></tr>';
+        echo '<tr><td colspan="9"><em>' . esc_html__('No volunteers found.', 'eventadmin-volunteer-management') . '</em></td></tr>';
     }
 
     // Pre-fetch social login user IDs in one query to avoid N+1.
@@ -409,10 +408,15 @@ function eventadmin_volunteer_list_page(): void
             $display_name .= ' <span class="eventadmin-badge" tabindex="0" data-tooltip="' . $tip . '" aria-label="' . $tip . '" style="background:#2e7d32;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:normal;">' . esc_html__('Manual', 'eventadmin-volunteer-management') . '</span>';
         }
 
-        $registered_ts   = strtotime($volunteer->user_registered . ' UTC') ?: 0;
-        $registered_label = $registered_ts ? mysql2date(get_option('date_format'), $volunteer->user_registered) : '—';
+        // Shortened to "1. Sep. 25" (day, abbreviated i18n month, 2-digit year) so the
+        // column stays narrow — the site's full date_format is still one hover away via
+        // the <td title="…"> below.
+        $registered_ts    = strtotime($volunteer->user_registered . ' UTC') ?: 0;
+        $registered_label = $registered_ts ? mysql2date('j. M. y', $volunteer->user_registered) : '—';
+        $registered_full  = $registered_ts ? mysql2date(get_option('date_format'), $volunteer->user_registered) : '';
         $last_shift_ts    = $last_shift_start ? strtotime($last_shift_start) : 0;
-        $last_shift_label = $last_shift_ts ? date_i18n(get_option('date_format'), $last_shift_ts) : '—';
+        $last_shift_label = $last_shift_ts ? date_i18n('j. M. y', $last_shift_ts) : '—';
+        $last_shift_full  = $last_shift_ts ? date_i18n(get_option('date_format'), $last_shift_ts) : '';
 
         $sort_name = trim($volunteer->first_name . ' ' . $volunteer->last_name) ?: $volunteer->user_login;
         echo '<tr'
@@ -425,48 +429,97 @@ function eventadmin_volunteer_list_page(): void
             . ' data-last_shift="' . esc_attr($last_shift_ts) . '"'
             . '>';
         echo '<td><strong>' . $display_name . '</strong></td>';
-        echo '<td>' . ($is_offline ? '—' : esc_html($volunteer->user_email)) . '</td>';
-        echo '<td>' . ($phone ? '<a href="tel:' . esc_attr(eventadmin_phone_tel_href($phone)) . '">' . esc_html($phone) . '</a>' : '—') . '</td>';
+
+        // E-Mail: a copy-to-clipboard icon (assets/js/volunteer-list.js's .eventadmin-copy-value
+        // handler) plus a truncated value, so a long address doesn't force the row to wrap.
+        // Sorting/search still key off this <tr>'s data-email attribute, not this markup.
+        echo '<td>';
+        if ($is_offline) {
+            echo '—';
+        } else {
+            echo '<span style="display:inline-flex;align-items:center;gap:4px;max-width:100%;">';
+            echo eventadmin_render_copy_value_button($volunteer->user_email, esc_attr__('Copy e-mail address', 'eventadmin-volunteer-management'));
+            echo '<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px;display:inline-block;" title="' . esc_attr($volunteer->user_email) . '">' . esc_html($volunteer->user_email) . '</span>';
+            echo '</span>';
+        }
+        echo '</td>';
+
+        // Phone: same copy-icon pattern, truncated hard to a "079…"-length sliver — the
+        // full number is one click away, so the column doesn't need to show it all.
+        echo '<td>';
+        if ($phone) {
+            $tel_href = esc_attr(eventadmin_phone_tel_href($phone));
+            echo '<span style="display:inline-flex;align-items:center;gap:4px;max-width:100%;">';
+            echo eventadmin_render_copy_value_button($phone, esc_attr__('Copy phone number', 'eventadmin-volunteer-management'));
+            echo '<a href="tel:' . $tel_href . '" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60px;display:inline-block;" title="' . esc_attr($phone) . '">' . esc_html($phone) . '</a>';
+            echo '</span>';
+        } else {
+            echo '—';
+        }
+        echo '</td>';
         echo '<td>' . ($is_offline
             ? '<span style="color:#999;">—</span>'
             : ($subscribed
                 ? '<span style="color:#00a32a;">&#10003; ' . esc_html__('Subscribed', 'eventadmin-volunteer-management') . '</span>'
                 : '<span style="color:#999;">&#10007; ' . esc_html__('Opted out', 'eventadmin-volunteer-management') . '</span>')) . '</td>';
         echo '<td>' . esc_html($shift_count) . '</td>';
-        echo '<td>' . esc_html($registered_label) . '</td>';
-        echo '<td>' . esc_html($last_shift_label) . '</td>';
-        echo '<td>';
+        echo '<td' . ($registered_full ? ' title="' . esc_attr($registered_full) . '"' : '') . '>' . esc_html($registered_label) . '</td>';
+        echo '<td' . ($last_shift_full ? ' title="' . esc_attr($last_shift_full) . '"' : '') . '>' . esc_html($last_shift_label) . '</td>';
+        echo '<td><div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;white-space:nowrap;">';
         if (empty($department_terms)) {
-            echo '<span style="color:#999;">—</span> ';
+            echo '<span style="color:#999;">—</span>';
         } else {
-            foreach ($department_terms as $term) {
+            // Caps the badges shown so a volunteer linked to many departments doesn't blow
+            // up the row height — the rest collapse into a "+N" badge with the same instant
+            // hover tooltip as the Offline/Unverified/Social/Manual badges (see
+            // eventadmin_render_volunteer_badges() and its .eventadmin-badge CSS), listing
+            // the remaining department names.
+            $dept_display_cap = 1;
+            $shown_terms       = array_slice($department_terms, 0, $dept_display_cap);
+            $overflow_terms    = array_slice($department_terms, $dept_display_cap);
+            foreach ($shown_terms as $term) {
                 $color = get_term_meta($term->term_id, 'term_color', true) ?: '#777';
-                echo '<span style="background:' . esc_attr($color) . ';color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;display:inline-block;margin:1px 2px 1px 0;">' . esc_html($term->name) . '</span> ';
+                echo '<span style="background:' . esc_attr($color) . ';color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;flex-shrink:0;">' . esc_html($term->name) . '</span>';
+            }
+            if (!empty($overflow_terms)) {
+                $overflow_names = esc_attr(implode(', ', array_map(fn($t) => $t->name, $overflow_terms)));
+                echo '<span class="eventadmin-badge" tabindex="0" data-tooltip="' . $overflow_names . '" aria-label="' . $overflow_names . '" style="background:#777;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;flex-shrink:0;">'
+                    . esc_html(sprintf('+%d', count($overflow_terms))) . '</span>';
             }
         }
-        echo '<button type="button" class="button button-small eventadmin-edit-departments" data-user-id="' . esc_attr($volunteer->ID) . '" data-name="' . esc_attr($profile_trigger_name) . '">' . esc_html__('Edit', 'eventadmin-volunteer-management') . '</button>';
-        echo '</td>';
-        echo '<td>' . ($is_offline
-            ? '—'
-            : '<a href="' . esc_url(admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-bulk-email&recipient_user_id=' . $volunteer->ID)) . '" class="button button-small">' . esc_html__('Email', 'eventadmin-volunteer-management') . '</a>') . '</td>';
+        echo '<button type="button" class="button button-small eventadmin-edit-departments" data-user-id="' . esc_attr($volunteer->ID) . '" data-name="' . esc_attr($profile_trigger_name) . '" style="flex-shrink:0;">' . esc_html__('Edit', 'eventadmin-volunteer-management') . '</button>';
+        echo '</div></td>';
         $safe_name = esc_attr(trim($volunteer->first_name . ' ' . $volunteer->last_name) ?: $volunteer->user_login);
-        echo '<td><button class="button button-small eventadmin-remove-role"'
+        // Icon-only actions (Email / Remove role) so this stays one column at one line
+        // tall regardless of how many actions a row ends up needing — each icon's title/
+        // aria-label carries the explanation a full-text button used to show.
+        echo '<td style="white-space:nowrap;">';
+        if (!$is_offline) {
+            $email_label = esc_attr__('Send this volunteer an email', 'eventadmin-volunteer-management');
+            echo '<a href="' . esc_url(admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-bulk-email&recipient_user_id=' . $volunteer->ID)) . '" class="button button-small" title="' . $email_label . '" aria-label="' . $email_label . '">'
+                . '<span class="dashicons dashicons-email-alt" style="vertical-align:text-bottom;"></span></a> ';
+        }
+        $remove_label = esc_attr__('Remove volunteer role', 'eventadmin-volunteer-management');
+        echo '<button type="button" class="button button-small eventadmin-remove-role"'
             . ' data-user-id="' . esc_attr($volunteer->ID) . '"'
             . ' data-shift-count="' . esc_attr($shift_count) . '"'
-            . ' data-name="' . $safe_name . '">'
-            . esc_html__('Remove role', 'eventadmin-volunteer-management')
-            . '</button></td>';
+            . ' data-name="' . $safe_name . '"'
+            . ' title="' . $remove_label . '"'
+            . ' aria-label="' . $remove_label . '">'
+            . '<span class="dashicons dashicons-remove" style="vertical-align:text-bottom;"></span></button>';
+        echo '</td>';
         echo '</tr>';
     }
 
     echo '</tbody></table>';
 
     // JS for the volunteer table, modals and group email form
+    $volunteer_list_js_path = plugin_dir_path(__FILE__) . '../../assets/js/volunteer-list.js';
     wp_enqueue_script(
         'eventadmin-volunteer-list',
         plugin_dir_url(__FILE__) . '../../assets/js/volunteer-list.js',
         ['jquery'],
-        '1.0',
+        file_exists($volunteer_list_js_path) ? filemtime($volunteer_list_js_path) : null,
         true
     );
     wp_localize_script('eventadmin-volunteer-list', 'EVENTADMIN_VOL', [
@@ -634,6 +687,145 @@ function eventadmin_clear_cleanup_log_handler(): void
 }
 
 add_action('wp_ajax_eventadmin_clear_cleanup_log', 'eventadmin_clear_cleanup_log_handler');
+
+/**
+ * Non-AJAX admin_init handler for the "Export CSV" button on the Volunteers list — same
+ * classic form-submit pattern as the shift CSV exports in dashboard-form-handlers.php,
+ * kept local here since it's specific to this screen's own volunteer roster, not shifts.
+ */
+function eventadmin_volunteer_list_admin_init(): void
+{
+    if (
+        isset($_POST['eventadmin_export_volunteers']) &&
+        check_admin_referer('eventadmin_export_volunteers', 'eventadmin_export_volunteers_nonce') &&
+        current_user_can('eventadmin_manage_volunteers')
+    ) {
+        eventadmin_export_volunteers_csv();
+    }
+}
+
+add_action('admin_init', 'eventadmin_volunteer_list_admin_init');
+
+/**
+ * Exports the whole Volunteers roster (every online eventadmin_volunteer, independent of
+ * the on-page shift/category filter or the client-side search box) as a CSV file — same
+ * header/BOM pattern as the shift CSV exports in dashboard-form-handlers.php.
+ */
+#[NoReturn] function eventadmin_export_volunteers_csv(): void
+{
+    $volunteers = get_users([
+        'role'       => 'eventadmin_volunteer',
+        'meta_query' => [['key' => 'eventadmin_offline_volunteer', 'compare' => 'NOT EXISTS']],
+        'orderby'    => 'display_name',
+    ]);
+
+    header('Content-Type: text/csv; charset=UTF-8');
+    header('Content-Disposition: attachment; filename=eventadmin_volunteers.csv');
+
+    $out = fopen('php://output', 'w');
+    // UTF-8 BOM so Excel (which does not auto-detect CSV encoding) doesn't mangle non-ASCII characters.
+    fwrite($out, "\xEF\xBB\xBF");
+    fputcsv($out, [
+        esc_html__('Name', 'eventadmin-volunteer-management'),
+        esc_html__('E-Mail', 'eventadmin-volunteer-management'),
+        esc_html__('Phone', 'eventadmin-volunteer-management'),
+        esc_html__('Announcements', 'eventadmin-volunteer-management'),
+        esc_html__('Upcoming shifts', 'eventadmin-volunteer-management'),
+        esc_html__('Registered', 'eventadmin-volunteer-management'),
+        esc_html__('Departments', 'eventadmin-volunteer-management'),
+    ]);
+
+    $now_ts = current_time('timestamp');
+
+    foreach ($volunteers as $volunteer) {
+        $announcements_raw = get_user_meta($volunteer->ID, 'eventadmin_announcements', true);
+        $subscribed        = $announcements_raw !== '0';
+
+        $upcoming_count = 0;
+        foreach (get_posts([
+            'post_type'   => 'eventadmin_shift',
+            'numberposts' => -1,
+            'fields'      => 'ids',
+            'meta_query'  => [['key' => 'assigned_user_' . $volunteer->ID, 'compare' => 'EXISTS']],
+        ]) as $shift_id) {
+            $start = get_post_meta($shift_id, 'shift_start', true);
+            if ($start && strtotime($start) >= $now_ts) {
+                $upcoming_count++;
+            }
+        }
+
+        $department_names = implode(', ', array_filter(array_map(
+            function ($term_id) {
+                $term = get_term($term_id, 'eventadmin_shift_category');
+                return $term instanceof WP_Term ? $term->name : null;
+            },
+            eventadmin_get_volunteer_department_ids($volunteer->ID)
+        )));
+
+        fputcsv($out, [
+            trim($volunteer->first_name . ' ' . $volunteer->last_name) ?: $volunteer->user_login,
+            $volunteer->user_email,
+            get_user_meta($volunteer->ID, 'eventadmin_phone', true),
+            $subscribed ? esc_html__('Subscribed', 'eventadmin-volunteer-management') : esc_html__('Opted out', 'eventadmin-volunteer-management'),
+            $upcoming_count,
+            mysql2date(get_option('date_format'), $volunteer->user_registered),
+            $department_names,
+        ]);
+    }
+
+    exit;
+}
+
+/**
+ * Renders and enqueues the "Edit departments" modal — AJAX-filled per volunteer (see
+ * eventadmin_ajax_get_volunteer_departments() / eventadmin_ajax_save_volunteer_departments()
+ * below), same shared-shell pattern as the "View profile" modal. Called from
+ * eventadmin_render_shared_volunteer_modals() (includes/admin/user-profile.php) so its
+ * ".eventadmin-edit-departments" trigger works both from the Volunteers list Departments
+ * column and from the Departments row inside the "View profile" modal, on every screen
+ * that modal appears (Volunteers list, Timeline, Overview, user-edit.php).
+ *
+ * @return void
+ */
+function eventadmin_render_edit_departments_modal(): void
+{
+    eventadmin_render_modal_open('eventadmin-edit-departments-modal');
+    eventadmin_render_modal_close_button('eventadmin-edit-departments-close');
+    echo '<h2 id="eventadmin-edit-departments-heading" style="margin-top:0;"></h2>';
+    echo '<form id="eventadmin-edit-departments-form">';
+    wp_nonce_field('eventadmin_edit_volunteer_departments', 'eventadmin_edit_departments_nonce');
+    echo '<input type="hidden" name="user_id" id="eventadmin-edit-departments-user-id" value="">';
+    echo '<div id="eventadmin-edit-departments-body"></div>';
+    echo '<p><button type="submit" class="button button-primary">' . esc_html__('Save', 'eventadmin-volunteer-management') . '</button> <span id="eventadmin-edit-departments-result" style="margin-left:8px;"></span></p>';
+    echo '</form>';
+    eventadmin_render_modal_close();
+
+    $department_checkboxes_js_path = plugin_dir_path(__FILE__) . '../../assets/js/department-checkboxes.js';
+    wp_enqueue_script(
+        'eventadmin-department-checkboxes',
+        plugin_dir_url(__FILE__) . '../../assets/js/department-checkboxes.js',
+        [],
+        file_exists($department_checkboxes_js_path) ? filemtime($department_checkboxes_js_path) : null,
+        true
+    );
+    $edit_departments_modal_js_path = plugin_dir_path(__FILE__) . '../../assets/js/edit-departments-modal.js';
+    wp_enqueue_script(
+        'eventadmin-edit-departments-modal',
+        plugin_dir_url(__FILE__) . '../../assets/js/edit-departments-modal.js',
+        [],
+        file_exists($edit_departments_modal_js_path) ? filemtime($edit_departments_modal_js_path) : null,
+        true
+    );
+    wp_localize_script('eventadmin-edit-departments-modal', 'EVENTADMIN_EDIT_DEPARTMENTS', [
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce('eventadmin_edit_volunteer_departments'),
+        'i18n'     => [
+            'loading' => esc_html__('Loading…', 'eventadmin-volunteer-management'),
+            'error'   => esc_html__('An error occurred. Please try again.', 'eventadmin-volunteer-management'),
+            'saved'   => esc_html__('Saved. Reloading…', 'eventadmin-volunteer-management'),
+        ],
+    ]);
+}
 
 /**
  * Renders the department checklist body (hint + hierarchical checkboxes) for the

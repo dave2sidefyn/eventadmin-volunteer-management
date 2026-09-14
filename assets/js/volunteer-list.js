@@ -12,6 +12,33 @@ jQuery(function ($) {
         if (e.target === this) $(this).hide();
     });
 
+    // Copy-to-clipboard icon buttons (E-Mail / Phone columns) — the visible text is
+    // truncated, so this is how an admin gets the full value without selecting it by hand.
+    $(document).on('click', '.eventadmin-copy-value', function (e) {
+        e.preventDefault();
+        const $btn   = $(this);
+        const value  = $btn.data('copy');
+        const $icon  = $btn.find('.dashicons');
+
+        function showCopied() {
+            $icon.removeClass('dashicons-clipboard').addClass('dashicons-yes');
+            setTimeout(function () {
+                $icon.removeClass('dashicons-yes').addClass('dashicons-clipboard');
+            }, 1200);
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(value).then(showCopied);
+        } else {
+            // Fallback for browsers/contexts without the async Clipboard API.
+            const $tmp = $('<textarea>').val(value).css({position: 'fixed', left: '-9999px'}).appendTo('body');
+            $tmp[0].select();
+            document.execCommand('copy');
+            $tmp.remove();
+            showCopied();
+        }
+    });
+
     // Volunteer table: search
     function updateCount() {
         const visible = $('#eventadmin-vol-table tbody tr:visible').length;
@@ -112,13 +139,6 @@ jQuery(function ($) {
             $result.css('color', '#d63638').text(cfg.i18n.error);
             $btn.prop('disabled', false);
         });
-    });
-
-    // Opens the shared "Edit departments" modal (assets/js/edit-departments-modal.js)
-    $(document).on('click', '.eventadmin-edit-departments', function () {
-        if (typeof window.eventadminOpenEditDepartmentsModal === 'function') {
-            window.eventadminOpenEditDepartmentsModal($(this).data('user-id'), $(this).data('name'));
-        }
     });
 
     // Remove volunteer role

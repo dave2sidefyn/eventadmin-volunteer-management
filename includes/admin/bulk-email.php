@@ -59,11 +59,12 @@ function eventadmin_bulk_email_page(): void
 
     wp_enqueue_media();
 
+    $bulk_email_js_path = plugin_dir_path(__FILE__) . '../../assets/js/bulk-email.js';
     wp_enqueue_script(
         'eventadmin-bulk-email',
         plugin_dir_url(__FILE__) . '../../assets/js/bulk-email.js',
         ['jquery', 'editor'],
-        '1.0',
+        file_exists($bulk_email_js_path) ? filemtime($bulk_email_js_path) : null,
         true
     );
 

@@ -1113,18 +1113,20 @@ function eventadmin_admin_enqueue_settings_scripts(): void
         return;
     }
 
+    $settings_css_path = plugin_dir_path(__FILE__) . '../../assets/css/settings.css';
     wp_enqueue_style(
         'eventadmin-admin-settings',
         plugin_dir_url(__FILE__) . '../../assets/css/settings.css',
         [],
-        '1.0'
+        file_exists($settings_css_path) ? filemtime($settings_css_path) : null
     );
 
+    $settings_js_path = plugin_dir_path(__FILE__) . '../../assets/js/settings.js';
     wp_enqueue_script(
         'eventadmin-admin-settings',
         plugin_dir_url(__FILE__) . '../../assets/js/settings.js',
         ['media-editor'],
-        '1.0',
+        file_exists($settings_js_path) ? filemtime($settings_js_path) : null,
         true
     );
 

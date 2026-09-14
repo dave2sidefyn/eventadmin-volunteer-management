@@ -113,11 +113,12 @@ function eventadmin_render_shift_details_modal_markup(): void
  */
 function eventadmin_enqueue_shift_details_modal_script(array $extra = []): void
 {
+    $shift_details_modal_js_path = plugin_dir_path(__FILE__) . '../../assets/js/shift-details-modal.js';
     wp_enqueue_script(
         'eventadmin-shift-details-modal',
         plugin_dir_url(__FILE__) . '../../assets/js/shift-details-modal.js',
         [],
-        '1.0',
+        file_exists($shift_details_modal_js_path) ? filemtime($shift_details_modal_js_path) : null,
         true
     );
 

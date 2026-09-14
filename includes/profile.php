@@ -77,11 +77,12 @@ function eventadmin_profile_shortcode(): bool|string|null
             </label>
 
             <?php if (!empty($departments)) :
+                $department_checkboxes_js_path = plugin_dir_path(__FILE__) . '../assets/js/department-checkboxes.js';
                 wp_enqueue_script(
                     'eventadmin-department-checkboxes',
                     plugin_dir_url(__FILE__) . '../assets/js/department-checkboxes.js',
                     [],
-                    '1.0',
+                    file_exists($department_checkboxes_js_path) ? filemtime($department_checkboxes_js_path) : null,
                     true
                 );
                 ?>
