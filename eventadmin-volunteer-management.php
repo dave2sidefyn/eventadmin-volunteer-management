@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       EventAdmin – Volunteer Management
  * Description:       Manage volunteers for events directly in WordPress. Create and schedule shifts, allow volunteers to sign up and cancel independently, and configure individual rules – e.g., maximum shifts per person per year.
- * Version:           3.3.0
+ * Version:           3.4.0
  * Author:            David Wiedmer, sidefyn GmbH
  * Author URI:        https://profiles.wordpress.org/davesidefyn/
  * Requires at least: 5.8
@@ -16,7 +16,7 @@
 
 defined('ABSPATH') or die('No script kiddies please!');
 
-define('EVENTADMIN_VERSION', '3.3.0');
+define('EVENTADMIN_VERSION', '3.4.0');
 define('EVENTADMIN_REVIEW_URL', 'https://wordpress.org/plugins/eventadmin-volunteer-management/#reviews');
 define('EVENTADMIN_DONATE_URL', 'https://revolut.me/davidwiedmer');
 
@@ -232,11 +232,12 @@ add_action('after_setup_theme', 'eventadmin_after_setup_theme');
  */
 function eventadmin_admin_enqueue_main_scripts(): void
 {
+    $main_css_path = plugin_dir_path(__FILE__) . 'assets/css/eventadmin-volunteer-management.css';
     wp_enqueue_style(
         'eventadmin-volunteer-management',
         plugin_dir_url(__FILE__) . 'assets/css/eventadmin-volunteer-management.css',
         [],
-        '1.0'
+        file_exists($main_css_path) ? filemtime($main_css_path) : null
     );
 }
 
@@ -289,14 +290,14 @@ function eventadmin_update_notice(): void
     $nonce = wp_create_nonce('eventadmin_dismiss_notice');
     ?>
     <div id="eventadmin-update-notice" style="clear:both;background:#fff;border-left:4px solid #2271b1;padding:16px 20px;margin:20px 20px 20px 0;box-shadow:0 1px 4px rgba(0,0,0,.08);display:flex;align-items:flex-start;gap:16px;">
-        <div style="font-size:28px;line-height:1;">🎉</div>
+        <div style="flex-shrink:0;"><img src="<?php echo esc_url(plugin_dir_url(__FILE__) . 'assets/img/eventadmin-icon.png'); ?>" width="40" height="40" alt="" style="display:block;"></div>
         <div style="flex:1;">
             <?php
             /* translators: %s is the plugin version number, e.g. "0.9.3" */
             $notice_title = sprintf(__('EventAdmin %s is here!', 'eventadmin-volunteer-management'), EVENTADMIN_VERSION);
             ?>
             <strong><?php echo esc_html($notice_title); ?></strong><br>
-            <?php echo esc_html__('New in this release: a "Recent activity" feed on the Overview dashboard, a unified shift modal (with a clickable volunteer roster) reachable from anywhere, and richer, editable volunteer profile summaries with click-to-call phone numbers.', 'eventadmin-volunteer-management'); ?>
+            <?php echo esc_html__('New in this release: a wp-admin Dashboard widget showing what needs your attention (open shifts, next shifts, recent activity) without visiting the plugin\'s own pages, a CSV export for the Volunteers list, and a Departments filter that finally matches volunteers linked to a department, not just those with a shift there.', 'eventadmin-volunteer-management'); ?>
             <div style="margin-top:10px;">
                 <a href="<?php echo esc_url(EVENTADMIN_REVIEW_URL); ?>" target="_blank" class="button button-primary" style="margin-right:8px;">⭐ <?php echo esc_html__('Rate 5 stars', 'eventadmin-volunteer-management'); ?></a>
                 <a href="<?php echo esc_url(EVENTADMIN_DONATE_URL); ?>" target="_blank" class="button">❤️ <?php echo esc_html__('Donate', 'eventadmin-volunteer-management'); ?></a>

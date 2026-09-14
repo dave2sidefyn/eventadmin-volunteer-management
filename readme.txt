@@ -4,7 +4,7 @@ Tags: volunteer, volunteers, shift scheduling, event management, roster, sign up
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.3.0
+Stable tag: 3.4.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,17 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.4.0 =
+* New: A "EventAdmin – Volunteer Management" widget on wp-admin's own Dashboard (Dashboard → Home, not just the plugin's own Overview page) shows the KPI numbers that need attention, the next few upcoming shifts (flagging any still short on volunteers), and the same "Recent activity" feed — visible right after login
+* New: Export the Volunteers list to CSV
+* New: A copy-to-clipboard button next to each volunteer's e-mail and phone number in the Volunteers list, now that both are truncated to keep rows from growing tall when a volunteer is linked to several departments
+* New: The plugin's own logo now appears as the "Shifts" admin menu icon and in the update notice, instead of a generic calendar icon
+* Fix: Filtering the Volunteers list by department now also includes volunteers explicitly linked to that department (via "Edit" on their Departments badges), not just those with a shift assigned to it
+* Fix: Department links can now also be edited from the "View profile" popup, not only from the Volunteers list's Departments column
+* Fix: The Volunteers list's Email and Remove-role actions are now one compact "Actions" column instead of two, and a volunteer linked to several departments no longer stretches their whole row
+* Fix: The "Recent activity" panel (Overview dashboard and the new widget) shows 5 entries by default with a "Show more" toggle, instead of always listing up to 20
+* Fix: Plugin assets (CSS/JS) now bust the browser cache automatically whenever they change, instead of a fixed version number that could leave an old cached copy in place after an update
 
 = Version 3.3.0 =
 * New: The Overview dashboard has a "Recent activity" panel showing the most recent shift sign-ups, cancellations, and admin actions across every volunteer — separate from each volunteer's own email-notification history, so it also covers offline volunteers and actions sent without a notification
@@ -376,6 +387,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Shift management, volunteer registration, dashboard, export, rules
 
 == Upgrade Notice ==
+
+= 3.4.0 =
+Adds a wp-admin Dashboard widget (open shifts, next shifts, recent activity), a Volunteers list CSV export, and fixes the Departments filter to also match volunteers linked to a department. No breaking changes.
 
 = 3.3.0 =
 Adds a "Recent activity" feed on the Overview dashboard, a unified shift modal with a clickable volunteer roster reachable from anywhere, and a richer, editable volunteer profile summary. No breaking changes.
