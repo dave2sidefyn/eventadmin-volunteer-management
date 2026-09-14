@@ -1006,6 +1006,18 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             actionsMenu.appendChild(editBtn);
 
+            const duplicateBtn = document.createElement('button');
+            duplicateBtn.type = 'button';
+            duplicateBtn.className = 'eventadmin-timeline-menu-item';
+            duplicateBtn.textContent = i18n.duplicateShift || 'Duplicate';
+            duplicateBtn.addEventListener('click', () => {
+                closeTimelineActionsMenu();
+                if (typeof window.eventadminOpenDuplicateShiftModal === 'function') {
+                    window.eventadminOpenDuplicateShiftModal(row.shift_id);
+                }
+            });
+            actionsMenu.appendChild(duplicateBtn);
+
             if (row.open) {
                 const addVolunteerBtn = document.createElement('button');
                 addVolunteerBtn.type = 'button';

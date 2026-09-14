@@ -544,6 +544,39 @@ function eventadmin_plugin_register_settings(): void
         'eventadmin_general_admin_menu'
     );
 
+    add_settings_section(
+        'eventadmin_general_api',
+        esc_html__('API access', 'eventadmin-volunteer-management'),
+        null,
+        'eventadmin-settings-general'
+    );
+
+    register_setting('eventadmin_plugin_settings_general', 'eventadmin_enable_rest_api', [
+        'sanitize_callback' => 'eventadmin_sanitize_checkbox_setting',
+    ]);
+
+    add_settings_field(
+        'eventadmin_enable_rest_api',
+        esc_html__('Allow API access', 'eventadmin-volunteer-management'),
+        static function () {
+            echo '<input type="checkbox" name="eventadmin_enable_rest_api" value="1" ' . checked(1, get_option('eventadmin_enable_rest_api'), false) . '>';
+            echo ' ' . esc_html__('Yes', 'eventadmin-volunteer-management');
+            echo '<p class="description">' . esc_html__('Exposes shifts and dashboard data via the WordPress REST API (at /wp-json/eventadmin/v1/), for use with MCP or other external integrations. Only Administrators and Shift Managers can use it, authenticated with a WordPress Application Password (Users → your profile → Application Passwords).', 'eventadmin-volunteer-management') . '</p>';
+        },
+        'eventadmin-settings-general',
+        'eventadmin_general_api'
+    );
+
+    add_settings_field(
+        'eventadmin_mcp_connect',
+        esc_html__('Connect', 'eventadmin-volunteer-management'),
+        static function () {
+            eventadmin_render_mcp_connect_field();
+        },
+        'eventadmin-settings-general',
+        'eventadmin_general_api'
+    );
+
     register_setting('eventadmin_plugin_settings_general', 'eventadmin_captcha_provider', [
         'sanitize_callback' => static function ($val) {
             return in_array($val, ['none', 'recaptcha_v2', 'recaptcha_v3', 'hcaptcha', 'cf_turnstile'], true) ? $val : 'none';

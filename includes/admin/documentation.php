@@ -209,6 +209,15 @@ function eventadmin_plugin_documentation_page()
                 </ul>
             </li>
             <li>
+                <strong><?php echo esc_html__('Connecting an AI Assistant (MCP)', 'eventadmin-volunteer-management'); ?></strong>
+                <ul>
+                    <li><a href="#eventadmin-doc-mcp-what"><?php echo esc_html__('What is this?', 'eventadmin-volunteer-management'); ?></a></li>
+                    <li><a href="#eventadmin-doc-mcp-setup"><?php echo esc_html__('Setting it up', 'eventadmin-volunteer-management'); ?></a></li>
+                    <li><a href="#eventadmin-doc-mcp-can-do"><?php echo esc_html__('What it can do', 'eventadmin-volunteer-management'); ?></a></li>
+                    <li><a href="#eventadmin-doc-mcp-security"><?php echo esc_html__('Security', 'eventadmin-volunteer-management'); ?></a></li>
+                </ul>
+            </li>
+            <li>
                 <strong><?php echo esc_html__('Reference', 'eventadmin-volunteer-management'); ?></strong>
                 <ul>
                     <li><a href="#eventadmin-doc-shortcodes"><?php echo esc_html__('All Shortcodes', 'eventadmin-volunteer-management'); ?></a></li>
@@ -529,6 +538,42 @@ function eventadmin_plugin_documentation_page()
         <div style="max-width:640px;margin-bottom:16px;padding:20px;background:#fff;border:1px solid #dcdcde;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.05);">
             <?php echo do_shortcode('[eventadmin_open_positions]'); ?>
         </div>
+
+        <hr style="margin:32px 0;">
+
+        <h2 id="eventadmin-doc-mcp"><?php echo esc_html__('Connecting an AI Assistant (MCP)', 'eventadmin-volunteer-management'); ?></h2>
+        <p><?php echo esc_html__('Optional, and a bit more technical than the rest of this page — skip this section if it doesn\'t sound useful to you. Everything else in EventAdmin works exactly the same whether or not this is turned on.', 'eventadmin-volunteer-management'); ?></p>
+
+        <h3 id="eventadmin-doc-mcp-what"><?php echo esc_html__('What is this?', 'eventadmin-volunteer-management'); ?></h3>
+        <p><?php echo esc_html__('MCP (Model Context Protocol) is a way for AI assistants such as Claude to connect to other apps and use them as tools. Turning this on lets a connected AI assistant look at your shifts and dashboard, and create new shifts, when you ask it to — without you needing to open wp-admin yourself.', 'eventadmin-volunteer-management'); ?></p>
+
+        <h3 id="eventadmin-doc-mcp-setup"><?php echo esc_html__('Setting it up', 'eventadmin-volunteer-management'); ?></h3>
+        <p><?php echo esc_html__('This needs Node.js installed on the computer running your AI assistant (a free, one-time install — see nodejs.org if you don\'t have it yet). Once that\'s done:', 'eventadmin-volunteer-management'); ?></p>
+        <ol style="max-width:640px;">
+            <li><?php echo esc_html__('Go to Settings → General, turn on "Allow API access" under "API access", and save.', 'eventadmin-volunteer-management'); ?></li>
+            <li><?php echo esc_html__('A "Connect an MCP client" button now appears in that same section. Click it.', 'eventadmin-volunteer-management'); ?></li>
+            <li><?php echo esc_html__('You land on WordPress\'s own "Authorize Application" screen — click "Approve". This only grants the same access level your own account already has; it doesn\'t share your WordPress login itself.', 'eventadmin-volunteer-management'); ?></li>
+            <li><?php echo esc_html__('You\'re taken back to Settings, where a green box shows a ready-to-use configuration. Click "Copy to clipboard".', 'eventadmin-volunteer-management'); ?></li>
+            <li><?php echo esc_html__('Paste that into your AI assistant\'s configuration (in Claude Desktop or Claude Code, wherever it lets you add an MCP server), then restart it.', 'eventadmin-volunteer-management'); ?></li>
+        </ol>
+        <p><?php echo esc_html__('That\'s it — your assistant can now see and manage your shifts when you ask it to.', 'eventadmin-volunteer-management'); ?></p>
+
+        <h3 id="eventadmin-doc-mcp-can-do"><?php echo esc_html__('What it can do', 'eventadmin-volunteer-management'); ?></h3>
+        <table class="widefat striped" style="max-width:640px;margin-bottom:16px;">
+            <thead><tr>
+                <th><?php echo esc_html__('Attribute', 'eventadmin-volunteer-management'); ?></th>
+                <th><?php echo esc_html__('Meaning', 'eventadmin-volunteer-management'); ?></th>
+            </tr></thead>
+            <tbody>
+                <tr><td><code>list_shifts</code></td><td><?php echo esc_html__('Lists shifts, optionally filtered by department, date, or time period.', 'eventadmin-volunteer-management'); ?></td></tr>
+                <tr><td><code>get_shift</code></td><td><?php echo esc_html__('Gets the full details of one specific shift.', 'eventadmin-volunteer-management'); ?></td></tr>
+                <tr><td><code>create_shift</code></td><td><?php echo esc_html__('Creates a new shift.', 'eventadmin-volunteer-management'); ?></td></tr>
+                <tr><td><code>get_dashboard</code></td><td><?php echo esc_html__('Gets the same overview numbers shown on the Overview dashboard (open shifts, understaffed shifts, and so on).', 'eventadmin-volunteer-management'); ?></td></tr>
+            </tbody>
+        </table>
+
+        <h3 id="eventadmin-doc-mcp-security"><?php echo esc_html__('Security', 'eventadmin-volunteer-management'); ?></h3>
+        <p><?php echo esc_html__('This only works for Administrator and Shift Manager accounts — the same permission level already required for these actions in wp-admin. To disconnect it again, turn "Allow API access" back off, and/or remove the "EventAdmin MCP" entry under Users → your profile → Application Passwords.', 'eventadmin-volunteer-management'); ?></p>
 
         <hr style="margin:32px 0;">
 

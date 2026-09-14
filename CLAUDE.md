@@ -47,6 +47,7 @@ No custom database tables – everything uses WP post meta, user meta, and optio
 | `admin/shift-metaboxes.php` | Custom metaboxes on shift edit screen (start/end datetime, max volunteers) |
 | `admin/quick-edit.php` | Inline quick-edit for shifts in post list |
 | `admin/import.php` | Demo data import and bulk delete tools |
+| `rest-api.php` | WP REST API (`/wp-json/eventadmin/v1/`) for shifts and dashboard data — for MCP/external integrations |
 
 ### Business Rules (enforced in `helpers.php`)
 1. User must be logged in to sign up
@@ -75,6 +76,9 @@ The Settings → General "hide All Shifts/Add Shift/Departments menu" options (`
 All AJAX actions use WP nonce verification and are registered in `shiftselector.php`:
 - `wp_ajax_eventadmin_assign` / `wp_ajax_nopriv_eventadmin_assign`
 - `wp_ajax_eventadmin_unassign` / `wp_ajax_nopriv_eventadmin_unassign`
+
+### REST API
+`includes/rest-api.php` registers `/wp-json/eventadmin/v1/` (`GET /shifts`, `GET /shifts/{id}`, `POST /shifts`, `GET /dashboard`), off by default — enabled via Settings → General → "API access" → "Allow API access" (`eventadmin_enable_rest_api` option). Every route requires the `eventadmin_manage_shifts` capability (so Administrator and Shift Manager accounts, and no one else), authenticated with a standard WordPress Application Password — no separate API-key system. Built so an MCP server (or any other external client) can list/create shifts and read dashboard KPIs without going through wp-admin.
 
 ### Assets
 - `assets/js/cockpit.js` – tab switching and AJAX calls for the cockpit

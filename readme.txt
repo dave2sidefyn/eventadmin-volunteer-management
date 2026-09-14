@@ -4,7 +4,7 @@ Tags: volunteer, volunteers, shift scheduling, event management, roster, sign up
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.4.0
+Stable tag: 3.5.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,12 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.5.0 =
+* New: The Manager view's shift popover gained a "Duplicate" action — pre-fills the Add Shift form with the same time, department, capacity and organizer, so you only need to adjust the date
+* New: An optional REST API (Settings → General → API access → "Allow API access") exposing shifts and dashboard data at /wp-json/eventadmin/v1/, for use with MCP or other external integrations — off by default, and limited to Administrator and Shift Manager accounts
+* New: A "Connect an MCP client" button that uses WordPress's own "Authorize Application" screen to set up an AI assistant connection, with a ready-to-paste configuration shown once — no manual password copying needed
+* New: A "Connecting an AI Assistant (MCP)" section on the Documentation page explaining what this is and how to set it up, for anyone unfamiliar with MCP
 
 = Version 3.4.0 =
 * New: A "EventAdmin – Volunteer Management" widget on wp-admin's own Dashboard (Dashboard → Home, not just the plugin's own Overview page) shows the KPI numbers that need attention, the next few upcoming shifts (flagging any still short on volunteers), and the same "Recent activity" feed — visible right after login
@@ -387,6 +393,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Shift management, volunteer registration, dashboard, export, rules
 
 == Upgrade Notice ==
+
+= 3.5.0 =
+Adds an optional REST API for MCP/AI-assistant integrations (off by default), a one-click way to connect one via WordPress's own Application Passwords screen, and a "Duplicate" action for shifts in the Manager view. No breaking changes.
 
 = 3.4.0 =
 Adds a wp-admin Dashboard widget (open shifts, next shifts, recent activity), a Volunteers list CSV export, and fixes the Departments filter to also match volunteers linked to a department. No breaking changes.

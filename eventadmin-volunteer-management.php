@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       EventAdmin – Volunteer Management
  * Description:       Manage volunteers for events directly in WordPress. Create and schedule shifts, allow volunteers to sign up and cancel independently, and configure individual rules – e.g., maximum shifts per person per year.
- * Version:           3.4.0
+ * Version:           3.5.0
  * Author:            David Wiedmer, sidefyn GmbH
  * Author URI:        https://profiles.wordpress.org/davesidefyn/
  * Requires at least: 5.8
@@ -16,7 +16,7 @@
 
 defined('ABSPATH') or die('No script kiddies please!');
 
-define('EVENTADMIN_VERSION', '3.4.0');
+define('EVENTADMIN_VERSION', '3.5.0');
 define('EVENTADMIN_REVIEW_URL', 'https://wordpress.org/plugins/eventadmin-volunteer-management/#reviews');
 define('EVENTADMIN_DONATE_URL', 'https://revolut.me/davidwiedmer');
 
@@ -47,6 +47,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/admin/volunteer-list.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/user-profile.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/shift-details-modal.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/getting-started-checklist.php';
+require_once plugin_dir_path(__FILE__) . 'includes/rest-api.php';
 
 
 /**
@@ -297,7 +298,7 @@ function eventadmin_update_notice(): void
             $notice_title = sprintf(__('EventAdmin %s is here!', 'eventadmin-volunteer-management'), EVENTADMIN_VERSION);
             ?>
             <strong><?php echo esc_html($notice_title); ?></strong><br>
-            <?php echo esc_html__('New in this release: a wp-admin Dashboard widget showing what needs your attention (open shifts, next shifts, recent activity) without visiting the plugin\'s own pages, a CSV export for the Volunteers list, and a Departments filter that finally matches volunteers linked to a department, not just those with a shift there.', 'eventadmin-volunteer-management'); ?>
+            <?php echo esc_html__('New in this release: an optional REST API for connecting an AI assistant via MCP (Settings → General → API access) with a one-click "Connect" flow, and a "Duplicate" action for shifts in the Manager view.', 'eventadmin-volunteer-management'); ?>
             <div style="margin-top:10px;">
                 <a href="<?php echo esc_url(EVENTADMIN_REVIEW_URL); ?>" target="_blank" class="button button-primary" style="margin-right:8px;">⭐ <?php echo esc_html__('Rate 5 stars', 'eventadmin-volunteer-management'); ?></a>
                 <a href="<?php echo esc_url(EVENTADMIN_DONATE_URL); ?>" target="_blank" class="button">❤️ <?php echo esc_html__('Donate', 'eventadmin-volunteer-management'); ?></a>

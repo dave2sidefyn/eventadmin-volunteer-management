@@ -247,6 +247,10 @@ function eventadmin_render_timeline_shift_modals_and_config(string $view, array 
             'undo'              => esc_html__('Undo', 'eventadmin-volunteer-management'),
             'editShift'         => esc_html__('Edit shift', 'eventadmin-volunteer-management'),
             'addShift'          => esc_html__('Add shift', 'eventadmin-volunteer-management'),
+            // Reuses the same strings as the "All Shifts" list's row-action Duplicate
+            // button (includes/admin/shift-metaboxes.php) so this needs no new translations.
+            'duplicateShift'    => esc_html__('Duplicate', 'eventadmin-volunteer-management'),
+            'copySuffix'        => esc_html__(' (Copy)', 'eventadmin-volunteer-management'),
             'requiredFields'    => esc_html__('Title, start and end are required.', 'eventadmin-volunteer-management'),
             'removeVolunteer'   => esc_html__('Remove from shift', 'eventadmin-volunteer-management'),
             /* translators: %s is the volunteer's name */

@@ -15,3 +15,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# mcp-server (companion Node tool, not part of the WP.org plugin package)
+mcp-server/node_modules/

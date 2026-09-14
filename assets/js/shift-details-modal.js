@@ -232,6 +232,47 @@ document.addEventListener('DOMContentLoaded', function () {
         newShiftBtn.addEventListener('click', () => window.eventadminOpenNewShiftModal());
     }
 
+    // Opens the same modal in "create" mode, pre-filled from an existing shift (used by the
+    // Manager/Timeline view's "Duplicate" popover action) — same date/time/department/
+    // capacity/organizer as the original, so the common case (nudging it to a different day)
+    // is a quick edit rather than starting from a blank form. Nothing about the original
+    // shift, including its volunteers, is touched until Save is clicked on this new one.
+    window.eventadminOpenDuplicateShiftModal = function (shiftId) {
+        isCreateMode = true;
+        errorEl.textContent = '';
+        idInput.value = '';
+        fullLink.style.display = 'none';
+        rosterEl.innerHTML = '';
+        showEditMode(i18n.duplicateShift || 'Duplicate');
+        submitBtn.textContent = i18n.duplicateShift || 'Duplicate';
+        editModal.style.display = 'block';
+
+        const applyData = (data) => {
+            fillForm(data);
+            titleInput.value = (data.title || '') + (i18n.copySuffix || ' (Copy)');
+            setTimeout(repaintDescriptionEditor, 0);
+            titleInput.focus();
+        };
+
+        const cached = cfg.shifts[shiftId];
+        if (cached) {
+            applyData(cached);
+            return;
+        }
+
+        fetchShiftDetails(shiftId)
+            .then((res) => {
+                if (!res.success) {
+                    errorEl.textContent = (res.data && res.data.message) || i18n.error || 'Error';
+                    return;
+                }
+                applyData(res.data);
+            })
+            .catch(() => {
+                errorEl.textContent = i18n.error || 'Error';
+            });
+    };
+
     window.eventadminCloseShiftDetailsModal = function () {
         editModal.style.display = 'none';
     };
