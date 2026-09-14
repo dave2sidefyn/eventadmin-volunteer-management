@@ -266,9 +266,9 @@ function eventadmin_volunteer_list_page(): void
     }
     eventadmin_render_modal_close();
 
-    // "View profile" modal — shared with the Timeline view (see includes/admin/user-profile.php).
-    eventadmin_render_volunteer_profile_modal_markup();
-    eventadmin_enqueue_volunteer_profile_modal_script();
+    // "View profile" + "Shift details" modals — shared with the Timeline view and
+    // user-edit.php (see includes/admin/user-profile.php).
+    eventadmin_render_shared_volunteer_modals();
 
     // "Edit departments" modal — AJAX-filled per volunteer, same shared-shell pattern as the
     // "View profile" modal above (see eventadmin_ajax_get_volunteer_departments() /
@@ -393,16 +393,20 @@ function eventadmin_volunteer_list_page(): void
             . esc_attr($volunteer->ID) . '" data-name="' . esc_attr($profile_trigger_name) . '">'
             . esc_html($profile_trigger_name) . '</button>';
         if ($is_offline) {
-            $display_name .= ' <span style="background:#777;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:normal;">' . esc_html__('Offline', 'eventadmin-volunteer-management') . '</span>';
+            $tip = esc_attr__('Created by an admin without an email address. Cannot log in and receives no notifications.', 'eventadmin-volunteer-management');
+            $display_name .= ' <span class="eventadmin-badge" tabindex="0" data-tooltip="' . $tip . '" aria-label="' . $tip . '" style="background:#777;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:normal;">' . esc_html__('Offline', 'eventadmin-volunteer-management') . '</span>';
         }
         if ($is_unverified) {
-            $display_name .= ' <span style="background:#dba617;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:normal;">' . esc_html__('Unverified', 'eventadmin-volunteer-management') . '</span>';
+            $tip = esc_attr__('Registered via the public form but has not yet clicked the magic login link. The account is auto-deleted once the link expires (~24 h). The badge disappears as soon as the link is clicked.', 'eventadmin-volunteer-management');
+            $display_name .= ' <span class="eventadmin-badge" tabindex="0" data-tooltip="' . $tip . '" aria-label="' . $tip . '" style="background:#dba617;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:normal;">' . esc_html__('Unverified', 'eventadmin-volunteer-management') . '</span>';
         }
         if ($is_social) {
-            $display_name .= ' <span style="background:#4285f4;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:normal;">' . esc_html__('Social', 'eventadmin-volunteer-management') . '</span>';
+            $tip = esc_attr__('Registered or linked via Nextend Social Login (e.g. Google, Facebook). Requires the Nextend Social Login plugin.', 'eventadmin-volunteer-management');
+            $display_name .= ' <span class="eventadmin-badge" tabindex="0" data-tooltip="' . $tip . '" aria-label="' . $tip . '" style="background:#4285f4;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:normal;">' . esc_html__('Social', 'eventadmin-volunteer-management') . '</span>';
         }
         if ($is_manual) {
-            $display_name .= ' <span style="background:#2e7d32;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:normal;">' . esc_html__('Manual', 'eventadmin-volunteer-management') . '</span>';
+            $tip = esc_attr__('Added by an admin via the dashboard form or the "Grant volunteer role" function. Never auto-deleted.', 'eventadmin-volunteer-management');
+            $display_name .= ' <span class="eventadmin-badge" tabindex="0" data-tooltip="' . $tip . '" aria-label="' . $tip . '" style="background:#2e7d32;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:normal;">' . esc_html__('Manual', 'eventadmin-volunteer-management') . '</span>';
         }
 
         $registered_ts   = strtotime($volunteer->user_registered . ' UTC') ?: 0;
@@ -422,7 +426,7 @@ function eventadmin_volunteer_list_page(): void
             . '>';
         echo '<td><strong>' . $display_name . '</strong></td>';
         echo '<td>' . ($is_offline ? '—' : esc_html($volunteer->user_email)) . '</td>';
-        echo '<td>' . esc_html($phone ?: '—') . '</td>';
+        echo '<td>' . ($phone ? '<a href="tel:' . esc_attr(eventadmin_phone_tel_href($phone)) . '">' . esc_html($phone) . '</a>' : '—') . '</td>';
         echo '<td>' . ($is_offline
             ? '<span style="color:#999;">—</span>'
             : ($subscribed
@@ -440,7 +444,7 @@ function eventadmin_volunteer_list_page(): void
                 echo '<span style="background:' . esc_attr($color) . ';color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;display:inline-block;margin:1px 2px 1px 0;">' . esc_html($term->name) . '</span> ';
             }
         }
-        echo '<button type="button" class="button-link eventadmin-edit-departments" data-user-id="' . esc_attr($volunteer->ID) . '" data-name="' . esc_attr($profile_trigger_name) . '" style="font-size:11px;">' . esc_html__('Edit', 'eventadmin-volunteer-management') . '</button>';
+        echo '<button type="button" class="button button-small eventadmin-edit-departments" data-user-id="' . esc_attr($volunteer->ID) . '" data-name="' . esc_attr($profile_trigger_name) . '">' . esc_html__('Edit', 'eventadmin-volunteer-management') . '</button>';
         echo '</td>';
         echo '<td>' . ($is_offline
             ? '—'

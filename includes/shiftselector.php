@@ -338,6 +338,7 @@ function eventadmin_assign_ajax(): void
 
     // Save assignment
     add_post_meta($shift_id, 'assigned_user_' . $user_id, $user_id);
+    eventadmin_log_shift_activity('assign', $user_id, $shift_id, 'self');
     eventadmin_send_shift_un_assignment_notification($user_id, $shift_id, 'assign');
 
     $names = eventadmin_get_user_display_names($shift_id);
@@ -401,6 +402,7 @@ function eventadmin_unassign_ajax(): void
 
     if (get_post_meta($shift_id, $meta_key, true)) {
         delete_post_meta($shift_id, $meta_key);
+        eventadmin_log_shift_activity('unassign', $user_id, $shift_id, 'self');
         eventadmin_send_shift_un_assignment_notification($user_id, $shift_id, 'unassign');
 
         $names = eventadmin_get_user_display_names($shift_id);

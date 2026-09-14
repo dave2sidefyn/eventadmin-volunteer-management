@@ -340,35 +340,27 @@ function eventadmin_send_shift_un_assignment_notification(
     }
 
     $user         = $context['user'];
-    $shift        = $context['shift'];
     $replacements = $context['replacements'];
-    $action_label = $action === 'assign'
-        ? esc_html__('assigned', 'eventadmin-volunteer-management')
-        : esc_html__('removed', 'eventadmin-volunteer-management');
+    $defaults     = eventadmin_get_option_defaults();
 
     if ($send_admin) {
+        if ($action === 'assign') {
+            $admin_subject_template = get_option('eventadmin_email_subject_admin_assign') ?: $defaults['eventadmin_email_subject_admin_assign'];
+            $admin_message_template = get_option('eventadmin_email_text_admin_assign') ?: $defaults['eventadmin_email_text_admin_assign'];
+        } else {
+            $admin_subject_template = get_option('eventadmin_email_subject_admin_unassign') ?: $defaults['eventadmin_email_subject_admin_unassign'];
+            $admin_message_template = get_option('eventadmin_email_text_admin_unassign') ?: $defaults['eventadmin_email_text_admin_unassign'];
+        }
+
         eventadmin_send_HTML_e_mail(
             $context['notification_email'],
-            sprintf(
-                /* translators: %1$s = action, %2$s = title of shift */
-                esc_html__('Volunteer was %1$s: %2$s', 'eventadmin-volunteer-management'),
-                $action_label,
-                $shift->post_title
-            ),
-            sprintf(
-                /* translators: %1$s = first name, %2$s = last name, %3$s = action, %4$s = title of shift */
-                esc_html__('The volunteer %1$s, %2$s was %3$s for the shift: %4$s', 'eventadmin-volunteer-management'),
-                $user->first_name,
-                $user->last_name,
-                $action_label,
-                $shift->post_title
-            ),
+            strtr($admin_subject_template, $replacements),
+            wpautop(strtr($admin_message_template, $replacements)),
             $context['headers']
         );
     }
 
     // User email
-    $defaults = eventadmin_get_option_defaults();
     if ($action === 'assign') {
         $subject_template = get_option('eventadmin_email_subject_assign') ?: $defaults['eventadmin_email_subject_assign'];
         $message_template = get_option('eventadmin_email_text_assign') ?: $defaults['eventadmin_email_text_assign'];

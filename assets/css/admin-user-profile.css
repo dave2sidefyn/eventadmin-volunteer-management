@@ -90,3 +90,89 @@
     background: #f2ecfa;
     color: #6a3fa0;
 }
+
+.eventadmin-profile-muted {
+    color: #999;
+}
+
+/* "Volunteer details" summary: inline Edit/Subscribe-Unsubscribe triggers next to the
+   Phone and Announcements rows, and the Phone row's inline edit form. */
+.eventadmin-profile-edit-trigger {
+    font-size: 11px;
+}
+
+.eventadmin-phone-edit {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.eventadmin-phone-input {
+    width: 160px;
+    padding: 3px 8px;
+    min-height: 30px;
+    font-size: 13px;
+    line-height: normal;
+}
+
+/* Overview dashboard's "Recent activity" panel. */
+.eventadmin-activity-feed {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.eventadmin-activity-feed li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f1;
+    font-size: 13px;
+}
+
+.eventadmin-activity-feed li:last-child {
+    border-bottom: none;
+}
+
+.eventadmin-activity-feed-time {
+    flex-shrink: 0;
+    color: #8c8f94;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.eventadmin-phone-edit .button {
+    margin: 0;
+}
+
+/* Instant CSS tooltip for volunteer badges (Offline/Unverified/Social/Manual) — native
+   title-attribute tooltips are slow and inconsistent across browsers/OSes, so this uses
+   data-tooltip + ::after instead, shown on hover and keyboard focus alike. Shared by the
+   Volunteers list table, the "Volunteer details" summary, and any future badge use. */
+.eventadmin-badge {
+    position: relative;
+    cursor: help;
+}
+
+.eventadmin-badge:hover::after,
+.eventadmin-badge:focus::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 0;
+    background: #1d2327;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1.4;
+    white-space: normal;
+    width: max-content;
+    max-width: 280px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+    z-index: 100;
+    pointer-events: none;
+}

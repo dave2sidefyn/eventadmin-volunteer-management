@@ -162,80 +162,25 @@ function eventadmin_render_timeline_chart(array $timeline_rows): void
 }
 
 /**
- * Renders the Timeline-only modals (Edit Shift, Move to another shift, View profile) and the
- * click-to-act popover shell, plus the EVENTADMIN_SHIFT_EDIT JS config that ties them all
- * together with admin-charts.js — drag-to-move/resize bars, and clicking a filled bar to
- * edit the shift's own details without leaving the page.
+ * Renders the Timeline-only "Move to another shift" modal and the click-to-act popover
+ * shell, then the shared "View profile" + shift modal (with this view's own richer
+ * EVENTADMIN_SHIFT_EDIT config layered on) that ties them all together with
+ * admin-charts.js — drag-to-move/resize bars, and clicking a filled bar to edit the shift's
+ * own details without leaving the page.
  *
  * @param string $view           Current view — no-op on anything other than 'timeline'.
- * @param WP_Term[] $categories  From eventadmin_get_hierarchical_shift_categories().
  * @param array  $shift_edit_map From eventadmin_build_overview_rows() — per-shift data for
- *                                the Edit Shift modal.
+ *                                the shared shift modal's fast local-cache path.
  * @param bool   $show_open      Whether the Timeline is currently showing open slots.
  * @param string $selected_date  Currently selected date filter, passed through to the JS
  *                                config as the default date for a newly created shift.
  * @return void
  */
-function eventadmin_render_timeline_shift_modals_and_config(string $view, array $categories, array $shift_edit_map, bool $show_open, string $selected_date): void
+function eventadmin_render_timeline_shift_modals_and_config(string $view, array $shift_edit_map, bool $show_open, string $selected_date): void
 {
     if ($view !== 'timeline') {
         return;
     }
-
-    eventadmin_render_modal_open('eventadmin-edit-shift-modal');
-    eventadmin_render_modal_close_button('eventadmin-edit-shift-close');
-    echo '<h2 id="eventadmin-edit-shift-heading" style="margin-top:0;">' . esc_html__('Edit shift', 'eventadmin-volunteer-management') . '</h2>';
-    echo '<form id="eventadmin-edit-shift-form">';
-    echo '<input type="hidden" id="eventadmin-edit-shift-id" value="">';
-    echo '<p><label>' . esc_html__('Title', 'eventadmin-volunteer-management') . '<br><input type="text" id="eventadmin-edit-shift-title" style="width:100%;" required></label></p>';
-    echo '<p><label>' . esc_html__('Department', 'eventadmin-volunteer-management') . '<br><select id="eventadmin-edit-shift-category" style="width:100%;">';
-    echo '<option value="0">' . esc_html__('— None —', 'eventadmin-volunteer-management') . '</option>';
-    echo eventadmin_category_dropdown_options($categories, 0, 'term_id');
-    echo '</select></label></p>';
-    echo '<p style="display:flex;gap:8px;">';
-    echo '<label style="flex:1;">' . esc_html__('Start', 'eventadmin-volunteer-management') . '<br><input type="datetime-local" id="eventadmin-edit-shift-start" style="width:100%;" required></label>';
-    echo '<label style="flex:1;">' . esc_html__('End', 'eventadmin-volunteer-management') . '<br><input type="datetime-local" id="eventadmin-edit-shift-end" style="width:100%;" required></label>';
-    echo '</p>';
-    echo '<p style="display:flex;gap:8px;">';
-    echo '<label style="flex:1;">' . esc_html__('Min. Volunteers', 'eventadmin-volunteer-management') . '<br><input type="number" id="eventadmin-edit-shift-min" min="0" style="width:100%;"></label>';
-    echo '<label style="flex:1;">' . esc_html__('Max. Volunteers', 'eventadmin-volunteer-management') . '<br><input type="number" id="eventadmin-edit-shift-max" min="1" style="width:100%;"></label>';
-    echo '</p>';
-    echo '<p><label>' . esc_html__('Description', 'eventadmin-volunteer-management') . '</label></p>';
-    wp_editor('', 'eventadmin_edit_shift_description', [
-        'textarea_name' => 'description',
-        'textarea_rows' => 6,
-        'media_buttons' => false,
-        'teeny'         => true,
-        'quicktags'     => false,
-    ]);
-    echo '<details style="margin:12px 0;">';
-    echo '<summary style="cursor:pointer;font-weight:600;padding:4px 0;">' . esc_html__('Advanced', 'eventadmin-volunteer-management') . '</summary>';
-    echo '<div style="padding-top:8px;">';
-    echo '<p><label>' . esc_html__('Organizer user:', 'eventadmin-volunteer-management') . '<br><select id="eventadmin-edit-shift-organizer-user" style="width:100%;">';
-    echo '<option value="">' . esc_html__('— None —', 'eventadmin-volunteer-management') . '</option>';
-    foreach (get_users(['orderby' => 'display_name', 'order' => 'ASC', 'role__in' => eventadmin_get_allowed_organizer_roles()]) as $organizer_user) {
-        $organizer_label = $organizer_user->display_name;
-        if (!empty($organizer_user->user_email)) {
-            $organizer_label .= ' (' . $organizer_user->user_email . ')';
-        }
-        echo '<option value="' . esc_attr($organizer_user->ID) . '">' . esc_html($organizer_label) . '</option>';
-    }
-    echo '</select></label></p>';
-    echo '<p class="description" style="margin-top:-8px;">' . esc_html__('Only staff-side users are shown here by default. If selected, this user is used as the sender fallback for shift emails unless a custom organizer name/email is entered below.', 'eventadmin-volunteer-management') . '</p>';
-    echo '<p style="display:flex;gap:8px;">';
-    echo '<label style="flex:1;">' . esc_html__('Organizer name:', 'eventadmin-volunteer-management') . '<br><input type="text" id="eventadmin-edit-shift-organizer-name" style="width:100%;"></label>';
-    echo '<label style="flex:1;">' . esc_html__('Organizer email:', 'eventadmin-volunteer-management') . '<br><input type="email" id="eventadmin-edit-shift-organizer-email" style="width:100%;"></label>';
-    echo '</p>';
-    echo '<p class="description" style="margin-top:-8px;">' . esc_html__('Leave empty to use the linked organizer user or the global notification sender.', 'eventadmin-volunteer-management') . '</p>';
-    echo '</div>';
-    echo '</details>';
-    echo '<p id="eventadmin-edit-shift-error" style="color:#d63638;"></p>';
-    echo '<p>';
-    echo '<button type="submit" id="eventadmin-edit-shift-submit" class="button button-primary">' . esc_html__('Save', 'eventadmin-volunteer-management') . '</button> ';
-    echo '<a href="#" id="eventadmin-edit-shift-full-link" target="_blank" style="margin-left:8px;">' . esc_html__('Open full editor', 'eventadmin-volunteer-management') . '</a>';
-    echo '</p>';
-    echo '</form>';
-    eventadmin_render_modal_close();
 
     // "Move to another shift" modal — a real form POST (not AJAX) since the target
     // shift can be on a completely different day/department than what's currently
@@ -257,11 +202,6 @@ function eventadmin_render_timeline_shift_modals_and_config(string $view, array 
     echo '</p>';
     echo '</form>';
     eventadmin_render_modal_close();
-
-    // "View profile" modal — shared markup/JS with the Volunteers list page (see
-    // includes/admin/user-profile.php).
-    eventadmin_render_volunteer_profile_modal_markup();
-    eventadmin_enqueue_volunteer_profile_modal_script();
 
     // Small click-to-act popover: appears at the clicked bar with "Edit shift" and
     // (for a filled bar) "View profile", "Move to another shift" and "Remove from
@@ -290,29 +230,30 @@ function eventadmin_render_timeline_shift_modals_and_config(string $view, array 
         ];
     }
 
-    echo '<script>';
-    echo 'const EVENTADMIN_SHIFT_EDIT = ' . wp_json_encode([
-        'ajax_url'      => admin_url('admin-ajax.php'),
-        'nonce'         => wp_create_nonce('eventadmin_update_shift'),
-        'user_edit_url_base' => admin_url('user-edit.php?user_id='),
-        'move_shifts'   => $move_shift_options,
-        'shifts'        => $shift_edit_map,
-        'edit_url_base' => admin_url('post.php?action=edit&post='),
-        'show_open'     => $show_open,
-        'default_date'  => $selected_date,
-        'i18n'          => [
+    // "View profile" + shared shift modal — the shift modal's markup/AJAX endpoint are the
+    // same one used everywhere (see includes/admin/shift-details-modal.php); this view just
+    // layers its own local shift cache, move-target list and fuller i18n set on top of the
+    // defaults, so opening a shift here is instant and also drives the drag/resize/delete/
+    // split/popover behavior in admin-charts.js that only exists on this page.
+    eventadmin_render_shared_volunteer_modals([
+        'shifts'       => $shift_edit_map,
+        'move_shifts'  => $move_shift_options,
+        'show_open'    => $show_open,
+        'default_date' => $selected_date,
+        'i18n'         => [
             'error'             => esc_html__('An error occurred. Please try again.', 'eventadmin-volunteer-management'),
+            'loading'           => esc_html__('Loading…', 'eventadmin-volunteer-management'),
             'timeUpdated'       => esc_html__('Shift time updated.', 'eventadmin-volunteer-management'),
             'undo'              => esc_html__('Undo', 'eventadmin-volunteer-management'),
             'editShift'         => esc_html__('Edit shift', 'eventadmin-volunteer-management'),
             'addShift'          => esc_html__('Add shift', 'eventadmin-volunteer-management'),
+            'requiredFields'    => esc_html__('Title, start and end are required.', 'eventadmin-volunteer-management'),
             'removeVolunteer'   => esc_html__('Remove from shift', 'eventadmin-volunteer-management'),
             /* translators: %s is the volunteer's name */
             'confirmRemove'     => esc_html__('Remove %s from this shift?', 'eventadmin-volunteer-management'),
             'notifyVolunteer'   => esc_html__('Notify volunteer', 'eventadmin-volunteer-management'),
             'viewProfile'       => esc_html__('View profile', 'eventadmin-volunteer-management'),
             'moveToShift'       => esc_html__('Move to another shift', 'eventadmin-volunteer-management'),
-            'loading'           => esc_html__('Loading…', 'eventadmin-volunteer-management'),
             'addVolunteer'      => esc_html__('Add volunteer', 'eventadmin-volunteer-management'),
             'deleteShift'       => esc_html__('Delete shift', 'eventadmin-volunteer-management'),
             'confirmDeleteShiftEmpty' => esc_html__('Delete this shift?', 'eventadmin-volunteer-management'),
@@ -330,7 +271,6 @@ function eventadmin_render_timeline_shift_modals_and_config(string $view, array 
             'notifyAffectedVolunteers' => esc_html__('Notify affected volunteers', 'eventadmin-volunteer-management'),
         ],
     ]);
-    echo ';</script>';
 }
 
 /**
@@ -620,6 +560,7 @@ function eventadmin_ajax_split_shift_volunteer(): void
 
     delete_post_meta($shift_id, $meta_key);
     add_post_meta($new_shift_id, $meta_key, $user_id);
+    eventadmin_log_shift_activity('move', $user_id, $shift_id, 'admin', $new_shift_id);
 
     // The original shift now needs one fewer person — shrink its own min/max to match so
     // its capacity stays consistent instead of quietly implying a spot that no longer
@@ -689,6 +630,7 @@ function eventadmin_ajax_timeline_unassign(): void
     }
 
     delete_post_meta($shift_id, $meta_key);
+    eventadmin_log_shift_activity('unassign', $user_id, $shift_id, 'admin');
 
     if (!empty($_POST['notify_volunteer']) && eventadmin_user_can_receive_email($user_id)) {
         eventadmin_send_shift_un_assignment_notification($user_id, $shift_id, 'unassign', false, true);

@@ -110,7 +110,7 @@ function eventadmin_render_communication_subtabs(string $page): void
         ],
         'confirmations' => [
             'label'    => esc_html__('Shift Confirmations', 'eventadmin-volunteer-management'),
-            'sections' => ['eventadmin_communication_templates'],
+            'sections' => ['eventadmin_communication_templates', 'eventadmin_communication_admin_notifications'],
         ],
         'reminders' => [
             'label'    => esc_html__('Reminders', 'eventadmin-volunteer-management'),
@@ -210,6 +210,7 @@ function eventadmin_plugin_settings_page(): void
                 <?php
                 settings_fields($current['group']);
                 if ($current['page'] === 'eventadmin-settings-communication') {
+                    eventadmin_plugin_placeholders_info();
                     eventadmin_render_communication_subtabs($current['page']);
                 } else {
                     do_settings_sections($current['page']);
@@ -220,7 +221,6 @@ function eventadmin_plugin_settings_page(): void
 
             <?php if ($current['page'] === 'eventadmin-settings-communication') : ?>
                 <div class="plugin-settings-right">
-                    <?php eventadmin_plugin_placeholders_info(); ?>
                     <?php eventadmin_plugin_preview_field(); ?>
                 </div>
             <?php endif; ?>
@@ -234,8 +234,8 @@ function eventadmin_plugin_settings_page(): void
  */
 function eventadmin_plugin_placeholders_info(): void
 {
-    echo '<div class="plugin-placeholders-info">';
-    echo '<p><strong>' . esc_html__('Available placeholders:', 'eventadmin-volunteer-management') . '</strong></p>';
+    echo '<details class="plugin-placeholders-info">';
+    echo '<summary><strong>' . esc_html__('Available placeholders', 'eventadmin-volunteer-management') . '</strong></summary>';
     echo '<ul>';
     echo '<li><code>{first}</code> – ' . esc_html__('First name of the volunteer', 'eventadmin-volunteer-management') . '</li>';
     echo '<li><code>{last}</code> – ' . esc_html__('Last name of the volunteer', 'eventadmin-volunteer-management') . '</li>';
@@ -247,7 +247,7 @@ function eventadmin_plugin_placeholders_info(): void
     echo '<li><code>{end}</code> – ' . esc_html__('End time of the shift (formatted)', 'eventadmin-volunteer-management') . '</li>';
     echo '<li><code>{days}</code> – ' . esc_html__('Number of days before the shift starts', 'eventadmin-volunteer-management') . '</li>';
     echo '</ul>';
-    echo '</div>';
+    echo '</details>';
 }
 
 /**
@@ -369,6 +369,22 @@ function eventadmin_plugin_register_settings(): void
     ]);
 
     register_setting('eventadmin_plugin_settings_communication', 'eventadmin_email_text_unassign', [
+        'sanitize_callback' => 'wp_kses_post',
+    ]);
+
+    register_setting('eventadmin_plugin_settings_communication', 'eventadmin_email_subject_admin_assign', [
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+
+    register_setting('eventadmin_plugin_settings_communication', 'eventadmin_email_subject_admin_unassign', [
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+
+    register_setting('eventadmin_plugin_settings_communication', 'eventadmin_email_text_admin_assign', [
+        'sanitize_callback' => 'wp_kses_post',
+    ]);
+
+    register_setting('eventadmin_plugin_settings_communication', 'eventadmin_email_text_admin_unassign', [
         'sanitize_callback' => 'wp_kses_post',
     ]);
 
@@ -889,6 +905,63 @@ function eventadmin_plugin_register_settings(): void
     );
 
     add_settings_section(
+        'eventadmin_communication_admin_notifications',
+        esc_html__('Organizer Notifications', 'eventadmin-volunteer-management'),
+        static function () {
+            echo '<p class="description">' . esc_html__('These go to the shift\'s organizer (its linked user and/or manual organizer email, or the notification email above if neither is set) — not to the volunteer.', 'eventadmin-volunteer-management') . '</p>';
+        },
+        'eventadmin-settings-communication'
+    );
+
+    add_settings_field(
+        'eventadmin_email_subject_admin_assign',
+        esc_html__('Email Subject (Sign up)', 'eventadmin-volunteer-management'),
+        static function () {
+            $val = get_option('eventadmin_email_subject_admin_assign', 'Volunteer was assigned: {title}');
+            echo '<input type="text" name="eventadmin_email_subject_admin_assign" value="' . esc_attr($val) . '" class="regular-text">';
+        },
+        'eventadmin-settings-communication',
+        'eventadmin_communication_admin_notifications'
+    );
+
+    add_settings_field(
+        'eventadmin_email_text_admin_assign',
+        esc_html__('Email Text (Sign up)', 'eventadmin-volunteer-management'),
+        static function () {
+            eventadmin_render_email_text_field(
+                'eventadmin_email_text_admin_assign',
+                'The volunteer {first}, {last} was assigned for the shift: {title}'
+            );
+        },
+        'eventadmin-settings-communication',
+        'eventadmin_communication_admin_notifications'
+    );
+
+    add_settings_field(
+        'eventadmin_email_subject_admin_unassign',
+        esc_html__('Email Subject (Sign out)', 'eventadmin-volunteer-management'),
+        static function () {
+            $val = get_option('eventadmin_email_subject_admin_unassign', 'Volunteer was removed: {title}');
+            echo '<input type="text" name="eventadmin_email_subject_admin_unassign" value="' . esc_attr($val) . '" class="regular-text">';
+        },
+        'eventadmin-settings-communication',
+        'eventadmin_communication_admin_notifications'
+    );
+
+    add_settings_field(
+        'eventadmin_email_text_admin_unassign',
+        esc_html__('Email Text (Sign out)', 'eventadmin-volunteer-management'),
+        static function () {
+            eventadmin_render_email_text_field(
+                'eventadmin_email_text_admin_unassign',
+                'The volunteer {first}, {last} was removed for the shift: {title}'
+            );
+        },
+        'eventadmin-settings-communication',
+        'eventadmin_communication_admin_notifications'
+    );
+
+    add_settings_section(
         'eventadmin_communication_reminders',
         esc_html__('Shift Reminders', 'eventadmin-volunteer-management'),
         null,
@@ -1007,9 +1080,11 @@ function eventadmin_plugin_preview_field(): void
     $actions = [
         // "Sign up" doubles as General's one example preview, since General has no email
         // template of its own but does control the shared header/footer/logo/colors.
-        'assign'   => ['label' => esc_html__('Sign up', 'eventadmin-volunteer-management'), 'subtabs' => ['general', 'confirmations']],
-        'unassign' => ['label' => esc_html__('Sign out', 'eventadmin-volunteer-management'), 'subtabs' => ['confirmations']],
-        'reminder' => ['label' => esc_html__('Reminder', 'eventadmin-volunteer-management'), 'subtabs' => ['reminders']],
+        'assign'         => ['label' => esc_html__('Sign up', 'eventadmin-volunteer-management'), 'subtabs' => ['general', 'confirmations']],
+        'unassign'       => ['label' => esc_html__('Sign out', 'eventadmin-volunteer-management'), 'subtabs' => ['confirmations']],
+        'admin_assign'   => ['label' => esc_html__('Organizer: Sign up', 'eventadmin-volunteer-management'), 'subtabs' => ['confirmations']],
+        'admin_unassign' => ['label' => esc_html__('Organizer: Sign out', 'eventadmin-volunteer-management'), 'subtabs' => ['confirmations']],
+        'reminder'       => ['label' => esc_html__('Reminder', 'eventadmin-volunteer-management'), 'subtabs' => ['reminders']],
     ];
 
     $active_subtab = isset($_GET['subtab']) && in_array(sanitize_key(wp_unslash($_GET['subtab'])), ['general', 'confirmations', 'reminders'], true)

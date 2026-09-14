@@ -609,6 +609,8 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
     if ($view === 'dashboard') {
         eventadmin_render_getting_started_checklist();
         eventadmin_render_dashboard_stats_tab($total_users);
+        eventadmin_render_activity_feed();
+        eventadmin_render_shared_volunteer_modals();
         echo '</div>';
         return;
     }
@@ -688,7 +690,7 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
 
     eventadmin_render_add_volunteer_modal($view, $volunteers, $shift_info_map);
 
-    eventadmin_render_timeline_shift_modals_and_config($view, $categories, $shift_edit_map, $show_open, $selected_date);
+    eventadmin_render_timeline_shift_modals_and_config($view, $shift_edit_map, $show_open, $selected_date);
 
     eventadmin_render_overview_pagination($total_found, $per_page, $current_page, $filter_query_args, $view);
 

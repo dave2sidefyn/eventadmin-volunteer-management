@@ -42,6 +42,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const config = [
             ['assign', 'eventadmin_email_subject_assign', 'eventadmin_email_text_assign'],
             ['unassign', 'eventadmin_email_subject_unassign', 'eventadmin_email_text_unassign'],
+            ['admin_assign', 'eventadmin_email_subject_admin_assign', 'eventadmin_email_text_admin_assign'],
+            ['admin_unassign', 'eventadmin_email_subject_admin_unassign', 'eventadmin_email_text_admin_unassign'],
             ['reminder', 'eventadmin_email_subject_reminder', 'eventadmin_email_text_reminder']
         ];
 
@@ -207,6 +209,8 @@ document.addEventListener('DOMContentLoaded', function () {
         'eventadmin_email_footer_html',
         'eventadmin_email_text_assign',
         'eventadmin_email_text_unassign',
+        'eventadmin_email_text_admin_assign',
+        'eventadmin_email_text_admin_unassign',
         'eventadmin_email_text_reminder',
     ];
     if (window.tinymce) {

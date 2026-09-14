@@ -1262,303 +1262,80 @@ document.addEventListener('DOMContentLoaded', function () {
 
     eventadminInitTimelineChart();
 
-    // --- Edit Shift modal (also handles creating a brand-new shift) ----------------------
-    const editModal = document.getElementById('eventadmin-edit-shift-modal');
-    if (editModal && typeof EVENTADMIN_SHIFT_EDIT !== 'undefined') {
-        const cfg = EVENTADMIN_SHIFT_EDIT;
-        const idInput       = document.getElementById('eventadmin-edit-shift-id');
-        const titleInput    = document.getElementById('eventadmin-edit-shift-title');
-        const categorySelect = document.getElementById('eventadmin-edit-shift-category');
-        const startInput    = document.getElementById('eventadmin-edit-shift-start');
-        const endInput      = document.getElementById('eventadmin-edit-shift-end');
-        const minInput      = document.getElementById('eventadmin-edit-shift-min');
-        const maxInput      = document.getElementById('eventadmin-edit-shift-max');
-        const organizerUserSelect = document.getElementById('eventadmin-edit-shift-organizer-user');
-        const organizerNameInput  = document.getElementById('eventadmin-edit-shift-organizer-name');
-        const organizerEmailInput = document.getElementById('eventadmin-edit-shift-organizer-email');
-        const errorEl       = document.getElementById('eventadmin-edit-shift-error');
-        const closeBtn      = document.getElementById('eventadmin-edit-shift-close');
-        const fullLink      = document.getElementById('eventadmin-edit-shift-full-link');
-        const form          = document.getElementById('eventadmin-edit-shift-form');
-        const headingEl     = document.getElementById('eventadmin-edit-shift-heading');
-        const submitBtn     = document.getElementById('eventadmin-edit-shift-submit');
-        const newShiftBtn   = document.getElementById('eventadmin-open-new-shift-modal');
-        const saveButtonLabel = submitBtn ? submitBtn.textContent : '';
-        const DESCRIPTION_EDITOR_ID = 'eventadmin_edit_shift_description';
-
-        let isCreateMode = false;
-
-        // The description field is a wp_editor() (TinyMCE) instance — it only syncs to its
-        // underlying textarea on blur/save, not on every keystroke, and setting the
-        // textarea's .value directly doesn't update the visible TinyMCE iframe. Both
-        // directions need to go through the tinymce API when the editor is active, falling
-        // back to the plain textarea when running in "Text" mode (or before TinyMCE has
-        // finished initializing).
-        function getDescriptionValue() {
-            const editor = window.tinymce && window.tinymce.get(DESCRIPTION_EDITOR_ID);
-            if (editor && !editor.isHidden()) return editor.getContent();
-            const textarea = document.getElementById(DESCRIPTION_EDITOR_ID);
-            return textarea ? textarea.value : '';
-        }
-
-        function setDescriptionValue(html) {
-            const editor = window.tinymce && window.tinymce.get(DESCRIPTION_EDITOR_ID);
-            if (editor) {
-                editor.setContent(html || '');
+    // Registers with the shared shift modal (assets/js/shift-details-modal.js) so a save or
+    // a brand-new shift patches this page's Timeline chart in place — the modal itself has
+    // no idea a chart even exists; it's reused unchanged on pages that don't have one (a
+    // volunteer's profile, the Overview dashboard).
+    if (typeof EVENTADMIN_SHIFT_EDIT !== 'undefined') {
+        window.eventadminOnShiftSaved = function (shiftId, data) {
+            if (timelineState) {
+                timelineState.replaceShiftRows(shiftId, data.rows);
             }
-            const textarea = document.getElementById(DESCRIPTION_EDITOR_ID);
-            if (textarea) textarea.value = html || '';
-        }
-
-        // TinyMCE sizes its iframe from the container's layout at init time — since this
-        // modal starts (and returns to) display:none, the editor would otherwise be
-        // measured as 0-width. Repainting once the modal is actually visible fixes that.
-        function repaintDescriptionEditor() {
-            const editor = window.tinymce && window.tinymce.get(DESCRIPTION_EDITOR_ID);
-            if (editor) editor.execCommand('mceRepaint');
-        }
-
-        // "start"/"end" are wall-clock times encoded as UTC (see
-        // eventadmin_wallclock_to_ts()) — format via UTC getters for the same reason
-        // tsToDatetimeString() above does, so the datetime-local input shows the shift's
-        // actual site-local time rather than shifting it by the browser's own timezone.
-        function tsToLocalInputValue(tsSeconds) {
-            const d = new Date(tsSeconds * 1000);
-            const pad = (n) => String(n).padStart(2, '0');
-            return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()) + 'T'
-                + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes());
-        }
-
-        window.eventadminOpenEditShiftModal = function (shiftId) {
-            const shift = cfg.shifts[shiftId];
-            if (!shift) return;
-
-            isCreateMode = false;
-            errorEl.textContent = '';
-            idInput.value = shiftId;
-            titleInput.value = shift.title;
-            categorySelect.value = shift.category_id || '0';
-            startInput.value = tsToLocalInputValue(shift.start);
-            endInput.value = tsToLocalInputValue(shift.end);
-            minInput.value = shift.min;
-            maxInput.value = shift.max;
-            setDescriptionValue(shift.description);
-            organizerUserSelect.value = shift.organizer_user_id || '';
-            organizerNameInput.value = shift.organizer_name || '';
-            organizerEmailInput.value = shift.organizer_email || '';
-            headingEl.textContent = (cfg.i18n && cfg.i18n.editShift) || 'Edit shift';
-            submitBtn.textContent = saveButtonLabel;
-            fullLink.style.display = '';
-            fullLink.href = cfg.edit_url_base + shiftId;
-
-            editModal.style.display = 'block';
-            setTimeout(repaintDescriptionEditor, 0);
         };
 
-        // Opens the same modal empty, defaulting the date to whatever the page's own
-        // "Date" filter is currently scoped to (falling back to today) — the common case
-        // is adding a shift to the day you're already looking at.
-        window.eventadminOpenNewShiftModal = function () {
-            const pad = (n) => String(n).padStart(2, '0');
-            const now = new Date();
-            const hasFilterDate = cfg.default_date && /^\d{4}-\d{2}-\d{2}$/.test(cfg.default_date);
-
-            let startValue, endValue;
-            if (hasFilterDate) {
-                // A specific day is already selected in the "Date" filter — "now" doesn't
-                // mean anything for a different day, so just default to a plausible time.
-                startValue = cfg.default_date + 'T09:00';
-                endValue = cfg.default_date + 'T11:00';
+        window.eventadminOnShiftCreated = function (shiftId, data) {
+            if (timelineState) {
+                if (!EVENTADMIN_SHIFT_EDIT.show_open) {
+                    EVENTADMIN_SHIFT_EDIT.show_open = true;
+                    const showOpenCheckbox = document.querySelector('#eventadmin-overview-filters input[name="show_open"][type="checkbox"]');
+                    if (showOpenCheckbox) showOpenCheckbox.checked = true;
+                }
+                timelineState.replaceShiftRows(shiftId, data.rows);
+                if (typeof window.eventadminCloseShiftDetailsModal === 'function') {
+                    window.eventadminCloseShiftDetailsModal();
+                }
             } else {
-                // No date filter active: default to "starting soon" (now, rounded up to the
-                // next half hour) rather than a fixed time, so a shift created this
-                // afternoon doesn't default to a morning slot that's already in the past.
-                const start = new Date(now.getTime() + (30 - (now.getMinutes() % 30)) * 60000);
-                start.setSeconds(0, 0);
-                const end = new Date(start.getTime() + 2 * 60 * 60000);
-                const fmt = (d) => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate())
-                    + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
-                startValue = fmt(start);
-                endValue = fmt(end);
+                // No chart exists yet (the Timeline had zero rows) — nothing to patch in
+                // place, so reload with "show open slots" forced on so the brand-new
+                // (necessarily empty) shift is visible.
+                const url = new URL(window.location.href);
+                url.searchParams.set('show_open', '1');
+                window.location.href = url.toString();
             }
+        };
+    }
 
-            isCreateMode = true;
-            errorEl.textContent = '';
-            idInput.value = '';
-            titleInput.value = '';
-            categorySelect.value = '0';
-            startInput.value = startValue;
-            endInput.value = endValue;
-            minInput.value = 0;
-            maxInput.value = 1;
-            setDescriptionValue('');
-            organizerUserSelect.value = '';
-            organizerNameInput.value = '';
-            organizerEmailInput.value = '';
-            headingEl.textContent = (cfg.i18n && cfg.i18n.addShift) || 'Add shift';
-            submitBtn.textContent = (cfg.i18n && cfg.i18n.addShift) || 'Add shift';
-            fullLink.style.display = 'none';
+    // --- Move to another shift modal --------------------------------------------------
+    // A real form submit (not AJAX): the target shift can be on a completely different
+    // day or department than what's currently filtered, so a plain reload is the
+    // simplest way to always land on a correctly re-rendered view afterward.
+    const moveModal = document.getElementById('eventadmin-move-volunteer-modal');
+    if (moveModal && typeof EVENTADMIN_SHIFT_EDIT !== 'undefined') {
+        const cfg = EVENTADMIN_SHIFT_EDIT;
+        const moveCloseBtn = document.getElementById('eventadmin-move-volunteer-close');
+        const moveSubtitle = document.getElementById('eventadmin-move-volunteer-subtitle');
+        const moveFromShiftInput = document.getElementById('eventadmin-move-from-shift-id');
+        const moveUserIdInput = document.getElementById('eventadmin-move-user-id');
+        const moveToSelect = document.getElementById('eventadmin-move-to-shift-select');
 
-            editModal.style.display = 'block';
-            setTimeout(repaintDescriptionEditor, 0);
-            titleInput.focus();
+        window.eventadminOpenMoveVolunteerModal = function (fromShiftId, userId, volunteerName, shiftTitle) {
+            moveFromShiftInput.value = fromShiftId;
+            moveUserIdInput.value = userId;
+            moveSubtitle.textContent = volunteerName + ' — ' + shiftTitle;
+
+            moveToSelect.innerHTML = '';
+            (cfg.move_shifts || [])
+                .filter((s) => s.id !== fromShiftId)
+                .forEach((s) => {
+                    const opt = document.createElement('option');
+                    opt.value = s.id;
+                    opt.textContent = s.label;
+                    moveToSelect.appendChild(opt);
+                });
+
+            moveModal.style.display = 'block';
         };
 
-        if (newShiftBtn) {
-            newShiftBtn.addEventListener('click', () => window.eventadminOpenNewShiftModal());
+        function closeMoveVolunteerModal() {
+            moveModal.style.display = 'none';
         }
 
-        function closeEditShiftModal() {
-            editModal.style.display = 'none';
-        }
-
-        if (closeBtn) closeBtn.addEventListener('click', closeEditShiftModal);
-        editModal.addEventListener('click', (e) => {
-            if (e.target === editModal) closeEditShiftModal();
-        });
-
-        // --- Move to another shift modal --------------------------------------------------
-        // A real form submit (not AJAX): the target shift can be on a completely different
-        // day or department than what's currently filtered, so a plain reload is the
-        // simplest way to always land on a correctly re-rendered view afterward.
-        const moveModal = document.getElementById('eventadmin-move-volunteer-modal');
-        if (moveModal) {
-            const moveCloseBtn = document.getElementById('eventadmin-move-volunteer-close');
-            const moveSubtitle = document.getElementById('eventadmin-move-volunteer-subtitle');
-            const moveFromShiftInput = document.getElementById('eventadmin-move-from-shift-id');
-            const moveUserIdInput = document.getElementById('eventadmin-move-user-id');
-            const moveToSelect = document.getElementById('eventadmin-move-to-shift-select');
-
-            window.eventadminOpenMoveVolunteerModal = function (fromShiftId, userId, volunteerName, shiftTitle) {
-                moveFromShiftInput.value = fromShiftId;
-                moveUserIdInput.value = userId;
-                moveSubtitle.textContent = volunteerName + ' — ' + shiftTitle;
-
-                moveToSelect.innerHTML = '';
-                (cfg.move_shifts || [])
-                    .filter((s) => s.id !== fromShiftId)
-                    .forEach((s) => {
-                        const opt = document.createElement('option');
-                        opt.value = s.id;
-                        opt.textContent = s.label;
-                        moveToSelect.appendChild(opt);
-                    });
-
-                moveModal.style.display = 'block';
-            };
-
-            function closeMoveVolunteerModal() {
-                moveModal.style.display = 'none';
-            }
-
-            if (moveCloseBtn) moveCloseBtn.addEventListener('click', closeMoveVolunteerModal);
-            moveModal.addEventListener('click', (e) => {
-                if (e.target === moveModal) closeMoveVolunteerModal();
-            });
-        }
-
-        // "View profile" modal is now shared (assets/js/volunteer-profile-modal.js) and
-        // exposes window.eventadminOpenVolunteerProfileModal — nothing to wire up here.
-
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const shiftId = isCreateMode ? 0 : parseInt(idInput.value, 10);
-            errorEl.textContent = '';
-
-            fetch(cfg.ajax_url, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: new URLSearchParams({
-                    action: isCreateMode ? 'eventadmin_create_shift' : 'eventadmin_update_shift',
-                    nonce: cfg.nonce,
-                    shift_id: shiftId,
-                    title: titleInput.value,
-                    category_id: categorySelect.value,
-                    start: startInput.value.replace('T', ' '),
-                    end: endInput.value.replace('T', ' '),
-                    min: minInput.value,
-                    max: maxInput.value,
-                    description: getDescriptionValue(),
-                    shift_organizer_user_id: organizerUserSelect.value,
-                    shift_organizer_name: organizerNameInput.value,
-                    shift_organizer_email: organizerEmailInput.value,
-                    show_open: cfg.show_open ? '1' : '0',
-                }),
-            })
-                .then((r) => r.json())
-                .then((res) => {
-                    if (!res.success) {
-                        errorEl.textContent = (res.data && res.data.message) || (cfg.i18n && cfg.i18n.error) || 'Error';
-                        return;
-                    }
-                    const data = res.data;
-
-                    if (isCreateMode) {
-                        cfg.shifts[data.shift_id] = {
-                            title: data.title,
-                            category_id: data.category_id,
-                            start: data.start,
-                            end: data.end,
-                            min: data.min,
-                            max: data.max,
-                            description: data.description,
-                            organizer_user_id: data.organizer_user_id,
-                            organizer_name: data.organizer_name,
-                            organizer_email: data.organizer_email,
-                        };
-                        // Registers the new shift with the "Add volunteer" modal (Table and
-                        // Timeline views both use this shared map) — without it, clicking
-                        // the new shift's open-slot bar to add someone would silently do
-                        // nothing until the page was reloaded.
-                        if (typeof EVENTADMIN_SHIFT_INFO !== 'undefined') {
-                            EVENTADMIN_SHIFT_INFO[data.shift_id] = {title: data.title, assigned: []};
-                        }
-
-                        if (timelineState) {
-                            // The new shift is always returned with an open slot so it's
-                            // visible immediately — keep the page's own checkbox in sync
-                            // so what's displayed matches what it says.
-                            if (!cfg.show_open) {
-                                cfg.show_open = true;
-                                const showOpenCheckbox = document.querySelector('#eventadmin-overview-filters input[name="show_open"][type="checkbox"]');
-                                if (showOpenCheckbox) showOpenCheckbox.checked = true;
-                            }
-                            timelineState.replaceShiftRows(data.shift_id, data.rows);
-                            closeEditShiftModal();
-                        } else {
-                            // No chart exists yet (the Timeline had zero rows) — nothing to
-                            // patch in place, so reload with "show open slots" forced on so
-                            // the brand-new (necessarily empty) shift is visible.
-                            const url = new URL(window.location.href);
-                            url.searchParams.set('show_open', '1');
-                            window.location.href = url.toString();
-                        }
-                        return;
-                    }
-
-                    cfg.shifts[shiftId] = {
-                        title: data.title,
-                        category_id: data.category_id,
-                        start: data.start,
-                        end: data.end,
-                        min: data.min,
-                        max: data.max,
-                        description: data.description,
-                        organizer_user_id: data.organizer_user_id,
-                        organizer_name: data.organizer_name,
-                        organizer_email: data.organizer_email,
-                    };
-                    if (timelineState) {
-                        // Rebuilds every row for this shift from scratch rather than patching
-                        // existing ones in place — min/max changes can add or remove open-slot
-                        // rows, which an in-place patch of the old row set can't reflect.
-                        timelineState.replaceShiftRows(shiftId, data.rows);
-                    }
-                    closeEditShiftModal();
-                })
-                .catch(() => {
-                    errorEl.textContent = (cfg.i18n && cfg.i18n.error) || 'Error';
-                });
+        if (moveCloseBtn) moveCloseBtn.addEventListener('click', closeMoveVolunteerModal);
+        moveModal.addEventListener('click', (e) => {
+            if (e.target === moveModal) closeMoveVolunteerModal();
         });
     }
+
+    // "View profile" modal and the shared shift modal (assets/js/volunteer-profile-modal.js,
+    // assets/js/shift-details-modal.js) are wired up independently — nothing to do here.
 });

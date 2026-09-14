@@ -114,13 +114,6 @@ jQuery(function ($) {
         });
     });
 
-    // Opens the shared "Volunteer activity" modal (assets/js/volunteer-profile-modal.js)
-    $(document).on('click', '.eventadmin-view-volunteer-profile', function () {
-        if (typeof window.eventadminOpenVolunteerProfileModal === 'function') {
-            window.eventadminOpenVolunteerProfileModal($(this).data('user-id'), $(this).data('name'));
-        }
-    });
-
     // Opens the shared "Edit departments" modal (assets/js/edit-departments-modal.js)
     $(document).on('click', '.eventadmin-edit-departments', function () {
         if (typeof window.eventadminOpenEditDepartmentsModal === 'function') {

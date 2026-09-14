@@ -120,3 +120,179 @@ function eventadmin_render_dashboard_stats_tab(int $total_users): void
             </div>
         </div>';
 }
+
+/**
+ * Builds the clickable "View profile" trigger for one activity-feed entry — a volunteer
+ * who has since been deleted (rare, but the log outlives the user account) falls back to
+ * plain, non-clickable text instead of a dead link.
+ *
+ * @param int $user_id
+ * @return string
+ */
+function eventadmin_activity_feed_volunteer_link(int $user_id): string
+{
+    $user = get_userdata($user_id);
+    if (!$user) {
+        return esc_html__('a deleted volunteer', 'eventadmin-volunteer-management');
+    }
+
+    $name = trim($user->first_name . ' ' . $user->last_name) ?: $user->user_login;
+
+    return '<button type="button" class="button-link eventadmin-view-volunteer-profile" data-user-id="'
+        . esc_attr($user_id) . '" data-name="' . esc_attr($name) . '">' . esc_html($name) . '</button>';
+}
+
+/**
+ * Builds the clickable "Shift details" trigger for one activity-feed entry — a shift that
+ * has since been deleted falls back to plain, non-clickable text.
+ *
+ * @param int $shift_id
+ * @return string
+ */
+function eventadmin_activity_feed_shift_link(int $shift_id): string
+{
+    $shift = get_post($shift_id);
+    if (!$shift || $shift->post_type !== 'eventadmin_shift') {
+        return esc_html__('a deleted shift', 'eventadmin-volunteer-management');
+    }
+
+    return '<button type="button" class="button-link eventadmin-view-shift-details" data-shift-id="'
+        . esc_attr($shift_id) . '" data-title="' . esc_attr($shift->post_title) . '">' . esc_html($shift->post_title) . '</button>';
+}
+
+/**
+ * Turns one eventadmin_log_shift_activity() entry into its human-readable sentence, e.g.
+ * "Achim Spörri signed up for Morning Shift" or "Jane Doe moved Max Muster from Morning
+ * Shift to Afternoon Shift". Volunteer and shift names are clickable triggers for the
+ * "View profile" / "Shift details" modals (both rendered by
+ * eventadmin_render_shared_volunteer_modals(), always present alongside this feed).
+ *
+ * @param array<string, mixed> $entry
+ * @return string HTML — already escaped/built from trusted pieces, safe to echo directly.
+ */
+function eventadmin_activity_feed_entry_text(array $entry): string
+{
+    $type        = (string) ($entry['type'] ?? '');
+    $user_id     = (int) ($entry['user_id'] ?? 0);
+    $shift_id    = (int) ($entry['shift_id'] ?? 0);
+    $to_shift_id = (int) ($entry['to_shift_id'] ?? 0);
+    $actor       = (string) ($entry['actor'] ?? 'self');
+    $actor_id    = (int) ($entry['actor_id'] ?? 0);
+
+    $volunteer_link = eventadmin_activity_feed_volunteer_link($user_id);
+    $shift_link      = eventadmin_activity_feed_shift_link($shift_id);
+
+    $actor_user = $actor === 'admin' && $actor_id ? get_userdata($actor_id) : null;
+    $actor_name = $actor_user
+        ? ($actor_user->display_name ?: trim($actor_user->first_name . ' ' . $actor_user->last_name))
+        : esc_html__('An admin', 'eventadmin-volunteer-management');
+
+    switch ($type) {
+        case 'assign':
+            if ($actor === 'admin') {
+                return sprintf(
+                    /* translators: 1: admin name, 2: volunteer name, 3: shift title */
+                    esc_html__('%1$s added %2$s to %3$s', 'eventadmin-volunteer-management'),
+                    esc_html($actor_name),
+                    $volunteer_link,
+                    $shift_link
+                );
+            }
+            return sprintf(
+                /* translators: 1: volunteer name, 2: shift title */
+                esc_html__('%1$s signed up for %2$s', 'eventadmin-volunteer-management'),
+                $volunteer_link,
+                $shift_link
+            );
+
+        case 'unassign':
+            if ($actor === 'admin') {
+                return sprintf(
+                    /* translators: 1: admin name, 2: volunteer name, 3: shift title */
+                    esc_html__('%1$s removed %2$s from %3$s', 'eventadmin-volunteer-management'),
+                    esc_html($actor_name),
+                    $volunteer_link,
+                    $shift_link
+                );
+            }
+            return sprintf(
+                /* translators: 1: volunteer name, 2: shift title */
+                esc_html__('%1$s cancelled %2$s', 'eventadmin-volunteer-management'),
+                $volunteer_link,
+                $shift_link
+            );
+
+        case 'move':
+            return sprintf(
+                /* translators: 1: admin name, 2: volunteer name, 3: origin shift title, 4: destination shift title */
+                esc_html__('%1$s moved %2$s from %3$s to %4$s', 'eventadmin-volunteer-management'),
+                esc_html($actor_name),
+                $volunteer_link,
+                $shift_link,
+                $to_shift_id ? eventadmin_activity_feed_shift_link($to_shift_id) : esc_html__('another shift', 'eventadmin-volunteer-management')
+            );
+
+        default:
+            return '';
+    }
+}
+
+/**
+ * Renders the "Recent activity" panel on the Overview dashboard — the most recent shift
+ * assignments, cancellations and moves across every volunteer, from the site-wide log kept
+ * by eventadmin_log_shift_activity() (includes/helpers.php). Distinct from each volunteer's
+ * own "Notification history" (includes/admin/user-profile.php), which only records what was
+ * actually emailed and therefore misses offline volunteers.
+ *
+ * @param int $limit
+ * @return void
+ */
+function eventadmin_render_activity_feed(int $limit = 20): void
+{
+    $log = get_option('eventadmin_activity_log', []);
+    if (!is_array($log)) {
+        $log = [];
+    }
+
+    $allowed_html = [
+        'button' => [
+            'type'          => true,
+            'class'         => true,
+            'data-user-id'  => true,
+            'data-shift-id' => true,
+            'data-name'     => true,
+            'data-title'    => true,
+        ],
+    ];
+
+    echo '<div class="eventadmin-profile-section eventadmin-activity-feed-section">';
+    echo '<h3>' . esc_html__('Recent activity', 'eventadmin-volunteer-management') . '</h3>';
+
+    if (empty($log)) {
+        echo '<p class="eventadmin-profile-empty">' . esc_html__('Nothing has happened yet.', 'eventadmin-volunteer-management') . '</p>';
+        echo '</div>';
+        return;
+    }
+
+    echo '<ul class="eventadmin-activity-feed">';
+    foreach (array_slice($log, 0, $limit) as $entry) {
+        $text = eventadmin_activity_feed_entry_text($entry);
+        if ($text === '') {
+            continue;
+        }
+        $date_ts = isset($entry['date']) ? strtotime((string) $entry['date']) : false;
+        $when    = $date_ts
+            ? sprintf(
+                /* translators: %s: relative time, e.g. "2 hours" */
+                esc_html__('%s ago', 'eventadmin-volunteer-management'),
+                human_time_diff($date_ts, current_time('timestamp'))
+            )
+            : '';
+
+        echo '<li><span class="eventadmin-activity-feed-text">' . wp_kses($text, $allowed_html) . '</span>'
+            . ($when ? ' <span class="eventadmin-activity-feed-time">' . esc_html($when) . '</span>' : '')
+            . '</li>';
+    }
+    echo '</ul>';
+    echo '</div>';
+}

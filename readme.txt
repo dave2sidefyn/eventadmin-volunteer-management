@@ -4,7 +4,7 @@ Tags: volunteer, volunteers, shift scheduling, event management, roster, sign up
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.2.0
+Stable tag: 3.3.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -20,10 +20,12 @@ EventAdmin turns a WordPress page into a self-service volunteer roster for an ev
 * **Set up shifts.** Each shift has a time slot, a department, and a minimum/maximum number of volunteers. Departments can be nested and colour-coded.
 * **One page for volunteers.** Put the `[eventadmin]` shortcode on a page. Visitors who are not logged in see a short registration form. Once registered, the same page becomes their dashboard: open shifts to join, the shifts they have taken, and their profile.
 * **Volunteers manage themselves.** They sign up and cancel on their own, up to an optional deadline. Limits you set — shifts per day, week, month or year, and optional overlap prevention — are enforced automatically.
-* **You stay in control.** The admin overview shows who signed up and which shifts are understaffed, as a Dashboard, Cards, a Table, or a drag-to-reschedule Timeline. Assign or create volunteers by hand, export CSV, and send bulk emails to chase the gaps.
+* **You stay in control.** The admin overview shows who signed up and which shifts are understaffed, as a Dashboard, Cards, a Table, or a drag-to-reschedule Timeline. Assign or create volunteers by hand, import or export CSV, and send bulk emails to chase the gaps.
+* **Delegate without giving out Administrator.** Two extra roles — Shift Manager and Volunteer Manager — hand off day-to-day work (shifts, volunteers, announcements) to other organizers without full admin access.
+* **Reach people by department.** Link a volunteer to one or more departments to target them with announcements — even before a single shift in that department exists yet.
 * **Recruit in public.** An optional `[eventadmin_open_positions]` list shows visitors where help is still needed before they register — no login required.
 
-Built for clubs, street festivals, and community events. Everything runs in your own WordPress install — no page builder and no external service required. Emails are sent through WordPress; social login works via the free Nextend Social Login plugin.
+Built for clubs, street festivals, and community events. Everything runs in your own WordPress install — no page builder and no external service required. Emails are sent through WordPress; social login works via the free Nextend Social Login plugin. New installs get a step-by-step "Getting started" checklist right on the dashboard.
 
 **Features:**
 
@@ -34,19 +36,23 @@ Built for clubs, street festivals, and community events. Everything runs in your
 * Configurable limits: maximum shifts per day, week, month, or year, plus optional overlap prevention
 * Optional "Full shifts" section so volunteers can still see fully booked shifts (disabled by default)
 * Public "open positions" overview (`[eventadmin_open_positions]`) — a no-login list of where volunteers are still needed, grouped by department, for a recruitment page
+* Two delegated roles — Shift Manager (shifts, departments, volunteers) and Volunteer Manager (volunteers, announcements) — for handing off work without full Administrator access
+* Link volunteers to one or more departments, independent of shift history, to target them with department-specific announcements
+* CSV import for volunteers (name, email, phone) and for shifts (title, description, time, department, capacity, organizer) under Tools → EventAdmin Data
 * Manual creation and assignment of volunteers by admins — pick an existing volunteer from a dropdown or create a new account on the fly, including offline volunteers without an email address
 * Per-shift organizer — override the notification sender for a single shift with a linked WordPress user and/or a manual name and email
-* Assignment, cancellation, and reminder emails (reminders a configurable number of days before a shift)
+* Assignment, cancellation, and reminder emails (reminders a configurable number of days before a shift), plus a separate, fully customizable notification to the shift's organizer on every sign-up and cancellation
 * Registration form protected by a honeypot plus optional CAPTCHA (Google reCAPTCHA v2/v3, hCaptcha, or Cloudflare Turnstile); blocked attempts are logged
 * CSV export per shift or for all shifts
-* Admin overview with Dashboard, Cards, Table, and Timeline views — drag shifts on the Timeline to reschedule them
+* Admin overview with Dashboard, Cards, Table, and Timeline views — drag shifts on the Timeline to reschedule them, or copy a whole day's shifts (and optionally its volunteers) to a new date
 * Dashboard statistics: registered volunteers, upcoming shifts, and open spots split into required (below the minimum) vs. optional openings
+* A "Getting started" checklist on the dashboard for new installs — tracks initial setup and surfaces less obvious features, then disappears once everything's done
 * Bulk email tool: announcements to all, opted-in, department-, shift-, or upcoming-shift-based recipient groups — batched, with a progress bar, delivery-failure tracking, a live HTML preview, an optional PDF attachment, and a confirmation email to the sender
 * Customisable email design: rich-text templates, header colour, header title/subtitle, footer, and custom CSS
 * Volunteers can opt out of announcements on their profile page
 * Send history log with subject, message preview, recipient count, and failure count
 * Integration with Nextend Social Login
-* Fully translatable; ships with German (informal & formal), French, and Dutch translations
+* Fully translatable; ships with German (informal & formal), French, Dutch, and Norwegian translations
 
 == Installation ==
 
@@ -55,8 +61,10 @@ Built for clubs, street festivals, and community events. Everything runs in your
 3. Go to Pages → Add New and insert the `[eventadmin]` shortcode — this is the main volunteer page (registration for new visitors, shift selector + profile for logged-in volunteers)
 4. Create your departments under Shifts → Categories (optionally give each a colour)
 5. Create your first shifts under Shifts → Add New
-6. Optional: create separate pages for `[eventadmin_profile]` or `[eventadmin_shiftselector]` if you want dedicated pages for those features
-7. Optional: add `[eventadmin_open_positions]` to a public recruitment page to show non-registered visitors where volunteers are still needed
+6. Optional: follow the "Getting started" checklist on Shifts → Overview — it tracks these same steps and points out a few more things worth trying
+7. Optional: create separate pages for `[eventadmin_profile]` or `[eventadmin_shiftselector]` if you want dedicated pages for those features
+8. Optional: add `[eventadmin_open_positions]` to a public recruitment page to show non-registered visitors where volunteers are still needed
+9. Optional: assign the Shift Manager or Volunteer Manager role (Users → All Users) to delegate work without giving out full Administrator access
 
 == Frequently Asked Questions ==
 
@@ -107,13 +115,25 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 
 == Screenshots ==
 
-1. Admin dashboard — live staffing overview: registrations, upcoming shifts, filled vs. open spots, and load per department
+1. Timeline view — every shift across the event on one chart, colour-coded by department; drag a shift to reschedule it
 2. The volunteer view — browse open shifts by department and sign up in one click
-3. Timeline view — every shift across the event on one chart; drag a shift to reschedule it
-4. Settings — shift limits per day/week/month/year, overlap prevention, cancellation deadline, and spam protection
-5. Send Announcement — target a recipient group and see a live preview of the email
+3. Click a volunteer on the Timeline for quick actions — edit the shift, view their profile, move or remove them
+4. Edit shift — title, department, time, min/max volunteers, and a rich-text description
+5. Add a volunteer on the spot — pick an existing one or create a new account without leaving the shift
+6. Settings — registration options and shift-limit rules (per day/week/month/year, overlap prevention)
+7. Email design — shared placeholders and a live preview of exactly what volunteers receive
+8. Send Announcement — target a recipient group and see a live preview of the email
+9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.3.0 =
+* New: The Overview dashboard has a "Recent activity" panel showing the most recent shift sign-ups, cancellations, and admin actions across every volunteer — separate from each volunteer's own email-notification history, so it also covers offline volunteers and actions sent without a notification
+* New: Clicking a shift anywhere in the admin area (a volunteer's Upcoming/Past shifts, the new activity feed) opens the same shift modal used in the Manager view — showing who else is on it, with each name linking to that volunteer's own profile, and back again
+* New: The Volunteers admin profile (and its "View profile" popup) shows an at-a-glance summary — badges, phone, registration date, departments, and announcement subscription — and lets you edit the phone number, toggle the announcement subscription, or remove the volunteer role right there
+* New: Phone numbers throughout the admin area are click-to-call links
+* New: "Documentation" now also appears as a link on the plugin's row on the Plugins screen, next to "Settings"
+* Fix: Volunteer badges (Offline/Unverified/Social/Manual) now show their tooltip instantly instead of relying on the browser's native, slow and inconsistent title-attribute tooltip
 
 = Version 3.2.0 =
 * New: Two new roles — "Shift Manager" (shift/department CRUD, manage volunteers) and "Volunteer Manager" (manage volunteers, send announcements) — for delegating day-to-day work without handing out full Administrator access. See the in-plugin Documentation page for exactly what each role can do
@@ -356,6 +376,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Shift management, volunteer registration, dashboard, export, rules
 
 == Upgrade Notice ==
+
+= 3.3.0 =
+Adds a "Recent activity" feed on the Overview dashboard, a unified shift modal with a clickable volunteer roster reachable from anywhere, and a richer, editable volunteer profile summary. No breaking changes.
 
 = 3.2.0 =
 Adds two new roles (Shift Manager, Volunteer Manager) for delegating work, volunteer-department linking with targeted announcements, CSV shift import, and a "Getting started" checklist. No breaking changes.

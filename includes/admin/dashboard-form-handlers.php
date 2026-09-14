@@ -40,6 +40,7 @@ function eventadmin_admin_dashboard_admin_init(): void
         $notify_volunteer  = !empty($_POST['notify_volunteer']);
 
         delete_post_meta($shift_id, 'assigned_user_' . $user_id);
+        eventadmin_log_shift_activity('unassign', $user_id, $shift_id, 'admin');
 
         if ($notify_volunteer && !get_user_meta($user_id, 'eventadmin_offline_volunteer', true)) {
             eventadmin_send_shift_un_assignment_notification($user_id, $shift_id, 'unassign', false, true);
@@ -107,6 +108,7 @@ function eventadmin_admin_dashboard_admin_init(): void
         }
 
         add_post_meta($to_shift_id, $meta_key, $user_id);
+        eventadmin_log_shift_activity('move', $user_id, $from_shift_id, 'admin', $to_shift_id);
 
         if ($notify_volunteer && !get_user_meta($user_id, 'eventadmin_offline_volunteer', true)) {
             eventadmin_send_shift_un_assignment_notification($user_id, $from_shift_id, 'unassign', false, true);
@@ -185,6 +187,7 @@ function eventadmin_admin_dashboard_admin_init(): void
         }
 
         add_post_meta($shift_id, 'assigned_user_' . $user->ID, $user->ID);
+        eventadmin_log_shift_activity('assign', $user->ID, $shift_id, 'admin');
 
         if ($notify_volunteer && !get_user_meta($user->ID, 'eventadmin_offline_volunteer', true)) {
             eventadmin_send_shift_un_assignment_notification($user->ID, $shift_id, 'assign', false, true);

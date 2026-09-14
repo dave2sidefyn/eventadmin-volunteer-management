@@ -76,6 +76,62 @@ function eventadmin_count_assignments(int $shift_id): int
 }
 
 /**
+ * Returns the user IDs currently assigned to a shift.
+ * @param int $shift_id The ID of the shift
+ * @return int[] Assigned user IDs
+ */
+function eventadmin_get_shift_assigned_user_ids(int $shift_id): array
+{
+    $meta = get_post_meta($shift_id);
+    $ids  = [];
+
+    foreach ($meta as $key => $val) {
+        if (str_starts_with($key, 'assigned_user_')) {
+            $ids[] = (int) $val[0];
+        }
+    }
+
+    return $ids;
+}
+
+/**
+ * Appends one entry to the site-wide shift-activity log (assign/unassign/move) — shown as
+ * the "Recent activity" panel on the Overview dashboard (see
+ * includes/admin/dashboard-tab-dashboard.php). Capped at the 200 most recent, newest first.
+ *
+ * Deliberately separate from eventadmin_log_volunteer_notification() (includes/
+ * notifications.php), which only writes an entry when an email actually sends and therefore
+ * misses offline volunteers and any assignment made with "notify volunteer" unchecked. This
+ * fires at the actual point an assignment is created or removed, regardless of whether any
+ * email goes out, so every volunteer type and every admin action is captured.
+ *
+ * @param string $type One of 'assign', 'unassign', 'move'.
+ * @param int $user_id Volunteer affected.
+ * @param int $shift_id Shift assigned to / removed from (for 'move', the origin shift).
+ * @param string $actor 'self' (the volunteer did it themselves) or 'admin'.
+ * @param int $to_shift_id For 'move' only: the destination shift.
+ */
+function eventadmin_log_shift_activity(string $type, int $user_id, int $shift_id, string $actor, int $to_shift_id = 0): void
+{
+    $log = get_option('eventadmin_activity_log', []);
+    if (!is_array($log)) {
+        $log = [];
+    }
+
+    array_unshift($log, [
+        'date'        => current_time('mysql'),
+        'type'        => $type,
+        'user_id'     => $user_id,
+        'shift_id'    => $shift_id,
+        'to_shift_id' => $to_shift_id,
+        'actor'       => $actor,
+        'actor_id'    => $actor === 'admin' ? get_current_user_id() : 0,
+    ]);
+
+    update_option('eventadmin_activity_log', array_slice($log, 0, 200));
+}
+
+/**
  * Removes all shift assignments for a deleted user.
  * Prevents orphaned assigned_user_* meta from inflating shift counts.
  * @param int $user_id The ID of the deleted user

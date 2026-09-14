@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       EventAdmin – Volunteer Management
  * Description:       Manage volunteers for events directly in WordPress. Create and schedule shifts, allow volunteers to sign up and cancel independently, and configure individual rules – e.g., maximum shifts per person per year.
- * Version:           3.2.0
+ * Version:           3.3.0
  * Author:            David Wiedmer, sidefyn GmbH
  * Author URI:        https://profiles.wordpress.org/davesidefyn/
  * Requires at least: 5.8
@@ -16,7 +16,7 @@
 
 defined('ABSPATH') or die('No script kiddies please!');
 
-define('EVENTADMIN_VERSION', '3.2.0');
+define('EVENTADMIN_VERSION', '3.3.0');
 define('EVENTADMIN_REVIEW_URL', 'https://wordpress.org/plugins/eventadmin-volunteer-management/#reviews');
 define('EVENTADMIN_DONATE_URL', 'https://revolut.me/davidwiedmer');
 
@@ -45,6 +45,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/admin/quick-edit.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/bulk-email.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/volunteer-list.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/user-profile.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/shift-details-modal.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/getting-started-checklist.php';
 
 
@@ -82,6 +83,10 @@ function eventadmin_get_option_defaults(): array
         'eventadmin_email_subject_unassign'     => "Confirmation: You have been removed from '{title}'",
         'eventadmin_email_text_assign'          => "Dear {first},\n\nThank you for volunteering at the event.\nYour shift:\n\n<b>{title}</b>\n<i>{start} – {end}</i>\n{desc}\n\nPlease arrive 20 minutes early.",
         'eventadmin_email_text_unassign'        => "Dear {first},\n\nYou have successfully signed out from:\n\n<b>{title}</b>\n<i>{start} – {end}</i>\n{desc}\n\nThank you for your update!",
+        'eventadmin_email_subject_admin_assign'   => 'Volunteer was assigned: {title}',
+        'eventadmin_email_subject_admin_unassign' => 'Volunteer was removed: {title}',
+        'eventadmin_email_text_admin_assign'      => 'The volunteer {first}, {last} was assigned for the shift: {title}',
+        'eventadmin_email_text_admin_unassign'    => 'The volunteer {first}, {last} was removed for the shift: {title}',
         'eventadmin_email_reminder_days'        => '7, 1',
         'eventadmin_email_subject_reminder'     => "Reminder: Your shift '{title}' starts in {days} day(s)",
         'eventadmin_email_text_reminder'        => "Dear {first},\n\nThis is a reminder that your shift starts in {days} day(s).\n\n<b>{title}</b>\n<i>{start} – {end}</i>\n{desc}\n\nThank you for your support.",
@@ -291,7 +296,7 @@ function eventadmin_update_notice(): void
             $notice_title = sprintf(__('EventAdmin %s is here!', 'eventadmin-volunteer-management'), EVENTADMIN_VERSION);
             ?>
             <strong><?php echo esc_html($notice_title); ?></strong><br>
-            <?php echo esc_html__('New in this release: two new roles (Shift Manager, Volunteer Manager) let you delegate day-to-day work without giving full admin access, volunteers can be linked to departments for targeted announcements, and a new "Getting started" checklist guides initial setup.', 'eventadmin-volunteer-management'); ?>
+            <?php echo esc_html__('New in this release: a "Recent activity" feed on the Overview dashboard, a unified shift modal (with a clickable volunteer roster) reachable from anywhere, and richer, editable volunteer profile summaries with click-to-call phone numbers.', 'eventadmin-volunteer-management'); ?>
             <div style="margin-top:10px;">
                 <a href="<?php echo esc_url(EVENTADMIN_REVIEW_URL); ?>" target="_blank" class="button button-primary" style="margin-right:8px;">⭐ <?php echo esc_html__('Rate 5 stars', 'eventadmin-volunteer-management'); ?></a>
                 <a href="<?php echo esc_url(EVENTADMIN_DONATE_URL); ?>" target="_blank" class="button">❤️ <?php echo esc_html__('Donate', 'eventadmin-volunteer-management'); ?></a>
@@ -316,8 +321,9 @@ function eventadmin_update_notice(): void
 add_action('admin_notices', 'eventadmin_update_notice');
 
 /**
- * Adds a "Settings" link to this plugin's row on the Plugins screen, next to Activate/
- * Deactivate — the standard place users look for it first, same as most other plugins.
+ * Adds "Settings" and "Documentation" links to this plugin's row on the Plugins screen,
+ * next to Activate/Deactivate — the standard place users look for them first, same as most
+ * other plugins, rather than only inside the plugin's own admin menu.
  *
  * @param string[] $links
  * @return string[]
@@ -326,7 +332,8 @@ function eventadmin_plugin_action_links(array $links): array
 {
     array_unshift(
         $links,
-        '<a href="' . esc_url(admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-settings')) . '">' . esc_html__('Settings', 'eventadmin-volunteer-management') . '</a>'
+        '<a href="' . esc_url(admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-settings')) . '">' . esc_html__('Settings', 'eventadmin-volunteer-management') . '</a>',
+        '<a href="' . esc_url(admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-documentation')) . '">' . esc_html__('Documentation', 'eventadmin-volunteer-management') . '</a>'
     );
     return $links;
 }

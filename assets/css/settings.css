@@ -12,11 +12,15 @@
     background: #f9f9f9;
     border-left: 4px solid #2271b1;
     padding: 10px 15px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+}
+
+.plugin-placeholders-info summary {
+    cursor: pointer;
 }
 
 .plugin-placeholders-info ul {
-    margin-left: 20px;
+    margin: 10px 0 0 20px;
 }
 
 .preview-block {
