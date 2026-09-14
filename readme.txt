@@ -4,7 +4,7 @@ Tags: volunteer, volunteers, shift scheduling, event management, roster, sign up
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.5.0
+Stable tag: 3.6.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,12 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.6.0 =
+* New: The EventAdmin MCP tools can now see who is assigned to a shift, and a new "notify_shift" tool can email a shift's roster directly
+* New: "list_departments", "get_settings", and "get_documentation" MCP tools/endpoints — resolve a department name to its ID, check the active sign-up rules (limits, overlap, cancellation deadline), and answer "how does this work" questions from the real Documentation page instead of guessing
+* Fix: The "Connect an MCP client" screen's "Copy to clipboard" button silently did nothing on non-HTTPS sites (the most common case for local development) — added the same fallback the Volunteers list's own copy buttons already use
+* Fix: Importing volunteers or shifts from a CSV file could silently blank out names containing accented or Nordic letters (é, ø, å, æ, ü, and similar) when the file was saved as Windows-1252 (Excel's default "CSV" export on Windows) instead of UTF-8
 
 = Version 3.5.0 =
 * New: The Manager view's shift popover gained a "Duplicate" action — pre-fills the Add Shift form with the same time, department, capacity and organizer, so you only need to adjust the date
@@ -393,6 +399,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Shift management, volunteer registration, dashboard, export, rules
 
 == Upgrade Notice ==
+
+= 3.6.0 =
+Adds a shift roster + email-the-roster MCP tool, department/settings/documentation lookup tools for MCP, and fixes a clipboard-copy bug on non-HTTPS sites plus a CSV import bug that silently dropped names with accented or Nordic letters. No breaking changes.
 
 = 3.5.0 =
 Adds an optional REST API for MCP/AI-assistant integrations (off by default), a one-click way to connect one via WordPress's own Application Passwords screen, and a "Duplicate" action for shifts in the Manager view. No breaking changes.

@@ -554,8 +554,30 @@ function eventadmin_plugin_documentation_page()
             <li><?php echo esc_html__('A "Connect an MCP client" button now appears in that same section. Click it.', 'eventadmin-volunteer-management'); ?></li>
             <li><?php echo esc_html__('You land on WordPress\'s own "Authorize Application" screen — click "Approve". This only grants the same access level your own account already has; it doesn\'t share your WordPress login itself.', 'eventadmin-volunteer-management'); ?></li>
             <li><?php echo esc_html__('You\'re taken back to Settings, where a green box shows a ready-to-use configuration. Click "Copy to clipboard".', 'eventadmin-volunteer-management'); ?></li>
-            <li><?php echo esc_html__('Paste that into your AI assistant\'s configuration (in Claude Desktop or Claude Code, wherever it lets you add an MCP server), then restart it.', 'eventadmin-volunteer-management'); ?></li>
+            <li><?php echo esc_html__('Paste that into your AI assistant\'s configuration — see the two common examples just below, depending on which one you use.', 'eventadmin-volunteer-management'); ?></li>
         </ol>
+
+        <p><strong><?php echo esc_html__('Example: Claude Desktop', 'eventadmin-volunteer-management'); ?></strong><br>
+        <?php echo esc_html__('Settings → Developer → Edit Config. This opens (or creates) a file called claude_desktop_config.json. If it already lists other servers, add "eventadmin" alongside them inside the same "mcpServers" section instead of replacing the file; otherwise paste the whole thing. Save, then fully quit and reopen Claude Desktop (closing the window isn\'t enough).', 'eventadmin-volunteer-management'); ?></p>
+        <pre><code>{
+  "mcpServers": {
+    "eventadmin": {
+      "command": "npx",
+      "args": ["-y", "eventadmin-mcp-server"],
+      "env": {
+        "EVENTADMIN_SITE_URL": "https://example.com",
+        "EVENTADMIN_USERNAME": "admin",
+        "EVENTADMIN_APP_PASSWORD": "xxxx xxxx xxxx xxxx xxxx xxxx"
+      }
+    }
+  }
+}</code></pre>
+
+        <p><strong><?php echo esc_html__('Example: Claude Code', 'eventadmin-volunteer-management'); ?></strong><br>
+        <?php echo esc_html__('Run this in a terminal, using the site URL, username and password from what you copied:', 'eventadmin-volunteer-management'); ?></p>
+        <pre><code>claude mcp add-json eventadmin '{"command":"npx","args":["-y","eventadmin-mcp-server"],"env":{"EVENTADMIN_SITE_URL":"https://example.com","EVENTADMIN_USERNAME":"admin","EVENTADMIN_APP_PASSWORD":"xxxx xxxx xxxx xxxx xxxx xxxx"}}'</code></pre>
+        <p><?php echo esc_html__('Then run', 'eventadmin-volunteer-management'); ?> <code>claude mcp list</code> <?php echo esc_html__('to confirm it registered.', 'eventadmin-volunteer-management'); ?></p>
+
         <p><?php echo esc_html__('That\'s it — your assistant can now see and manage your shifts when you ask it to.', 'eventadmin-volunteer-management'); ?></p>
 
         <h3 id="eventadmin-doc-mcp-can-do"><?php echo esc_html__('What it can do', 'eventadmin-volunteer-management'); ?></h3>
@@ -565,15 +587,20 @@ function eventadmin_plugin_documentation_page()
                 <th><?php echo esc_html__('Meaning', 'eventadmin-volunteer-management'); ?></th>
             </tr></thead>
             <tbody>
-                <tr><td><code>list_shifts</code></td><td><?php echo esc_html__('Lists shifts, optionally filtered by department, date, or time period.', 'eventadmin-volunteer-management'); ?></td></tr>
-                <tr><td><code>get_shift</code></td><td><?php echo esc_html__('Gets the full details of one specific shift.', 'eventadmin-volunteer-management'); ?></td></tr>
+                <tr><td><code>list_shifts</code></td><td><?php echo esc_html__('Lists shifts, optionally filtered by department, date, or time period. Each shift includes who is assigned to it.', 'eventadmin-volunteer-management'); ?></td></tr>
+                <tr><td><code>get_shift</code></td><td><?php echo esc_html__('Gets the full details of one specific shift, including who is assigned to it.', 'eventadmin-volunteer-management'); ?></td></tr>
                 <tr><td><code>create_shift</code></td><td><?php echo esc_html__('Creates a new shift.', 'eventadmin-volunteer-management'); ?></td></tr>
                 <tr><td><code>get_dashboard</code></td><td><?php echo esc_html__('Gets the same overview numbers shown on the Overview dashboard (open shifts, understaffed shifts, and so on).', 'eventadmin-volunteer-management'); ?></td></tr>
+                <tr><td><code>notify_shift</code></td><td><?php echo esc_html__('Emails everyone assigned to a specific shift.', 'eventadmin-volunteer-management'); ?></td></tr>
+                <tr><td><code>list_departments</code></td><td><?php echo esc_html__('Lists every department, so a shift can be created in one by name.', 'eventadmin-volunteer-management'); ?></td></tr>
+                <tr><td><code>get_settings</code></td><td><?php echo esc_html__('Gets the active sign-up rules: shift limits per volunteer, overlap policy, cancellation deadline.', 'eventadmin-volunteer-management'); ?></td></tr>
+                <tr><td><code>get_documentation</code></td><td><?php echo esc_html__('Gets this Documentation page as plain text, so your assistant can answer "how does this work" questions from it.', 'eventadmin-volunteer-management'); ?></td></tr>
             </tbody>
         </table>
 
         <h3 id="eventadmin-doc-mcp-security"><?php echo esc_html__('Security', 'eventadmin-volunteer-management'); ?></h3>
-        <p><?php echo esc_html__('This only works for Administrator and Shift Manager accounts — the same permission level already required for these actions in wp-admin. To disconnect it again, turn "Allow API access" back off, and/or remove the "EventAdmin MCP" entry under Users → your profile → Application Passwords.', 'eventadmin-volunteer-management'); ?></p>
+        <p><?php echo esc_html__('Most of this requires an Administrator or Shift Manager account — the same permission level already required for these actions in wp-admin. Two exceptions: emailing a shift\'s roster only needs volunteer-management access (so a Volunteer Manager account can do that one thing, the same as "Send Announcement" in wp-admin), and reading settings requires a full Administrator account (Shift Managers can\'t see the Settings page in wp-admin either).', 'eventadmin-volunteer-management'); ?></p>
+        <p><?php echo esc_html__('To disconnect it again, turn "Allow API access" back off, and/or remove the "EventAdmin MCP" entry under Users → your profile → Application Passwords.', 'eventadmin-volunteer-management'); ?></p>
 
         <hr style="margin:32px 0;">
 

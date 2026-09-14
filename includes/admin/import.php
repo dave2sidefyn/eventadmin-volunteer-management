@@ -534,6 +534,42 @@ function eventadmin_import_volunteers_from_upload(): array
 }
 
 /**
+ * Opens a CSV file for reading with its content normalized to valid UTF-8, regardless of how
+ * it was actually saved. Spreadsheet apps — Excel in particular — very often export "CSV" as
+ * Windows-1252/ANSI, not UTF-8. Without this, any accented or Nordic letter (é, ü, ø, å, æ, …)
+ * in the file makes wp_check_invalid_utf8() — which sanitize_text_field() calls on every
+ * imported value — return an empty string for that *entire* field (not just the one
+ * character), so e.g. a first name of "Bjørn" silently becomes "" and the row gets rejected
+ * as missing a first name. Detects and converts up front so the rest of the import logic can
+ * assume valid UTF-8, same as it already does for the header's BOM.
+ *
+ * @param string $path Absolute path to the uploaded file.
+ * @return resource|false A stream of guaranteed-UTF-8 content, or false if the file couldn't be read.
+ */
+function eventadmin_open_csv_as_utf8(string $path)
+{
+    $content = file_get_contents($path);
+    if ($content === false) {
+        return false;
+    }
+
+    if ($content !== '' && !mb_check_encoding($content, 'UTF-8')) {
+        // Windows-1252 is a superset of ISO-8859-1 and what Excel on Windows actually writes
+        // for "CSV" — covers every accented Western/Nordic character likely to show up here.
+        $converted = mb_convert_encoding($content, 'UTF-8', 'Windows-1252');
+        if ($converted !== false) {
+            $content = $converted;
+        }
+    }
+
+    $stream = fopen('php://temp', 'r+');
+    fwrite($stream, $content);
+    rewind($stream);
+
+    return $stream;
+}
+
+/**
  * Maps a raw CSV header cell to one of the canonical field keys
  * (first_name, last_name, email, phone) or '' when it is not recognised.
  */
@@ -573,7 +609,7 @@ function eventadmin_import_volunteers_from_csv(string $path): array
 {
     $result = ['created' => 0, 'duplicates' => [], 'errors' => []];
 
-    $handle = fopen($path, 'r');
+    $handle = eventadmin_open_csv_as_utf8($path);
     if ($handle === false) {
         $result['errors'][] = esc_html__('The file could not be read.', 'eventadmin-volunteer-management');
         return $result;
@@ -761,7 +797,7 @@ function eventadmin_import_shifts_from_csv(string $path): array
 {
     $result = ['created' => 0, 'errors' => [], 'warnings' => []];
 
-    $handle = fopen($path, 'r');
+    $handle = eventadmin_open_csv_as_utf8($path);
     if ($handle === false) {
         $result['errors'][] = esc_html__('The file could not be read.', 'eventadmin-volunteer-management');
         return $result;

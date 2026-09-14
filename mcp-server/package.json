@@ -1,6 +1,6 @@
 {
   "name": "eventadmin-mcp-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "MCP server wrapping the EventAdmin – Volunteer Management REST API (shifts, dashboard).",
   "type": "module",
   "main": "index.js",

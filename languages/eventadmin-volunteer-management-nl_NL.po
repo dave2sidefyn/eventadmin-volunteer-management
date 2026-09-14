@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-"
 "volunteer-management\n"
-"POT-Creation-Date: 2026-09-14T20:31:55+00:00\n"
+"POT-Creation-Date: 2026-09-14T21:17:35+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
@@ -69,10 +69,12 @@ msgstr "EventAdmin %s is er!"
 
 #: eventadmin-volunteer-management.php:301
 msgid ""
-"New in this release: an optional REST API for connecting an AI assistant via "
-"MCP (Settings → General → API access) with a one-click \"Connect\" flow, and "
-"a \"Duplicate\" action for shifts in the Manager view."
-msgstr "Nieuw in deze versie: een optionele REST API om een AI-assistent te verbinden via MCP (Instellingen → Algemeen → API-toegang) met een verbinding in één klik, en een \"Dupliceren\"-actie voor diensten in de Manager-weergave."
+"New in this release: the MCP tools can now see who is assigned to a shift "
+"and email that shift's roster directly, plus new tools to look up "
+"departments, sign-up rules, and the plugin's own documentation. Also fixes a "
+"clipboard-copy bug on non-HTTPS sites and a CSV import bug affecting "
+"accented or Nordic letters."
+msgstr "Nieuw in deze versie: de MCP-tools kunnen nu zien wie aan een dienst is toegewezen en direct een e-mail sturen naar de bezetting van die dienst. Ook nieuwe tools om afdelingen, aanmeldregels en de documentatie van de plugin op te zoeken. Verhelpt ook een kopieerbug in het klembord op niet-HTTPS-sites en een CSV-importbug bij namen met accenten of Noordse letters."
 
 #: eventadmin-volunteer-management.php:307
 msgid "Dismiss"
@@ -404,7 +406,7 @@ msgstr "Onvoldoende rechten."
 msgid "Invalid recipient type."
 msgstr "Ongeldig ontvangertype."
 
-#: includes/admin/bulk-email.php:675
+#: includes/admin/bulk-email.php:675 includes/rest-api.php:311
 msgid "Subject and message are required."
 msgstr "Onderwerp en bericht zijn verplicht."
 
@@ -1074,7 +1076,7 @@ msgid " (Copy)"
 msgstr " (Kopie)"
 
 #: includes/admin/dashboard-tab-timeline.php:254
-#: includes/admin/shift-details-modal.php:138 includes/rest-api.php:105
+#: includes/admin/shift-details-modal.php:138 includes/rest-api.php:159
 msgid "Title, start and end are required."
 msgstr "Titel, start en einde zijn verplicht."
 
@@ -1154,7 +1156,8 @@ msgid "Notify affected volunteers"
 msgstr "Betrokken volunteers informeren"
 
 #: includes/admin/dashboard-tab-timeline.php:307
-#: includes/admin/shift-details-modal.php:170 includes/rest-api.php:88
+#: includes/admin/shift-details-modal.php:170 includes/rest-api.php:142
+#: includes/rest-api.php:304
 msgid "Shift not found."
 msgstr "Dienst niet gevonden."
 
@@ -1424,24 +1427,24 @@ msgstr "Wat is dit?"
 msgid "Setting it up"
 msgstr "Instellen"
 
-#: includes/admin/documentation.php:216 includes/admin/documentation.php:561
+#: includes/admin/documentation.php:216 includes/admin/documentation.php:583
 msgid "What it can do"
 msgstr "Wat het kan"
 
-#: includes/admin/documentation.php:217 includes/admin/documentation.php:575
+#: includes/admin/documentation.php:217 includes/admin/documentation.php:601
 #: includes/admin/settings.php:603
 msgid "Security"
 msgstr "Beveiliging"
 
-#: includes/admin/documentation.php:221 includes/admin/documentation.php:580
+#: includes/admin/documentation.php:221 includes/admin/documentation.php:607
 msgid "Reference"
 msgstr "Referentie"
 
-#: includes/admin/documentation.php:223 includes/admin/documentation.php:583
+#: includes/admin/documentation.php:223 includes/admin/documentation.php:610
 msgid "All Shortcodes"
 msgstr "Alle shortcodes"
 
-#: includes/admin/documentation.php:224 includes/admin/documentation.php:611
+#: includes/admin/documentation.php:224 includes/admin/documentation.php:638
 msgid "Frequently Asked Questions (FAQ)"
 msgstr "Veelgestelde vragen (FAQ)"
 
@@ -1821,7 +1824,7 @@ msgid "Badge"
 msgstr "Badge"
 
 #: includes/admin/documentation.php:350 includes/admin/documentation.php:508
-#: includes/admin/documentation.php:565
+#: includes/admin/documentation.php:587
 msgid "Meaning"
 msgstr "Betekenis"
 
@@ -2268,7 +2271,7 @@ msgstr ""
 "het aantal vrije plekken — een snel overzicht van \"waar nog hulp nodig is\" "
 "in plaats van de volledige dienstenlijst."
 
-#: includes/admin/documentation.php:507 includes/admin/documentation.php:564
+#: includes/admin/documentation.php:507 includes/admin/documentation.php:586
 msgid "Attribute"
 msgstr "Attribuut"
 
@@ -2392,14 +2395,52 @@ msgstr ""
 
 #: includes/admin/documentation.php:557
 msgid ""
-"Paste that into your AI assistant's configuration (in Claude Desktop or "
-"Claude Code, wherever it lets you add an MCP server), then restart it."
+"Paste that into your AI assistant's configuration — see the two common "
+"examples just below, depending on which one you use."
 msgstr ""
-"Plak dit in de configuratie van je AI-assistent (in Claude Desktop of Claude "
-"Code, waar je een MCP-server kunt toevoegen), en start deze daarna opnieuw "
-"op."
+"Plak dit in de configuratie van je AI-assistent — hieronder staan de twee "
+"meest gangbare voorbeelden, afhankelijk van welke je gebruikt."
 
-#: includes/admin/documentation.php:559
+#: includes/admin/documentation.php:560
+msgid "Example: Claude Desktop"
+msgstr "Voorbeeld: Claude Desktop"
+
+#: includes/admin/documentation.php:561
+msgid ""
+"Settings → Developer → Edit Config. This opens (or creates) a file called "
+"claude_desktop_config.json. If it already lists other servers, add "
+"\"eventadmin\" alongside them inside the same \"mcpServers\" section instead "
+"of replacing the file; otherwise paste the whole thing. Save, then fully "
+"quit and reopen Claude Desktop (closing the window isn't enough)."
+msgstr ""
+"Instellingen → Ontwikkelaar → Configuratie bewerken. Hiermee open je (of "
+"maak je) een bestand met de naam claude_desktop_config.json. Als daar al "
+"andere servers in staan, voeg \"eventadmin\" er dan naast toe binnen "
+"dezelfde \"mcpServers\"-sectie in plaats van het bestand te vervangen; plak "
+"anders het geheel. Opslaan, en sluit Claude Desktop daarna volledig af en "
+"start het opnieuw op (het venster alleen sluiten is niet genoeg)."
+
+#: includes/admin/documentation.php:576
+msgid "Example: Claude Code"
+msgstr "Voorbeeld: Claude Code"
+
+#: includes/admin/documentation.php:577
+msgid ""
+"Run this in a terminal, using the site URL, username and password from what "
+"you copied:"
+msgstr ""
+"Voer dit uit in een terminal, met de site-URL, gebruikersnaam en het "
+"wachtwoord uit wat je gekopieerd hebt:"
+
+#: includes/admin/documentation.php:579
+msgid "Then run"
+msgstr "Voer daarna"
+
+#: includes/admin/documentation.php:579
+msgid "to confirm it registered."
+msgstr "uit om te bevestigen dat het geregistreerd is."
+
+#: includes/admin/documentation.php:581
 msgid ""
 "That's it — your assistant can now see and manage your shifts when you ask "
 "it to."
@@ -2407,19 +2448,26 @@ msgstr ""
 "Dat is alles — je assistent kan nu je diensten bekijken en beheren wanneer "
 "je daarom vraagt."
 
-#: includes/admin/documentation.php:568
-msgid "Lists shifts, optionally filtered by department, date, or time period."
-msgstr "Toont diensten, optioneel gefilterd op afdeling, datum of periode."
+#: includes/admin/documentation.php:590
+msgid ""
+"Lists shifts, optionally filtered by department, date, or time period. Each "
+"shift includes who is assigned to it."
+msgstr ""
+"Toont diensten, optioneel gefilterd op afdeling, datum of periode. Elke "
+"dienst laat zien wie eraan is toegewezen."
 
-#: includes/admin/documentation.php:569
-msgid "Gets the full details of one specific shift."
-msgstr "Haalt alle details van één specifieke dienst op."
+#: includes/admin/documentation.php:591
+msgid ""
+"Gets the full details of one specific shift, including who is assigned to it."
+msgstr ""
+"Haalt alle details van één specifieke dienst op, inclusief wie eraan is "
+"toegewezen."
 
-#: includes/admin/documentation.php:570
+#: includes/admin/documentation.php:592
 msgid "Creates a new shift."
 msgstr "Maakt een nieuwe dienst aan."
 
-#: includes/admin/documentation.php:571
+#: includes/admin/documentation.php:593
 msgid ""
 "Gets the same overview numbers shown on the Overview dashboard (open shifts, "
 "understaffed shifts, and so on)."
@@ -2427,27 +2475,68 @@ msgstr ""
 "Haalt dezelfde overzichtscijfers op die ook op het Overzicht-dashboard staan "
 "(open diensten, onderbezette diensten, enzovoort)."
 
-#: includes/admin/documentation.php:576
-msgid ""
-"This only works for Administrator and Shift Manager accounts — the same "
-"permission level already required for these actions in wp-admin. To "
-"disconnect it again, turn \"Allow API access\" back off, and/or remove the "
-"\"EventAdmin MCP\" entry under Users → your profile → Application Passwords."
+#: includes/admin/documentation.php:594
+msgid "Emails everyone assigned to a specific shift."
 msgstr ""
-"Dit werkt alleen voor accounts met de rol Beheerder of Dienstbeheerder — "
-"hetzelfde toegangsniveau dat voor deze acties in wp-admin al vereist is. Om "
-"de verbinding weer te verbreken, zet je \"API-toegang toestaan\" weer uit en/"
-"of verwijder je de vermelding \"EventAdmin MCP\" onder Gebruikers → jouw "
+"Stuurt een e-mail naar iedereen die aan een specifieke dienst is toegewezen."
+
+#: includes/admin/documentation.php:595
+msgid "Lists every department, so a shift can be created in one by name."
+msgstr ""
+"Toont alle afdelingen, zodat een dienst er per naam in kan worden aangemaakt."
+
+#: includes/admin/documentation.php:596
+msgid ""
+"Gets the active sign-up rules: shift limits per volunteer, overlap policy, "
+"cancellation deadline."
+msgstr ""
+"Haalt de actieve aanmeldregels op: dienstlimieten per vrijwilliger, "
+"overlapbeleid, annuleringstermijn."
+
+#: includes/admin/documentation.php:597
+msgid ""
+"Gets this Documentation page as plain text, so your assistant can answer "
+"\"how does this work\" questions from it."
+msgstr ""
+"Haalt deze documentatiepagina op als platte tekst, zodat je assistent vragen "
+"over de werking ermee kan beantwoorden."
+
+#: includes/admin/documentation.php:602
+msgid ""
+"Most of this requires an Administrator or Shift Manager account — the same "
+"permission level already required for these actions in wp-admin. Two "
+"exceptions: emailing a shift's roster only needs volunteer-management access "
+"(so a Volunteer Manager account can do that one thing, the same as \"Send "
+"Announcement\" in wp-admin), and reading settings requires a full "
+"Administrator account (Shift Managers can't see the Settings page in wp-"
+"admin either)."
+msgstr ""
+"Het meeste hiervan vereist een Beheerder- of Dienstbeheerder-account — "
+"hetzelfde toegangsniveau dat voor deze acties in wp-admin al vereist is. "
+"Twee uitzonderingen: een e-mail sturen naar de bezetting van een dienst "
+"vereist alleen toegang tot vrijwilligersbeheer (een Vrijwilligersbeheerder-"
+"account kan dus precies dat, net als bij \"Aankondiging versturen\" in wp-"
+"admin), en het opvragen van instellingen vereist een volledig Beheerder-"
+"account (Dienstbeheerders zien de Instellingenpagina in wp-admin ook niet)."
+
+#: includes/admin/documentation.php:603
+msgid ""
+"To disconnect it again, turn \"Allow API access\" back off, and/or remove "
+"the \"EventAdmin MCP\" entry under Users → your profile → Application "
+"Passwords."
+msgstr ""
+"Om de verbinding weer te verbreken, zet je \"API-toegang toestaan\" weer uit "
+"en/of verwijder je de vermelding \"EventAdmin MCP\" onder Gebruikers → jouw "
 "profiel → Toepassingswachtwoorden."
 
-#: includes/admin/documentation.php:581
+#: includes/admin/documentation.php:608
 msgid ""
 "Everything else: the full shortcode list and answers to common questions."
 msgstr ""
 "Al de rest: de volledige lijst met shortcodes en antwoorden op veelgestelde "
 "vragen."
 
-#: includes/admin/documentation.php:587
+#: includes/admin/documentation.php:614
 msgid ""
 "The main volunteer page — registration for new visitors, shift selector and "
 "profile for logged-in volunteers. This is the one shortcode almost every "
@@ -2457,7 +2546,7 @@ msgstr ""
 "dienstselectie en profiel voor ingelogde volunteers. Dit is de ene shortcode "
 "die bijna elke site nodig heeft."
 
-#: includes/admin/documentation.php:591
+#: includes/admin/documentation.php:618
 msgid ""
 "Shows the registration form for new volunteers – and if logged in – the "
 "complete cockpit."
@@ -2465,22 +2554,22 @@ msgstr ""
 "Toont het registratieformulier voor nieuwe Volunteers – en, indien ingelogd "
 "– het volledige cockpit."
 
-#: includes/admin/documentation.php:595
+#: includes/admin/documentation.php:622
 msgid ""
 "Shows the full cockpit for logged-in volunteers (profile & shift selection)."
 msgstr ""
 "Toont het volledige cockpit voor ingelogde Volunteers (profiel en "
 "dienstselectie)."
 
-#: includes/admin/documentation.php:599
+#: includes/admin/documentation.php:626
 msgid "Shows the volunteer profile for logged-in users."
 msgstr "Toont het Volunteer­profiel voor ingelogde gebruikers."
 
-#: includes/admin/documentation.php:603
+#: includes/admin/documentation.php:630
 msgid "Volunteers can sign up for or cancel shifts."
 msgstr "Volunteers kunnen zich aanmelden of afmelden voor diensten."
 
-#: includes/admin/documentation.php:607
+#: includes/admin/documentation.php:634
 msgid ""
 "Public, no-login overview of where volunteers are still needed, grouped by "
 "department. Ideal for a recruitment page that points visitors to the "
@@ -2490,20 +2579,20 @@ msgstr ""
 "nodig zijn, gegroepeerd per afdeling. Ideaal voor een wervingspagina die "
 "bezoekers naar het registratieformulier leidt."
 
-#: includes/admin/documentation.php:613
+#: includes/admin/documentation.php:640
 msgid "Do volunteers need an account?"
 msgstr "Hebben Volunteers een account nodig?"
 
-#: includes/admin/documentation.php:614
+#: includes/admin/documentation.php:641
 msgid "Yes, they must be logged in to view and join shifts."
 msgstr ""
 "Ja, je moet ingelogd zijn om diensten te bekijken en eraan deel te nemen."
 
-#: includes/admin/documentation.php:616
+#: includes/admin/documentation.php:643
 msgid "How can I assign volunteers manually?"
 msgstr "Hoe kan ik Volunteers handmatig toewijzen?"
 
-#: includes/admin/documentation.php:617
+#: includes/admin/documentation.php:644
 msgid ""
 "Open Shifts → Overview. In the Table view use the \"Add volunteer\" button "
 "on a shift, or click an open slot in the Timeline view. You can pick an "
@@ -2515,11 +2604,11 @@ msgstr ""
 "\"Tijdlijn\" op een open plek. Je kunt een bestaande vrijwilliger kiezen of "
 "ter plekke een nieuw account aanmaken (met of zonder e-mailadres)."
 
-#: includes/admin/documentation.php:619
+#: includes/admin/documentation.php:646
 msgid "What happens when shifts are full?"
 msgstr "Wat gebeurt er als diensten vol zijn?"
 
-#: includes/admin/documentation.php:620
+#: includes/admin/documentation.php:647
 msgid ""
 "By default, full shifts are hidden on the volunteer page. You can optionally "
 "show them in a separate read-only section by enabling \"Show full shifts to "
@@ -2529,11 +2618,11 @@ msgstr ""
 "optioneel weergeven in een aparte alleen-lezen sectie door \"Volle diensten "
 "tonen aan Volunteers\" in te schakelen via Instellingen → Weergave."
 
-#: includes/admin/documentation.php:622
+#: includes/admin/documentation.php:649
 msgid "What is the minimum volunteers field for?"
 msgstr "Waarvoor dient het veld voor het minimum aantal Volunteers?"
 
-#: includes/admin/documentation.php:623
+#: includes/admin/documentation.php:650
 msgid ""
 "You can set a minimum number of volunteers per shift. The admin dashboard "
 "will highlight shifts that have not reached the minimum with an "
@@ -2545,11 +2634,11 @@ msgstr ""
 "onderbezettingswaarschuwing. Dit is alleen informatief – er worden geen "
 "aanmeldingsregels afgedwongen op basis van het minimum."
 
-#: includes/admin/documentation.php:625
+#: includes/admin/documentation.php:652
 msgid "Can visitors see where help is needed before registering?"
 msgstr "Kunnen bezoekers vóór registratie zien waar hulp nodig is?"
 
-#: includes/admin/documentation.php:626
+#: includes/admin/documentation.php:653
 msgid ""
 "Yes. Put the [eventadmin_open_positions] shortcode on any public page. It "
 "lists every department that still has unfilled slots, needs no login, and by "
@@ -2561,11 +2650,11 @@ msgstr ""
 "vereist geen inloggen en laat standaard een compacte samenvatting zien — "
 "voeg style=\"list\" toe voor de afzonderlijke openstaande diensten."
 
-#: includes/admin/documentation.php:628
+#: includes/admin/documentation.php:655
 msgid "Why can't a volunteer cancel their shift anymore?"
 msgstr "Waarom kan een volunteer zich niet meer afmelden?"
 
-#: includes/admin/documentation.php:629
+#: includes/admin/documentation.php:656
 msgid ""
 "By default they can cancel anytime, right up to the start. Settings → "
 "General → \"Sign out possible up to X hours before start\" lets you require "
@@ -2577,11 +2666,11 @@ msgstr ""
 "je in plaats daarvan een minimale opzegtermijn instellen (bijv. 24 uur) — "
 "daarna verdwijnt de afmeldoptie voor hen."
 
-#: includes/admin/documentation.php:631
+#: includes/admin/documentation.php:658
 msgid "Can a volunteer sign up for two overlapping shifts?"
 msgstr "Kan een volunteer zich aanmelden voor twee overlappende diensten?"
 
-#: includes/admin/documentation.php:632
+#: includes/admin/documentation.php:659
 msgid ""
 "Not by default — Settings → General → \"Allow overlapping shifts\" blocks a "
 "volunteer from signing up for a shift that overlaps one they're already on. "
@@ -2592,11 +2681,11 @@ msgstr ""
 "overlapt met een dienst waarvoor hij al staat ingedeeld. Vink de optie aan "
 "als overlappende diensten wel toegestaan moeten zijn."
 
-#: includes/admin/documentation.php:634
+#: includes/admin/documentation.php:661
 msgid "How do I limit how many shifts one person can take?"
 msgstr "Hoe beperk ik hoeveel diensten iemand kan nemen?"
 
-#: includes/admin/documentation.php:635
+#: includes/admin/documentation.php:662
 msgid ""
 "Settings → General has four separate limits — per day, week, month, and "
 "year. Each is 0 (unlimited) by default; set any of them to cap how many "
@@ -2606,11 +2695,11 @@ msgstr ""
 "jaar. Elk staat standaard op 0 (onbeperkt); stel er een in om te beperken "
 "hoeveel diensten een volunteer in die periode kan nemen."
 
-#: includes/admin/documentation.php:637
+#: includes/admin/documentation.php:664
 msgid "How do I stop spam registrations?"
 msgstr "Hoe voorkom ik spamregistraties?"
 
-#: includes/admin/documentation.php:638
+#: includes/admin/documentation.php:665
 msgid ""
 "Bots occasionally submit fake volunteer registrations through the public "
 "form. Besides the built-in honeypot field (always on), Settings → General "
@@ -2629,11 +2718,11 @@ msgstr ""
 "geblokkeerd, controleer dus ook de instellingen van die plugin nadat je "
 "overschakelt."
 
-#: includes/admin/documentation.php:640
+#: includes/admin/documentation.php:667
 msgid "Why isn't there a password field when volunteers register or log in?"
 msgstr "Waarom is er geen wachtwoordveld bij registratie of aanmelden?"
 
-#: includes/admin/documentation.php:641
+#: includes/admin/documentation.php:668
 msgid ""
 "Volunteers don't set a password — the registration form and the \"resend "
 "login\" option both email a one-time login link (valid ~24 hours) instead. "
@@ -2648,7 +2737,7 @@ msgstr ""
 "geverifieerd\" zit (zie Volunteer-lijst & badges) voor accounts die zich "
 "hebben geregistreerd maar hun link nog niet hebben aangeklikt."
 
-#: includes/admin/documentation.php:643
+#: includes/admin/documentation.php:670
 msgid ""
 "What's the difference between assigning a volunteer to a shift and linking "
 "them to a department?"
@@ -2656,7 +2745,7 @@ msgstr ""
 "Wat is het verschil tussen een volunteer toewijzen aan een dienst en "
 "koppelen aan een afdeling?"
 
-#: includes/admin/documentation.php:644
+#: includes/admin/documentation.php:671
 msgid ""
 "Assigning them to a shift is the actual roster — it's what they signed up "
 "for. Linking them to a department (Volunteers page → Edit) is independent of "
@@ -2671,12 +2760,12 @@ msgstr ""
 "aan een afdeling\"), handig om mensen te bereiken voordat er überhaupt een "
 "dienst in die afdeling bestaat."
 
-#: includes/admin/documentation.php:646
+#: includes/admin/documentation.php:673
 msgid "Does deleting or deactivating the plugin delete volunteer data?"
 msgstr ""
 "Verwijdert het verwijderen of deactiveren van de plugin volunteergegevens?"
 
-#: includes/admin/documentation.php:647
+#: includes/admin/documentation.php:674
 msgid ""
 "Deactivating only stops the scheduled reminder and cleanup jobs. "
 "Uninstalling does not delete anything either — volunteer accounts, shifts, "
@@ -2690,12 +2779,12 @@ msgstr ""
 "dus er gaat niets verloren als je opnieuw installeert. Verwijder ze zelf "
 "handmatig (of met een opschoon-plugin) als je een schone lei wilt."
 
-#: includes/admin/documentation.php:649
+#: includes/admin/documentation.php:676
 msgid "Can I reuse last year's shifts for a new event?"
 msgstr ""
 "Kan ik de diensten van vorig jaar hergebruiken voor een nieuw evenement?"
 
-#: includes/admin/documentation.php:650
+#: includes/admin/documentation.php:677
 msgid ""
 "Yes — on the Manager page's Timeline tab, use \"Copy shifts to another day\" "
 "(in the + Add shift dropdown) to recreate every shift from a past day onto a "
@@ -2710,11 +2799,11 @@ msgstr ""
 "aangemelde volunteers mee te kopiëren, zodat je het rooster van een hele dag "
 "in één keer naar volgend jaar kunt overzetten."
 
-#: includes/admin/documentation.php:655
+#: includes/admin/documentation.php:682
 msgid "Support EventAdmin"
 msgstr "EventAdmin ondersteunen"
 
-#: includes/admin/documentation.php:656
+#: includes/admin/documentation.php:683
 msgid ""
 "EventAdmin is free and open source. If it saves you time, please consider "
 "leaving a review or making a small donation — it helps a lot!"
@@ -2722,11 +2811,11 @@ msgstr ""
 "EventAdmin is gratis en open source. Als het je tijd bespaart, denk dan aan "
 "een beoordeling of een kleine donatie!"
 
-#: includes/admin/documentation.php:658
+#: includes/admin/documentation.php:685
 msgid "Rate 5 stars on WordPress.org"
 msgstr "5 sterren geven op WordPress.org"
 
-#: includes/admin/documentation.php:659
+#: includes/admin/documentation.php:686
 msgid "Donate via Revolut"
 msgstr "Doneren via Revolut"
 
@@ -2943,7 +3032,7 @@ msgstr ""
 "Deze checklist behandelt de essentie; de volledige uitleg vind je op de %s."
 
 #: includes/admin/getting-started-checklist.php:302
-#: includes/admin/import.php:965
+#: includes/admin/import.php:1001
 msgid "Documentation page"
 msgstr "Documentatiepagina"
 
@@ -3295,97 +3384,97 @@ msgstr "Volunteers nodig voor de opbouw van het evenement."
 msgid "Setup Morning"
 msgstr "Opbouw ochtend"
 
-#: includes/admin/import.php:517 includes/admin/import.php:696
+#: includes/admin/import.php:517 includes/admin/import.php:732
 msgid "No file was uploaded."
 msgstr "Er is geen bestand geüpload."
 
-#: includes/admin/import.php:522 includes/admin/import.php:701
+#: includes/admin/import.php:522 includes/admin/import.php:737
 msgid "The file could not be uploaded. Please try again."
 msgstr "Het bestand kon niet worden geüpload. Probeer het opnieuw."
 
-#: includes/admin/import.php:529 includes/admin/import.php:708
+#: includes/admin/import.php:529 includes/admin/import.php:744
 msgid "Please upload a .csv file."
 msgstr "Upload een .csv-bestand."
 
-#: includes/admin/import.php:578 includes/admin/import.php:766
+#: includes/admin/import.php:614 includes/admin/import.php:802
 msgid "The file could not be read."
 msgstr "Het bestand kon niet worden gelezen."
 
-#: includes/admin/import.php:590 includes/admin/import.php:778
+#: includes/admin/import.php:626 includes/admin/import.php:814
 msgid "The file is empty."
 msgstr "Het bestand is leeg."
 
-#: includes/admin/import.php:597
+#: includes/admin/import.php:633
 msgid "The header row must contain a \"first_name\" column."
 msgstr "De koprij moet een kolom \"first_name\" bevatten."
 
 #. translators: %d: CSV line number
-#: includes/admin/import.php:630
+#: includes/admin/import.php:666
 #, php-format
 msgid "Row %d: first name is required."
 msgstr "Rij %d: voornaam is verplicht."
 
 #. translators: %d: CSV line number
-#: includes/admin/import.php:639
+#: includes/admin/import.php:675
 #, php-format
 msgid "Row %d: invalid e-mail address."
 msgstr "Rij %d: ongeldig e-mailadres."
 
 #. translators: 1: CSV line number, 2: e-mail address
-#: includes/admin/import.php:645 includes/admin/import.php:662
-#: includes/admin/import.php:869
+#: includes/admin/import.php:681 includes/admin/import.php:698
+#: includes/admin/import.php:905
 #, php-format
 msgid "Row %1$d: %2$s"
 msgstr "Rij %1$d: %2$s"
 
 #. translators: %s: required column name, e.g. "title"
-#: includes/admin/import.php:787
+#: includes/admin/import.php:823
 #, php-format
 msgid "The header row must contain a \"%s\" column."
 msgstr "De koprij moet een kolom \"%s\" bevatten."
 
 #. translators: %d: CSV line number
-#: includes/admin/import.php:819
+#: includes/admin/import.php:855
 #, php-format
 msgid "Row %d: title is required."
 msgstr "Rij %d: titel is verplicht."
 
 #. translators: %d: CSV line number
-#: includes/admin/import.php:826
+#: includes/admin/import.php:862
 #, php-format
 msgid "Row %d: start date/time is missing or not recognised."
 msgstr "Rij %d: startdatum/-tijd ontbreekt of wordt niet herkend."
 
 #. translators: %d: CSV line number
-#: includes/admin/import.php:833
+#: includes/admin/import.php:869
 #, php-format
 msgid "Row %d: end date/time is missing or not recognised."
 msgstr "Rij %d: einddatum/-tijd ontbreekt of wordt niet herkend."
 
 #. translators: %d: CSV line number
-#: includes/admin/import.php:839
+#: includes/admin/import.php:875
 #, php-format
 msgid "Row %d: end must be after start."
 msgstr "Rij %d: einde moet na de start liggen."
 
 #. translators: %d: CSV line number
-#: includes/admin/import.php:845
+#: includes/admin/import.php:881
 #, php-format
 msgid "Row %d: max_volunteers must be a whole number of 1 or more."
 msgstr "Rij %d: max_volunteers moet een geheel getal van 1 of hoger zijn."
 
 #. translators: %d: CSV line number
-#: includes/admin/import.php:853
+#: includes/admin/import.php:889
 #, php-format
 msgid "Row %d: min_volunteers cannot be greater than max_volunteers."
 msgstr "Rij %d: min_volunteers mag niet groter zijn dan max_volunteers."
 
-#: includes/admin/import.php:871
+#: includes/admin/import.php:907
 msgid "the shift could not be created."
 msgstr "de dienst kon niet worden aangemaakt."
 
 #. translators: 1: CSV line number, 2: department name
-#: includes/admin/import.php:893
+#: includes/admin/import.php:929
 #, php-format
 msgid ""
 "Row %1$d: could not create department \"%2$s\", shift left without a "
@@ -3395,32 +3484,32 @@ msgstr ""
 "zonder afdeling."
 
 #. translators: %s: department name
-#: includes/admin/import.php:897
+#: includes/admin/import.php:933
 #, php-format
 msgid "Created new department \"%s\"."
 msgstr "Nieuwe afdeling \"%s\" aangemaakt."
 
 #. translators: 1: CSV line number, 2: the organizer_user value from the row
-#: includes/admin/import.php:925
+#: includes/admin/import.php:961
 #, php-format
 msgid "Row %1$d: organizer user \"%2$s\" was not found and was left unset."
 msgstr ""
 "Rij %1$d: organisatiegebruiker \"%2$s\" is niet gevonden en is leeg gelaten."
 
-#: includes/admin/import.php:959
+#: includes/admin/import.php:995
 msgid "Do you want to import the sample data for EventAdmin?"
 msgstr "Wil je de voorbeelddata voor EventAdmin importeren?"
 
-#: includes/admin/import.php:960
+#: includes/admin/import.php:996
 msgid "Yes, please import"
 msgstr "Ja, importeren alstublieft"
 
-#: includes/admin/import.php:961
+#: includes/admin/import.php:997
 msgid "No, thanks"
 msgstr "Nee, bedankt"
 
 #. translators: %s: link to the Documentation page
-#: includes/admin/import.php:964
+#: includes/admin/import.php:1000
 #, php-format
 msgid "New here? Check the %s for setup steps and an overview of user roles."
 msgstr ""
@@ -4596,7 +4685,11 @@ msgstr ""
 "Hallo %1$s,<br><br>Bedankt voor je registratie bij %2$s (%3$s).<br><br>Hier "
 "is je inloglink:<br>%4$s"
 
-#: includes/rest-api.php:224
+#: includes/rest-api.php:367
+msgid "This shift has no assigned volunteers."
+msgstr "Er zijn geen vrijwilligers aan deze dienst toegewezen."
+
+#: includes/rest-api.php:478
 msgid ""
 "Turn on \"Allow API access\" above and save, then come back here to connect "
 "an MCP client."
@@ -4604,7 +4697,7 @@ msgstr ""
 "Zet hierboven \"API-toegang toestaan\" aan en sla op, kom daarna hier terug "
 "om een MCP-client te verbinden."
 
-#: includes/rest-api.php:229
+#: includes/rest-api.php:483
 msgid ""
 "Application Passwords aren't available on this site — they require HTTPS. "
 "Enable HTTPS to connect an MCP client this way."
@@ -4613,11 +4706,11 @@ msgstr ""
 "HTTPS vereist. Schakel HTTPS in om op deze manier een MCP-client te "
 "verbinden."
 
-#: includes/rest-api.php:241
+#: includes/rest-api.php:495
 msgid "Connect an MCP client"
 msgstr "MCP-client verbinden"
 
-#: includes/rest-api.php:242
+#: includes/rest-api.php:496
 msgid ""
 "Uses WordPress's own \"Authorize Application\" screen, so there's no "
 "password to create or copy by hand. Connects whichever account you're "
@@ -4627,19 +4720,23 @@ msgstr ""
 "geen wachtwoord handmatig hoeft aan te maken of te kopiëren. Verbindt het "
 "account waarmee je nu bent ingelogd."
 
-#: includes/rest-api.php:283
+#: includes/rest-api.php:537
 msgid ""
-"Connected! Paste this into your MCP client's configuration, then close this "
-"page — this password is shown only once."
+"Connected! Paste this into your MCP client's configuration file or settings "
+"screen — not into a chat message — then close this page. This password is "
+"shown only once."
 msgstr ""
-"Verbonden! Plak dit in de configuratie van je MCP-client en sluit deze "
-"pagina daarna — dit wachtwoord wordt maar één keer getoond."
+"Verbonden! Plak dit in het configuratiebestand of scherm met instellingen "
+"van je MCP-client — niet in een chatbericht — en sluit deze pagina daarna. "
+"Dit wachtwoord wordt maar één keer getoond.Verbonden! Plak dit in de "
+"configuratie van je MCP-client en sluit deze pagina daarna — dit wachtwoord "
+"wordt maar één keer getoond."
 
-#: includes/rest-api.php:285
+#: includes/rest-api.php:539
 msgid "Copy to clipboard"
 msgstr "Kopiëren naar klembord"
 
-#: includes/rest-api.php:293
+#: includes/rest-api.php:548
 msgid "Copied!"
 msgstr "Gekopieerd!"
 
@@ -4710,6 +4807,24 @@ msgstr "Je bent succesvol afgemeld."
 #: includes/shiftselector.php:419
 msgid "You are not signed up for this shift."
 msgstr "Je bent niet aangemeld voor deze dienst."
+
+#~ msgid ""
+#~ "New in this release: an optional REST API for connecting an AI assistant "
+#~ "via MCP (Settings → General → API access) with a one-click \"Connect\" "
+#~ "flow, and a \"Duplicate\" action for shifts in the Manager view."
+#~ msgstr ""
+#~ "Nieuw in deze versie: een optionele REST API om een AI-assistent te "
+#~ "verbinden via MCP (Instellingen → Algemeen → API-toegang) met een "
+#~ "verbinding in één klik, en een \"Dupliceren\"-actie voor diensten in de "
+#~ "Manager-weergave."
+
+#~ msgid ""
+#~ "Paste that into your AI assistant's configuration (in Claude Desktop or "
+#~ "Claude Code, wherever it lets you add an MCP server), then restart it."
+#~ msgstr ""
+#~ "Plak dit in de configuratie van je AI-assistent (in Claude Desktop of "
+#~ "Claude Code, waar je een MCP-server kunt toevoegen), en start deze daarna "
+#~ "opnieuw op."
 
 #~ msgid ""
 #~ "New in this release: a wp-admin Dashboard widget showing what needs your "
@@ -5098,10 +5213,6 @@ msgstr "Je bent niet aangemeld voor deze dienst."
 #~ "overschreven. Gebruik {first_name} en {last_name} als "
 #~ "personalisatieplaatshouders. HTML-opmaak wordt ondersteund — de live "
 #~ "preview onder het formulier toont de e-mail zoals hij eruit zal zien."
-
-#~ msgid "Only the volunteers assigned to a selected shift."
-#~ msgstr ""
-#~ "Alleen de vrijwilligers die zijn ingedeeld voor een geselecteerde dienst."
 
 #~ msgid ""
 #~ "New in this release: fixed a bug where Administrators who also held the "

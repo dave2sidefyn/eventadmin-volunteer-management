@@ -64,10 +64,23 @@ function toolResult(data) {
   return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
 }
 
-const server = new McpServer({
-  name: 'eventadmin-volunteer-management',
-  version: '1.0.0',
-});
+const server = new McpServer(
+  {
+    name: 'eventadmin-volunteer-management',
+    version: '1.0.0',
+  },
+  {
+    instructions:
+      'Tools for the EventAdmin – Volunteer Management WordPress plugin: manage shifts, read the ' +
+      'dashboard, and email a shift\'s roster. Before creating a shift in a department by name, call ' +
+      'list_departments to resolve its numeric ID — a department with no shifts yet has no other way ' +
+      'to be discovered. Before answering a question about how a specific EventAdmin feature or ' +
+      'setting works, call get_documentation rather than guessing. get_settings reports the active ' +
+      'sign-up rules (per-volunteer shift limits, overlap policy, cancellation deadline) — check it ' +
+      'before assuming a shift-creation or cancellation request is unconstrained; it requires an ' +
+      'Administrator-connected account.',
+  }
+);
 
 server.tool(
   'list_shifts',
@@ -106,7 +119,7 @@ server.tool(
     start: z.string().describe('Start date/time, e.g. "2026-10-01 09:00"'),
     end: z.string().describe('End date/time, e.g. "2026-10-01 11:00"'),
     description: z.string().optional(),
-    category_id: z.number().int().optional().describe('Department (shift category) term ID'),
+    category_id: z.number().int().optional().describe('Department (shift category) term ID — look it up with list_departments if you only have the department name'),
     min_volunteers: z.number().int().min(0).optional(),
     max_volunteers: z.number().int().min(1).optional(),
     organizer_name: z.string().optional(),
@@ -120,6 +133,39 @@ server.tool(
   'Get the same KPI numbers shown on the EventAdmin Overview dashboard: total/open/filled shifts, volunteers without a shift, per-department counts, and the next upcoming shifts.',
   {},
   async () => toolResult(await apiRequest('GET', '/dashboard'))
+);
+
+server.tool(
+  'notify_shift',
+  "Email everyone assigned to a specific shift (its roster — see the assigned_volunteers field from list_shifts/get_shift for who that is). Requires the connected account to have volunteer-management access. {first_name} and {last_name} in the message are replaced per recipient; volunteers with no real email address (offline volunteers) are silently skipped and listed in the response's `skipped` field.",
+  {
+    id: z.number().int().describe('The shift (post) ID'),
+    subject: z.string().describe('Email subject'),
+    message: z.string().describe('Email body. Supports {first_name} and {last_name} placeholders.'),
+  },
+  async ({ id, subject, message }) =>
+    toolResult(await apiRequest('POST', `/shifts/${id}/notify`, { subject, message }))
+);
+
+server.tool(
+  'list_departments',
+  'List every EventAdmin department (shift category): id, name, color, parent department, and whether it\'s hidden from volunteers. Use this to resolve a department name to the numeric category_id create_shift needs — especially important for a department that has no shifts yet, since there\'s otherwise no way to discover its ID.',
+  {},
+  async () => toolResult(await apiRequest('GET', '/departments'))
+);
+
+server.tool(
+  'get_settings',
+  'Get the EventAdmin rules that affect shift sign-up: max shifts per day/week/month/year per volunteer (0 = unlimited), whether overlapping shifts are allowed, and the cancellation deadline in hours before a shift starts. Requires an Administrator account (Shift Managers can\'t see these in wp-admin either).',
+  {},
+  async () => toolResult(await apiRequest('GET', '/settings'))
+);
+
+server.tool(
+  'get_documentation',
+  "Get the EventAdmin plugin's own documentation (the same content as its in-admin Documentation page), as plain text. Use this before answering a question about how a specific EventAdmin feature works, what a setting does, or how to set something up, instead of guessing.",
+  {},
+  async () => toolResult(await apiRequest('GET', '/documentation'))
 );
 
 const transport = new StdioServerTransport();
