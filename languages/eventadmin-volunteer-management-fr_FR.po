@@ -3227,6 +3227,16 @@ msgstr ""
 "mail ou nom d'utilisateur, dans cet ordre – si aucune correspondance n'est "
 "trouvée, le créneau est tout de même créé sans organisateur lié."
 
+#: includes/admin/import.php:89
+msgid ""
+"A row whose title and start date/time match an existing shift exactly is "
+"reported and skipped, so importing the same file twice will not create "
+"duplicates."
+msgstr ""
+"Une ligne dont le titre et la date/heure de début correspondent exactement à "
+"un créneau existant est signalée et ignorée, de sorte qu'importer le même "
+"fichier deux fois ne créera pas de doublons."
+
 #: includes/admin/import.php:103
 msgid "Import demo data"
 msgstr "Importer les données de démonstration"
@@ -3303,6 +3313,10 @@ msgstr "Ignoré – lignes non valides :"
 #, php-format
 msgid "%d shift(s) imported."
 msgstr "%d créneau(x) importé(s)."
+
+#: includes/admin/import.php:218
+msgid "Skipped – already exists:"
+msgstr "Ignoré – déjà existant :"
 
 #: includes/admin/import.php:217
 msgid "Notes:"
@@ -3490,6 +3504,14 @@ msgstr "Ligne %d : la date/heure de fin est manquante ou non reconnue."
 #, php-format
 msgid "Row %d: end must be after start."
 msgstr "Ligne %d : la fin doit être postérieure au début."
+
+#. translators: %d: CSV line number
+#: includes/admin/import.php:898
+#, php-format
+msgid "Row %d: a shift with this title and start time already exists, skipped."
+msgstr ""
+"Ligne %d : un créneau avec ce titre et cette heure de début existe déjà, "
+"ignoré."
 
 #. translators: %d: CSV line number
 #: includes/admin/import.php:881

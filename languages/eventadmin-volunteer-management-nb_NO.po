@@ -3148,6 +3148,16 @@ msgstr ""
 "i den rekkefølgen – hvis ingen match finnes, opprettes vakten likevel uten "
 "en tilknyttet arrangør."
 
+#: includes/admin/import.php:89
+msgid ""
+"A row whose title and start date/time match an existing shift exactly is "
+"reported and skipped, so importing the same file twice will not create "
+"duplicates."
+msgstr ""
+"En rad der tittel og starttidspunkt er identisk med en eksisterende vakt, "
+"blir rapportert og hoppet over, slik at import av samme fil to ganger ikke "
+"skaper duplikater."
+
 #: includes/admin/import.php:103
 msgid "Import demo data"
 msgstr "Importer demodata"
@@ -3224,6 +3234,10 @@ msgstr "Hoppet over – ugyldige rader:"
 #, php-format
 msgid "%d shift(s) imported."
 msgstr "%d vakt(er) importert."
+
+#: includes/admin/import.php:218
+msgid "Skipped – already exists:"
+msgstr "Hoppet over – finnes allerede:"
 
 #: includes/admin/import.php:217
 msgid "Notes:"
@@ -3411,6 +3425,14 @@ msgstr "Rad %d: sluttdato/-tid mangler eller gjenkjennes ikke."
 #, php-format
 msgid "Row %d: end must be after start."
 msgstr "Rad %d: slutt må være etter start."
+
+#. translators: %d: CSV line number
+#: includes/admin/import.php:898
+#, php-format
+msgid "Row %d: a shift with this title and start time already exists, skipped."
+msgstr ""
+"Rad %d: en vakt med denne tittelen og starttidspunktet finnes allerede, "
+"hoppet over."
 
 #. translators: %d: CSV line number
 #: includes/admin/import.php:881
