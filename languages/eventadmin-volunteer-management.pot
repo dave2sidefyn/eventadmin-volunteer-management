@@ -908,6 +908,24 @@ msgstr ""
 msgid "Filled:"
 msgstr ""
 
+#: includes/admin/shift-metaboxes.php:341
+msgid "Copy invite text"
+msgstr ""
+
+#. translators: %d: number of additional volunteers still needed for this shift
+#: includes/admin/shift-metaboxes.php:327
+#, php-format
+msgid "%d more volunteer needed."
+msgid_plural "%d more volunteers needed."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: URL of the public volunteer sign-up page
+#: includes/admin/shift-metaboxes.php:335
+#, php-format
+msgid "Sign up here: %s"
+msgstr ""
+
 #: includes/admin/dashboard-tab-cards.php:48
 msgid "Min.:"
 msgstr ""

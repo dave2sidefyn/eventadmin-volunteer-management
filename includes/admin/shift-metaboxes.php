@@ -262,6 +262,8 @@ function eventadmin_shift_meta_box(WP_Post $post): void
 
     echo '<p><strong>' . esc_html__('Filled:', 'eventadmin-volunteer-management') . '</strong> ' . esc_html($count) . '/' . esc_html($max) . '</p>';
 
+    eventadmin_render_shift_invite_copy_button($post, (int) $max, $count);
+
     echo '<table class="widefat striped">
 <thead>
 <tr>
@@ -288,4 +290,83 @@ function eventadmin_shift_meta_box(WP_Post $post): void
         }
     }
     echo '</tbody></table>';
+}
+
+/**
+ * Renders a "Copy invite text" button that copies the shift's title, time, description, how
+ * many more volunteers are needed, and a link to the site's public volunteer page, ready to
+ * paste into an e-mail or chat to recruit people outside the volunteer system — e.g. an O365
+ * group — when a shift suddenly needs more people. Uses the same clipboard-copy-with-fallback
+ * pattern as the MCP config copy button (includes/rest-api.php) and the Volunteers list's
+ * per-value copy buttons (assets/js/volunteer-list.js).
+ *
+ * @param WP_Post $post
+ * @param int $max Number of volunteers the shift needs.
+ * @param int $count Number of volunteers already assigned.
+ * @return void
+ */
+function eventadmin_render_shift_invite_copy_button(WP_Post $post, int $max, int $count): void
+{
+    $start = get_post_meta($post->ID, 'shift_start', true);
+    $end   = get_post_meta($post->ID, 'shift_end', true);
+
+    $lines = [$post->post_title];
+    if ($start) {
+        $lines[] = eventadmin_get_formatted_zeitraum($start, $end);
+    }
+
+    $description = trim(wp_strip_all_tags($post->post_content));
+    if ($description) {
+        $lines[] = $description;
+    }
+
+    $remaining = max(0, $max - $count);
+    if ($remaining > 0) {
+        /* translators: %d: number of additional volunteers still needed for this shift */
+        $lines[] = sprintf(
+            _n('%d more volunteer needed.', '%d more volunteers needed.', $remaining, 'eventadmin-volunteer-management'),
+            $remaining
+        );
+    }
+
+    $public_page_id = eventadmin_get_getting_started_public_page_id();
+    if ($public_page_id) {
+        /* translators: %s: URL of the public volunteer sign-up page */
+        $lines[] = sprintf(__('Sign up here: %s', 'eventadmin-volunteer-management'), get_permalink($public_page_id));
+    }
+
+    $invite_text = implode("\n\n", $lines);
+
+    echo '<textarea id="eventadmin-shift-invite-text" style="display:none;">' . esc_textarea($invite_text) . '</textarea>';
+    echo '<p><button type="button" class="button" id="eventadmin-shift-invite-copy">' . esc_html__('Copy invite text', 'eventadmin-volunteer-management') . '</button></p>';
+    echo '<script>
+    jQuery(function ($) {
+        $("#eventadmin-shift-invite-copy").on("click", function () {
+            var $btn = $(this);
+            var text = document.getElementById("eventadmin-shift-invite-text").value;
+
+            function showCopied() {
+                var original = $btn.text();
+                $btn.text(' . wp_json_encode(esc_html__('Copied!', 'eventadmin-volunteer-management')) . ');
+                setTimeout(function () { $btn.text(original); }, 1500);
+            }
+
+            // Same secure-context fallback as the MCP config copy button (includes/rest-api.php)
+            // and the Volunteers list\'s copy buttons (assets/js/volunteer-list.js).
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(showCopied, fallbackCopy);
+            } else {
+                fallbackCopy();
+            }
+
+            function fallbackCopy() {
+                var $tmp = $("<textarea>").val(text).css({position: "fixed", left: "-9999px"}).appendTo("body");
+                $tmp[0].select();
+                document.execCommand("copy");
+                $tmp.remove();
+                showCopied();
+            }
+        });
+    });
+    </script>';
 }
