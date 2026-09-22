@@ -2362,6 +2362,10 @@ msgstr ""
 msgid "<code>start</code> and <code>end</code> accept most common date/time formats (e.g. <code>2026-09-20 09:00</code>). <code>department</code> is matched to an existing department by name and created automatically if it does not exist yet. <code>organizer_user</code> is matched against an existing WordPress user by user ID, e-mail address, or username, in that order – if it cannot be matched, the shift is still created without a linked organizer user."
 msgstr ""
 
+#: includes/admin/import.php:89
+msgid "A row whose title and start date/time match an existing shift exactly is reported and skipped, so importing the same file twice will not create duplicates."
+msgstr ""
+
 #: includes/admin/import.php:103
 msgid "Import demo data"
 msgstr ""
@@ -2433,6 +2437,10 @@ msgstr ""
 #: includes/admin/import.php:208
 #, php-format
 msgid "%d shift(s) imported."
+msgstr ""
+
+#: includes/admin/import.php:218
+msgid "Skipped – already exists:"
 msgstr ""
 
 #: includes/admin/import.php:217
@@ -2603,6 +2611,12 @@ msgstr ""
 #: includes/admin/import.php:875
 #, php-format
 msgid "Row %d: end must be after start."
+msgstr ""
+
+#. translators: %d: CSV line number
+#: includes/admin/import.php:898
+#, php-format
+msgid "Row %d: a shift with this title and start time already exists, skipped."
 msgstr ""
 
 #. translators: %d: CSV line number

@@ -86,6 +86,7 @@ Anna,Muster,anna@example.com,+41 79 123 45 67</pre>
             __('<code>start</code> and <code>end</code> accept most common date/time formats (e.g. <code>2026-09-20 09:00</code>). <code>department</code> is matched to an existing department by name and created automatically if it does not exist yet. <code>organizer_user</code> is matched against an existing WordPress user by user ID, e-mail address, or username, in that order – if it cannot be matched, the shift is still created without a linked organizer user.', 'eventadmin-volunteer-management'),
             ['code' => []]
         ); ?></p>
+        <p><?php esc_html_e('A row whose title and start date/time match an existing shift exactly is reported and skipped, so importing the same file twice will not create duplicates.', 'eventadmin-volunteer-management'); ?></p>
         <pre style="background:#f6f7f7;border:1px solid #dcdcde;padding:8px 12px;display:inline-block;">title,details,start,end,department,min_volunteers,max_volunteers,organizer_user,organizer_name,organizer_email
 Bar shift,Serve drinks and keep the bar tidy,2026-09-20 18:00,2026-09-20 22:00,Bar,1,3,stein@example.com,Stein Selseth,stein@example.com</pre>
         <form method="post" action="" enctype="multipart/form-data">
@@ -199,23 +200,27 @@ Bar shift,Serve drinks and keep the bar tidy,2026-09-20 18:00,2026-09-20 22:00,B
         delete_transient('eventadmin_shift_import_result_' . get_current_user_id());
 
         if (!is_array($result)) {
-            $result = ['created' => 0, 'errors' => [], 'warnings' => []];
+            $result = ['created' => 0, 'errors' => [], 'warnings' => [], 'duplicates' => []];
         }
 
-        $class = !empty($result['errors']) ? 'notice-warning' : 'notice-success';
+        $class = (!empty($result['errors']) || !empty($result['duplicates'])) ? 'notice-warning' : 'notice-success';
         echo '<div class="notice ' . esc_attr($class) . ' is-dismissible"><p>' . sprintf(
             /* translators: %d: number of shifts created */
             esc_html__('%d shift(s) imported.', 'eventadmin-volunteer-management'),
             (int) $result['created']
         ) . '</p>';
 
-        foreach (['warnings', 'errors'] as $group) {
+        foreach (['duplicates', 'warnings', 'errors'] as $group) {
             if (empty($result[$group])) {
                 continue;
             }
-            $label = $group === 'warnings'
-                ? esc_html__('Notes:', 'eventadmin-volunteer-management')
-                : esc_html__('Skipped – invalid rows:', 'eventadmin-volunteer-management');
+            if ($group === 'duplicates') {
+                $label = esc_html__('Skipped – already exists:', 'eventadmin-volunteer-management');
+            } elseif ($group === 'warnings') {
+                $label = esc_html__('Notes:', 'eventadmin-volunteer-management');
+            } else {
+                $label = esc_html__('Skipped – invalid rows:', 'eventadmin-volunteer-management');
+            }
             echo '<p><strong>' . $label . '</strong></p><ul style="list-style:disc;margin-left:20px;">';
             foreach ($result[$group] as $line) {
                 echo '<li>' . esc_html($line) . '</li>';
@@ -719,11 +724,11 @@ function eventadmin_import_volunteers_from_csv(string $path): array
 /**
  * Validates the uploaded shift CSV and hands it to the parser.
  *
- * @return array{created: int, errors: string[], warnings: string[]}
+ * @return array{created: int, errors: string[], warnings: string[], duplicates: string[]}
  */
 function eventadmin_import_shifts_from_upload(): array
 {
-    $empty = ['created' => 0, 'errors' => [], 'warnings' => []];
+    $empty = ['created' => 0, 'errors' => [], 'warnings' => [], 'duplicates' => []];
 
     if (
         empty($_FILES['eventadmin_shift_csv']['tmp_name']) ||
@@ -789,13 +794,15 @@ function eventadmin_normalize_shift_csv_header(string $raw): string
  * an existing user by numeric ID, then e-mail address, then username, in that
  * order; when it does not resolve, the row is still imported but without a
  * linked organizer user (see eventadmin_save_shift_organizer_fields()).
+ * A row whose title and start date/time exactly match an existing shift is
+ * reported as a duplicate and skipped, so re-importing the same file is safe.
  *
  * @param string $path Absolute path to the uploaded CSV file.
- * @return array{created: int, errors: string[], warnings: string[]}
+ * @return array{created: int, errors: string[], warnings: string[], duplicates: string[]}
  */
 function eventadmin_import_shifts_from_csv(string $path): array
 {
-    $result = ['created' => 0, 'errors' => [], 'warnings' => []];
+    $result = ['created' => 0, 'errors' => [], 'warnings' => [], 'duplicates' => []];
 
     $handle = eventadmin_open_csv_as_utf8($path);
     if ($handle === false) {
@@ -873,6 +880,22 @@ function eventadmin_import_shifts_from_csv(string $path): array
         if (strtotime($end) <= strtotime($start)) {
             /* translators: %d: CSV line number */
             $result['errors'][] = sprintf(esc_html__('Row %d: end must be after start.', 'eventadmin-volunteer-management'), $line);
+            continue;
+        }
+
+        $duplicate = get_posts([
+            'post_type'   => 'eventadmin_shift',
+            'post_status' => 'any',
+            'numberposts' => 1,
+            'fields'      => 'ids',
+            'title'       => $title,
+            'meta_query'  => [
+                ['key' => 'shift_start', 'value' => $start],
+            ],
+        ]);
+        if (!empty($duplicate)) {
+            /* translators: %d: CSV line number */
+            $result['duplicates'][] = sprintf(esc_html__('Row %d: a shift with this title and start time already exists, skipped.', 'eventadmin-volunteer-management'), $line);
             continue;
         }
 

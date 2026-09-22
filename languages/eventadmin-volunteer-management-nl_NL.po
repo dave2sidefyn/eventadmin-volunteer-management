@@ -3193,6 +3193,16 @@ msgstr ""
 "gebruikersnaam, in die volgorde – als er geen koppeling wordt gevonden, "
 "wordt de dienst toch aangemaakt zonder gekoppelde organisator."
 
+#: includes/admin/import.php:89
+msgid ""
+"A row whose title and start date/time match an existing shift exactly is "
+"reported and skipped, so importing the same file twice will not create "
+"duplicates."
+msgstr ""
+"Een rij waarvan titel en startdatum/-tijd exact overeenkomen met een "
+"bestaande dienst wordt gemeld en overgeslagen, zodat hetzelfde bestand twee "
+"keer importeren geen duplicaten oplevert."
+
 #: includes/admin/import.php:103
 msgid "Import demo data"
 msgstr "Demodata importeren"
@@ -3269,6 +3279,10 @@ msgstr "Overgeslagen – ongeldige rijen:"
 #, php-format
 msgid "%d shift(s) imported."
 msgstr "%d dienst(en) geïmporteerd."
+
+#: includes/admin/import.php:218
+msgid "Skipped – already exists:"
+msgstr "Overgeslagen – bestaat al:"
 
 #: includes/admin/import.php:217
 msgid "Notes:"
@@ -3456,6 +3470,12 @@ msgstr "Rij %d: einddatum/-tijd ontbreekt of wordt niet herkend."
 #, php-format
 msgid "Row %d: end must be after start."
 msgstr "Rij %d: einde moet na de start liggen."
+
+#. translators: %d: CSV line number
+#: includes/admin/import.php:898
+#, php-format
+msgid "Row %d: a shift with this title and start time already exists, skipped."
+msgstr "Rij %d: een dienst met deze titel en starttijd bestaat al, overgeslagen."
 
 #. translators: %d: CSV line number
 #: includes/admin/import.php:881

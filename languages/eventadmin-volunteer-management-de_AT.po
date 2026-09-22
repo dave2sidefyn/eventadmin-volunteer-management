@@ -3210,6 +3210,16 @@ msgstr ""
 "keine Zuordnung gefunden werden, wird die Schicht trotzdem ohne verknüpften "
 "Organisator angelegt."
 
+#: includes/admin/import.php:89
+msgid ""
+"A row whose title and start date/time match an existing shift exactly is "
+"reported and skipped, so importing the same file twice will not create "
+"duplicates."
+msgstr ""
+"Eine Zeile, deren Titel und Startzeit genau mit einer bestehenden Schicht "
+"übereinstimmen, wird gemeldet und übersprungen – die gleiche Datei kann so "
+"gefahrlos ein zweites Mal importiert werden, ohne Duplikate zu erzeugen."
+
 #: includes/admin/import.php:103
 msgid "Import demo data"
 msgstr "Demodaten importieren"
@@ -3286,6 +3296,10 @@ msgstr "Übersprungen – ungültige Zeilen:"
 #, php-format
 msgid "%d shift(s) imported."
 msgstr "%d Schicht(en) importiert."
+
+#: includes/admin/import.php:218
+msgid "Skipped – already exists:"
+msgstr "Übersprungen – bereits vorhanden:"
 
 #: includes/admin/import.php:217
 msgid "Notes:"
@@ -3476,6 +3490,14 @@ msgstr "Zeile %d: Enddatum/-zeit fehlt oder wird nicht erkannt."
 #, php-format
 msgid "Row %d: end must be after start."
 msgstr "Zeile %d: Ende muss nach dem Start liegen."
+
+#. translators: %d: CSV line number
+#: includes/admin/import.php:898
+#, php-format
+msgid "Row %d: a shift with this title and start time already exists, skipped."
+msgstr ""
+"Zeile %d: Eine Schicht mit diesem Titel und dieser Startzeit existiert "
+"bereits, übersprungen."
 
 #. translators: %d: CSV line number
 #: includes/admin/import.php:881
