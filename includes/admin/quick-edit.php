@@ -243,16 +243,22 @@ function eventadmin_sortable_columns(array $columns): array
 add_filter('manage_edit-eventadmin_shift_sortable_columns', 'eventadmin_sortable_columns');
 
 /**
- * Handles sorting by shift_start meta key in the admin list
+ * Handles sorting by shift_start meta key in the admin list. Also defaults the "All
+ * Shifts" list to soonest-first by start time — instead of WordPress's usual
+ * post-creation-date order — whenever the screen is loaded without an explicit sort,
+ * so upcoming shifts are visible without first clicking the Start column header.
  */
 function eventadmin_sort_by_shift_start(WP_Query $query): void
 {
     if (!is_admin() || !$query->is_main_query()) return;
     if ($query->get('post_type') !== 'eventadmin_shift') return;
-    if ($query->get('orderby') === 'shift_start') {
+    if ($query->get('orderby') === 'shift_start' || empty($_GET['orderby'])) {
         $query->set('meta_key', 'shift_start');
         $query->set('orderby', 'meta_value');
         $query->set('meta_type', 'DATETIME');
+        if (empty($_GET['orderby'])) {
+            $query->set('order', 'ASC');
+        }
     }
 }
 
