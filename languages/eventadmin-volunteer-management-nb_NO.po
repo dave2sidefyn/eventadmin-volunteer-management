@@ -4751,6 +4751,10 @@ msgstr "Full"
 msgid "Invalid shift ID."
 msgstr "Ugyldig vakt-ID."
 
+#: includes/shiftselector.php:368
+msgid "This shift has already started."
+msgstr "Dette skiftet har allerede startet."
+
 #: includes/shiftselector.php:349
 msgid "You have been successfully signed up."
 msgstr "Du har blitt meldt på."

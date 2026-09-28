@@ -4802,6 +4802,10 @@ msgstr "Vol"
 msgid "Invalid shift ID."
 msgstr "Ongeldige dienst-ID."
 
+#: includes/shiftselector.php:368
+msgid "This shift has already started."
+msgstr "Deze dienst is al begonnen."
+
 #: includes/shiftselector.php:349
 msgid "You have been successfully signed up."
 msgstr "Je bent succesvol aangemeld."

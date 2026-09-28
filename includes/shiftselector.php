@@ -97,6 +97,34 @@ function eventadmin_shift_is_hidden_from_volunteers(int $shift_id): bool
     return true;
 }
 
+/**
+ * Whether a shift is already over, i.e. its end (or its start, if it has no end) lies in the
+ * past in the site's own timezone. Past shifts are no longer shown to volunteers in the shift
+ * selector — neither to sign up for nor under "My shifts".
+ *
+ * @param int $shift_id
+ * @return bool
+ */
+function eventadmin_shift_has_ended(int $shift_id): bool
+{
+    $end_raw = get_post_meta($shift_id, 'shift_end', true) ?: get_post_meta($shift_id, 'shift_start', true);
+    $end_ts  = eventadmin_wallclock_to_ts((string) $end_raw);
+    return $end_ts && $end_ts < eventadmin_wallclock_to_ts(current_time('mysql'));
+}
+
+/**
+ * Whether a shift has already started in the site's own timezone — volunteers can no longer
+ * sign up for it from then on.
+ *
+ * @param int $shift_id
+ * @return bool
+ */
+function eventadmin_shift_has_started(int $shift_id): bool
+{
+    $start_ts = eventadmin_wallclock_to_ts((string) get_post_meta($shift_id, 'shift_start', true));
+    return $start_ts && $start_ts <= eventadmin_wallclock_to_ts(current_time('mysql'));
+}
+
 function eventadmin_shiftselector_shortcode(): bool|string
 {
     if (!is_user_logged_in()) return esc_html__('Please log in first.', 'eventadmin-volunteer-management');
@@ -110,6 +138,10 @@ function eventadmin_shiftselector_shortcode(): bool|string
     $shift_slots = [];
 
     foreach ($shifts as $shift) {
+        if (eventadmin_shift_has_ended($shift->ID)) {
+            continue; // already over — nothing to sign up for or cancel any more
+        }
+
         $is_assigned = get_post_meta($shift->ID, 'assigned_user_' . $current_user_id, true);
         $max = (int)get_post_meta($shift->ID, 'max_volunteers', true);
         $current = eventadmin_count_assignments($shift->ID);
@@ -117,6 +149,8 @@ function eventadmin_shiftselector_shortcode(): bool|string
 
         if ($is_assigned) {
             $my_shifts[] = $shift;
+        } elseif (eventadmin_shift_has_started($shift->ID)) {
+            continue; // already running — too late to sign up
         } elseif (eventadmin_shift_is_hidden_from_volunteers($shift->ID)) {
             continue; // not signed up, and every department it's in is hidden — don't offer it
         } elseif ($current < $max) {
@@ -329,6 +363,9 @@ function eventadmin_assign_ajax(): void
     $shift_id = isset($_POST['shift_id']) ? absint($_POST['shift_id']) : 0;
     if (!$shift_id) {
         wp_send_json_error(['message' => esc_html__('Invalid shift ID.', 'eventadmin-volunteer-management')]);
+    }
+    if (eventadmin_shift_has_started($shift_id)) {
+        wp_send_json_error(['message' => esc_html__('This shift has already started.', 'eventadmin-volunteer-management')]);
     }
     $error = eventadmin_check_match_schicht_user($user_id, $shift_id);
 
