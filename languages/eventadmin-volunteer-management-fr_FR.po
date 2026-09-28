@@ -69,12 +69,11 @@ msgstr "EventAdmin %s est disponible !"
 
 #: eventadmin-volunteer-management.php:301
 msgid ""
-"New in this release: the MCP tools can now see who is assigned to a shift "
-"and email that shift's roster directly, plus new tools to look up "
-"departments, sign-up rules, and the plugin's own documentation. Also fixes a "
-"clipboard-copy bug on non-HTTPS sites and a CSV import bug affecting "
-"accented or Nordic letters."
-msgstr "Nouveau dans cette version : les outils MCP peuvent désormais voir qui est assigné à un créneau et envoyer directement un e-mail à la liste des personnes de ce créneau. Ajoute aussi de nouveaux outils pour rechercher les départements, les règles d'inscription et la documentation du plugin. Corrige également un bug de copie dans le presse-papiers sur les sites non HTTPS, ainsi qu'un bug d'import CSV affectant les noms avec des lettres accentuées ou nordiques."
+"New in this release: importing the same shift CSV twice no longer creates "
+"duplicates, volunteers no longer see past shifts in the shift selector (and "
+"can no longer sign up for shifts that have already started), and the All "
+"Shifts list now sorts by start time by default."
+msgstr "Nouveau dans cette version : importer deux fois le même fichier CSV de créneaux ne crée plus de doublons, les bénévoles ne voient plus les créneaux passés dans le sélecteur de créneaux (et ne peuvent plus s'inscrire à un créneau déjà commencé), et la liste « Tous les créneaux » est désormais triée par heure de début par défaut."
 
 #: eventadmin-volunteer-management.php:307
 msgid "Dismiss"

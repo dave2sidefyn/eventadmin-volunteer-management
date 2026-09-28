@@ -68,12 +68,11 @@ msgstr "EventAdmin %s er her!"
 
 #: eventadmin-volunteer-management.php:301
 msgid ""
-"New in this release: the MCP tools can now see who is assigned to a shift "
-"and email that shift's roster directly, plus new tools to look up "
-"departments, sign-up rules, and the plugin's own documentation. Also fixes a "
-"clipboard-copy bug on non-HTTPS sites and a CSV import bug affecting "
-"accented or Nordic letters."
-msgstr "Nytt i denne versjonen: MCP-verktøyene kan nå se hvem som er tildelt en vakt, og sende e-post direkte til bemanningen på den vakten. I tillegg nye verktøy for å slå opp avdelinger, påmeldingsregler og selve dokumentasjonen til programtillegget. Retter også en kopieringsfeil til utklippstavlen på nettsteder uten HTTPS, samt en CSV-importfeil som påvirket navn med aksenttegn eller nordiske bokstaver."
+"New in this release: importing the same shift CSV twice no longer creates "
+"duplicates, volunteers no longer see past shifts in the shift selector (and "
+"can no longer sign up for shifts that have already started), and the All "
+"Shifts list now sorts by start time by default."
+msgstr "Nytt i denne versjonen: Å importere den samme vakt-CSV-filen to ganger lager ikke lenger duplikater, frivillige ser ikke lenger tidligere vakter i vaktvelgeren (og kan ikke lenger melde seg på vakter som allerede har startet), og listen «Alle vakter» sorteres nå etter starttid som standard."
 
 #: eventadmin-volunteer-management.php:307
 msgid "Dismiss"
@@ -4753,7 +4752,7 @@ msgstr "Ugyldig vakt-ID."
 
 #: includes/shiftselector.php:368
 msgid "This shift has already started."
-msgstr "Dette skiftet har allerede startet."
+msgstr "Denne vakten har allerede startet."
 
 #: includes/shiftselector.php:349
 msgid "You have been successfully signed up."
