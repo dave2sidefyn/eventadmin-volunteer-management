@@ -4,7 +4,7 @@ Tags: volunteer, volunteers, shift scheduling, event management, roster, sign up
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.6.0
+Stable tag: 3.7.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,11 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.7.0 =
+* New: Importing shifts from CSV now skips any row whose title and start date/time exactly match an existing shift, and lists those rows under "Skipped – already exists" — importing the same file twice no longer creates duplicates
+* New: The "All Shifts" admin list now sorts by start time (soonest first) by default, instead of by creation date, so upcoming shifts are visible without first clicking the Start column
+* Fix: Volunteers no longer see shifts that are already over in the shift selector (neither to sign up for nor under their own shifts), and can no longer sign up for a shift that has already started
 
 = Version 3.6.0 =
 * New: The EventAdmin MCP tools can now see who is assigned to a shift, and a new "notify_shift" tool can email a shift's roster directly
@@ -399,6 +404,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Shift management, volunteer registration, dashboard, export, rules
 
 == Upgrade Notice ==
+
+= 3.7.0 =
+Re-importing the same shift CSV no longer creates duplicates, volunteers no longer see past shifts or sign up for ones already under way, and the All Shifts list sorts by start time by default. No breaking changes.
 
 = 3.6.0 =
 Adds a shift roster + email-the-roster MCP tool, department/settings/documentation lookup tools for MCP, and fixes a clipboard-copy bug on non-HTTPS sites plus a CSV import bug that silently dropped names with accented or Nordic letters. No breaking changes.

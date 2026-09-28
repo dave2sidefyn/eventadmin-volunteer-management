@@ -69,12 +69,11 @@ msgstr "EventAdmin %s is er!"
 
 #: eventadmin-volunteer-management.php:301
 msgid ""
-"New in this release: the MCP tools can now see who is assigned to a shift "
-"and email that shift's roster directly, plus new tools to look up "
-"departments, sign-up rules, and the plugin's own documentation. Also fixes a "
-"clipboard-copy bug on non-HTTPS sites and a CSV import bug affecting "
-"accented or Nordic letters."
-msgstr "Nieuw in deze versie: de MCP-tools kunnen nu zien wie aan een dienst is toegewezen en direct een e-mail sturen naar de bezetting van die dienst. Ook nieuwe tools om afdelingen, aanmeldregels en de documentatie van de plugin op te zoeken. Verhelpt ook een kopieerbug in het klembord op niet-HTTPS-sites en een CSV-importbug bij namen met accenten of Noordse letters."
+"New in this release: importing the same shift CSV twice no longer creates "
+"duplicates, volunteers no longer see past shifts in the shift selector (and "
+"can no longer sign up for shifts that have already started), and the All "
+"Shifts list now sorts by start time by default."
+msgstr "Nieuw in deze versie: hetzelfde dienst-CSV-bestand twee keer importeren maakt geen duplicaten meer aan, vrijwilligers zien geen voorbije diensten meer in de dienstkiezer (en kunnen zich niet meer aanmelden voor diensten die al begonnen zijn), en de lijst “Alle diensten” wordt nu standaard op starttijd gesorteerd."
 
 #: eventadmin-volunteer-management.php:307
 msgid "Dismiss"
