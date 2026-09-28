@@ -4850,6 +4850,10 @@ msgstr "Complet"
 msgid "Invalid shift ID."
 msgstr "Identifiant de créneau invalide."
 
+#: includes/shiftselector.php:368
+msgid "This shift has already started."
+msgstr "Ce créneau a déjà commencé."
+
 #: includes/shiftselector.php:349
 msgid "You have been successfully signed up."
 msgstr "Vous avez été inscrit avec succès."

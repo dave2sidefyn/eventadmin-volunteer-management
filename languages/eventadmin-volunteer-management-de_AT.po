@@ -4834,6 +4834,10 @@ msgstr "Voll"
 msgid "Invalid shift ID."
 msgstr "Ungültige Schicht-ID."
 
+#: includes/shiftselector.php:368
+msgid "This shift has already started."
+msgstr "Diese Schicht hat bereits begonnen."
+
 #: includes/shiftselector.php:349
 msgid "You have been successfully signed up."
 msgstr "Du wurdest erfolgreich angemeldet."

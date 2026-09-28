@@ -3841,6 +3841,10 @@ msgstr ""
 msgid "Invalid shift ID."
 msgstr ""
 
+#: includes/shiftselector.php:368
+msgid "This shift has already started."
+msgstr ""
+
 #: includes/shiftselector.php:349
 msgid "You have been successfully signed up."
 msgstr ""
