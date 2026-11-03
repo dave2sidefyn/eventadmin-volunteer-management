@@ -3,6 +3,7 @@
 .gitignore
 .distignore
 .wordpress-org
+design
 .claude
 .idea
 mcp-server

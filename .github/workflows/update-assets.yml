@@ -1,0 +1,26 @@
+name: Update WordPress.org assets and readme
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wordpress-org-assets
+  cancel-in-progress: false
+
+jobs:
+  update-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Update WordPress.org assets and readme
+        uses: 10up/action-wordpress-plugin-asset-update@2.2.0
+        env:
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SLUG: eventadmin-volunteer-management
+          ASSETS_DIR: .wordpress-org
+          IGNORE_OTHER_FILES: 'true'

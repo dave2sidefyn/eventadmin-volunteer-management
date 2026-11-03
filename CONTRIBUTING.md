@@ -32,6 +32,12 @@ Translation files live in `languages/`. If you add or change strings:
 2. Update the relevant `.po` files
 3. Compile to `.mo`
 
+## Publishing WordPress.org banners
+
+The upload assets live in `.wordpress-org/`. English uses the default banner filenames; German and French use `-de` and `-fr` suffixes. Each language needs both `772x250` and `1544x500` PNGs. Editable proposals live in `design/`, which is excluded from the plugin package.
+
+After merging and pushing the assets to the default branch, open GitHub Actions → **Update WordPress.org assets and readme** → **Run workflow**. This uses the existing SVN secrets to publish `.wordpress-org/` and `readme.txt` without releasing plugin code or changing its version. Review any readme changes before running it. The usual version-tag deployment also publishes these assets.
+
 ## Reporting Bugs
 
 Please open a [GitHub Issue](https://github.com/dave2sidefyn/eventadmin-volunteer-management/issues) with steps to reproduce, WordPress version, and PHP version.

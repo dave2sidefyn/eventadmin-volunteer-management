@@ -1,0 +1,11 @@
+EventAdmin WordPress.org banner proposals
+
+English fallback: banner-772x250.png and banner-1544x500.png
+German: banner-772x250-de.png and banner-1544x500-de.png
+French: banner-772x250-fr.png and banner-1544x500-fr.png
+
+Upload the six PNG files to the top-level assets/ directory of the plugin WordPress.org SVN repository. Do not put them under trunk/assets/. Both resolutions are required. Partial locale suffixes de and fr cover the respective language; full locale suffixes can override these later.
+
+The promotional text and screenshot frame captions are localized. Product screenshots reuse .wordpress-org/screenshot-1.png and screenshot-2.png; their interface labels remain English and event content remains German. No new screenshot captures or publication were performed. SVG masters are editable source files, not upload assets.
+
+Reference: https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/
