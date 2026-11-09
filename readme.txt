@@ -1,6 +1,6 @@
 === EventAdmin – Volunteer Management ===
 Contributors: davesidefyn
-Tags: volunteer, volunteers, shift scheduling, event management, roster, sign up, helpers, rota, volunteer management, planning
+Tags: volunteer, volunteer management, shift scheduling, event management, roster
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
