@@ -131,6 +131,7 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Fix: The login link in registration emails is now a clickable link — some mail clients did not turn the plain URL into a link
 * Fix: Login links no longer fail silently depending on who triggered the email or when they were opened. Clicking an already-used link while logged in now goes straight to the volunteer page instead of the home page
 * Fix: Registering with the email address of an existing account (e.g. the site admin testing the form) and logging in via the link now grants that account the volunteer role, so it sees the shifts instead of the registration form again. Existing roles are kept
+* Fix: The "Update User" button on a volunteer's Edit User screen did nothing, so admins could not change a volunteer's password or other WordPress profile fields there
 
 = Version 3.7.1 =
 * Fix: Login links (registration and "already registered" resend) and shift emails were silently not sent when the sender email under Settings → Communication had been saved empty — WordPress rejected them with "Invalid address: (From):". The plugin now falls back to the site's admin email (and the site name as sender name), also for the Send Announcement form

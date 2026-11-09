@@ -113,7 +113,14 @@ function eventadmin_render_volunteer_profile_section(WP_User $user): void
     // them), but the Upcoming/Past shifts tables above can still open the Shift details
     // modal, whose roster can in turn link to a *different* volunteer's profile — so both
     // modals still need to exist here, just hidden until something opens one.
-    eventadmin_render_shared_volunteer_modals();
+    // Rendered in admin_footer, i.e. after user-edit.php's own <form id="your-profile">
+    // has closed: the Edit departments modal contains a <form>, and nested inside the
+    // profile form its </form> closed the outer form early, so "Update User" (and the
+    // password fields) ended up outside it and the button did nothing. The closure also
+    // keeps admin_footer's '' argument away from the function's array parameter.
+    add_action('admin_footer', static function (): void {
+        eventadmin_render_shared_volunteer_modals();
+    });
 }
 
 add_action('edit_user_profile', 'eventadmin_render_volunteer_profile_section');
