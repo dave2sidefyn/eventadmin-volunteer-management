@@ -779,7 +779,7 @@ function eventadmin_plugin_register_settings(): void
         'eventadmin_notification_email_name',
         esc_html__('Name', 'eventadmin-volunteer-management'),
         static function () {
-            echo '<input type="text" name="eventadmin_notification_email_name" value="' . esc_attr(get_option('eventadmin_notification_email_name', '')) . '" class="regular-text">';
+            echo '<input type="text" name="eventadmin_notification_email_name" value="' . esc_attr(get_option('eventadmin_notification_email_name', '')) . '" placeholder="' . esc_attr(wp_specialchars_decode((string) get_bloginfo('name'), ENT_QUOTES)) . '" class="regular-text">';
         },
         'eventadmin-settings-communication',
         'eventadmin_communication_sender'
@@ -789,7 +789,7 @@ function eventadmin_plugin_register_settings(): void
         'eventadmin_notification_email',
         esc_html__('E-Mail', 'eventadmin-volunteer-management'),
         static function () {
-            echo '<input type="email" name="eventadmin_notification_email" value="' . esc_attr(get_option('eventadmin_notification_email', '')) . '" class="regular-text">';
+            echo '<input type="email" name="eventadmin_notification_email" value="' . esc_attr(get_option('eventadmin_notification_email', '')) . '" placeholder="' . esc_attr(get_option('admin_email')) . '" class="regular-text">';
         },
         'eventadmin-settings-communication',
         'eventadmin_communication_sender'

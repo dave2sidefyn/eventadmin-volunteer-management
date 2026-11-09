@@ -70,11 +70,10 @@ msgstr "EventAdmin %s ist da!"
 
 #: eventadmin-volunteer-management.php:301
 msgid ""
-"New in this release: importing the same shift CSV twice no longer creates "
-"duplicates, volunteers no longer see past shifts in the shift selector (and "
-"can no longer sign up for shifts that have already started), and the All "
-"Shifts list now sorts by start time by default."
-msgstr "Neu in dieser Version: Wird dieselbe Schicht-CSV zweimal importiert, entstehen keine Duplikate mehr. Volunteers sehen in der Schichtauswahl keine vergangenen Schichten mehr (und können sich nicht mehr für bereits begonnene Schichten anmelden), und die Liste «Alle Schichten» ist jetzt standardmässig nach Startzeit sortiert."
+"Fixed in this release: login links and shift emails are sent again when the "
+"sender email under Settings → Communication is left empty. The site's admin "
+"email is now used as the sender in that case."
+msgstr "Behoben in dieser Version: Login-Links und Schicht-E-Mails werden wieder versendet, wenn unter Einstellungen → Kommunikation keine Absender-E-Mail-Adresse eingetragen ist. In diesem Fall wird jetzt die Admin-E-Mail-Adresse der Website als Absender verwendet."
 
 #: eventadmin-volunteer-management.php:307
 msgid "Dismiss"

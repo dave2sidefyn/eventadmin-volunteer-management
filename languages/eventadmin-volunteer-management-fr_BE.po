@@ -69,11 +69,10 @@ msgstr "EventAdmin %s est disponible !"
 
 #: eventadmin-volunteer-management.php:301
 msgid ""
-"New in this release: importing the same shift CSV twice no longer creates "
-"duplicates, volunteers no longer see past shifts in the shift selector (and "
-"can no longer sign up for shifts that have already started), and the All "
-"Shifts list now sorts by start time by default."
-msgstr "Nouveau dans cette version : importer deux fois le même fichier CSV de créneaux ne crée plus de doublons, les bénévoles ne voient plus les créneaux passés dans le sélecteur de créneaux (et ne peuvent plus s'inscrire à un créneau déjà commencé), et la liste « Tous les créneaux » est désormais triée par heure de début par défaut."
+"Fixed in this release: login links and shift emails are sent again when the "
+"sender email under Settings → Communication is left empty. The site's admin "
+"email is now used as the sender in that case."
+msgstr "Corrigé dans cette version : les liens de connexion et les e-mails de créneaux sont de nouveau envoyés lorsque l'adresse e-mail de l'expéditeur est laissée vide sous Paramètres → Communication. Dans ce cas, l'adresse e-mail d'administration du site est désormais utilisée comme expéditeur."
 
 #: eventadmin-volunteer-management.php:307
 msgid "Dismiss"
