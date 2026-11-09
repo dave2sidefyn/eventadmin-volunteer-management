@@ -410,37 +410,56 @@ function eventadmin_check_match_schicht_user(int $user_id, int $shift_id): ?stri
  */
 function eventadmin_magic_login_check(): void
 {
-    if (
-        isset($_GET['magic_login'], $_GET['uid'], $_GET['_wpnonce']) &&
-        wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['_wpnonce'])), 'eventadmin_magic_login')
-    ) {
-        $token = sanitize_text_field(wp_unslash($_GET['magic_login']));
-        $user_id = absint($_GET['uid']);
-
-        $saved_token = get_user_meta($user_id, 'magic_login_token', true);
-        $expires = get_user_meta($user_id, 'magic_login_expire', true);
-
-        if ($token === $saved_token && time() < $expires) {
-            wp_set_current_user($user_id);
-            wp_set_auth_cookie($user_id, true);
-            delete_user_meta($user_id, 'magic_login_token');
-            delete_user_meta($user_id, 'magic_login_expire');
-
-            // For the Getting Started checklist (includes/admin/getting-started-checklist.php)
-            // — confirms the magic-login flow actually works end to end, whoever used it.
-            if (!get_option('eventadmin_magic_login_used')) {
-                update_option('eventadmin_magic_login_used', 1);
-            }
-            $redirect_to = isset($_GET['redirect_to']) ? esc_url_raw(wp_unslash($_GET['redirect_to'])) : site_url('/');
-            if (!str_starts_with($redirect_to, home_url())) {
-                $redirect_to = home_url('/');
-            }
-            wp_safe_redirect($redirect_to);
-            exit;
-        } else {
-            wp_die(esc_html__('Login link has expired or is invalid.', 'eventadmin-volunteer-management'));
-        }
+    // The _wpnonce parameter of links sent before 3.7.2 is ignored on purpose (see
+    // eventadmin_create_login_url()): the single-use token is what authenticates.
+    if (!isset($_GET['magic_login'], $_GET['uid'])) {
+        return;
     }
+
+    $token = sanitize_text_field(wp_unslash($_GET['magic_login']));
+    $user_id = absint($_GET['uid']);
+
+    $redirect_to = isset($_GET['redirect_to']) ? esc_url_raw(wp_unslash($_GET['redirect_to'])) : home_url('/');
+    if (!str_starts_with($redirect_to, home_url())) {
+        $redirect_to = home_url('/');
+    }
+
+    $saved_token = get_user_meta($user_id, 'magic_login_token', true);
+    $expires = (int) get_user_meta($user_id, 'magic_login_expire', true);
+
+    if ($user_id && $saved_token !== '' && hash_equals((string) $saved_token, $token) && time() < $expires) {
+        wp_set_current_user($user_id);
+        wp_set_auth_cookie($user_id, true);
+        delete_user_meta($user_id, 'magic_login_token');
+        delete_user_meta($user_id, 'magic_login_expire');
+
+        // Login links are only sent from the volunteer registration form, so whoever uses
+        // one has asked to volunteer. An existing account without the volunteer role
+        // (e.g. the site admin testing with their own address) would otherwise land on
+        // the registration form again instead of the shifts. add_role() keeps all
+        // existing roles.
+        $user = get_userdata($user_id);
+        if ($user && !in_array('eventadmin_volunteer', (array) $user->roles, true)) {
+            $user->add_role('eventadmin_volunteer');
+        }
+
+        // For the Getting Started checklist (includes/admin/getting-started-checklist.php)
+        // — confirms the magic-login flow actually works end to end, whoever used it.
+        if (!get_option('eventadmin_magic_login_used')) {
+            update_option('eventadmin_magic_login_used', 1);
+        }
+        wp_safe_redirect($redirect_to);
+        exit;
+    }
+
+    // Link already used (e.g. clicked twice, or opened by a mail scanner first) by the
+    // person who is now logged in: just take them where the link points.
+    if ($user_id && get_current_user_id() === $user_id) {
+        wp_safe_redirect($redirect_to);
+        exit;
+    }
+
+    wp_die(esc_html__('Login link has expired or is invalid.', 'eventadmin-volunteer-management'));
 }
 
 add_action('init', 'eventadmin_magic_login_check');

@@ -69,10 +69,10 @@ msgstr "EventAdmin %s is er!"
 
 #: eventadmin-volunteer-management.php:301
 msgid ""
-"Fixed in this release: login links and shift emails are sent again when the "
-"sender email under Settings → Communication is left empty. The site's admin "
-"email is now used as the sender in that case."
-msgstr "Opgelost in deze versie: inloglinks en dienst-e-mails worden weer verstuurd wanneer het afzender-e-mailadres onder Instellingen → Communicatie leeg is. In dat geval wordt nu het beheerders-e-mailadres van de website als afzender gebruikt."
+"Fixed in this release: login links in emails are now clickable and take "
+"volunteers straight to their shifts, also when they are already logged in "
+"or registered with an existing account (e.g. the admin's)."
+msgstr "Opgelost in deze versie: inloglinks in e-mails zijn nu klikbaar en leiden direct naar de diensten, ook bij een bestaande sessie of bij aanmelding met een bestaand account (bijv. dat van de beheerder)."
 
 #: eventadmin-volunteer-management.php:307
 msgid "Dismiss"

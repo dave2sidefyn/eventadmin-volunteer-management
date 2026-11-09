@@ -354,7 +354,7 @@ function eventadmin_handle_registration(): void
             /* translators: %1$s = first name, %2$s = login url */
                 wp_kses_post(__('Hello %1$s,<br><br>Your login link:<br>%2$s', 'eventadmin-volunteer-management')),
                 $existing_user->first_name,
-                $login_url
+                eventadmin_login_link_html($login_url)
             ));
 
         wp_safe_redirect(add_query_arg([
@@ -412,7 +412,7 @@ function eventadmin_handle_registration(): void
             $first,
             $site_name,
             $site_url,
-            $login_url
+            eventadmin_login_link_html($login_url)
         ));
 
     // 13. Redirect with success
@@ -440,12 +440,27 @@ function eventadmin_create_login_url(WP_Error|int $user_id, string $referer_url)
     update_user_meta($user_id, 'magic_login_token', $token);
     update_user_meta($user_id, 'magic_login_expire', time() + DAY_IN_SECONDS);
 
+    // No WordPress nonce here: a nonce is bound to the session of whoever triggered the
+    // email (a logged-out visitor, or an admin), so it failed as soon as the recipient's
+    // session differed and the link was silently ignored. The 128-bit single-use token
+    // is the actual secret.
     return add_query_arg([
         'magic_login' => $token,
         'uid' => $user_id,
-        '_wpnonce' => wp_create_nonce('eventadmin_magic_login'),
         'redirect_to' => $referer_url ?: get_permalink()
-    ], site_url());
+    ], home_url('/'));
+}
+
+/**
+ * Renders a login URL as a clickable link for HTML emails. Some mail clients don't
+ * auto-link a bare URL, which left volunteers copy-pasting it.
+ *
+ * @param string $login_url
+ * @return string
+ */
+function eventadmin_login_link_html(string $login_url): string
+{
+    return '<a href="' . esc_url($login_url) . '">' . esc_html($login_url) . '</a>';
 }
 
 add_action('init', 'eventadmin_handle_registration');
