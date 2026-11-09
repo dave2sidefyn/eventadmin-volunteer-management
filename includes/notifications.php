@@ -85,8 +85,8 @@ function eventadmin_get_shift_email_context(int $user_id, int $shift_id, array $
         $linked_name  = $organizer_user->display_name ?: trim($organizer_user->first_name . ' ' . $organizer_user->last_name);
     }
 
-    $notification_email = $organizer_email ?: ($linked_email ?: get_option('eventadmin_notification_email', get_bloginfo('admin_email')));
-    $notification_name  = $organizer_name ?: ($linked_name ?: get_option('eventadmin_notification_email_name', ''));
+    $notification_email = $organizer_email ?: ($linked_email ?: eventadmin_get_sender_email());
+    $notification_name  = $organizer_name ?: ($linked_name ?: eventadmin_get_sender_name());
 
     // Compute {days} from the shift start date so the placeholder works in all email types
     // (assign, unassign, reminder). For reminders, $extra_replacements overrides this with
@@ -533,14 +533,44 @@ function eventadmin_clear_shift_reminder_markers(int $shift_id): void
 
 
 /**
+ * The global sender address for plugin emails: Settings → Communication's sender email,
+ * falling back to the site's admin email.
+ *
+ * Uses ?: rather than get_option()'s own default argument on purpose: that default only
+ * applies while the option doesn't exist at all, so once the Communication tab has been
+ * saved with the field left blank the stored value is '' — which produced a "From: <>"
+ * header that PHPMailer rejects ("Invalid address: (From):"), silently dropping every
+ * login link and shift email that relies on the global sender.
+ *
+ * @return string
+ */
+function eventadmin_get_sender_email(): string
+{
+    $email = sanitize_email((string) get_option('eventadmin_notification_email', ''));
+    return is_email($email) ? $email : (string) get_option('admin_email');
+}
+
+/**
+ * The global sender name for plugin emails: Settings → Communication's sender name,
+ * falling back to the site name (same blank-option caveat as eventadmin_get_sender_email()).
+ *
+ * @return string
+ */
+function eventadmin_get_sender_name(): string
+{
+    $name = trim((string) get_option('eventadmin_notification_email_name', ''));
+    return $name !== '' ? $name : wp_specialchars_decode((string) get_bloginfo('name'), ENT_QUOTES);
+}
+
+/**
  * Generates the sender header for emails.
  *
  * @return string[]
  */
 function eventadmin_get_sender_header(): array
 {
-    $admin_email = get_option('eventadmin_notification_email', get_bloginfo('admin_email'));
-    $admin_email_name = get_option('eventadmin_notification_email_name', '');
+    $admin_email = eventadmin_get_sender_email();
+    $admin_email_name = eventadmin_get_sender_name();
     return [
         'From: ' . $admin_email_name . ' <' . $admin_email . '>',
         'Content-Type: text/html; charset=UTF-8'

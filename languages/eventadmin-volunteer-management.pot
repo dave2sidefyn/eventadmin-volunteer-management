@@ -58,7 +58,7 @@ msgid "EventAdmin %s is here!"
 msgstr ""
 
 #: eventadmin-volunteer-management.php:301
-msgid "New in this release: importing the same shift CSV twice no longer creates duplicates, volunteers no longer see past shifts in the shift selector (and can no longer sign up for shifts that have already started), and the All Shifts list now sorts by start time by default."
+msgid "Fixed in this release: login links and shift emails are sent again when the sender email under Settings → Communication is left empty. The site's admin email is now used as the sender in that case."
 msgstr ""
 
 #: eventadmin-volunteer-management.php:307

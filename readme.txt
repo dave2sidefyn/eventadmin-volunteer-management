@@ -4,7 +4,7 @@ Tags: volunteer, volunteers, shift scheduling, event management, roster, sign up
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.7.0
+Stable tag: 3.7.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.7.1 =
+* Fix: Login links (registration and "already registered" resend) and shift emails were silently not sent when the sender email under Settings → Communication had been saved empty — WordPress rejected them with "Invalid address: (From):". The plugin now falls back to the site's admin email (and the site name as sender name), also for the Send Announcement form
 
 = Version 3.7.0 =
 * New: Importing shifts from CSV now skips any row whose title and start date/time exactly match an existing shift, and lists those rows under "Skipped – already exists" — importing the same file twice no longer creates duplicates
@@ -404,6 +407,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Shift management, volunteer registration, dashboard, export, rules
 
 == Upgrade Notice ==
+
+= 3.7.1 =
+Fixes login links and shift emails not being sent when the sender email under Settings → Communication was left empty. Recommended for all sites. No breaking changes.
 
 = 3.7.0 =
 Re-importing the same shift CSV no longer creates duplicates, volunteers no longer see past shifts or sign up for ones already under way, and the All Shifts list sorts by start time by default. No breaking changes.

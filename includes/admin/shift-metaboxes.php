@@ -73,8 +73,8 @@ function eventadmin_shift_meta_callback(WP_Post $post): void
     echo '<label>' . esc_html__('End time:', 'eventadmin-volunteer-management') . '</label><br>';
     echo '<input type="datetime-local" name="shift_end" value="' . esc_attr($end) . '" /><br>';
 
-    $global_email = get_option('eventadmin_notification_email', get_bloginfo('admin_email'));
-    $global_name  = get_option('eventadmin_notification_email_name', '');
+    $global_email = eventadmin_get_sender_email();
+    $global_name  = eventadmin_get_sender_name();
 
     echo '<label>' . esc_html__('Organizer user:', 'eventadmin-volunteer-management') . '</label><br>';
     echo '<select name="shift_organizer_user_id" style="width:100%;max-width:300px;">';

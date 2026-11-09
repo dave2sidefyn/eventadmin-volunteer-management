@@ -94,8 +94,8 @@ function eventadmin_bulk_email_page(): void
     echo '<form id="eventadmin-bulk-email-form" method="post" style="margin-top:1rem;">';
     wp_nonce_field('eventadmin_bulk_email_init', 'eventadmin_bulk_email_nonce');
 
-    $default_from_name  = get_option('eventadmin_notification_email_name', get_bloginfo('name'));
-    $default_from_email = get_option('eventadmin_notification_email', get_option('admin_email'));
+    $default_from_name  = eventadmin_get_sender_name();
+    $default_from_email = eventadmin_get_sender_email();
 
     echo '<div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(360px, 1fr));gap:24px;align-items:start;max-width:1100px;">';
 
@@ -661,8 +661,12 @@ function eventadmin_bulk_email_init(): void
 
     $subject    = isset($_POST['bulk_email_subject'])    ? sanitize_text_field(wp_unslash($_POST['bulk_email_subject'])) : '';
     $body       = isset($_POST['bulk_email_body'])       ? wp_kses_post(wp_unslash($_POST['bulk_email_body'])) : '';
-    $from_name  = isset($_POST['bulk_email_from_name'])  ? sanitize_text_field(wp_unslash($_POST['bulk_email_from_name'])) : get_bloginfo('name');
-    $from_email = isset($_POST['bulk_email_from_email']) ? sanitize_email(wp_unslash($_POST['bulk_email_from_email'])) : get_option('admin_email');
+    $from_name  = isset($_POST['bulk_email_from_name'])  ? sanitize_text_field(wp_unslash($_POST['bulk_email_from_name'])) : '';
+    $from_email = isset($_POST['bulk_email_from_email']) ? sanitize_email(wp_unslash($_POST['bulk_email_from_email'])) : '';
+    // A blank or invalid sender field would otherwise produce a "From: <>" header that
+    // PHPMailer rejects, so fall back to the global sender just like every other email.
+    $from_name  = $from_name !== '' ? $from_name : eventadmin_get_sender_name();
+    $from_email = is_email($from_email) ? $from_email : eventadmin_get_sender_email();
     $raw_recip  = isset($_POST['bulk_email_recipients']) ? sanitize_text_field(wp_unslash($_POST['bulk_email_recipients'])) : 'subscribed';
     $recipients  = in_array($raw_recip, ['all', 'subscribed', 'shift', 'user', 'category', 'no_shift', 'has_shift', 'department_link'], true) ? $raw_recip : 'subscribed';
     $shift_id    = isset($_POST['bulk_email_shift_id'])    ? absint($_POST['bulk_email_shift_id'])    : 0;
@@ -776,8 +780,8 @@ function eventadmin_bulk_email_batch(): void
     $total        = count($user_ids);
     $batch        = array_slice($user_ids, $offset, $batch_size);
     $blog_name    = get_bloginfo('name');
-    $from_name    = $job['from_name']  ?? $blog_name;
-    $from_email   = $job['from_email'] ?? get_option('admin_email');
+    $from_name    = ($job['from_name']  ?? '') ?: eventadmin_get_sender_name();
+    $from_email   = ($job['from_email'] ?? '') ?: eventadmin_get_sender_email();
     $sender       = get_userdata($job['sent_by'] ?? 0);
     $reply_to     = $sender ? $sender->user_email : $from_email;
     $attachments  = !empty($job['attachment_path']) ? [$job['attachment_path']] : [];
