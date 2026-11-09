@@ -115,9 +115,10 @@ function eventadmin_render_volunteer_profile_section(WP_User $user): void
     // modals still need to exist here, just hidden until something opens one.
     // Rendered in admin_footer, i.e. after user-edit.php's own <form id="your-profile">
     // has closed: the Edit departments modal contains a <form>, and nested inside the
-    // profile form its </form> closed the outer form early, so "Update User" (and the
-    // password fields) ended up outside it and the button did nothing. The closure also
-    // keeps admin_footer's '' argument away from the function's array parameter.
+    // profile form its </form> closed the outer form early, so the "Update User" button
+    // (which comes after this section) ended up outside it and did nothing. The browser
+    // also dropped the modal's own <form>, so Edit departments was broken here too.
+    // The closure keeps admin_footer's '' argument away from the function's array parameter.
     add_action('admin_footer', static function (): void {
         eventadmin_render_shared_volunteer_modals();
     });
