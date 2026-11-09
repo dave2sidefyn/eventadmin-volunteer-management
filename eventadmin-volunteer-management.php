@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       EventAdmin – Volunteer Management
  * Description:       Manage volunteers for events directly in WordPress. Create and schedule shifts, allow volunteers to sign up and cancel independently, and configure individual rules – e.g., maximum shifts per person per year.
- * Version:           3.7.2
+ * Version:           3.7.3
  * Author:            David Wiedmer, sidefyn GmbH
  * Author URI:        https://profiles.wordpress.org/davesidefyn/
  * Requires at least: 5.8
@@ -16,7 +16,7 @@
 
 defined('ABSPATH') or die('No script kiddies please!');
 
-define('EVENTADMIN_VERSION', '3.7.2');
+define('EVENTADMIN_VERSION', '3.7.3');
 define('EVENTADMIN_REVIEW_URL', 'https://wordpress.org/plugins/eventadmin-volunteer-management/#reviews');
 define('EVENTADMIN_DONATE_URL', 'https://revolut.me/davidwiedmer');
 
@@ -126,6 +126,9 @@ function eventadmin_run_upgrades(): void
             update_option($key, $default);
         }
     }
+
+    // 3.7.3: give existing volunteers the permanent "verified" flag (runs once).
+    eventadmin_migrate_verified_flag();
 
     update_option('eventadmin_db_version', EVENTADMIN_VERSION);
 }
@@ -298,7 +301,7 @@ function eventadmin_update_notice(): void
             $notice_title = sprintf(__('EventAdmin %s is here!', 'eventadmin-volunteer-management'), EVENTADMIN_VERSION);
             ?>
             <strong><?php echo esc_html($notice_title); ?></strong><br>
-            <?php echo esc_html__('Fixed in this release: login links in emails are now clickable and take volunteers straight to their shifts, also when they are already logged in or registered with an existing account (e.g. the admin\'s).', 'eventadmin-volunteer-management'); ?>
+            <?php echo esc_html__('Important fix: volunteers who had already confirmed their account could be deleted by the daily cleanup of unconfirmed sign-ups after requesting a new login link — the same could happen to an admin who had registered with their own email. This no longer happens.', 'eventadmin-volunteer-management'); ?>
             <div style="margin-top:10px;">
                 <a href="<?php echo esc_url(EVENTADMIN_REVIEW_URL); ?>" target="_blank" class="button button-primary" style="margin-right:8px;">⭐ <?php echo esc_html__('Rate 5 stars', 'eventadmin-volunteer-management'); ?></a>
                 <a href="<?php echo esc_url(EVENTADMIN_DONATE_URL); ?>" target="_blank" class="button">❤️ <?php echo esc_html__('Donate', 'eventadmin-volunteer-management'); ?></a>

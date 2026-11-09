@@ -384,7 +384,7 @@ function eventadmin_plugin_documentation_page()
         ?>
 
         <h3 id="eventadmin-doc-cleanup"><?php echo esc_html__('Automatic Cleanup of Unverified Accounts', 'eventadmin-volunteer-management'); ?></h3>
-        <p><?php echo esc_html__('A daily background job automatically deletes volunteer accounts that were registered via the public form but whose magic login link expired without ever being clicked. Accounts are only deleted if they have no shift assignments and are not marked as manually added.', 'eventadmin-volunteer-management'); ?></p>
+        <p><?php echo esc_html__('A daily background job automatically deletes volunteer accounts that were registered via the public form but whose magic login link expired without ever being clicked. Accounts are only deleted if they have never logged in, have no shift assignments, are not marked as manually added and have no role other than Volunteer. Once a volunteer has logged in, requesting a new login link never puts their account at risk.', 'eventadmin-volunteer-management'); ?></p>
         <p><?php echo esc_html__('A log of automatically deleted accounts (up to the last 100) is shown at the bottom of the Volunteers page.', 'eventadmin-volunteer-management'); ?></p>
         <?php
         eventadmin_doc_screenshot(

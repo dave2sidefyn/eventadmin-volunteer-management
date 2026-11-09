@@ -4,7 +4,7 @@ Tags: volunteer, volunteer management, shift scheduling, event management, roste
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.7.2
+Stable tag: 3.7.3
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,11 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.7.3 =
+* Fix: The daily cleanup of unverified accounts could delete volunteers who had verified long ago — requesting a new login link (e.g. for another device) and not clicking it within 24 hours made them look unverified again. Accounts now keep a permanent "verified" status from their first login, and existing volunteers are marked as verified on update
+* Fix: The cleanup could also delete an administrator or other account that had the volunteer role (e.g. an admin who registered with their own email). It now only ever deletes plain volunteer accounts
+* Fix: The "Unverified" badge no longer reappears for verified volunteers who request a new login link
 
 = Version 3.7.2 =
 * Fix: The login link in registration emails is now a clickable link — some mail clients did not turn the plain URL into a link
@@ -413,6 +418,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Shift management, volunteer registration, dashboard, export, rules
 
 == Upgrade Notice ==
+
+= 3.7.3 =
+Important: fixes the daily cleanup deleting verified volunteers (and admins with the volunteer role) who had requested a new login link and not clicked it. Update as soon as possible. No breaking changes.
 
 = 3.7.2 =
 Login links in emails are clickable again and reliably lead to the shifts, also for existing accounts. Recommended for all sites. No breaking changes.

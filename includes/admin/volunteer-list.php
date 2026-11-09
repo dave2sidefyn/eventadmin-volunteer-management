@@ -379,8 +379,7 @@ function eventadmin_volunteer_list_page(): void
             }
         }
 
-        $token_set     = (bool) get_user_meta($volunteer->ID, 'magic_login_token', true);
-        $is_unverified = $token_set;
+        $is_unverified = eventadmin_user_is_unverified($volunteer->ID);
         $is_social     = in_array($volunteer->ID, $social_user_ids, true);
         $is_manual     = (bool) get_user_meta($volunteer->ID, 'eventadmin_manually_added', true);
 
