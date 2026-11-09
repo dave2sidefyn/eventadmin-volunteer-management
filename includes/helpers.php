@@ -405,6 +405,65 @@ function eventadmin_check_match_schicht_user(int $user_id, int $shift_id): ?stri
 }
 
 /**
+ * Records that a user has proven they can use their account (clicked a login link or
+ * logged in some other way). Permanent: unlike the login token, it is never removed, so
+ * requesting a new link later does not turn a verified volunteer back into "unverified".
+ */
+function eventadmin_mark_user_verified(int $user_id): void
+{
+    if ($user_id && !get_user_meta($user_id, 'eventadmin_verified', true)) {
+        update_user_meta($user_id, 'eventadmin_verified', time());
+    }
+}
+
+/**
+ * Whether a user registered via the public form but has never used a login link.
+ * A pending token alone is not enough: every "resend my login link" creates a new
+ * token, including for volunteers who verified long ago.
+ */
+function eventadmin_user_is_unverified(int $user_id): bool
+{
+    return (bool) get_user_meta($user_id, 'magic_login_token', true)
+        && !get_user_meta($user_id, 'eventadmin_verified', true);
+}
+
+// Any successful login (password, social login, ...) also counts as verified.
+add_action('wp_login', static function (string $user_login, WP_User $user): void {
+    eventadmin_mark_user_verified($user->ID);
+}, 10, 2);
+
+/**
+ * One-time migration for 3.7.3: before that, "unverified" simply meant "has a pending
+ * login token", so verified volunteers who had requested a new link were treated as
+ * unverified and could be auto-deleted. Marks everyone as verified except accounts that
+ * registered recently and have never used their link — a genuinely unverified account
+ * older than that would already have been removed by the daily cleanup.
+ */
+function eventadmin_migrate_verified_flag(): void
+{
+    if (get_option('eventadmin_verified_flag_migrated')) {
+        return;
+    }
+
+    $cutoff = time() - 2 * DAY_IN_SECONDS;
+    $users  = get_users([
+        'role'   => 'eventadmin_volunteer',
+        'fields' => ['ID', 'user_registered'],
+    ]);
+
+    foreach ($users as $user) {
+        $has_pending_token = (bool) get_user_meta((int) $user->ID, 'magic_login_token', true);
+        $registered_recently = strtotime($user->user_registered . ' UTC') > $cutoff;
+        if ($has_pending_token && $registered_recently) {
+            continue;
+        }
+        eventadmin_mark_user_verified((int) $user->ID);
+    }
+
+    update_option('eventadmin_verified_flag_migrated', 1, false);
+}
+
+/**
  * Checks the magic-link and logs the user in. The token is then deleted.
  * @return void
  */
@@ -432,6 +491,7 @@ function eventadmin_magic_login_check(): void
         wp_set_auth_cookie($user_id, true);
         delete_user_meta($user_id, 'magic_login_token');
         delete_user_meta($user_id, 'magic_login_expire');
+        eventadmin_mark_user_verified($user_id);
 
         // Login links are only sent from the volunteer registration form, so whoever uses
         // one has asked to volunteer. An existing account without the volunteer role
@@ -490,10 +550,15 @@ add_action('init', 'eventadmin_schedule_shift_reminders');
 
 /**
  * Deletes volunteer accounts that were registered but never verified via magic link.
- * Only removes users whose token has already expired and who have no shift assignments.
+ * Only removes users whose token has already expired, who have never verified (see
+ * eventadmin_mark_user_verified()), who have no role other than volunteer, and who
+ * have no shift assignments.
  */
 function eventadmin_cleanup_unverified_volunteers(): void
 {
+    // Never delete anyone while verified flags may still be missing for existing users.
+    eventadmin_migrate_verified_flag();
+
     $users = get_users([
         'role'       => 'eventadmin_volunteer',
         'meta_query' => [
@@ -501,6 +566,7 @@ function eventadmin_cleanup_unverified_volunteers(): void
             ['key' => 'magic_login_token', 'compare' => 'EXISTS'],
             ['key' => 'magic_login_expire', 'value' => time(), 'compare' => '<', 'type' => 'NUMERIC'],
             ['key' => 'eventadmin_manually_added', 'compare' => 'NOT EXISTS'],
+            ['key' => 'eventadmin_verified', 'compare' => 'NOT EXISTS'],
         ],
     ]);
 
@@ -513,6 +579,12 @@ function eventadmin_cleanup_unverified_volunteers(): void
     $log = get_option('eventadmin_cleanup_log', []);
 
     foreach ($users as $user) {
+        // An account with any other role (e.g. an admin who registered with their own
+        // address) was not created by the registration form — never delete it here.
+        if (array_diff((array) $user->roles, ['eventadmin_volunteer'])) {
+            continue;
+        }
+
         $assigned = get_posts([
             'post_type'   => 'eventadmin_shift',
             'numberposts' => 1,

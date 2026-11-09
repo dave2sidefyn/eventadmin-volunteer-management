@@ -146,7 +146,7 @@ function eventadmin_render_volunteer_badges(WP_User $user): string
     ));
 
     $is_offline    = (bool) get_user_meta($user->ID, 'eventadmin_offline_volunteer', true) || empty($user->user_email);
-    $is_unverified = (bool) get_user_meta($user->ID, 'magic_login_token', true);
+    $is_unverified = eventadmin_user_is_unverified($user->ID);
     $is_manual     = (bool) get_user_meta($user->ID, 'eventadmin_manually_added', true);
 
     $badges = [];
