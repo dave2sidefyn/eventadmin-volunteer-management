@@ -58,7 +58,7 @@ msgid "EventAdmin %s is here!"
 msgstr ""
 
 #: eventadmin-volunteer-management.php:301
-msgid "Fixed in this release: login links and shift emails are sent again when the sender email under Settings → Communication is left empty. The site's admin email is now used as the sender in that case."
+msgid "Fixed in this release: login links in emails are now clickable and take volunteers straight to their shifts, also when they are already logged in or registered with an existing account (e.g. the admin's)."
 msgstr ""
 
 #: eventadmin-volunteer-management.php:307

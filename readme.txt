@@ -4,7 +4,7 @@ Tags: volunteer, volunteer management, shift scheduling, event management, roste
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.7.1
+Stable tag: 3.7.2
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,11 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.7.2 =
+* Fix: The login link in registration emails is now a clickable link — some mail clients did not turn the plain URL into a link
+* Fix: Login links no longer fail silently depending on who triggered the email or when they were opened. Clicking an already-used link while logged in now goes straight to the volunteer page instead of the home page
+* Fix: Registering with the email address of an existing account (e.g. the site admin testing the form) and logging in via the link now grants that account the volunteer role, so it sees the shifts instead of the registration form again. Existing roles are kept
 
 = Version 3.7.1 =
 * Fix: Login links (registration and "already registered" resend) and shift emails were silently not sent when the sender email under Settings → Communication had been saved empty — WordPress rejected them with "Invalid address: (From):". The plugin now falls back to the site's admin email (and the site name as sender name), also for the Send Announcement form
@@ -407,6 +412,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Shift management, volunteer registration, dashboard, export, rules
 
 == Upgrade Notice ==
+
+= 3.7.2 =
+Login links in emails are clickable again and reliably lead to the shifts, also for existing accounts. Recommended for all sites. No breaking changes.
 
 = 3.7.1 =
 Fixes login links and shift emails not being sent when the sender email under Settings → Communication was left empty. Recommended for all sites. No breaking changes.
