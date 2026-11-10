@@ -507,3 +507,133 @@ a.eventadmin-date-picker-day:focus { background: #f0f6fc; color: #2271b1; }
     color: #646970;
     font-style: italic;
 }
+
+/* Calendar tab (includes/admin/dashboard-tab-calendar.php). */
+.eventadmin-cal-nav .eventadmin-cal-period {
+    min-width: 9em;
+    text-align: center;
+    font-weight: 600;
+}
+.eventadmin-segmented { display: inline-flex; margin-left: 4px; }
+.eventadmin-segmented .button { border-radius: 0; margin: 0 -1px 0 0; }
+.eventadmin-segmented .button:first-child { border-radius: 3px 0 0 3px; }
+.eventadmin-segmented .button:last-child { border-radius: 0 3px 3px 0; margin-right: 0; }
+.eventadmin-segmented .button.is-active {
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff;
+    position: relative;
+}
+
+.eventadmin-cal { margin-top: 16px; }
+.eventadmin-cal-empty { color: #646970; }
+.eventadmin-cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    border-top: 1px solid #dcdcde;
+    border-left: 1px solid #dcdcde;
+    background: #fff;
+}
+.eventadmin-cal-weekday {
+    padding: 6px 8px;
+    border-right: 1px solid #dcdcde;
+    border-bottom: 1px solid #dcdcde;
+    background: #f6f7f7;
+    font-size: 12px;
+    font-weight: 600;
+    color: #50575e;
+    text-transform: uppercase;
+}
+.eventadmin-cal-day {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-height: 110px;
+    padding: 4px 4px 6px;
+    border-right: 1px solid #dcdcde;
+    border-bottom: 1px solid #dcdcde;
+    min-width: 0;
+}
+.eventadmin-cal.is-week .eventadmin-cal-day { min-height: 320px; }
+.eventadmin-cal-day.is-outside { background: #f9f9f9; }
+.eventadmin-cal-day.is-outside .eventadmin-cal-daynum { color: #a7aaad; }
+.eventadmin-cal-dayhead {
+    align-self: flex-start;
+    padding: 2px 6px;
+    border-radius: 999px;
+    color: #1d2327;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+a.eventadmin-cal-dayhead:hover,
+a.eventadmin-cal-dayhead:focus { background: #f0f6fc; color: #2271b1; }
+.eventadmin-cal-day.is-today .eventadmin-cal-dayhead { background: #2271b1; color: #fff; }
+.eventadmin-cal-dayname { display: none; }
+
+.eventadmin-cal-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    padding: 3px 6px;
+    border: 0;
+    border-left: 4px solid var(--dept, #8c8f94);
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--dept, #8c8f94) 14%, #fff);
+    color: #1d2327;
+    font-size: 12px;
+    line-height: 1.4;
+    text-align: left;
+    cursor: pointer;
+}
+.eventadmin-cal-chip:hover,
+.eventadmin-cal-chip:focus { background: color-mix(in srgb, var(--dept, #8c8f94) 26%, #fff); outline: none; box-shadow: 0 0 0 1px #2271b1; }
+.eventadmin-cal-day.is-past .eventadmin-cal-chip { opacity: .65; }
+.eventadmin-cal-chip-time { color: #50575e; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.eventadmin-cal-chip-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.eventadmin-cal-chip-fill {
+    flex-shrink: 0;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: #fff;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+.eventadmin-cal-chip.is-under .eventadmin-cal-chip-fill { background: #d63638; color: #fff; }
+.eventadmin-cal-chip.is-full .eventadmin-cal-chip-fill { color: #007017; }
+.eventadmin-cal-more { font-size: 12px; padding: 0 6px; text-decoration: none; }
+.eventadmin-cal.is-week .eventadmin-cal-chip { flex-wrap: wrap; }
+.eventadmin-cal.is-week .eventadmin-cal-chip-title { white-space: normal; flex-basis: 100%; order: 3; }
+
+.eventadmin-cal-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin: 10px 0 0;
+    color: #50575e;
+    font-size: 12px;
+}
+.eventadmin-cal-legend > span { display: inline-flex; align-items: center; gap: 6px; }
+.eventadmin-cal-legend-hint { margin-left: auto; }
+
+/* Phones: a list of the days that have shifts instead of a 7-column grid. */
+@media (max-width: 782px) {
+    .eventadmin-cal-grid { display: block; border: 0; background: transparent; }
+    .eventadmin-cal-weekday,
+    .eventadmin-cal-day.is-empty { display: none; }
+    .eventadmin-cal-day,
+    .eventadmin-cal.is-week .eventadmin-cal-day {
+        min-height: 0;
+        margin-bottom: 8px;
+        padding: 8px;
+        border: 1px solid #dcdcde;
+        border-radius: 4px;
+        background: #fff;
+    }
+    .eventadmin-cal-day.is-outside { background: #fff; }
+    .eventadmin-cal-daynum { display: none; }
+    .eventadmin-cal-dayname { display: inline; }
+    .eventadmin-cal-chip { font-size: 13px; padding: 6px 8px; }
+    .eventadmin-cal-legend-hint { margin-left: 0; }
+}

@@ -78,7 +78,16 @@ function eventadmin_overview_parse_filter_state(string $page_slug, array $allowe
     $date_chosen   = $filter_valid && isset($_GET['filter_date']);
     $sort_by     = in_array($raw_sortby, $allowed_sort_by, true)             ? $raw_sortby            : 'date';
     $order       = in_array(strtoupper($raw_order), $allowed_orders, true)  ? strtoupper($raw_order) : 'ASC';
-    $view          = in_array($raw_view, $allowed_views, true) ? $raw_view : $default_view;
+    // Setups spanning weeks open on the Calendar (includes/admin/dashboard-tab-calendar.php)
+    // unless a tab was picked explicitly.
+    if (in_array($raw_view, $allowed_views, true)) {
+        $view = $raw_view;
+    } elseif (in_array('calendar', $allowed_views, true) && eventadmin_calendar_is_default($day_stats)) {
+        $view = 'calendar';
+    } else {
+        $view = $default_view;
+    }
+    $calendar = eventadmin_calendar_parse_state($filter_valid, $day_stats);
     if ($view === 'timeline' && $time_filter === 'future' && $long_running && !$date_chosen && $selected_date === '') {
         $selected_date = eventadmin_next_shift_date($day_stats);
     }
@@ -102,6 +111,9 @@ function eventadmin_overview_parse_filter_state(string $page_slug, array $allowe
         'sort_by'                         => $sort_by !== 'date' ? $sort_by : null,
         'order'                           => $order !== 'ASC' ? $order : null,
         'show_open'                       => $show_open ? null : '0',
+        // Kept across tabs, so going back to the Calendar returns to the same month/week.
+        'cal_mode'                        => $calendar['mode'] === 'week' ? 'week' : null,
+        'cal_anchor'                      => $filter_valid && isset($_GET['cal_anchor']) ? $calendar['anchor'] : null,
         'eventadmin_filter_shifts_nonce'  => wp_create_nonce('eventadmin_filter_shifts'),
     ]);
 
@@ -122,6 +134,7 @@ function eventadmin_overview_parse_filter_state(string $page_slug, array $allowe
         'view'               => $view,
         'show_open'          => $show_open,
         'filter_query_args'  => $filter_query_args,
+        'calendar'           => $calendar,
     ];
 }
 
@@ -245,7 +258,8 @@ function eventadmin_render_overview_toolbar(
     string $order,
     bool $show_open,
     array $filter_query_args,
-    array $day_stats
+    array $day_stats,
+    array $calendar = ['mode' => 'month', 'anchor' => '']
 ): void {
     $show_volunteer = $view !== 'timeline'; // Day already shows every volunteer's own row
     $show_status    = $view === 'cards';    // Table and Day show assignment rows, not shifts
@@ -278,11 +292,19 @@ function eventadmin_render_overview_toolbar(
     echo '<input type="hidden" name="filter_view" value="' . esc_attr($view) . '">';
     echo '<input type="hidden" name="filter_date" value="' . esc_attr($selected_date) . '">';
     echo '<input type="hidden" name="filter_time" value="' . esc_attr($time_filter) . '">';
+    if ($view === 'calendar') {
+        echo '<input type="hidden" name="cal_mode" value="' . esc_attr($calendar['mode']) . '">';
+        echo '<input type="hidden" name="cal_anchor" value="' . esc_attr($calendar['anchor']) . '">';
+    }
 
     // 1. When
     echo '<div class="eventadmin-toolbar-group eventadmin-toolbar-when">';
     echo '<span class="eventadmin-filter-label">' . esc_html__('Date', 'eventadmin-volunteer-management') . '</span>';
-    eventadmin_render_when_control($filter_query_args, $view, $selected_date, $day_stats, $time_filter);
+    if ($view === 'calendar') {
+        eventadmin_render_calendar_nav($filter_query_args, $calendar['mode'], $calendar['anchor']);
+    } else {
+        eventadmin_render_when_control($filter_query_args, $view, $selected_date, $day_stats, $time_filter);
+    }
     echo '</div>';
 
     // Mobile only: folds groups 2 and 3.
@@ -353,6 +375,8 @@ function eventadmin_render_overview_toolbar(
             'page'                           => $page_slug,
             'filter_view'                    => $view,
             'eventadmin_filter_shifts_nonce' => wp_create_nonce('eventadmin_filter_shifts'),
+            'cal_mode'                       => $view === 'calendar' ? $calendar['mode'] : null,
+            'cal_anchor'                     => $view === 'calendar' ? $calendar['anchor'] : null,
         ], admin_url('edit.php'));
         echo '<div class="eventadmin-active-filters">';
         foreach ($active as [$label, $value, $url]) {
@@ -687,6 +711,7 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
     $show_open          = $filter_state['show_open'];
     $filter_query_args  = $filter_state['filter_query_args'];
     $day_stats          = $filter_state['day_stats'];
+    $calendar           = $filter_state['calendar'];
 
     eventadmin_render_copy_shifts_notice_and_modal($view, $shift_dates);
 
@@ -700,6 +725,7 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
         $tab_labels = [
             'dashboard' => esc_html__('Dashboard', 'eventadmin-volunteer-management'),
             'timeline'  => esc_html__('Day', 'eventadmin-volunteer-management'),
+            'calendar'  => esc_html__('Calendar', 'eventadmin-volunteer-management'),
             'table'     => esc_html__('Table', 'eventadmin-volunteer-management'),
             'cards'     => esc_html__('Cards (old)', 'eventadmin-volunteer-management'),
         ];
@@ -735,8 +761,20 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
         $order,
         $show_open,
         $filter_query_args,
-        $day_stats
+        $day_stats,
+        $calendar
     );
+
+    // The Calendar runs its own query for exactly the days it shows — no list, no paging.
+    if ($view === 'calendar') {
+        eventadmin_render_calendar_view($filter_query_args, $calendar['mode'], $calendar['anchor'], $selected_cat, $selected_volunteer);
+        if (current_user_can('eventadmin_manage_shifts')) {
+            eventadmin_render_shared_volunteer_modals(['default_date' => $calendar['anchor']]);
+            echo '<script>window.eventadminOnShiftCreated = window.eventadminOnShiftSaved = function () { window.location.reload(); };</script>';
+        }
+        echo '</div>';
+        return;
+    }
 
     $current_page = isset($_GET['paged']) ? absint($_GET['paged']) : 1;
     $per_page     = 200;

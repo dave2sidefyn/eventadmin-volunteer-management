@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-10T19:57:52+00:00\n"
+"POT-Creation-Date: 2026-11-10T20:02:25+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: eventadmin-volunteer-management\n"
@@ -35,43 +35,43 @@ msgstr ""
 msgid "https://profiles.wordpress.org/davesidefyn/"
 msgstr ""
 
-#: eventadmin-volunteer-management.php:187
+#: eventadmin-volunteer-management.php:188
 msgid "EventAdmin – Volunteer Management – developed by <a href=\"mailto:dave@sidefyn.ch\">David Wiedmer, sidefyn GmbH</a>"
-msgstr ""
-
-#: eventadmin-volunteer-management.php:250
-#: eventadmin-volunteer-management.php:279
-#: includes/admin/getting-started-checklist.php:182
-msgid "Rate 5 stars"
 msgstr ""
 
 #: eventadmin-volunteer-management.php:251
 #: eventadmin-volunteer-management.php:280
+#: includes/admin/getting-started-checklist.php:182
+msgid "Rate 5 stars"
+msgstr ""
+
+#: eventadmin-volunteer-management.php:252
+#: eventadmin-volunteer-management.php:281
 #: includes/admin/getting-started-checklist.php:183
 msgid "Donate"
 msgstr ""
 
 #. translators: %s is the plugin version number, e.g. "0.9.3"
-#: eventadmin-volunteer-management.php:274
+#: eventadmin-volunteer-management.php:275
 #, php-format
 msgid "EventAdmin %s is here!"
 msgstr ""
 
-#: eventadmin-volunteer-management.php:277
+#: eventadmin-volunteer-management.php:278
 msgid "Invite volunteers you add yourself with a login link, and optionally let volunteers log in with a password too (Settings → General). Also an important fix: Editors and Shift Managers who had looked at the volunteer page could lose their role at their next login."
 msgstr ""
 
-#: eventadmin-volunteer-management.php:283
+#: eventadmin-volunteer-management.php:284
 msgid "Dismiss"
 msgstr ""
 
-#: eventadmin-volunteer-management.php:313
+#: eventadmin-volunteer-management.php:314
 #: includes/admin/settings.php:48
 #: includes/admin/settings.php:49
 msgid "Settings"
 msgstr ""
 
-#: eventadmin-volunteer-management.php:314
+#: eventadmin-volunteer-management.php:315
 #: includes/admin/documentation.php:60
 #: includes/admin/documentation.php:61
 msgid "Documentation"
@@ -283,7 +283,7 @@ msgid "Filter…"
 msgstr ""
 
 #: includes/admin/bulk-email.php:282
-#: includes/admin/dashboard-overview-page.php:284
+#: includes/admin/dashboard-overview-page.php:302
 #: includes/admin/user-profile.php:347
 #: includes/admin/volunteer-list.php:167
 #: includes/admin/volunteer-list.php:196
@@ -554,8 +554,8 @@ msgid "Please choose a \"repeat until\" date on or after the first target date."
 msgstr ""
 
 #: includes/admin/dashboard-form-handlers.php:290
-#: includes/admin/dashboard-overview-page.php:262
-#: includes/admin/dashboard-overview-page.php:299
+#: includes/admin/dashboard-overview-page.php:276
+#: includes/admin/dashboard-overview-page.php:321
 #: includes/admin/dashboard-tab-table.php:31
 #: includes/admin/quick-edit.php:130
 #: includes/admin/shift-details-modal.php:36
@@ -612,7 +612,7 @@ msgid "E-Mail"
 msgstr ""
 
 #: includes/admin/dashboard-form-handlers.php:295
-#: includes/admin/dashboard-overview-page.php:596
+#: includes/admin/dashboard-overview-page.php:620
 #: includes/admin/dashboard-tab-cards.php:103
 #: includes/admin/dashboard-tab-cards.php:112
 #: includes/admin/dashboard-tab-table.php:43
@@ -694,7 +694,7 @@ msgid "Heavily understaffed"
 msgstr ""
 
 #. translators: 1: number of shifts created, 2: number of days (weeks) they were spread over
-#: includes/admin/dashboard-overview-page.php:150
+#: includes/admin/dashboard-overview-page.php:163
 #, php-format
 msgid "%1$d shift was created across %2$d weeks."
 msgid_plural "%1$d shifts were created across %2$d weeks."
@@ -702,7 +702,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of shifts skipped because an identical shift already existed
-#: includes/admin/dashboard-overview-page.php:157
+#: includes/admin/dashboard-overview-page.php:170
 #, php-format
 msgid "%d shift already existed and was skipped."
 msgid_plural "%d shifts already existed and were skipped."
@@ -710,160 +710,161 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of shifts copied
-#: includes/admin/dashboard-overview-page.php:165
+#: includes/admin/dashboard-overview-page.php:178
 #, php-format
 msgid "%d shift was copied."
 msgid_plural "%d shifts were copied."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/dashboard-overview-page.php:169
+#: includes/admin/dashboard-overview-page.php:182
 msgid "No shifts were found on the selected day to copy."
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:176
-#: includes/admin/dashboard-overview-page.php:403
+#: includes/admin/dashboard-overview-page.php:189
+#: includes/admin/dashboard-overview-page.php:427
 msgid "Copy shifts to another day"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:177
+#: includes/admin/dashboard-overview-page.php:190
 msgid "Recreate every shift from a past (or future) day on a new date, keeping each shift's time of day and duration."
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:177
+#: includes/admin/dashboard-overview-page.php:190
 msgid "Use \"Repeat every week\" to fill a whole series at once, e.g. every Monday for 12 weeks."
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:181
+#: includes/admin/dashboard-overview-page.php:194
 msgid "Copy shifts from:"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:182
+#: includes/admin/dashboard-overview-page.php:195
 msgid "Select a day…"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:188
+#: includes/admin/dashboard-overview-page.php:201
 msgid "to:"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:189
+#: includes/admin/dashboard-overview-page.php:202
 msgid "Repeat every week"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:190
+#: includes/admin/dashboard-overview-page.php:203
 msgid "until (including):"
 msgstr ""
 
 #. translators: %d: maximum number of weeks
-#: includes/admin/dashboard-overview-page.php:193
+#: includes/admin/dashboard-overview-page.php:206
 #, php-format
 msgid "Creates the shifts on the same weekday every week, up to %d weeks. Shifts that already exist on a day are skipped, and volunteers are not copied."
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:196
+#: includes/admin/dashboard-overview-page.php:209
 msgid "Also copy the volunteers currently signed up"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:198
+#: includes/admin/dashboard-overview-page.php:211
 msgid "Copy shifts"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:266
-#: includes/admin/dashboard-overview-page.php:305
+#: includes/admin/dashboard-overview-page.php:280
+#: includes/admin/dashboard-overview-page.php:327
 #: includes/admin/documentation.php:243
 #: includes/helpers.php:183
 msgid "Volunteer"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:269
-#: includes/admin/dashboard-overview-page.php:314
+#: includes/admin/dashboard-overview-page.php:283
+#: includes/admin/dashboard-overview-page.php:336
 msgid "Status"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:290
+#: includes/admin/dashboard-overview-page.php:312
 #: includes/admin/volunteer-list.php:249
 msgid "Filters"
 msgstr ""
 
 #. translators: %d: number of active filters
-#: includes/admin/dashboard-overview-page.php:292
+#: includes/admin/dashboard-overview-page.php:314
 #: includes/admin/volunteer-list.php:248
 #, php-format
 msgid "Filters (%d)"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:294
-#: includes/admin/dashboard-overview-page.php:295
+#: includes/admin/dashboard-overview-page.php:316
+#: includes/admin/dashboard-overview-page.php:317
 #: includes/admin/volunteer-list.php:251
 #: includes/admin/volunteer-list.php:252
 msgid "Hide filters"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:300
+#: includes/admin/dashboard-overview-page.php:322
 #: includes/admin/quick-edit.php:316
 #: includes/admin/volunteer-list.php:257
 #: includes/shiftselector.php:265
 msgid "All departments"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:306
+#: includes/admin/dashboard-overview-page.php:328
 msgid "Anyone"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:315
+#: includes/admin/dashboard-overview-page.php:337
 msgid "Any status"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:326
+#: includes/admin/dashboard-overview-page.php:348
 msgid "View"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:331
+#: includes/admin/dashboard-overview-page.php:353
+#: includes/admin/dashboard-tab-calendar.php:323
 #: includes/admin/date-navigator.php:183
 msgid "Open slots"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:333
+#: includes/admin/dashboard-overview-page.php:355
 msgid "Sort by"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:334
+#: includes/admin/dashboard-overview-page.php:356
 msgid "Sort by date"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:334
+#: includes/admin/dashboard-overview-page.php:356
 msgid "Sort by name"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:338
+#: includes/admin/dashboard-overview-page.php:360
 msgid "Order"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:339
+#: includes/admin/dashboard-overview-page.php:361
 msgid "Ascending"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:339
+#: includes/admin/dashboard-overview-page.php:361
 msgid "Descending"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:347
+#: includes/admin/dashboard-overview-page.php:369
 #: includes/admin/volunteer-list.php:273
 msgid "Filter"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:359
+#: includes/admin/dashboard-overview-page.php:383
 #: includes/admin/volunteer-list.php:283
 #: includes/admin/volunteer-list.php:288
 msgid "Remove filter"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:363
+#: includes/admin/dashboard-overview-page.php:387
 #: includes/admin/volunteer-list.php:291
 msgid "Clear filters"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:394
+#: includes/admin/dashboard-overview-page.php:418
 #: includes/admin/documentation.php:179
 #: includes/admin/documentation.php:263
 #: includes/admin/user-profile.php:255
@@ -874,58 +875,58 @@ msgstr ""
 msgid "Departments"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:396
+#: includes/admin/dashboard-overview-page.php:420
 msgid "Export all shifts (CSV)"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:396
+#: includes/admin/dashboard-overview-page.php:420
 #: includes/admin/volunteer-list.php:136
 msgid "Export CSV"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:398
+#: includes/admin/dashboard-overview-page.php:422
 #: includes/admin/dashboard-tab-timeline.php:266
 #: includes/admin/getting-started-checklist.php:215
 #: includes/admin/shift-details-modal.php:137
 msgid "Add shift"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:399
+#: includes/admin/dashboard-overview-page.php:423
 #: includes/admin/volunteer-list.php:139
 msgid "More options"
 msgstr ""
 
 #. translators: %d is the minimum number of volunteers required
-#: includes/admin/dashboard-overview-page.php:485
+#: includes/admin/dashboard-overview-page.php:509
 #: includes/admin/dashboard-tab-timeline.php:65
 #: includes/admin/dashboard-tab-timeline.php:405
 #, php-format
 msgid "(min %d)"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:580
+#: includes/admin/dashboard-overview-page.php:604
 #: includes/admin/dashboard-tab-cards.php:83
 msgid "Select existing volunteer…"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:582
-#: includes/admin/dashboard-overview-page.php:597
+#: includes/admin/dashboard-overview-page.php:606
+#: includes/admin/dashboard-overview-page.php:621
 #: includes/admin/dashboard-tab-cards.php:89
 #: includes/admin/dashboard-tab-cards.php:104
 msgid "Send confirmation email"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:584
+#: includes/admin/dashboard-overview-page.php:608
 #: includes/admin/dashboard-tab-cards.php:90
 msgid "Add to shift"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:587
+#: includes/admin/dashboard-overview-page.php:611
 #: includes/admin/dashboard-tab-cards.php:92
 msgid "or add a new volunteer below"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:593
+#: includes/admin/dashboard-overview-page.php:617
 #: includes/admin/dashboard-tab-cards.php:100
 #: includes/admin/volunteer-list.php:331
 #: includes/profile.php:67
@@ -933,7 +934,7 @@ msgstr ""
 msgid "First name"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:594
+#: includes/admin/dashboard-overview-page.php:618
 #: includes/admin/dashboard-tab-cards.php:101
 #: includes/admin/volunteer-list.php:332
 #: includes/profile.php:72
@@ -941,39 +942,120 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:595
+#: includes/admin/dashboard-overview-page.php:619
 #: includes/admin/dashboard-tab-cards.php:102
 #: includes/admin/volunteer-list.php:335
 msgid "E-Mail (optional)"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:595
+#: includes/admin/dashboard-overview-page.php:619
 #: includes/admin/dashboard-tab-cards.php:102
 #: includes/admin/volunteer-list.php:335
 msgid "Leave blank for offline volunteers without an email address"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:599
+#: includes/admin/dashboard-overview-page.php:623
 #: includes/admin/dashboard-tab-cards.php:105
 msgid "Add"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:701
+#: includes/admin/dashboard-overview-page.php:726
 #: includes/admin/documentation.php:309
 msgid "Dashboard"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:702
+#: includes/admin/dashboard-overview-page.php:727
 msgid "Day"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:703
+#: includes/admin/dashboard-overview-page.php:728
+msgid "Calendar"
+msgstr ""
+
+#: includes/admin/dashboard-overview-page.php:729
 #: includes/admin/documentation.php:311
 msgid "Table"
 msgstr ""
 
-#: includes/admin/dashboard-overview-page.php:704
+#: includes/admin/dashboard-overview-page.php:730
 msgid "Cards (old)"
+msgstr ""
+
+#: includes/admin/dashboard-tab-calendar.php:216
+msgid "Previous week"
+msgstr ""
+
+#: includes/admin/dashboard-tab-calendar.php:217
+msgid "Next week"
+msgstr ""
+
+#: includes/admin/dashboard-tab-calendar.php:223
+#: includes/admin/date-navigator.php:270
+msgid "Previous month"
+msgstr ""
+
+#: includes/admin/dashboard-tab-calendar.php:224
+#: includes/admin/date-navigator.php:271
+msgid "Next month"
+msgstr ""
+
+#: includes/admin/dashboard-tab-calendar.php:231
+#: includes/admin/date-navigator.php:240
+msgid "Today"
+msgstr ""
+
+#: includes/admin/dashboard-tab-calendar.php:233
+msgid "Month"
+msgstr ""
+
+#: includes/admin/dashboard-tab-calendar.php:233
+msgid "Week"
+msgstr ""
+
+#: includes/admin/dashboard-tab-calendar.php:265
+msgid "No shifts this week."
+msgstr ""
+
+#: includes/admin/dashboard-tab-calendar.php:266
+msgid "No shifts this month."
+msgstr ""
+
+#. translators: %s: date
+#: includes/admin/dashboard-tab-calendar.php:291
+#, php-format
+msgid "Open %s on the Day tab"
+msgstr ""
+
+#. translators: 1: shift title, 2: department, 3: assigned volunteers, 4: maximum volunteers
+#: includes/admin/dashboard-tab-calendar.php:300
+#, php-format
+msgid "%1$s (%2$s) — %3$d of %4$d volunteers"
+msgstr ""
+
+#. translators: %d: minimum number of volunteers
+#: includes/admin/dashboard-tab-calendar.php:303
+#, php-format
+msgid "minimum %d"
+msgstr ""
+
+#. translators: %d: number of further shifts that day
+#: includes/admin/dashboard-tab-calendar.php:315
+#, php-format
+msgid "+%d more"
+msgstr ""
+
+#: includes/admin/dashboard-tab-calendar.php:322
+#: includes/admin/date-navigator.php:182
+msgid "Below the minimum"
+msgstr ""
+
+#: includes/admin/dashboard-tab-calendar.php:324
+#: includes/admin/date-navigator.php:184
+msgid "Fully staffed"
+msgstr ""
+
+#: includes/admin/dashboard-tab-calendar.php:325
+msgid "Click a shift to edit it, or a day to open it on the Day tab."
 msgstr ""
 
 #: includes/admin/dashboard-tab-cards.php:41
@@ -1287,14 +1369,6 @@ msgstr ""
 msgid "All dates"
 msgstr ""
 
-#: includes/admin/date-navigator.php:182
-msgid "Below the minimum"
-msgstr ""
-
-#: includes/admin/date-navigator.php:184
-msgid "Fully staffed"
-msgstr ""
-
 #: includes/admin/date-navigator.php:195
 #: includes/admin/date-navigator.php:245
 msgid "Choose a day"
@@ -1306,18 +1380,6 @@ msgstr ""
 
 #: includes/admin/date-navigator.php:237
 msgid "Next day with shifts"
-msgstr ""
-
-#: includes/admin/date-navigator.php:240
-msgid "Today"
-msgstr ""
-
-#: includes/admin/date-navigator.php:270
-msgid "Previous month"
-msgstr ""
-
-#: includes/admin/date-navigator.php:271
-msgid "Next month"
 msgstr ""
 
 #: includes/admin/documentation.php:120
@@ -2256,34 +2318,42 @@ msgid "Use the Date control at the start of the toolbar on the Day, Table and Ca
 msgstr ""
 
 #: includes/admin/documentation.php:686
-msgid "Can I create weekly recurring shifts?"
+msgid "Is there a calendar of all shifts?"
 msgstr ""
 
 #: includes/admin/documentation.php:687
-msgid "Yes. Set up one day's shifts, then use \"Copy shifts to another day\", pick the first new date and tick \"Repeat every week\" with an end date. The shifts are created on the same weekday every week (up to 52 weeks). Running the same repeat again skips shifts that already exist, and volunteers are never copied into a series."
+msgid "Yes — the Calendar tab on the Manager page shows a month (or a week) at a time. Each shift is a chip in its department's colour with its start time and how many volunteers it has (\"3/5\"); the count turns red while a shift is below its minimum. Click a shift to edit it or a day to open it on the Day tab; the Department and Volunteer filters apply here too. When your upcoming shifts span more than two weeks, the Manager page opens on the Calendar."
 msgstr ""
 
 #: includes/admin/documentation.php:689
-msgid "A volunteer sees old sign-ups or empty \"My shifts\" after reopening the page. Why?"
+msgid "Can I create weekly recurring shifts?"
 msgstr ""
 
 #: includes/admin/documentation.php:690
+msgid "Yes. Set up one day's shifts, then use \"Copy shifts to another day\", pick the first new date and tick \"Repeat every week\" with an end date. The shifts are created on the same weekday every week (up to 52 weeks). Running the same repeat again skips shifts that already exist, and volunteers are never copied into a series."
+msgstr ""
+
+#: includes/admin/documentation.php:692
+msgid "A volunteer sees old sign-ups or empty \"My shifts\" after reopening the page. Why?"
+msgstr ""
+
+#: includes/admin/documentation.php:693
 msgid "That is almost always a cached copy of the page. The plugin tells caching plugins, browsers and CDNs not to cache the volunteer page, but a host or CDN rule that caches every page regardless (e.g. Cloudflare \"Cache Everything\") overrides that. Exclude the volunteer page from such rules, or make them skip visitors with a WordPress login cookie."
 msgstr ""
 
-#: includes/admin/documentation.php:695
+#: includes/admin/documentation.php:698
 msgid "Support EventAdmin"
 msgstr ""
 
-#: includes/admin/documentation.php:696
+#: includes/admin/documentation.php:699
 msgid "EventAdmin is free and open source. If it saves you time, please consider leaving a review or making a small donation — it helps a lot!"
 msgstr ""
 
-#: includes/admin/documentation.php:698
+#: includes/admin/documentation.php:701
 msgid "Rate 5 stars on WordPress.org"
 msgstr ""
 
-#: includes/admin/documentation.php:699
+#: includes/admin/documentation.php:702
 msgid "Donate via Revolut"
 msgstr ""
 

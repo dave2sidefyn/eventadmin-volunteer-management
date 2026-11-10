@@ -145,7 +145,7 @@ function eventadmin_admin_overview_page(): void
 }
 
 /**
- * Displays the Manager page — Day/Table/Cards, tabbed (the day-to-day shift work
+ * Displays the Manager page — Day/Calendar/Table/Cards, tabbed (the day-to-day shift work
  * that used to share a page, and its own set of tabs, with the dashboard stats).
  *
  * @return void
@@ -154,7 +154,7 @@ function eventadmin_admin_shift_manager_page(): void
 {
     eventadmin_render_overview_page(
         'eventadmin-shift-manager',
-        ['timeline', 'table', 'cards'],
+        ['timeline', 'calendar', 'table', 'cards'],
         'timeline',
         esc_html__('EventAdmin Manager', 'eventadmin-volunteer-management')
     );
