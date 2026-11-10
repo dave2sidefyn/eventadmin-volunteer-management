@@ -173,6 +173,46 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 
+    // "Send login link" in the summary's E-Mail row: emails the volunteer a fresh single-use
+    // login link. The result is shown inline next to the button.
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.eventadmin-send-login-link');
+        if (!btn) return;
+
+        let status = btn.nextElementSibling;
+        if (!status || !status.classList.contains('eventadmin-send-login-link-status')) {
+            status = document.createElement('span');
+            status.className = 'eventadmin-send-login-link-status';
+            status.style.marginLeft = '6px';
+            btn.insertAdjacentElement('afterend', status);
+        }
+
+        btn.disabled = true;
+        status.style.color = '';
+        status.textContent = i18n.sending || '…';
+
+        fetch(cfg.ajax_url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: new URLSearchParams({
+                action: 'eventadmin_send_login_link',
+                _ajax_nonce: cfg.nonce_login_link,
+                user_id: btn.dataset.userId,
+            }),
+        })
+            .then((r) => r.json())
+            .then((res) => {
+                btn.disabled = false;
+                status.style.color = res.success ? '#00a32a' : '#d63638';
+                status.textContent = (res.data && res.data.message) || i18n.error || 'Error';
+            })
+            .catch(() => {
+                btn.disabled = false;
+                status.style.color = '#d63638';
+                status.textContent = i18n.error || 'Error';
+            });
+    });
+
     // Remove volunteer role, from the "Volunteer details" summary (distinct class from the
     // Volunteers list table's own .eventadmin-remove-role so both can load on the same page
     // — e.g. the modal opened from the Volunteers list — without double-binding).

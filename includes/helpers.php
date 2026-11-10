@@ -493,8 +493,8 @@ function eventadmin_magic_login_check(): void
         delete_user_meta($user_id, 'magic_login_expire');
         eventadmin_mark_user_verified($user_id);
 
-        // Login links are only sent from the volunteer registration form, so whoever uses
-        // one has asked to volunteer. An existing account without the volunteer role
+        // Login links are only sent from the volunteer registration form (or by a manager
+        // to a volunteer, via "Send login link"), so whoever uses one has asked to volunteer. An existing account without the volunteer role
         // (e.g. the site admin testing with their own address) would otherwise land on
         // the registration form again instead of the shifts. add_role() keeps all
         // existing roles.
@@ -519,7 +519,11 @@ function eventadmin_magic_login_check(): void
         exit;
     }
 
-    wp_die(esc_html__('Login link has expired or is invalid.', 'eventadmin-volunteer-management'));
+    // Anyone else (expired link, or the link's single use was already taken — typically by a
+    // mail scanner that opened it before the volunteer did) lands back on the volunteer page,
+    // which then offers to email a new link instead of showing a dead-end error page.
+    wp_safe_redirect(add_query_arg('eventadmin_login', 'expired', $redirect_to));
+    exit;
 }
 
 add_action('init', 'eventadmin_magic_login_check');

@@ -76,6 +76,11 @@ jQuery(function ($) {
     updateCount();
 
     // Create new volunteer
+    // No email address = offline volunteer, who can't receive a login link.
+    $('#eventadmin-create-volunteer-form [name="user_identifier"]').on('input', function () {
+        $('#eventadmin-create-volunteer-form [name="send_login_link"]').prop('disabled', $.trim($(this).val()) === '');
+    }).trigger('input');
+
     $('#eventadmin-create-volunteer-form').on('submit', function (e) {
         e.preventDefault();
         const $form   = $(this);
@@ -92,11 +97,15 @@ jQuery(function ($) {
             last_name:                         $form.find('[name="last_name"]').val(),
             user_identifier:                   $form.find('[name="user_identifier"]').val(),
             phone:                             $form.find('[name="phone"]').val(),
+            send_login_link:                   $form.find('[name="send_login_link"]').is(':checked:enabled') ? '1' : '',
         })
         .done(function (res) {
             if (res.success) {
-                $result.text(cfg.i18n.volunteer_created || res.data.message);
-                setTimeout(function () { location.reload(); }, 800);
+                // The server message says whether a login link went out; keep a failed-email
+                // warning on screen long enough to read before reloading.
+                const failed = !!(res.data && res.data.mail_failed);
+                $result.css('color', failed ? '#d63638' : '').text((res.data && res.data.message) || cfg.i18n.volunteer_created);
+                setTimeout(function () { location.reload(); }, failed ? 4000 : 800);
             } else {
                 $result.css('color', '#d63638').text(res.data && res.data.message ? res.data.message : cfg.i18n.error);
                 $btn.prop('disabled', false);

@@ -26,6 +26,11 @@ function eventadmin_cockpit_shortcode(): bool|string
     $phone_warning = empty($has_phone) ? ' <span title="' . esc_html__('Phone number missing', 'eventadmin-volunteer-management') . '">⚠️</span>' : '';
 
     ob_start(); ?>
+    <?php
+    // "Log in with a password next time?" — only when password login is enabled and the
+    // volunteer hasn't set one or declined (see includes/password-login.php).
+    echo eventadmin_render_password_prompt(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside
+    ?>
     <div class="eventadmin-tabs">
         <div class="tab-nav">
             <div class="tab-item active"

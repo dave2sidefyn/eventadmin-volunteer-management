@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       EventAdmin – Volunteer Management
  * Description:       Manage volunteers for events directly in WordPress. Create and schedule shifts, allow volunteers to sign up and cancel independently, and configure individual rules – e.g., maximum shifts per person per year.
- * Version:           3.7.3
+ * Version:           3.8.0
  * Author:            David Wiedmer, sidefyn GmbH
  * Author URI:        https://profiles.wordpress.org/davesidefyn/
  * Requires at least: 5.8
@@ -16,7 +16,7 @@
 
 defined('ABSPATH') or die('No script kiddies please!');
 
-define('EVENTADMIN_VERSION', '3.7.3');
+define('EVENTADMIN_VERSION', '3.8.0');
 define('EVENTADMIN_REVIEW_URL', 'https://wordpress.org/plugins/eventadmin-volunteer-management/#reviews');
 define('EVENTADMIN_DONATE_URL', 'https://revolut.me/davidwiedmer');
 
@@ -31,6 +31,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-form-handlers
 require_once plugin_dir_path(__FILE__) . 'includes/post-types.php';
 require_once plugin_dir_path(__FILE__) . 'includes/profile.php';
 require_once plugin_dir_path(__FILE__) . 'includes/registration.php';
+require_once plugin_dir_path(__FILE__) . 'includes/password-login.php';
 require_once plugin_dir_path(__FILE__) . 'includes/shiftselector.php';
 require_once plugin_dir_path(__FILE__) . 'includes/open-positions.php';
 require_once plugin_dir_path(__FILE__) . 'includes/helpers.php';
@@ -62,6 +63,7 @@ function eventadmin_get_option_defaults(): array
     return [
         // General
         'eventadmin_suppress_wp_password_email' => 1,
+        'eventadmin_allow_password_login'       => 0,
         'eventadmin_allow_overlap'              => 0,
         'eventadmin_unassign_limit_hours'       => 0,
         'eventadmin_limit_per_year'             => 0,
@@ -187,37 +189,6 @@ function eventadmin_admin_footer(): void
 add_action('admin_footer', 'eventadmin_admin_footer');
 
 /**
- * Adds a volunteer role when a user registers
- * @param string $user_login The username of the registered user
- * @param WP_User $user The WP_User object of the registered user
- */
-function eventadmin_custom_wp_login(string $user_login, WP_User $user): void
-{
-    $token = isset($_COOKIE['eventadmin_register_token']) ? sanitize_text_field(wp_unslash($_COOKIE['eventadmin_register_token'])) : '';
-    $nonce = isset($_COOKIE['eventadmin_register_nonce']) ? sanitize_text_field(wp_unslash($_COOKIE['eventadmin_register_nonce'])) : '';
-
-    if ($token && $nonce) {
-        // Check nonce
-        if (wp_verify_nonce($nonce, 'eventadmin_register_' . $token)) {
-            if (!in_array('eventadmin_volunteer', $user->roles)) {
-                if (in_array('administrator', $user->roles)) {
-                    $user->add_role('eventadmin_volunteer');
-                } else {
-                    $user->set_role('eventadmin_volunteer');
-                }
-            }
-
-            // Cleanup
-            delete_transient('eventadmin_token_' . $token);
-            setcookie('eventadmin_register_token', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie('eventadmin_register_nonce', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN);
-        }
-    }
-}
-
-add_action('wp_login', 'eventadmin_custom_wp_login', 10, 2);
-
-/**
  * Disables the admin bar for volunteers
  * @return void
  */
@@ -301,7 +272,7 @@ function eventadmin_update_notice(): void
             $notice_title = sprintf(__('EventAdmin %s is here!', 'eventadmin-volunteer-management'), EVENTADMIN_VERSION);
             ?>
             <strong><?php echo esc_html($notice_title); ?></strong><br>
-            <?php echo esc_html__('Important fix: volunteers who had already confirmed their account could be deleted by the daily cleanup of unconfirmed sign-ups after requesting a new login link — the same could happen to an admin who had registered with their own email. This no longer happens.', 'eventadmin-volunteer-management'); ?>
+            <?php echo esc_html__('Invite volunteers you add yourself with a login link, and optionally let volunteers log in with a password too (Settings → General). Also an important fix: Editors and Shift Managers who had looked at the volunteer page could lose their role at their next login.', 'eventadmin-volunteer-management'); ?>
             <div style="margin-top:10px;">
                 <a href="<?php echo esc_url(EVENTADMIN_REVIEW_URL); ?>" target="_blank" class="button button-primary" style="margin-right:8px;">⭐ <?php echo esc_html__('Rate 5 stars', 'eventadmin-volunteer-management'); ?></a>
                 <a href="<?php echo esc_url(EVENTADMIN_DONATE_URL); ?>" target="_blank" class="button">❤️ <?php echo esc_html__('Donate', 'eventadmin-volunteer-management'); ?></a>

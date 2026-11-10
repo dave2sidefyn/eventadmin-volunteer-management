@@ -26,7 +26,7 @@ This is a traditional WordPress plugin. To develop:
 - **Post type:** `eventadmin_shift` – represents a single shift; not publicly queryable
 - **Taxonomy:** `eventadmin_shift_category` – hierarchical departments with color term meta (`term_color`)
 - **Shift meta keys:** `shift_start`, `shift_end`, `max_volunteers`, `assigned_user_{USER_ID}` (one entry per assigned volunteer)
-- **User meta keys:** `eventadmin_phone`, `magic_login_token`, `magic_login_expire`, `eventadmin_department` (department term ID, one entry per linked department — admin-assigned via user-edit.php or self-subscribed via `[eventadmin_profile]`; used to target department-specific announcements independent of shift history)
+- **User meta keys:** `eventadmin_phone`, `magic_login_token`, `magic_login_expire`, `eventadmin_password_set` (volunteer chose their own password — accounts otherwise only hold a random one), `eventadmin_password_prompt_dismissed`, `eventadmin_department` (department term ID, one entry per linked department — admin-assigned via user-edit.php or self-subscribed via `[eventadmin_profile]`; used to target department-specific announcements independent of shift history)
 - **Plugin options:** prefixed `eventadmin_*` (limits, notification templates, sender config)
 
 No custom database tables – everything uses WP post meta, user meta, and options.
@@ -37,7 +37,8 @@ No custom database tables – everything uses WP post meta, user meta, and optio
 |------|---------|
 | `post-types.php` | Registers `eventadmin_shift` CPT and `eventadmin_shift_category` taxonomy |
 | `helpers.php` | Core validation logic: shift limits (year/month/week/day), overlap prevention, magic link auth, role registration |
-| `registration.php` | Public registration form; creates users with `eventadmin_volunteer` role; supports magic link login and Nextend Social Login |
+| `registration.php` | Public registration form ("I'm new" / "I already have an account" views); creates users with `eventadmin_volunteer` role; supports magic link login and Nextend Social Login (volunteer role only assigned on Nextend's own hooks when started from the volunteer page — never on `wp_login`) |
+| `password-login.php` | Optional email + password login (`eventadmin_allow_password_login`, off by default): login on the volunteer page via `wp_signon()` with per-email/IP lockout, "set a password" banner in the cockpit, password field in the profile; the login link stays the sign-up, invitation and "forgot password" path |
 | `shiftselector.php` | Shortcode `[eventadmin_shiftselector]` – AJAX-driven frontend for signing up/cancelling shifts |
 | `cockpit.php` | Shortcode `[eventadmin_cockpit]` – tabbed volunteer dashboard aggregating shiftselector + profile |
 | `profile.php` | Shortcode `[eventadmin_profile]` – volunteer profile editing (name, phone, email) |

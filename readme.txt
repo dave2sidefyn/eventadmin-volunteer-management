@@ -4,7 +4,7 @@ Tags: volunteer, volunteer management, shift scheduling, event management, roste
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.7.3
+Stable tag: 3.8.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -69,7 +69,7 @@ Built for clubs, street festivals, and community events. Everything runs in your
 == Frequently Asked Questions ==
 
 = Do volunteers need an account? =
-Yes — they need to be logged in to join or cancel a shift, but there is no password to remember. On the registration form they enter their name, email, and phone; they then get a magic login link by email that signs them in. Admins can also create accounts manually, including "offline" volunteers with no email address (added by hand, no login).
+Yes — they need to be logged in to join or cancel a shift, but there is no password to remember. On the registration form they enter their name, email, and phone; they then get a magic login link by email that signs them in. Admins can also create accounts manually and email them a login link as an invitation, including "offline" volunteers with no email address (added by hand, no login).
 
 = Which pages do I need to create? =
 Just one: a page with the `[eventadmin]` shortcode. It shows the registration form to logged-out visitors and the full dashboard (open shifts, my shifts, profile) to logged-in volunteers. `[eventadmin_open_positions]`, `[eventadmin_shiftselector]`, and `[eventadmin_profile]` are optional extras for dedicated pages.
@@ -126,6 +126,16 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.8.0 =
+* Fix: An Editor, Shift Manager or other non-admin who viewed the volunteer page and then logged in through wp-login.php within the hour lost their role and was turned into a volunteer. Roles are now only assigned in the volunteer flows (login link, social login from the volunteer page) and never removed
+* New: Invite volunteers you add yourself: "Send login link by email" when creating a volunteer, and "Send login link" in every volunteer profile
+* New: Optional email + password login for volunteers (Settings → General → "Password login", off by default). Volunteers can set a password after their first login or in their profile; the login link remains available for sign-up, invitations and forgotten passwords
+* New: The volunteer page has "I'm new" / "I already have an account" views, so returning volunteers can get a login link with just their email address
+* New: An expired or already-used login link now leads back to the volunteer page with a one-field form to request a new one, instead of an error page
+* Fix: "Suppress WordPress password email" now also works for social login sign-ups, cancels the email properly, and its description explains what it affects
+* Fix: Send Announcement now counts emails the mail server rejected as failed
+* Fix: The "Register" button is translated, and the "Profile incomplete" warning on the profile page shows its text again
 
 = Version 3.7.3 =
 * Fix: The daily cleanup of unverified accounts could delete volunteers who had verified long ago — requesting a new login link (e.g. for another device) and not clicking it within 24 hours made them look unverified again. Accounts now keep a permanent "verified" status from their first login, and existing volunteers are marked as verified on update
@@ -418,6 +428,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Shift management, volunteer registration, dashboard, export, rules
 
 == Upgrade Notice ==
+
+= 3.8.0 =
+Important: fixes Editors and Shift Managers losing their role after looking at the volunteer page and then logging in. Also adds volunteer invitations by login link and an optional password login (off by default). No breaking changes.
 
 = 3.7.3 =
 Important: fixes the daily cleanup deleting verified volunteers (and admins with the volunteer role) who had requested a new login link and not clicked it. Update as soon as possible. No breaking changes.
