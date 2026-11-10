@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-11-10T07:58:30+00:00\n"
+"POT-Creation-Date: 2026-11-10T08:05:55+00:00\n"
 "PO-Revision-Date: 2026-09-10 15:00:00+0000\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
@@ -584,7 +584,8 @@ msgstr "Navn"
 #: includes/admin/shift-metaboxes.php:269 includes/admin/user-profile.php:252
 #: includes/admin/volunteer-list.php:145 includes/admin/volunteer-list.php:175
 #: includes/admin/volunteer-list.php:317 includes/admin/volunteer-list.php:745
-#: includes/profile.php:69 includes/registration.php:263
+#: includes/profile.php:69 includes/registration.php:259
+#: includes/registration.php:287
 msgid "E-Mail"
 msgstr "E-post"
 
@@ -806,14 +807,14 @@ msgstr "eller legg til en ny frivillig under"
 #: includes/admin/dashboard-overview-page.php:490
 #: includes/admin/dashboard-tab-cards.php:100
 #: includes/admin/volunteer-list.php:269 includes/profile.php:57
-#: includes/registration.php:254
+#: includes/registration.php:278
 msgid "First name"
 msgstr "Fornavn"
 
 #: includes/admin/dashboard-overview-page.php:491
 #: includes/admin/dashboard-tab-cards.php:101
 #: includes/admin/volunteer-list.php:270 includes/profile.php:62
-#: includes/registration.php:257
+#: includes/registration.php:281
 msgid "Last name"
 msgstr "Etternavn"
 
@@ -2709,14 +2710,20 @@ msgid ""
 "login\" option both email a one-time login link (valid ~24 hours) instead. "
 "It's simpler for occasional volunteers, and it's what powers the "
 "\"Unverified\" badge (see Volunteer List & Badges) for accounts that "
-"registered but haven't clicked their link yet."
+"registered but haven't clicked their link yet. To invite someone you added "
+"yourself, tick \"Send login link by email\" when creating them, or use "
+"\"Send login link\" in their volunteer profile. If a link has expired or was"
+" already used, the volunteer page offers to email a new one."
 msgstr ""
 "Frivillige velger ikke passord — både registreringsskjemaet og «send "
 "innloggingslenke på nytt» sender i stedet en engangs innloggingslenke "
 "(gyldig i ca. 24 timer). Det er enklere for frivillige som bare hjelper til "
 "av og til, og det er også det som ligger bak «Ikke verifisert»-merket (se "
 "Frivilligliste og merker) for kontoer som har registrert seg, men ikke "
-"klikket på lenken sin ennå."
+"klikket på lenken sin ennå. For å invitere noen du har lagt til selv, huk av"
+" for «Send innloggingslenke på e-post» når du oppretter dem, eller bruk "
+"«Send innloggingslenke» i frivilligprofilen. Hvis en lenke er utløpt eller "
+"allerede brukt, tilbyr frivilligsiden å sende en ny på e-post."
 
 #: includes/admin/documentation.php:670
 msgid ""
@@ -3621,11 +3628,16 @@ msgstr "Ja"
 
 #: includes/admin/settings.php:435
 msgid ""
-"If enabled, WordPress will not send the default \"set your password\" email "
-"to newly registered volunteers."
+"Volunteers log in with a login link, never with a password. The registration"
+" form never sends a password email; WordPress only sends its \"set your "
+"password\" email for accounts created via social login or under Users → Add "
+"New. If enabled, volunteers don't receive that email."
 msgstr ""
-"Hvis aktivert, sender ikke WordPress standard-e-posten «angi passordet ditt»"
-" til nyregistrerte frivillige."
+"Frivillige logger inn med en innloggingslenke, aldri med passord. "
+"Registreringsskjemaet sender aldri en passord-e-post; WordPress sender bare "
+"sin «angi passord»-e-post for kontoer som er opprettet via sosial innlogging"
+" eller under Brukere → Legg til ny. Hvis aktivert, mottar ikke frivillige "
+"denne e-posten."
 
 #: includes/admin/settings.php:443
 msgid "Rules"
@@ -4457,7 +4469,7 @@ msgstr ""
 "Å krysse av (eller fjerne krysset for) en avdeling krysser automatisk av "
 "eller fjerner krysset for alle avdelinger under den også."
 
-#: includes/admin/volunteer-list.php:870 includes/helpers.php:783
+#: includes/admin/volunteer-list.php:870 includes/helpers.php:787
 msgid "(hidden from volunteers)"
 msgstr "(skjult for frivillige)"
 
@@ -4531,11 +4543,7 @@ msgstr "Du kan bare ta %1$d vakter per %2$s."
 msgid "This shift overlaps with one you have already taken."
 msgstr "Denne vakten overlapper med en du allerede har tatt."
 
-#: includes/helpers.php:522
-msgid "Login link has expired or is invalid."
-msgstr "Innloggingslenken er utløpt eller ugyldig."
-
-#: includes/helpers.php:819
+#: includes/helpers.php:823
 msgid "Close"
 msgstr "Lukk"
 
@@ -4647,7 +4655,7 @@ msgstr ""
 "<strong>Profil ufullstendig:</strong> Vennligst oppgi telefonnummeret ditt "
 "slik at vi kan nå deg ved endringer i siste liten."
 
-#: includes/profile.php:66 includes/registration.php:260
+#: includes/profile.php:66 includes/registration.php:284
 msgid "Phone number"
 msgstr "Telefonnummer"
 
@@ -4667,7 +4675,7 @@ msgstr "Varsle meg også om nye vakter i:"
 msgid "This email address is already used by another user."
 msgstr "Denne e-postadressen brukes allerede av en annen bruker."
 
-#: includes/registration.php:239
+#: includes/registration.php:243
 msgid ""
 "Thank you for your registration. You will receive an email with your login "
 "link shortly."
@@ -4675,39 +4683,62 @@ msgstr ""
 "Takk for registreringen. Du vil snart motta en e-post med innloggingslenken "
 "din."
 
-#: includes/registration.php:243
+#: includes/registration.php:247
 msgid "This email is already registered. We have resent your login link."
 msgstr ""
 "Denne e-posten er allerede registrert. Vi har sendt innloggingslenken din på"
 " nytt."
 
-#: includes/registration.php:388
+#: includes/registration.php:251
+msgid ""
+"If this email address is registered, we have sent you a new login link."
+msgstr ""
+"Hvis denne e-postadressen er registrert, har vi sendt deg en ny "
+"innloggingslenke."
+
+#: includes/registration.php:255
+msgid ""
+"This login link has expired or was already used. Enter your email address "
+"and we will send you a new one."
+msgstr ""
+"Denne innloggingslenken er utløpt eller allerede brukt. Skriv inn "
+"e-postadressen din, så sender vi deg en ny."
+
+#: includes/registration.php:265
+msgid "Send new login link"
+msgstr "Send ny innloggingslenke"
+
+#: includes/registration.php:268
+msgid "Not registered yet? Sign up here."
+msgstr "Ikke registrert ennå? Registrer deg her."
+
+#: includes/registration.php:412 includes/registration.php:606
 msgid "Invalid form submission."
 msgstr "Ugyldig skjemainnsending."
 
-#: includes/registration.php:408
+#: includes/registration.php:432 includes/registration.php:618
 msgid "CAPTCHA verification failed. Please try again."
 msgstr "CAPTCHA-verifiseringen feilet. Prøv igjen."
 
-#: includes/registration.php:419
+#: includes/registration.php:443
 msgid "Please enter a valid email address."
 msgstr "Oppgi en gyldig e-postadresse."
 
-#: includes/registration.php:424
+#: includes/registration.php:448
 msgid "Please fill in all required fields."
 msgstr "Fyll ut alle påkrevde felt."
 
-#: includes/registration.php:467
+#: includes/registration.php:481
 msgid "Registration error. Please try again later."
 msgstr "Registreringsfeil. Prøv igjen senere."
 
-#: includes/registration.php:482 includes/registration.php:567
+#: includes/registration.php:496 includes/registration.php:581
 msgid "Your login"
 msgstr "Din innlogging"
 
 #. translators: %1$s = first name, %2$s = site name, %3$s = site url, %4$s =
 #. login url
-#: includes/registration.php:485
+#: includes/registration.php:499
 #, php-format
 msgid ""
 "Hello %1$s,<br><br>Thank you for registering at %2$s (%3$s).<br><br>Here is "
@@ -4717,7 +4748,7 @@ msgstr ""
 "er innloggingslenken din:<br>%4$s"
 
 #. translators: %1$s = first name, %2$s = login url
-#: includes/registration.php:570
+#: includes/registration.php:584
 #, php-format
 msgid "Hello %1$s,<br><br>Your login link:<br>%2$s"
 msgstr "Hei %1$s,<br><br>Innloggingslenken din:<br>%2$s"
@@ -4848,6 +4879,30 @@ msgstr "Du har blitt fjernet."
 #: includes/shiftselector.php:456
 msgid "You are not signed up for this shift."
 msgstr "Du er ikke påmeldt denne vakten."
+
+#~ msgid ""
+#~ "Volunteers don't set a password — the registration form and the \"resend "
+#~ "login\" option both email a one-time login link (valid ~24 hours) instead. "
+#~ "It's simpler for occasional volunteers, and it's what powers the "
+#~ "\"Unverified\" badge (see Volunteer List & Badges) for accounts that "
+#~ "registered but haven't clicked their link yet."
+#~ msgstr ""
+#~ "Frivillige velger ikke passord — både registreringsskjemaet og «send "
+#~ "innloggingslenke på nytt» sender i stedet en engangs innloggingslenke "
+#~ "(gyldig i ca. 24 timer). Det er enklere for frivillige som bare hjelper til "
+#~ "av og til, og det er også det som ligger bak «Ikke verifisert»-merket (se "
+#~ "Frivilligliste og merker) for kontoer som har registrert seg, men ikke "
+#~ "klikket på lenken sin ennå."
+
+#~ msgid ""
+#~ "If enabled, WordPress will not send the default \"set your password\" email "
+#~ "to newly registered volunteers."
+#~ msgstr ""
+#~ "Hvis aktivert, sender ikke WordPress standard-e-posten «angi passordet ditt»"
+#~ " til nyregistrerte frivillige."
+
+#~ msgid "Login link has expired or is invalid."
+#~ msgstr "Innloggingslenken er utløpt eller ugyldig."
 
 #~ msgid ""
 #~ "Fixed in this release: login links in emails are now clickable and take "

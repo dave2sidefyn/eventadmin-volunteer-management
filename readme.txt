@@ -69,7 +69,7 @@ Built for clubs, street festivals, and community events. Everything runs in your
 == Frequently Asked Questions ==
 
 = Do volunteers need an account? =
-Yes — they need to be logged in to join or cancel a shift, but there is no password to remember. On the registration form they enter their name, email, and phone; they then get a magic login link by email that signs them in. Admins can also create accounts manually, including "offline" volunteers with no email address (added by hand, no login).
+Yes — they need to be logged in to join or cancel a shift, but there is no password to remember. On the registration form they enter their name, email, and phone; they then get a magic login link by email that signs them in. Admins can also create accounts manually and email them a login link as an invitation, including "offline" volunteers with no email address (added by hand, no login).
 
 = Which pages do I need to create? =
 Just one: a page with the `[eventadmin]` shortcode. It shows the registration form to logged-out visitors and the full dashboard (open shifts, my shifts, profile) to logged-in volunteers. `[eventadmin_open_positions]`, `[eventadmin_shiftselector]`, and `[eventadmin_profile]` are optional extras for dedicated pages.

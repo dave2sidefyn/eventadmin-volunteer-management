@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management - Development (trunk)\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-11-10T07:58:30+00:00\n"
+"POT-Creation-Date: 2026-11-10T08:05:55+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: de_CH\n"
 "MIME-Version: 1.0\n"
@@ -589,7 +589,8 @@ msgstr "Name"
 #: includes/admin/shift-metaboxes.php:269 includes/admin/user-profile.php:252
 #: includes/admin/volunteer-list.php:145 includes/admin/volunteer-list.php:175
 #: includes/admin/volunteer-list.php:317 includes/admin/volunteer-list.php:745
-#: includes/profile.php:69 includes/registration.php:263
+#: includes/profile.php:69 includes/registration.php:259
+#: includes/registration.php:287
 msgid "E-Mail"
 msgstr "E-Mail-Adresse"
 
@@ -811,14 +812,14 @@ msgstr "oder neue Person unten hinzufügen"
 #: includes/admin/dashboard-overview-page.php:490
 #: includes/admin/dashboard-tab-cards.php:100
 #: includes/admin/volunteer-list.php:269 includes/profile.php:57
-#: includes/registration.php:254
+#: includes/registration.php:278
 msgid "First name"
 msgstr "Vorname"
 
 #: includes/admin/dashboard-overview-page.php:491
 #: includes/admin/dashboard-tab-cards.php:101
 #: includes/admin/volunteer-list.php:270 includes/profile.php:62
-#: includes/registration.php:257
+#: includes/registration.php:281
 msgid "Last name"
 msgstr "Nachname"
 
@@ -2765,14 +2766,21 @@ msgid ""
 "login\" option both email a one-time login link (valid ~24 hours) instead. "
 "It's simpler for occasional volunteers, and it's what powers the "
 "\"Unverified\" badge (see Volunteer List & Badges) for accounts that "
-"registered but haven't clicked their link yet."
+"registered but haven't clicked their link yet. To invite someone you added "
+"yourself, tick \"Send login link by email\" when creating them, or use "
+"\"Send login link\" in their volunteer profile. If a link has expired or was"
+" already used, the volunteer page offers to email a new one."
 msgstr ""
 "Volunteers legen kein Passwort fest — sowohl das Registrierungsformular als "
 "auch die Funktion „Login erneut senden“ verschicken stattdessen einen "
 "einmaligen Login-Link (gültig ca. 24 Stunden). Das ist einfacher für "
 "gelegentliche Volunteers und steckt auch hinter dem Badge „Nicht "
 "verifiziert“ (siehe Volunteer-Liste & Badges) für Konten, die sich "
-"registriert, aber ihren Link noch nicht angeklickt haben."
+"registriert, aber ihren Link noch nicht angeklickt haben. Um jemanden "
+"einzuladen, den du selbst hinzugefügt hast, aktiviere beim Erstellen "
+"„Anmeldelink per E-Mail senden“ oder nutze „Anmeldelink senden“ im "
+"Volunteer-Profil. Ist ein Link abgelaufen oder wurde er bereits verwendet, "
+"bietet die Volunteer-Seite an, einen neuen per E-Mail zu senden."
 
 #: includes/admin/documentation.php:670
 msgid ""
@@ -3695,11 +3703,16 @@ msgstr "Ja"
 
 #: includes/admin/settings.php:435
 msgid ""
-"If enabled, WordPress will not send the default \"set your password\" email "
-"to newly registered volunteers."
+"Volunteers log in with a login link, never with a password. The registration"
+" form never sends a password email; WordPress only sends its \"set your "
+"password\" email for accounts created via social login or under Users → Add "
+"New. If enabled, volunteers don't receive that email."
 msgstr ""
-"Wenn aktiviert, sendet WordPress die standardmässige E-Mail «Lege dein "
-"Passwort fest» nicht an neu registrierte Volunteers."
+"Volunteers melden sich mit einem Anmeldelink an, nie mit einem Passwort. Das"
+" Registrierungsformular verschickt nie eine Passwort-E-Mail; WordPress "
+"sendet seine „Passwort festlegen“-E-Mail nur für Konten, die per Social "
+"Login oder unter Benutzer → Neu hinzufügen erstellt wurden. Wenn aktiviert, "
+"erhalten Volunteers diese E-Mail nicht."
 
 #: includes/admin/settings.php:443
 msgid "Rules"
@@ -4544,7 +4557,7 @@ msgstr ""
 "Das Auswählen (oder Abwählen) einer Abteilung wählt automatisch auch alle "
 "darunter liegenden Abteilungen aus (bzw. ab)."
 
-#: includes/admin/volunteer-list.php:870 includes/helpers.php:783
+#: includes/admin/volunteer-list.php:870 includes/helpers.php:787
 msgid "(hidden from volunteers)"
 msgstr "(vor Volunteers verborgen)"
 
@@ -4619,11 +4632,7 @@ msgid "This shift overlaps with one you have already taken."
 msgstr ""
 "Diese Schicht überschneidet sich mit einer, die du bereits gebucht hast."
 
-#: includes/helpers.php:522
-msgid "Login link has expired or is invalid."
-msgstr "Der Anmeldelink ist abgelaufen oder ungültig."
-
-#: includes/helpers.php:819
+#: includes/helpers.php:823
 msgid "Close"
 msgstr "Schliessen"
 
@@ -4735,7 +4744,7 @@ msgstr ""
 "<strong>Profil unvollständig:</strong> Bitte gib Deine Telefonnummer an, "
 "damit wir Dich bei kurzfristigen Änderungen erreichen können."
 
-#: includes/profile.php:66 includes/registration.php:260
+#: includes/profile.php:66 includes/registration.php:284
 msgid "Phone number"
 msgstr "Telefonnummer"
 
@@ -4756,7 +4765,7 @@ msgid "This email address is already used by another user."
 msgstr ""
 "Diese E-Mail-Adresse wird bereits von einem anderen Benutzer verwendet."
 
-#: includes/registration.php:239
+#: includes/registration.php:243
 msgid ""
 "Thank you for your registration. You will receive an email with your login "
 "link shortly."
@@ -4764,39 +4773,62 @@ msgstr ""
 "Vielen Dank für Deine Registrierung. Du erhältst in Kürze eine E-Mail mit "
 "Deinem Anmeldelink."
 
-#: includes/registration.php:243
+#: includes/registration.php:247
 msgid "This email is already registered. We have resent your login link."
 msgstr ""
 "Diese E-Mail-Adresse ist bereits registriert. Wir haben Dir Deinen "
 "Anmeldelink erneut zugesendet."
 
-#: includes/registration.php:388
+#: includes/registration.php:251
+msgid ""
+"If this email address is registered, we have sent you a new login link."
+msgstr ""
+"Falls diese E-Mail-Adresse registriert ist, haben wir dir einen neuen "
+"Anmeldelink geschickt."
+
+#: includes/registration.php:255
+msgid ""
+"This login link has expired or was already used. Enter your email address "
+"and we will send you a new one."
+msgstr ""
+"Dieser Anmeldelink ist abgelaufen oder wurde bereits verwendet. Gib deine "
+"E-Mail-Adresse ein, dann schicken wir dir einen neuen."
+
+#: includes/registration.php:265
+msgid "Send new login link"
+msgstr "Neuen Anmeldelink senden"
+
+#: includes/registration.php:268
+msgid "Not registered yet? Sign up here."
+msgstr "Noch nicht registriert? Hier registrieren."
+
+#: includes/registration.php:412 includes/registration.php:606
 msgid "Invalid form submission."
 msgstr "Ungültige Formularübermittlung."
 
-#: includes/registration.php:408
+#: includes/registration.php:432 includes/registration.php:618
 msgid "CAPTCHA verification failed. Please try again."
 msgstr "CAPTCHA-Überprüfung fehlgeschlagen. Bitte versuche es erneut."
 
-#: includes/registration.php:419
+#: includes/registration.php:443
 msgid "Please enter a valid email address."
 msgstr "Bitte gib eine gültige E-Mail-Adresse ein."
 
-#: includes/registration.php:424
+#: includes/registration.php:448
 msgid "Please fill in all required fields."
 msgstr "Bitte fülle alle Pflichtfelder aus."
 
-#: includes/registration.php:467
+#: includes/registration.php:481
 msgid "Registration error. Please try again later."
 msgstr "Registrierungsfehler. Bitte versuche es später erneut."
 
-#: includes/registration.php:482 includes/registration.php:567
+#: includes/registration.php:496 includes/registration.php:581
 msgid "Your login"
 msgstr "Dein Login"
 
 #. translators: %1$s = first name, %2$s = site name, %3$s = site url, %4$s =
 #. login url
-#: includes/registration.php:485
+#: includes/registration.php:499
 #, php-format
 msgid ""
 "Hello %1$s,<br><br>Thank you for registering at %2$s (%3$s).<br><br>Here is "
@@ -4806,7 +4838,7 @@ msgstr ""
 "(%3$s).<br><br>Hier ist Dein Anmeldelink:<br>%4$s"
 
 #. translators: %1$s = first name, %2$s = login url
-#: includes/registration.php:570
+#: includes/registration.php:584
 #, php-format
 msgid "Hello %1$s,<br><br>Your login link:<br>%2$s"
 msgstr "Hallo %1$s,<br><br>Dein Login-Link:<br>%2$s"
@@ -4938,6 +4970,30 @@ msgstr "Du wurdest erfolgreich abgemeldet."
 #: includes/shiftselector.php:456
 msgid "You are not signed up for this shift."
 msgstr "Du bist für diese Schicht nicht eingeteilt."
+
+#~ msgid ""
+#~ "Volunteers don't set a password — the registration form and the \"resend "
+#~ "login\" option both email a one-time login link (valid ~24 hours) instead. "
+#~ "It's simpler for occasional volunteers, and it's what powers the "
+#~ "\"Unverified\" badge (see Volunteer List & Badges) for accounts that "
+#~ "registered but haven't clicked their link yet."
+#~ msgstr ""
+#~ "Volunteers legen kein Passwort fest — sowohl das Registrierungsformular als "
+#~ "auch die Funktion „Login erneut senden“ verschicken stattdessen einen "
+#~ "einmaligen Login-Link (gültig ca. 24 Stunden). Das ist einfacher für "
+#~ "gelegentliche Volunteers und steckt auch hinter dem Badge „Nicht "
+#~ "verifiziert“ (siehe Volunteer-Liste & Badges) für Konten, die sich "
+#~ "registriert, aber ihren Link noch nicht angeklickt haben."
+
+#~ msgid ""
+#~ "If enabled, WordPress will not send the default \"set your password\" email "
+#~ "to newly registered volunteers."
+#~ msgstr ""
+#~ "Wenn aktiviert, sendet WordPress die standardmässige E-Mail «Lege dein "
+#~ "Passwort fest» nicht an neu registrierte Volunteers."
+
+#~ msgid "Login link has expired or is invalid."
+#~ msgstr "Der Anmeldelink ist abgelaufen oder ungültig."
 
 #~ msgid ""
 #~ "Fixed in this release: login links in emails are now clickable and take "

@@ -432,7 +432,7 @@ function eventadmin_plugin_register_settings(): void
         static function () {
             echo '<input type="checkbox" name="eventadmin_suppress_wp_password_email" value="1" ' . checked(1, get_option('eventadmin_suppress_wp_password_email', 1), false) . '>';
             echo ' ' . esc_html__('Yes', 'eventadmin-volunteer-management');
-            echo '<p class="description">' . esc_html__('If enabled, WordPress will not send the default "set your password" email to newly registered volunteers.', 'eventadmin-volunteer-management') . '</p>';
+            echo '<p class="description">' . esc_html__('Volunteers log in with a login link, never with a password. The registration form never sends a password email; WordPress only sends its "set your password" email for accounts created via social login or under Users → Add New. If enabled, volunteers don\'t receive that email.', 'eventadmin-volunteer-management') . '</p>';
         },
         'eventadmin-settings-general',
         'eventadmin_general_registration'

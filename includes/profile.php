@@ -168,12 +168,6 @@ function eventadmin_handle_profile_update(): void
     );
     eventadmin_save_volunteer_department_ids($user_id, array_merge($posted_departments, $preserved_hidden_departments));
 
-    if (!empty($password)) {
-        wp_set_password($password, $user_id);
-        wp_safe_redirect(wp_login_url()); // Re-login required
-        exit;
-    }
-
     $redirect_url = add_query_arg([
         'update' => 'success',
         '_wpnonce' => wp_create_nonce('eventadmin_profile_success'),

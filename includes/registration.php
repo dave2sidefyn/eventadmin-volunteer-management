@@ -231,6 +231,10 @@ function eventadmin_registration_form_shortcode(): bool|string
         && wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['eventadmin_register_nonce'])), 'eventadmin_register_action');
     $registration_success = $registration_nonce_valid && $_GET['registration'] === 'success';
     $registration_exists   = $registration_nonce_valid && $_GET['registration'] === 'exists';
+    $link_requested        = $registration_nonce_valid && $_GET['registration'] === 'link_requested';
+    // Set by eventadmin_magic_login_check() for an expired or already-used login link. Only
+    // switches which form is shown, so it needs no nonce.
+    $login_link_expired    = isset($_GET['eventadmin_login']) && $_GET['eventadmin_login'] === 'expired';
 
     ob_start(); ?>
     <div class="eventadmin-form-wrapper">
@@ -242,6 +246,26 @@ function eventadmin_registration_form_shortcode(): bool|string
             <div class="eventadmin-info">
                 <?php esc_html_e('This email is already registered. We have resent your login link.', 'eventadmin-volunteer-management'); ?>
             </div>
+        <?php elseif ($link_requested) : ?>
+            <div class="eventadmin-info">
+                <?php esc_html_e('If this email address is registered, we have sent you a new login link.', 'eventadmin-volunteer-management'); ?>
+            </div>
+        <?php elseif ($login_link_expired) : ?>
+            <div class="eventadmin-info">
+                <?php esc_html_e('This login link has expired or was already used. Enter your email address and we will send you a new one.', 'eventadmin-volunteer-management'); ?>
+            </div>
+            <form method="post" class="eventadmin-form">
+                <?php wp_nonce_field('eventadmin_request_login_link', 'eventadmin_request_link_nonce'); ?>
+                <label><?php esc_html_e('E-Mail', 'eventadmin-volunteer-management'); ?>
+                    <input type="email" name="eventadmin_email" required/>
+                </label>
+                <input type="hidden" name="eventadmin_redirect_to" value="<?php echo esc_url(get_permalink()); ?>"/>
+                <?php eventadmin_render_captcha_widget(); ?>
+                <input type="hidden" name="eventadmin_hp" id="eventadmin_hp" value="">
+                <input type="submit" value="<?php esc_attr_e('Send new login link', 'eventadmin-volunteer-management'); ?>"/>
+                <script>document.getElementById('eventadmin_hp').value='1';</script>
+            </form>
+            <p><a href="<?php echo esc_url(remove_query_arg('eventadmin_login')); ?>"><?php esc_html_e('Not registered yet? Sign up here.', 'eventadmin-volunteer-management'); ?></a></p>
         <?php else : ?>
             <?php
             if (shortcode_exists('nextend_social_login')) {
@@ -448,20 +472,10 @@ function eventadmin_handle_registration(): void
         'role' => 'eventadmin_volunteer', // Role for volunteers
     ];
 
-    // Suppress WP password email around wp_insert_user so the role check is not needed.
-    $suppress_cb = null;
-    if (get_option('eventadmin_suppress_wp_password_email', 1)) {
-        $suppress_cb = static function (array $mail): array {
-            return array_merge($mail, ['to' => '']);
-        };
-        add_filter('wp_new_user_notification_email', $suppress_cb, 999);
-    }
-
+    // wp_insert_user() never sends WordPress's "set your password" email itself, so nothing
+    // needs suppressing here — volunteers registering through this form only ever get
+    // their login link.
     $user_id = wp_insert_user($userdata);
-
-    if ($suppress_cb !== null) {
-        remove_filter('wp_new_user_notification_email', $suppress_cb, 999);
-    }
 
     if (is_wp_error($user_id)) {
         wp_die(esc_html__('Registration error. Please try again later.', 'eventadmin-volunteer-management'));
@@ -577,17 +591,100 @@ function eventadmin_send_login_link(int $user_id, string $redirect_to = ''): boo
 add_action('init', 'eventadmin_handle_registration');
 
 /**
- * Filter to modify the new user notification email.
- * If the user is a volunteer, we don't send a password.
+ * Handles the email-only "Send new login link" form shown after an expired or already-used
+ * login link, so a returning volunteer doesn't have to fill in the whole registration form
+ * again. Same bot protection as the registration form; one email per address per minute;
+ * and always the same answer, so it can't be used to find out who is registered.
+ */
+function eventadmin_handle_login_link_request(): void
+{
+    if (empty($_POST['eventadmin_request_link_nonce'])) {
+        return;
+    }
+
+    if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['eventadmin_request_link_nonce'])), 'eventadmin_request_login_link')) {
+        wp_die(esc_html__('Invalid form submission.', 'eventadmin-volunteer-management'));
+    }
+
+    // JS-based bot check, same as the registration form
+    if (($_POST['eventadmin_hp'] ?? '') !== '1') {
+        return;
+    }
+
+    $email = isset($_POST['eventadmin_email']) ? eventadmin_normalize_email(sanitize_email(wp_unslash($_POST['eventadmin_email']))) : '';
+
+    if (!eventadmin_verify_captcha_response()) {
+        eventadmin_log_blocked_registration($email, 'login_link_request_captcha_failed');
+        wp_die(esc_html__('CAPTCHA verification failed. Please try again.', 'eventadmin-volunteer-management'));
+    }
+
+    $redirect_to = isset($_POST['eventadmin_redirect_to']) ? esc_url_raw(wp_unslash($_POST['eventadmin_redirect_to'])) : home_url('/');
+    if (!str_starts_with($redirect_to, home_url())) {
+        $redirect_to = home_url('/');
+    }
+
+    $user = is_email($email) ? get_user_by('email', $email) : false;
+    if ($user) {
+        $throttle_key = 'eventadmin_link_request_' . md5(strtolower($email));
+        if (!get_transient($throttle_key)) {
+            set_transient($throttle_key, 1, MINUTE_IN_SECONDS);
+            eventadmin_send_login_link((int) $user->ID, $redirect_to);
+        }
+    }
+
+    wp_safe_redirect(add_query_arg([
+        'registration'              => 'link_requested',
+        'eventadmin_register_nonce' => wp_create_nonce('eventadmin_register_action'),
+    ], remove_query_arg('eventadmin_login', $redirect_to)));
+    exit;
+}
+
+add_action('init', 'eventadmin_handle_login_link_request');
+
+/**
+ * Whether WordPress's own "set your password" email should be withheld from this user:
+ * volunteers log in with a login link, so (if the setting is on) they don't need one.
  *
- * @param array $email The email data.
- * @param WP_User $user The user object.
+ * That email is never sent by this plugin's registration form; it only comes from accounts
+ * created elsewhere — social login (Nextend triggers WordPress's new-user notification) or
+ * Users → Add New with "Send the new user an email" ticked. Social sign-ups from the volunteer
+ * page already hold the volunteer role by then (see eventadmin_nsl_register_new_user()).
+ *
+ * @param WP_User $user
+ * @return bool
+ */
+function eventadmin_should_suppress_password_email(WP_User $user): bool
+{
+    return in_array('eventadmin_volunteer', (array) $user->roles, true)
+        && (bool) get_option('eventadmin_suppress_wp_password_email', 1);
+}
+
+/**
+ * WordPress 6.1+: cancels the user's copy of the new-user notification outright.
+ *
+ * @param bool    $send
+ * @param WP_User $user
+ * @return bool
+ */
+function eventadmin_send_new_user_notification_to_user(bool $send, WP_User $user): bool
+{
+    return eventadmin_should_suppress_password_email($user) ? false : $send;
+}
+
+add_filter('wp_send_new_user_notification_to_user', 'eventadmin_send_new_user_notification_to_user', 10, 2);
+
+/**
+ * Fallback for WordPress before 6.1, which has no filter to cancel the email: blank its
+ * recipient instead. On 6.1+ this never runs for a suppressed user, because
+ * eventadmin_send_new_user_notification_to_user() already stopped the email.
+ *
+ * @param array   $email The email data.
+ * @param WP_User $user  The user object.
  * @return array Modified email data.
  */
 function eventadmin_wp_new_user_notification_email(array $email, WP_User $user): array
 {
-    // As a volunteer they don't need a password to login
-    if (in_array('eventadmin_volunteer', $user->roles, true) && get_option('eventadmin_suppress_wp_password_email', 1)) {
+    if (eventadmin_should_suppress_password_email($user)) {
         return [
             'to' => '',
             'subject' => '',
@@ -596,7 +693,6 @@ function eventadmin_wp_new_user_notification_email(array $email, WP_User $user):
         ];
     }
 
-    // All other roles should keep the default behavior
     return $email;
 }
 
