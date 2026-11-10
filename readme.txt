@@ -4,7 +4,7 @@ Tags: volunteer, volunteer management, shift scheduling, event management, roste
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.8.0
+Stable tag: 3.9.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,16 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.9.0 =
+* New: Calendar tab on the Manager page — a month or week grid with every shift in its department's colour, its start time and how many volunteers it has (red while below the minimum). Click a shift to edit it, or a day to open it on the Day tab. Opens automatically when your shifts span more than two weeks
+* New: Date picker on the Manager page — Upcoming / Past / All dates or a single day, with a month view whose days are marked by staffing. Long-running setups step day by day and open on the next day with shifts
+* New: Weekly repeating shifts — "Copy shifts to another day" can repeat a day's shifts every week until an end date (up to 52 weeks); running it again skips shifts that already exist
+* New: "Shifts per department" (Settings → General, off by default) — volunteers only see and can sign up for shifts in the departments you allow them under Volunteers → Edit departments, kept separate from the departments they get notified about
+* New: department="slug" option for [eventadmin], [eventadmin_cockpit] and [eventadmin_shiftselector], for one volunteer page per department
+* New: Switching between "I'm new" and "I already have an account" on the volunteer page no longer reloads the page
+* Improved: One consistent filter toolbar on the Manager and Volunteers pages (Date → Department → Volunteer/Shift → Status), with removable filter chips, "Clear filters" and a compact filter toggle on phones. Page actions (Add shift, Export CSV, Departments) sit at the top right. The Timeline tab is now called "Day"
+* Fix: Volunteer pages are now kept out of page caches and CDNs, which could show volunteers an outdated or empty "My shifts" after reopening the browser on a phone
 
 = Version 3.8.0 =
 * Fix: An Editor, Shift Manager or other non-admin who viewed the volunteer page and then logged in through wp-login.php within the hour lost their role and was turned into a volunteer. Roles are now only assigned in the volunteer flows (login link, social login from the volunteer page) and never removed
@@ -428,6 +438,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Shift management, volunteer registration, dashboard, export, rules
 
 == Upgrade Notice ==
+
+= 3.9.0 =
+Adds a Calendar tab and date picker for long-running events, weekly repeating shifts, optional per-department sign-up and per-department volunteer pages, and keeps volunteer pages out of page caches. No breaking changes.
 
 = 3.8.0 =
 Important: fixes Editors and Shift Managers losing their role after looking at the volunteer page and then logging in. Also adds volunteer invitations by login link and an optional password login (off by default). No breaking changes.
