@@ -23,6 +23,7 @@ define('EVENTADMIN_DONATE_URL', 'https://revolut.me/davidwiedmer');
 require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-data.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-menu.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-overview-page.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/date-navigator.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-tab-dashboard.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-tab-table.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-tab-cards.php';

@@ -680,6 +680,9 @@ function eventadmin_plugin_documentation_page()
             <dt><strong><?php echo esc_html__('Can I reuse last year\'s shifts for a new event?', 'eventadmin-volunteer-management'); ?></strong></dt>
             <dd><?php echo esc_html__('Yes — on the Manager page\'s Timeline tab, use "Copy shifts to another day" (in the + Add shift dropdown) to recreate every shift from a past day onto a new date, keeping each shift\'s time-of-day and duration. There\'s an option to also copy over the volunteers who were signed up, so a whole day\'s roster can be cloned forward to next year in one go.', 'eventadmin-volunteer-management'); ?></dd>
 
+            <dt><strong><?php echo esc_html__('How do I find a specific day when shifts run over many weeks?', 'eventadmin-volunteer-management'); ?></strong></dt>
+            <dd><?php echo esc_html__('Use the date bar above the Manager, Table and Cards views. For a short event every day is a button; for longer periods step day by day with ◀ ▶, jump back with "Today", or click the date to open a month view where each day with shifts is marked red (below the minimum), grey (open slots) or green (fully staffed). When your shifts span more than a week, the Manager view opens on the next day with shifts; choose "All dates" to see everything at once.', 'eventadmin-volunteer-management'); ?></dd>
+
             <dt><strong><?php echo esc_html__('Can I create weekly recurring shifts?', 'eventadmin-volunteer-management'); ?></strong></dt>
             <dd><?php echo esc_html__('Yes. Set up one day\'s shifts, then use "Copy shifts to another day", pick the first new date and tick "Repeat every week" with an end date. The shifts are created on the same weekday every week (up to 52 weeks). Running the same repeat again skips shifts that already exist, and volunteers are never copied into a series.', 'eventadmin-volunteer-management'); ?></dd>
 

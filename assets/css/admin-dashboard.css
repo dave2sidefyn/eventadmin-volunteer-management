@@ -221,3 +221,144 @@ button.eventadmin-filters-toggle {
     border-top: 1px solid #dcdcde;
     margin: 6px 2px;
 }
+
+/* Date bar (includes/admin/date-navigator.php): chips for a short event, ◀ day ▶ + month
+   picker for long-running setups. */
+.eventadmin-date-nav {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 12px 0;
+}
+
+.eventadmin-date-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid #c3c4c7;
+    border-radius: 999px;
+    background: #fff;
+    color: #1d2327;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.eventadmin-date-chip:hover,
+.eventadmin-date-chip:focus {
+    border-color: #2271b1;
+    color: #2271b1;
+}
+
+.eventadmin-date-chip.is-active {
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff;
+}
+
+.eventadmin-date-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.eventadmin-date-dot.is-under { background: #d63638; }
+.eventadmin-date-dot.is-open { background: #8c8f94; }
+.eventadmin-date-dot.is-full { background: #00a32a; }
+
+.eventadmin-date-chip.is-active .eventadmin-date-dot { box-shadow: 0 0 0 2px #fff; }
+
+.eventadmin-date-nav .eventadmin-date-current {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.eventadmin-date-step[aria-disabled="true"] {
+    opacity: .4;
+    pointer-events: none;
+}
+
+.eventadmin-date-all,
+.eventadmin-date-summary {
+    margin-left: 4px;
+    font-size: 13px;
+}
+
+.eventadmin-date-summary { color: #646970; }
+
+.eventadmin-date-picker {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 100;
+    width: 260px;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, .12);
+}
+
+.eventadmin-date-picker[hidden] { display: none; }
+
+.eventadmin-date-picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.eventadmin-date-picker-header .button-link {
+    font-size: 18px;
+    line-height: 1;
+    padding: 2px 8px;
+    text-decoration: none;
+}
+
+.eventadmin-date-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    text-align: center;
+}
+
+.eventadmin-date-picker-weekday {
+    font-size: 11px;
+    color: #646970;
+    padding-bottom: 4px;
+}
+
+.eventadmin-date-picker-day {
+    position: relative;
+    padding: 6px 0 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #1d2327;
+    text-decoration: none;
+}
+
+a.eventadmin-date-picker-day:hover,
+a.eventadmin-date-picker-day:focus { background: #f0f6fc; color: #2271b1; }
+
+.eventadmin-date-picker-day.is-empty { color: #a7aaad; }
+.eventadmin-date-picker-day.is-today { box-shadow: inset 0 0 0 1px #2271b1; }
+.eventadmin-date-picker-day.is-selected { background: #2271b1; color: #fff; }
+
+.eventadmin-date-picker-day .eventadmin-date-dot {
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    transform: translateX(-50%);
+}
+
+@media (max-width: 600px) {
+    .eventadmin-date-picker { width: calc(100vw - 40px); }
+}

@@ -69,13 +69,25 @@ function eventadmin_overview_parse_filter_state(string $page_slug, array $allowe
     $raw_order  = $filter_valid && isset($_GET['order'])       ? sanitize_text_field(wp_unslash($_GET['order']))       : '';
     $raw_view   = $filter_valid && isset($_GET['filter_view']) ? sanitize_text_field(wp_unslash($_GET['filter_view'])) : '';
     $time_filter = in_array($raw_time, $allowed_time_filters, true)          ? $raw_time              : 'future';
+
+    // Per-day staffing for the date bar (includes/admin/date-navigator.php). For long-running
+    // setups the Manager timeline opens on the next day with shifts instead of every upcoming
+    // shift at once — unless a date (or "All dates", sent as an empty filter_date) was chosen.
+    $day_stats     = eventadmin_get_shift_day_stats($selected_cat);
+    $long_running  = eventadmin_shifts_are_long_running($day_stats);
+    $date_chosen   = $filter_valid && isset($_GET['filter_date']);
     $sort_by     = in_array($raw_sortby, $allowed_sort_by, true)             ? $raw_sortby            : 'date';
     $order       = in_array(strtoupper($raw_order), $allowed_orders, true)  ? strtoupper($raw_order) : 'ASC';
     $view          = in_array($raw_view, $allowed_views, true) ? $raw_view : $default_view;
+    if ($view === 'timeline' && $time_filter === 'future' && $long_running && !$date_chosen && $selected_date === '') {
+        $selected_date = eventadmin_next_shift_date($day_stats);
+    }
     // Checkboxes submit nothing when unchecked, so a hidden "0" companion field (rendered
     // just before the checkbox) is what lets us tell "unchecked" apart from "not submitted
     // yet" — the checkbox's own value overwrites it in the query string only when checked.
-    $show_open = !$filter_valid || (isset($_GET['show_open']) && $_GET['show_open'] === '1');
+    // Links built from $filter_query_args (view tabs, pagination, the date bar) leave
+    // show_open out while it's on, so only an explicit "0" turns it off.
+    $show_open = !($filter_valid && isset($_GET['show_open']) && $_GET['show_open'] !== '1');
 
     // Shared base query args for building both the view tabs and pagination links below,
     // so a filter change (department, date, …) doesn't reset the other.
@@ -103,6 +115,7 @@ function eventadmin_overview_parse_filter_state(string $page_slug, array $allowe
         'selected_volunteer' => $selected_volunteer,
         'selected_date'      => $selected_date,
         'shift_dates'        => $shift_dates,
+        'day_stats'          => $day_stats,
         'time_filter'        => $time_filter,
         'sort_by'            => $sort_by,
         'order'              => $order,
@@ -230,7 +243,7 @@ function eventadmin_render_overview_filter_form(
     // on a small screen before the visitor has asked to filter anything. Pre-opened when a
     // filter is already active, so changing your mind about it doesn't mean hunting for the
     // toggle first.
-    $filters_active = (bool) ($selected_cat || $selected_state || $selected_volunteer || $selected_date || $time_filter !== 'future');
+    $filters_active = (bool) ($selected_cat || $selected_state || $selected_volunteer || $time_filter !== 'future');
     $filters_show_label = esc_html__('Show filter', 'eventadmin-volunteer-management');
     $filters_hide_label = esc_html__('Hide filter', 'eventadmin-volunteer-management');
     echo '<button type="button" id="eventadmin-filters-toggle" class="button eventadmin-filters-toggle"'
@@ -271,14 +284,9 @@ function eventadmin_render_overview_filter_form(
         echo '</select></label>';
     }
 
-    // Date filter
-    echo '<label>' . esc_html__('Date:', 'eventadmin-volunteer-management') . '<select name="filter_date">';
-    echo '<option value="">' . esc_html__('All', 'eventadmin-volunteer-management') . '</option>';
-    foreach ($shift_dates as $date) {
-        $label = date_i18n('l, ' . get_option('date_format'), strtotime($date));
-        echo '<option value="' . esc_attr($date) . '"' . selected($selected_date, $date, false) . '>' . esc_html($label) . '</option>';
-    }
-    echo '</select></label>';
+    // The day itself is picked in the date bar above the content (date-navigator.php); this
+    // keeps it when another filter is changed.
+    echo '<input type="hidden" name="filter_date" value="' . esc_attr($selected_date) . '">';
 
     // Time period filter
     echo '<label>' . esc_html__('Show:', 'eventadmin-volunteer-management') . '<select name="filter_time">';
@@ -607,6 +615,7 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
     $view               = $filter_state['view'];
     $show_open          = $filter_state['show_open'];
     $filter_query_args  = $filter_state['filter_query_args'];
+    $day_stats          = $filter_state['day_stats'];
 
     eventadmin_render_copy_shifts_notice_and_modal($view, $shift_dates);
 
@@ -681,6 +690,8 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
         echo '</form>';
         echo '</p>';
     }
+
+    eventadmin_render_date_navigator($filter_query_args, $view, $selected_date, $day_stats, $time_filter);
 
     $current_page = isset($_GET['paged']) ? absint($_GET['paged']) : 1;
     $per_page     = 200;

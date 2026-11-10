@@ -159,7 +159,7 @@ function eventadmin_render_timeline_chart(array $timeline_rows): void
     if ($days_shown > 1) {
         echo ' ' . esc_html(sprintf(
             /* translators: %d: number of days currently shown in the timeline */
-            __('Showing %d days, so short shifts appear narrow — pick a single day in the date filter for a closer view.', 'eventadmin-volunteer-management'),
+            __('Showing %d days, so short shifts appear narrow — pick a single day in the date bar above for a closer view.', 'eventadmin-volunteer-management'),
             $days_shown
         ));
     }

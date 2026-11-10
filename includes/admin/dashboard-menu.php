@@ -187,6 +187,15 @@ function eventadmin_admin_enqueue_dashboard_scripts(): void
         true
     );
 
+    $date_navigator_js_path = plugin_dir_path(__FILE__) . '../../assets/js/date-navigator.js';
+    wp_enqueue_script(
+        'eventadmin-date-navigator',
+        plugin_dir_url(__FILE__) . '../../assets/js/date-navigator.js',
+        [],
+        file_exists($date_navigator_js_path) ? filemtime($date_navigator_js_path) : null,
+        true
+    );
+
     $admin_dashboard_css_path = plugin_dir_path(__FILE__) . '../../assets/css/admin-dashboard.css';
     wp_enqueue_style(
         'eventadmin-admin-dashboard',
