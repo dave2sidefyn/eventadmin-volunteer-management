@@ -301,6 +301,10 @@ function eventadmin_plugin_register_settings(): void
         'sanitize_callback' => 'eventadmin_sanitize_checkbox_setting',
     ]);
 
+    register_setting('eventadmin_plugin_settings_general', 'eventadmin_allow_password_login', [
+        'sanitize_callback' => 'eventadmin_sanitize_checkbox_setting',
+    ]);
+
     register_setting('eventadmin_plugin_settings_general', 'eventadmin_allow_overlap', [
         'sanitize_callback' => 'eventadmin_sanitize_checkbox_setting',
     ]);
@@ -433,6 +437,18 @@ function eventadmin_plugin_register_settings(): void
             echo '<input type="checkbox" name="eventadmin_suppress_wp_password_email" value="1" ' . checked(1, get_option('eventadmin_suppress_wp_password_email', 1), false) . '>';
             echo ' ' . esc_html__('Yes', 'eventadmin-volunteer-management');
             echo '<p class="description">' . esc_html__('Volunteers log in with a login link, never with a password. The registration form never sends a password email; WordPress only sends its "set your password" email for accounts created via social login or under Users → Add New. If enabled, volunteers don\'t receive that email.', 'eventadmin-volunteer-management') . '</p>';
+        },
+        'eventadmin-settings-general',
+        'eventadmin_general_registration'
+    );
+
+    add_settings_field(
+        'eventadmin_allow_password_login',
+        esc_html__('Password login', 'eventadmin-volunteer-management'),
+        static function () {
+            echo '<input type="checkbox" name="eventadmin_allow_password_login" value="1" ' . checked(1, get_option('eventadmin_allow_password_login', 0), false) . '>';
+            echo ' ' . esc_html__('Allow volunteers to also log in with email and password', 'eventadmin-volunteer-management');
+            echo '<p class="description">' . esc_html__('Volunteers can set a password in their profile and log in with it on the volunteer page. The login link stays available to everyone — it is still used for signing up and invitations, and whenever someone forgets their password.', 'eventadmin-volunteer-management') . '</p>';
         },
         'eventadmin-settings-general',
         'eventadmin_general_registration'

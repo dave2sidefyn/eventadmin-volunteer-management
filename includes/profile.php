@@ -46,9 +46,19 @@ function eventadmin_profile_shortcode(): bool|string|null
             </div>
         <?php endif; ?>
 
+        <?php if (isset($_GET['password_error']) && $_GET['password_error'] === 'too_short') : ?>
+            <div class="hinweis-box hinweis-box-warning">
+                <?php echo esc_html(sprintf(
+                /* translators: %d = minimum number of characters */
+                    __('Your other changes were saved, but the password was not: it must be at least %d characters long.', 'eventadmin-volunteer-management'),
+                    EVENTADMIN_MIN_PASSWORD_LENGTH
+                )); ?>
+            </div>
+        <?php endif; ?>
+
         <?php if (empty($phone)) : ?>
             <div class="hinweis-box hinweis-box-warning">
-                <?php wp_kses_post(__('<strong>Profile incomplete:</strong> Please enter your phone number so we can reach you in case of last-minute changes.', 'eventadmin-volunteer-management')); ?>
+                <?php echo wp_kses_post(__('<strong>Profile incomplete:</strong> Please enter your phone number so we can reach you in case of last-minute changes.', 'eventadmin-volunteer-management')); ?>
 
             </div>
         <?php endif; ?>
@@ -70,6 +80,16 @@ function eventadmin_profile_shortcode(): bool|string|null
                 <input type="text" name="eventadmin_email" value="<?php echo esc_attr($user->user_email); ?>" readonly
                        style="background: #eee;">
             </label>
+
+            <?php if (eventadmin_password_login_enabled()) : ?>
+                <label><?php echo eventadmin_user_has_own_password($user->ID)
+                        ? esc_html__('New password (leave empty to keep your current one)', 'eventadmin-volunteer-management')
+                        : esc_html__('Password (optional)', 'eventadmin-volunteer-management'); ?>
+                    <input type="password" name="eventadmin_new_password" autocomplete="new-password"
+                           minlength="<?php echo esc_attr(EVENTADMIN_MIN_PASSWORD_LENGTH); ?>">
+                </label>
+                <p class="eventadmin-field-hint"><?php esc_html_e('You can always log in with a link sent by email instead.', 'eventadmin-volunteer-management'); ?></p>
+            <?php endif; ?>
 
             <label class="eventadmin-checkbox-label">
                 <input type="checkbox" name="eventadmin_announcements" value="1"<?php checked($announcements, 1); ?>>
@@ -168,10 +188,22 @@ function eventadmin_handle_profile_update(): void
     );
     eventadmin_save_volunteer_department_ids($user_id, array_merge($posted_departments, $preserved_hidden_departments));
 
-    $redirect_url = add_query_arg([
-        'update' => 'success',
+    $redirect_args = [
+        'update'   => 'success',
         '_wpnonce' => wp_create_nonce('eventadmin_profile_success'),
-    ]);
+    ];
+
+    // Optional password (only when password login is enabled). Passwords are taken verbatim —
+    // sanitizing would change what the user typed.
+    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+    $new_password = isset($_POST['eventadmin_new_password']) ? (string) wp_unslash($_POST['eventadmin_new_password']) : '';
+    if ($new_password !== '' && eventadmin_password_login_enabled()) {
+        if (is_wp_error(eventadmin_set_volunteer_password($user_id, $new_password))) {
+            $redirect_args['password_error'] = 'too_short';
+        }
+    }
+
+    $redirect_url = add_query_arg($redirect_args, remove_query_arg('password_error'));
 
     wp_safe_redirect($redirect_url);
     exit;

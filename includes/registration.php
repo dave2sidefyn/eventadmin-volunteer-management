@@ -232,9 +232,16 @@ function eventadmin_registration_form_shortcode(): bool|string
     $registration_success = $registration_nonce_valid && $_GET['registration'] === 'success';
     $registration_exists   = $registration_nonce_valid && $_GET['registration'] === 'exists';
     $link_requested        = $registration_nonce_valid && $_GET['registration'] === 'link_requested';
-    // Set by eventadmin_magic_login_check() for an expired or already-used login link. Only
-    // switches which form is shown, so it needs no nonce.
+    // These only switch which view / notice is shown, so they need no nonce. "expired" is set
+    // by eventadmin_magic_login_check() for an expired or already-used login link; the login
+    // errors by eventadmin_handle_password_login().
     $login_link_expired    = isset($_GET['eventadmin_login']) && $_GET['eventadmin_login'] === 'expired';
+    $login_error           = isset($_GET['eventadmin_login_error']) ? sanitize_key(wp_unslash($_GET['eventadmin_login_error'])) : '';
+    $show_login_view       = $login_link_expired || $login_error !== ''
+        || (isset($_GET['eventadmin_view']) && $_GET['eventadmin_view'] === 'login');
+    $password_enabled      = eventadmin_password_login_enabled();
+    $signup_url            = remove_query_arg(['eventadmin_view', 'eventadmin_login', 'eventadmin_login_error']);
+    $login_url             = add_query_arg('eventadmin_view', 'login', $signup_url);
 
     ob_start(); ?>
     <div class="eventadmin-form-wrapper">
@@ -250,22 +257,6 @@ function eventadmin_registration_form_shortcode(): bool|string
             <div class="eventadmin-info">
                 <?php esc_html_e('If this email address is registered, we have sent you a new login link.', 'eventadmin-volunteer-management'); ?>
             </div>
-        <?php elseif ($login_link_expired) : ?>
-            <div class="eventadmin-info">
-                <?php esc_html_e('This login link has expired or was already used. Enter your email address and we will send you a new one.', 'eventadmin-volunteer-management'); ?>
-            </div>
-            <form method="post" class="eventadmin-form">
-                <?php wp_nonce_field('eventadmin_request_login_link', 'eventadmin_request_link_nonce'); ?>
-                <label><?php esc_html_e('E-Mail', 'eventadmin-volunteer-management'); ?>
-                    <input type="email" name="eventadmin_email" required/>
-                </label>
-                <input type="hidden" name="eventadmin_redirect_to" value="<?php echo esc_url(get_permalink()); ?>"/>
-                <?php eventadmin_render_captcha_widget(); ?>
-                <input type="hidden" name="eventadmin_hp" id="eventadmin_hp" value="">
-                <input type="submit" value="<?php esc_attr_e('Send new login link', 'eventadmin-volunteer-management'); ?>"/>
-                <script>document.getElementById('eventadmin_hp').value='1';</script>
-            </form>
-            <p><a href="<?php echo esc_url(remove_query_arg('eventadmin_login')); ?>"><?php esc_html_e('Not registered yet? Sign up here.', 'eventadmin-volunteer-management'); ?></a></p>
         <?php else : ?>
             <?php
             if (shortcode_exists('nextend_social_login')) {
@@ -273,6 +264,52 @@ function eventadmin_registration_form_shortcode(): bool|string
                 echo '<hr />';
             }
             ?>
+            <nav class="eventadmin-view-tabs">
+                <a href="<?php echo esc_url($signup_url); ?>"<?php echo $show_login_view ? '' : ' class="is-active" aria-current="page"'; ?>><?php esc_html_e('I\'m new', 'eventadmin-volunteer-management'); ?></a>
+                <a href="<?php echo esc_url($login_url); ?>"<?php echo $show_login_view ? ' class="is-active" aria-current="page"' : ''; ?>><?php esc_html_e('I already have an account', 'eventadmin-volunteer-management'); ?></a>
+            </nav>
+            <?php if ($show_login_view) : ?>
+                <?php if ($login_link_expired) : ?>
+                    <div class="eventadmin-info">
+                        <?php esc_html_e('This login link has expired or was already used. Enter your email address and we will send you a new one.', 'eventadmin-volunteer-management'); ?>
+                    </div>
+                <?php elseif ($login_error === 'invalid') : ?>
+                    <div class="eventadmin-error">
+                        <?php esc_html_e('Email or password is incorrect. If you usually log in with a link, we can email you one.', 'eventadmin-volunteer-management'); ?>
+                    </div>
+                <?php elseif ($login_error === 'locked') : ?>
+                    <div class="eventadmin-error">
+                        <?php esc_html_e('Too many failed attempts. Please wait 15 minutes, or log in with a link sent by email.', 'eventadmin-volunteer-management'); ?>
+                    </div>
+                <?php endif; ?>
+                <form method="post" class="eventadmin-form">
+                    <?php wp_nonce_field('eventadmin_request_login_link', 'eventadmin_request_link_nonce'); ?>
+                    <label><?php esc_html_e('E-Mail', 'eventadmin-volunteer-management'); ?>
+                        <input type="email" name="eventadmin_email" autocomplete="email" required/>
+                    </label>
+                    <?php if ($password_enabled) : ?>
+                        <label><?php esc_html_e('Password', 'eventadmin-volunteer-management'); ?>
+                            <input type="password" name="eventadmin_password" autocomplete="current-password" required/>
+                        </label>
+                    <?php endif; ?>
+                    <input type="hidden" name="eventadmin_redirect_to" value="<?php echo esc_url(get_permalink()); ?>"/>
+                    <?php eventadmin_render_captcha_widget(); ?>
+                    <input type="hidden" name="eventadmin_hp" id="eventadmin_hp" value="">
+                    <?php if ($password_enabled) : ?>
+                        <button type="submit" name="eventadmin_login_action" value="password"><?php esc_html_e('Log in', 'eventadmin-volunteer-management'); ?></button>
+                        <p class="eventadmin-login-alt">
+                            <?php esc_html_e('Forgot your password, or don\'t have one?', 'eventadmin-volunteer-management'); ?>
+                            <?php // Clearing the password makes "send a link" unambiguous even when the
+                            // submit goes through form.submit() (reCAPTCHA v3), which drops the button's value. ?>
+                            <button type="submit" name="eventadmin_login_action" value="link" class="eventadmin-link-button" formnovalidate
+                                    onclick="this.form.eventadmin_password.value='';"><?php esc_html_e('Email me a login link', 'eventadmin-volunteer-management'); ?></button>
+                        </p>
+                    <?php else : ?>
+                        <button type="submit" name="eventadmin_login_action" value="link"><?php esc_html_e('Email me a login link', 'eventadmin-volunteer-management'); ?></button>
+                    <?php endif; ?>
+                    <script>document.getElementById('eventadmin_hp').value='1';</script>
+                </form>
+            <?php else : ?>
             <form method="post" class="eventadmin-form">
                 <?php wp_nonce_field('eventadmin_register_action', 'eventadmin_register_nonce'); ?>
                 <label><?php esc_html_e('First name', 'eventadmin-volunteer-management'); ?>
@@ -290,9 +327,10 @@ function eventadmin_registration_form_shortcode(): bool|string
                 <input type="hidden" name="eventadmin_redirect_to" value="<?php echo esc_url(get_permalink()); ?>"/>
                 <?php eventadmin_render_captcha_widget(); ?>
                 <input type="hidden" name="eventadmin_hp" id="eventadmin_hp" value="">
-                <input type="submit" name="eventadmin_register_submit" value="Register"/>
+                <input type="submit" name="eventadmin_register_submit" value="<?php esc_attr_e('Register', 'eventadmin-volunteer-management'); ?>"/>
                 <script>document.getElementById('eventadmin_hp').value='1';</script>
             </form>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
     <?php
@@ -501,7 +539,7 @@ function eventadmin_handle_registration(): void
             $site_name,
             $site_url,
             eventadmin_login_link_html($login_url)
-        ));
+        ) . eventadmin_password_tip_html((int) $user_id));
 
     // 13. Redirect with success
     wp_safe_redirect(add_query_arg([
@@ -584,17 +622,19 @@ function eventadmin_send_login_link(int $user_id, string $redirect_to = ''): boo
             wp_kses_post(__('Hello %1$s,<br><br>Your login link:<br>%2$s', 'eventadmin-volunteer-management')),
             $user->first_name,
             eventadmin_login_link_html($login_url)
-        )
+        ) . eventadmin_password_tip_html($user_id)
     );
 }
 
 add_action('init', 'eventadmin_handle_registration');
 
 /**
- * Handles the email-only "Send new login link" form shown after an expired or already-used
- * login link, so a returning volunteer doesn't have to fill in the whole registration form
- * again. Same bot protection as the registration form; one email per address per minute;
- * and always the same answer, so it can't be used to find out who is registered.
+ * Handles the "I already have an account" form on the volunteer page (also shown after an
+ * expired or already-used login link): emails a new login link, so a returning volunteer
+ * doesn't have to fill in the whole registration form again — or, if password login is
+ * enabled and they chose "Log in", hands over to eventadmin_handle_password_login(). Same bot
+ * protection as the registration form; one link email per address per minute; and always the
+ * same answer, so it can't be used to find out who is registered.
  */
 function eventadmin_handle_login_link_request(): void
 {
@@ -623,6 +663,18 @@ function eventadmin_handle_login_link_request(): void
         $redirect_to = home_url('/');
     }
 
+    // "Log in" with a password (only when that's enabled); anything else sends a login link.
+    // Passwords are taken verbatim — sanitizing would change what the user typed.
+    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+    $password = isset($_POST['eventadmin_password']) ? (string) wp_unslash($_POST['eventadmin_password']) : '';
+    $action   = isset($_POST['eventadmin_login_action']) ? sanitize_key(wp_unslash($_POST['eventadmin_login_action'])) : '';
+    if ($action === '') {
+        $action = $password !== '' ? 'password' : 'link';
+    }
+    if ($action === 'password' && eventadmin_password_login_enabled()) {
+        eventadmin_handle_password_login($email, $password, $redirect_to);
+    }
+
     $user = is_email($email) ? get_user_by('email', $email) : false;
     if ($user) {
         $throttle_key = 'eventadmin_link_request_' . md5(strtolower($email));
@@ -635,7 +687,7 @@ function eventadmin_handle_login_link_request(): void
     wp_safe_redirect(add_query_arg([
         'registration'              => 'link_requested',
         'eventadmin_register_nonce' => wp_create_nonce('eventadmin_register_action'),
-    ], remove_query_arg('eventadmin_login', $redirect_to)));
+    ], remove_query_arg(['eventadmin_login', 'eventadmin_view', 'eventadmin_login_error'], $redirect_to)));
     exit;
 }
 

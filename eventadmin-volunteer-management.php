@@ -31,6 +31,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/admin/dashboard-form-handlers
 require_once plugin_dir_path(__FILE__) . 'includes/post-types.php';
 require_once plugin_dir_path(__FILE__) . 'includes/profile.php';
 require_once plugin_dir_path(__FILE__) . 'includes/registration.php';
+require_once plugin_dir_path(__FILE__) . 'includes/password-login.php';
 require_once plugin_dir_path(__FILE__) . 'includes/shiftselector.php';
 require_once plugin_dir_path(__FILE__) . 'includes/open-positions.php';
 require_once plugin_dir_path(__FILE__) . 'includes/helpers.php';
@@ -62,6 +63,7 @@ function eventadmin_get_option_defaults(): array
     return [
         // General
         'eventadmin_suppress_wp_password_email' => 1,
+        'eventadmin_allow_password_login'       => 0,
         'eventadmin_allow_overlap'              => 0,
         'eventadmin_unassign_limit_hours'       => 0,
         'eventadmin_limit_per_year'             => 0,

@@ -104,3 +104,92 @@
     border-radius: 4px;
     color: #155724;
 }
+
+/* Neutral / error notices (the registration page's info messages had no style before) */
+.eventadmin-info,
+.eventadmin-error {
+    margin-bottom: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 4px;
+}
+
+.eventadmin-info {
+    background: #e8f4fa;
+    border: 1px solid #b6dcef;
+    color: #1d4f6b;
+}
+
+.eventadmin-error {
+    background: #fbeaea;
+    border: 1px solid #f1c3c3;
+    color: #8a1f1f;
+}
+
+/* "I'm new" / "I already have an account" switch on the volunteer page */
+.eventadmin-view-tabs {
+    display: flex;
+    margin-bottom: 1.2rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.eventadmin-view-tabs a {
+    flex: 1;
+    padding: 0.6rem 0.4rem;
+    text-align: center;
+    text-decoration: none;
+    color: #555;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+}
+
+.eventadmin-view-tabs a.is-active {
+    color: #0073aa;
+    font-weight: bold;
+    border-bottom-color: #0073aa;
+}
+
+/* Secondary action that looks like a link (e.g. "Email me a login link", "No thanks"),
+   overriding the full-width blue .eventadmin-form button style */
+.eventadmin-form button.eventadmin-link-button,
+.eventadmin-form button.eventadmin-link-button:hover {
+    width: auto;
+    padding: 0;
+    background: none;
+    color: #0073aa;
+    text-decoration: underline;
+    font-size: inherit;
+}
+
+.eventadmin-form button.eventadmin-link-button:hover {
+    color: #005d88;
+}
+
+.eventadmin-login-alt {
+    margin: 1rem 0 0;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.eventadmin-field-hint {
+    margin: -0.6rem 0 1rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* "Log in with a password next time?" banner above the cockpit */
+.eventadmin-password-prompt {
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.2rem;
+    background: #e8f4fa;
+    border: 1px solid #b6dcef;
+    border-radius: 6px;
+}
+
+.eventadmin-password-prompt p {
+    margin-top: 0;
+}
+
+.eventadmin-password-prompt .eventadmin-form button.eventadmin-link-button {
+    display: block;
+    margin: 0.8rem auto 0;
+}

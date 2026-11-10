@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-11-10T08:05:55+00:00\n"
+"POT-Creation-Date: 2026-11-10T08:23:42+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
@@ -40,7 +40,7 @@ msgstr "David Wiedmer, sidefyn GmbH"
 msgid "https://profiles.wordpress.org/davesidefyn/"
 msgstr "https://profiles.wordpress.org/davesidefyn/"
 
-#: eventadmin-volunteer-management.php:183
+#: eventadmin-volunteer-management.php:185
 msgid ""
 "EventAdmin – Volunteer Management – developed by <a "
 "href=\"mailto:dave@sidefyn.ch\">David Wiedmer, sidefyn GmbH</a>"
@@ -48,25 +48,25 @@ msgstr ""
 "EventAdmin – Volunteer Management – ontwikkeld door <a "
 "href=\"mailto:dave@sidefyn.ch\">David Wiedmer, sidefyn GmbH</a>"
 
-#: eventadmin-volunteer-management.php:246
-#: eventadmin-volunteer-management.php:275
+#: eventadmin-volunteer-management.php:248
+#: eventadmin-volunteer-management.php:277
 #: includes/admin/getting-started-checklist.php:182
 msgid "Rate 5 stars"
 msgstr "5 sterren geven"
 
-#: eventadmin-volunteer-management.php:247
-#: eventadmin-volunteer-management.php:276
+#: eventadmin-volunteer-management.php:249
+#: eventadmin-volunteer-management.php:278
 #: includes/admin/getting-started-checklist.php:183
 msgid "Donate"
 msgstr "Doneren"
 
 #. translators: %s is the plugin version number, e.g. "0.9.3"
-#: eventadmin-volunteer-management.php:270
+#: eventadmin-volunteer-management.php:272
 #, php-format
 msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s is er!"
 
-#: eventadmin-volunteer-management.php:273
+#: eventadmin-volunteer-management.php:275
 msgid ""
 "Important fix: volunteers who had already confirmed their account could be "
 "deleted by the daily cleanup of unconfirmed sign-ups after requesting a new "
@@ -79,16 +79,16 @@ msgstr ""
 "beheerder overkomen die zich met het eigen e-mailadres had geregistreerd. "
 "Dat gebeurt niet meer."
 
-#: eventadmin-volunteer-management.php:279
+#: eventadmin-volunteer-management.php:281
 msgid "Dismiss"
 msgstr "Sluiten"
 
-#: eventadmin-volunteer-management.php:309 includes/admin/settings.php:48
+#: eventadmin-volunteer-management.php:311 includes/admin/settings.php:48
 #: includes/admin/settings.php:49
 msgid "Settings"
 msgstr "Instellingen"
 
-#: eventadmin-volunteer-management.php:310 includes/admin/documentation.php:60
+#: eventadmin-volunteer-management.php:312 includes/admin/documentation.php:60
 #: includes/admin/documentation.php:61
 msgid "Documentation"
 msgstr "Documentatie"
@@ -218,7 +218,7 @@ msgstr ""
 msgid "— Select department —"
 msgstr "— Afdeling selecteren —"
 
-#: includes/admin/bulk-email.php:199 includes/admin/settings.php:773
+#: includes/admin/bulk-email.php:199 includes/admin/settings.php:789
 msgid "Sender"
 msgstr "Afzender"
 
@@ -244,7 +244,7 @@ msgid "Select PDF…"
 msgstr "PDF selecteren…"
 
 #: includes/admin/bulk-email.php:218
-#: includes/admin/dashboard-tab-cards.php:131 includes/admin/settings.php:1056
+#: includes/admin/dashboard-tab-cards.php:131 includes/admin/settings.php:1072
 msgid "Remove"
 msgstr "Verwijderen"
 
@@ -574,7 +574,7 @@ msgstr "Periode"
 #: includes/admin/dashboard-form-handlers.php:262
 #: includes/admin/dashboard-overview-page.php:277
 #: includes/admin/dashboard-tab-cards.php:112
-#: includes/admin/dashboard-tab-table.php:41 includes/admin/settings.php:780
+#: includes/admin/dashboard-tab-table.php:41 includes/admin/settings.php:796
 #: includes/admin/shift-metaboxes.php:268
 #: includes/admin/volunteer-list.php:174 includes/admin/volunteer-list.php:316
 #: includes/admin/volunteer-list.php:744
@@ -583,12 +583,12 @@ msgstr "Naam"
 
 #: includes/admin/dashboard-form-handlers.php:263
 #: includes/admin/dashboard-tab-cards.php:112
-#: includes/admin/dashboard-tab-table.php:42 includes/admin/settings.php:790
+#: includes/admin/dashboard-tab-table.php:42 includes/admin/settings.php:806
 #: includes/admin/shift-metaboxes.php:269 includes/admin/user-profile.php:252
 #: includes/admin/volunteer-list.php:145 includes/admin/volunteer-list.php:175
 #: includes/admin/volunteer-list.php:317 includes/admin/volunteer-list.php:745
-#: includes/profile.php:69 includes/registration.php:259
-#: includes/registration.php:287
+#: includes/profile.php:79 includes/registration.php:287
+#: includes/registration.php:324
 msgid "E-Mail"
 msgstr "E-mailadres"
 
@@ -809,15 +809,15 @@ msgstr "of voeg hieronder een nieuwe vrijwilliger toe"
 
 #: includes/admin/dashboard-overview-page.php:490
 #: includes/admin/dashboard-tab-cards.php:100
-#: includes/admin/volunteer-list.php:269 includes/profile.php:57
-#: includes/registration.php:278
+#: includes/admin/volunteer-list.php:269 includes/profile.php:67
+#: includes/registration.php:315
 msgid "First name"
 msgstr "Voornaam"
 
 #: includes/admin/dashboard-overview-page.php:491
 #: includes/admin/dashboard-tab-cards.php:101
-#: includes/admin/volunteer-list.php:270 includes/profile.php:62
-#: includes/registration.php:281
+#: includes/admin/volunteer-list.php:270 includes/profile.php:72
+#: includes/registration.php:318
 msgid "Last name"
 msgstr "Achternaam"
 
@@ -1443,7 +1443,7 @@ msgid "What it can do"
 msgstr "Wat het kan"
 
 #: includes/admin/documentation.php:217 includes/admin/documentation.php:601
-#: includes/admin/settings.php:603
+#: includes/admin/settings.php:619
 msgid "Security"
 msgstr "Beveiliging"
 
@@ -2750,7 +2750,10 @@ msgid ""
 "registered but haven't clicked their link yet. To invite someone you added "
 "yourself, tick \"Send login link by email\" when creating them, or use "
 "\"Send login link\" in their volunteer profile. If a link has expired or was"
-" already used, the volunteer page offers to email a new one."
+" already used, the volunteer page offers to email a new one. If you want, "
+"Settings → General → \"Password login\" additionally lets volunteers set a "
+"password in their profile and log in with it on the volunteer page — the "
+"login link stays available to everyone, e.g. when they forget it."
 msgstr ""
 "Volunteers stellen geen wachtwoord in — zowel het registratieformulier als "
 "de functie \"login opnieuw versturen\" sturen in plaats daarvan een "
@@ -2761,7 +2764,11 @@ msgstr ""
 " te nodigen die je zelf hebt toegevoegd, vink je bij het aanmaken "
 "\"Inloglink per e-mail versturen\" aan of gebruik je \"Inloglink versturen\""
 " in het vrijwilligersprofiel. Is een link verlopen of al gebruikt, dan biedt"
-" de vrijwilligerspagina aan om een nieuwe te e-mailen."
+" de vrijwilligerspagina aan om een nieuwe te e-mailen. Desgewenst kunnen "
+"vrijwilligers via Instellingen → Algemeen → \"Inloggen met wachtwoord\" "
+"daarnaast een wachtwoord instellen in hun profiel en daarmee inloggen op de "
+"vrijwilligerspagina — de inloglink blijft voor iedereen beschikbaar, "
+"bijvoorbeeld als ze het vergeten."
 
 #: includes/admin/documentation.php:670
 msgid ""
@@ -3657,22 +3664,22 @@ msgstr "Eindtijd van de dienst (opgemaakt)"
 msgid "Number of days before the shift starts"
 msgstr "Aantal dagen voor de start van de dienst"
 
-#: includes/admin/settings.php:424
+#: includes/admin/settings.php:428
 msgid "Registration"
 msgstr "Registratie"
 
-#: includes/admin/settings.php:431
+#: includes/admin/settings.php:435
 msgid "Suppress WordPress password email"
 msgstr "WordPress wachtwoord-e-mail onderdrukken"
 
-#: includes/admin/settings.php:434 includes/admin/settings.php:476
-#: includes/admin/settings.php:508 includes/admin/settings.php:524
-#: includes/admin/settings.php:540 includes/admin/settings.php:563
-#: includes/admin/settings.php:687
+#: includes/admin/settings.php:438 includes/admin/settings.php:492
+#: includes/admin/settings.php:524 includes/admin/settings.php:540
+#: includes/admin/settings.php:556 includes/admin/settings.php:579
+#: includes/admin/settings.php:703
 msgid "Yes"
 msgstr "Ja"
 
-#: includes/admin/settings.php:435
+#: includes/admin/settings.php:439
 msgid ""
 "Volunteers log in with a login link, never with a password. The registration"
 " form never sends a password email; WordPress only sends its \"set your "
@@ -3685,47 +3692,67 @@ msgstr ""
 "login of onder Gebruikers → Nieuwe toevoegen zijn aangemaakt. Indien "
 "ingeschakeld ontvangen vrijwilligers die e-mail niet."
 
-#: includes/admin/settings.php:443
+#: includes/admin/settings.php:447
+msgid "Password login"
+msgstr "Inloggen met wachtwoord"
+
+#: includes/admin/settings.php:450
+msgid "Allow volunteers to also log in with email and password"
+msgstr "Vrijwilligers toestaan om ook met e-mail en wachtwoord in te loggen"
+
+#: includes/admin/settings.php:451
+msgid ""
+"Volunteers can set a password in their profile and log in with it on the "
+"volunteer page. The login link stays available to everyone — it is still "
+"used for signing up and invitations, and whenever someone forgets their "
+"password."
+msgstr ""
+"Vrijwilligers kunnen in hun profiel een wachtwoord instellen en daarmee "
+"inloggen op de vrijwilligerspagina. De inloglink blijft voor iedereen "
+"beschikbaar — die wordt nog steeds gebruikt voor aanmelden en uitnodigingen,"
+" en wanneer iemand zijn wachtwoord vergeten is."
+
+#: includes/admin/settings.php:459
 msgid "Rules"
 msgstr "Regels"
 
-#: includes/admin/settings.php:449
+#: includes/admin/settings.php:465
 msgid "Max. shifts per year"
 msgstr "Max. diensten per jaar"
 
-#: includes/admin/settings.php:450
+#: includes/admin/settings.php:466
 msgid "Max. shifts per month"
 msgstr "Max. diensten per maand"
 
-#: includes/admin/settings.php:451
+#: includes/admin/settings.php:467
 msgid "Max. shifts per week"
 msgstr "Max. diensten per week"
 
-#: includes/admin/settings.php:452
+#: includes/admin/settings.php:468
 msgid "Max. shifts per day"
 msgstr "Max. diensten per dag"
 
-#: includes/admin/settings.php:473
+#: includes/admin/settings.php:489
 msgid "Allow overlapping shifts"
 msgstr "Overlappende diensten toestaan"
 
-#: includes/admin/settings.php:484
+#: includes/admin/settings.php:500
 msgid "Sign out possible up to X hours before start"
 msgstr "Afmelden mogelijk tot X uur voor aanvang"
 
-#: includes/admin/settings.php:486 includes/shiftselector.php:429
+#: includes/admin/settings.php:502 includes/shiftselector.php:429
 msgid "hours"
 msgstr "uur"
 
-#: includes/admin/settings.php:494
+#: includes/admin/settings.php:510
 msgid "Admin menu"
 msgstr "Beheermenu"
 
-#: includes/admin/settings.php:505
+#: includes/admin/settings.php:521
 msgid "Hide \"All Shifts\" menu item"
 msgstr "Menu-item \"Alle diensten\" verbergen"
 
-#: includes/admin/settings.php:509
+#: includes/admin/settings.php:525
 msgid ""
 "Hides the classic shift list screen from the sidebar — Manager covers the "
 "same day-to-day work. The screen itself still works if you have a direct "
@@ -3735,11 +3762,11 @@ msgstr ""
 "hetzelfde dagelijkse werk. Het scherm zelf werkt nog steeds als je er een "
 "directe link naartoe hebt."
 
-#: includes/admin/settings.php:521
+#: includes/admin/settings.php:537
 msgid "Hide \"Add Shift\" menu item"
 msgstr "Menu-item \"Dienst toevoegen\" verbergen"
 
-#: includes/admin/settings.php:525
+#: includes/admin/settings.php:541
 msgid ""
 "Hides the classic \"Add new shift\" screen from the sidebar — Manager's own "
 "\"+ Add shift\" button covers the same task. The screen itself still works "
@@ -3749,11 +3776,11 @@ msgstr ""
 "de eigen \"+ Dienst toevoegen\"-knop van Manager dekt dezelfde taak. Het "
 "scherm zelf werkt nog steeds als je er een directe link naartoe hebt."
 
-#: includes/admin/settings.php:537
+#: includes/admin/settings.php:553
 msgid "Hide \"Departments\" menu item"
 msgstr "Menu-item \"Afdelingen\" verbergen"
 
-#: includes/admin/settings.php:541
+#: includes/admin/settings.php:557
 msgid ""
 "Hides the department management screen from the sidebar — Manager's own "
 "\"Departments\" link (in the \"Add shift\" dropdown) covers the same task. "
@@ -3764,15 +3791,15 @@ msgstr ""
 "dezelfde taak. Het scherm zelf werkt nog steeds als je er een directe link "
 "naartoe hebt."
 
-#: includes/admin/settings.php:549
+#: includes/admin/settings.php:565
 msgid "API access"
 msgstr "API-toegang"
 
-#: includes/admin/settings.php:560
+#: includes/admin/settings.php:576
 msgid "Allow API access"
 msgstr "API-toegang toestaan"
 
-#: includes/admin/settings.php:564
+#: includes/admin/settings.php:580
 msgid ""
 "Exposes shifts and dashboard data via the WordPress REST API (at /wp-"
 "json/eventadmin/v1/), for use with MCP or other external integrations. Only "
@@ -3785,19 +3812,19 @@ msgstr ""
 "geïdentificeerd met een WordPress-toepassingswachtwoord (Gebruikers → jouw "
 "profiel → Toepassingswachtwoorden)."
 
-#: includes/admin/settings.php:572
+#: includes/admin/settings.php:588
 msgid "Connect"
 msgstr "Verbinden"
 
-#: includes/admin/settings.php:610
+#: includes/admin/settings.php:626
 msgid "CAPTCHA provider"
 msgstr "CAPTCHA-aanbieder"
 
-#: includes/admin/settings.php:614
+#: includes/admin/settings.php:630
 msgid "None"
 msgstr "Geen"
 
-#: includes/admin/settings.php:625
+#: includes/admin/settings.php:641
 msgid ""
 "Adds a CAPTCHA challenge to the volunteer registration form to block "
 "automated spam registrations."
@@ -3807,12 +3834,12 @@ msgstr ""
 
 #. translators: %s = link to the Simple Cloudflare Turnstile plugin on
 #. WordPress.org
-#: includes/admin/settings.php:630
+#: includes/admin/settings.php:646
 #, php-format
 msgid "Requires the free %s plugin to be installed and activated."
 msgstr "Vereist dat de gratis plugin %s is geïnstalleerd en geactiveerd."
 
-#: includes/admin/settings.php:634
+#: includes/admin/settings.php:650
 msgid ""
 "The Simple Cloudflare Turnstile plugin is active but has no site key/secret "
 "key configured yet. Until it is configured, registration is blocked for "
@@ -3822,11 +3849,11 @@ msgstr ""
 "sitesleutel/geheime sleutel geconfigureerd. Zolang dit niet is ingesteld, is"
 " registratie voor iedereen geblokkeerd."
 
-#: includes/admin/settings.php:643
+#: includes/admin/settings.php:659
 msgid "CAPTCHA site key"
 msgstr "CAPTCHA-sitesleutel"
 
-#: includes/admin/settings.php:646
+#: includes/admin/settings.php:662
 msgid ""
 "Get your keys from the provider's admin console. Not used for Cloudflare "
 "Turnstile — configure its site key in the Simple Cloudflare Turnstile plugin"
@@ -3836,11 +3863,11 @@ msgstr ""
 "voor Cloudflare Turnstile — configureer de sitesleutel in plaats daarvan in "
 "de instellingen van de Simple Cloudflare Turnstile-plugin."
 
-#: includes/admin/settings.php:654
+#: includes/admin/settings.php:670
 msgid "CAPTCHA secret key"
 msgstr "CAPTCHA-geheime sleutel"
 
-#: includes/admin/settings.php:657
+#: includes/admin/settings.php:673
 msgid ""
 "Not used for Cloudflare Turnstile — configure its secret key in the Simple "
 "Cloudflare Turnstile plugin settings instead."
@@ -3848,11 +3875,11 @@ msgstr ""
 "Niet gebruikt voor Cloudflare Turnstile — configureer de geheime sleutel in "
 "plaats daarvan in de instellingen van de Simple Cloudflare Turnstile-plugin."
 
-#: includes/admin/settings.php:665
+#: includes/admin/settings.php:681
 msgid "reCAPTCHA v3 score threshold"
 msgstr "reCAPTCHA v3 scoredrempel"
 
-#: includes/admin/settings.php:669
+#: includes/admin/settings.php:685
 msgid ""
 "Scores below this value are treated as bots (0.0 = all pass, 1.0 = all "
 "blocked). Default: 0.5. Only applies to reCAPTCHA v3."
@@ -3860,15 +3887,15 @@ msgstr ""
 "Scores onder deze waarde worden als bots beschouwd (0.0 = alles door, 1.0 = "
 "alles geblokkeerd). Standaard: 0.5. Geldt alleen voor reCAPTCHA v3."
 
-#: includes/admin/settings.php:677
+#: includes/admin/settings.php:693
 msgid "Volunteer Shift Selector"
 msgstr "Dienstkiezer voor vrijwilligers"
 
-#: includes/admin/settings.php:684
+#: includes/admin/settings.php:700
 msgid "Show full shifts to volunteers"
 msgstr "Volle diensten tonen aan Volunteers"
 
-#: includes/admin/settings.php:688
+#: includes/admin/settings.php:704
 msgid ""
 "If enabled, a \"Full shifts\" section is shown on the volunteer shift "
 "selector page."
@@ -3876,57 +3903,57 @@ msgstr ""
 "Indien ingeschakeld, wordt op de Volunteer­dienstpagina een sectie \"Volle "
 "diensten\" weergegeven."
 
-#: includes/admin/settings.php:696
+#: includes/admin/settings.php:712
 msgid "Volunteer shift filters"
 msgstr "Dienstfilters voor vrijwilligers"
 
-#: includes/admin/settings.php:700
+#: includes/admin/settings.php:716
 msgid "Text search"
 msgstr "Tekstzoekopdracht"
 
-#: includes/admin/settings.php:701
+#: includes/admin/settings.php:717
 msgid "Date filter"
 msgstr "Datumfilter"
 
-#: includes/admin/settings.php:702
+#: includes/admin/settings.php:718
 msgid "Category filter"
 msgstr "Categoriefilter"
 
-#: includes/admin/settings.php:710
+#: includes/admin/settings.php:726
 msgid "Choose which filter controls appear on the volunteer shift selector."
 msgstr ""
 "Kies welke filteropties worden getoond op de dienstkiezer voor "
 "vrijwilligers."
 
-#: includes/admin/settings.php:718
+#: includes/admin/settings.php:734
 msgid "Formatting"
 msgstr "Opmaak"
 
-#: includes/admin/settings.php:725
+#: includes/admin/settings.php:741
 msgid "Date format (shift start)"
 msgstr "Datumnotatie (begin dienst)"
 
-#: includes/admin/settings.php:731 includes/admin/settings.php:749
+#: includes/admin/settings.php:747 includes/admin/settings.php:765
 msgid "Example:"
 msgstr "Voorbeeld:"
 
-#: includes/admin/settings.php:732 includes/admin/settings.php:750
+#: includes/admin/settings.php:748 includes/admin/settings.php:766
 msgid "Default:"
 msgstr "Standaard:"
 
-#: includes/admin/settings.php:733 includes/admin/settings.php:751
+#: includes/admin/settings.php:749 includes/admin/settings.php:767
 msgid "Common tokens"
 msgstr "Veelgebruikte tokens"
 
-#: includes/admin/settings.php:743
+#: includes/admin/settings.php:759
 msgid "Time format (shift end)"
 msgstr "Tijdnotatie (einde dienst)"
 
-#: includes/admin/settings.php:761 includes/admin/settings.php:875
+#: includes/admin/settings.php:777 includes/admin/settings.php:891
 msgid "Custom CSS"
 msgstr "Aangepaste CSS"
 
-#: includes/admin/settings.php:765
+#: includes/admin/settings.php:781
 msgid ""
 "Additional CSS injected on the frontend. Use this for theme-specific "
 "adjustments without modifying your theme files."
@@ -3934,11 +3961,11 @@ msgstr ""
 "Extra CSS dat op de frontend wordt ingevoegd. Gebruik dit voor thema-"
 "specifieke aanpassingen zonder je themabestanden te bewerken."
 
-#: includes/admin/settings.php:800
+#: includes/admin/settings.php:816
 msgid "Email Design"
 msgstr "E-mailontwerp"
 
-#: includes/admin/settings.php:802
+#: includes/admin/settings.php:818
 msgid ""
 "These apply to every email the plugin sends — sign-up confirmations, "
 "reminders, and announcements."
@@ -3946,47 +3973,47 @@ msgstr ""
 "Deze gelden voor elke e-mail die de plugin verstuurt — aanmeldbevestigingen,"
 " herinneringen en aankondigingen."
 
-#: includes/admin/settings.php:809
+#: includes/admin/settings.php:825
 msgid "Header color"
 msgstr "Kleur van de kop"
 
-#: includes/admin/settings.php:813
+#: includes/admin/settings.php:829
 msgid "Use a custom color"
 msgstr "Aangepaste kleur gebruiken"
 
-#: includes/admin/settings.php:815
+#: includes/admin/settings.php:831
 msgid "Default is a dark blue gradient."
 msgstr "Standaard is een donkerblauw verloop."
 
-#: includes/admin/settings.php:823
+#: includes/admin/settings.php:839
 msgid "Header text color"
 msgstr "Tekstkleur in de kop"
 
-#: includes/admin/settings.php:827
+#: includes/admin/settings.php:843
 msgid "Choose a color that stays readable against your header color/logo."
 msgstr "Kies een kleur die goed leesbaar blijft tegen je koptekstkleur/logo."
 
-#: includes/admin/settings.php:835
+#: includes/admin/settings.php:851
 msgid "Header title"
 msgstr "Titel in de kop"
 
-#: includes/admin/settings.php:839 includes/admin/settings.php:851
+#: includes/admin/settings.php:855 includes/admin/settings.php:867
 msgid "Leave empty to hide this line."
 msgstr "Laat leeg om deze regel te verbergen."
 
-#: includes/admin/settings.php:847
+#: includes/admin/settings.php:863
 msgid "Header subtitle"
 msgstr "Ondertitel in de kop"
 
-#: includes/admin/settings.php:859
+#: includes/admin/settings.php:875
 msgid "Header logo"
 msgstr "Logo in de kop"
 
-#: includes/admin/settings.php:867
+#: includes/admin/settings.php:883
 msgid "Footer"
 msgstr "Voettekst"
 
-#: includes/admin/settings.php:879
+#: includes/admin/settings.php:895
 msgid ""
 "Advanced: extra CSS added to every email. Support varies a lot by email "
 "client (e.g. Outlook ignores it entirely) — use it for minor tweaks, not "
@@ -3996,31 +4023,31 @@ msgstr ""
 "verschilt sterk per e-mailclient (Outlook negeert het bijvoorbeeld volledig)"
 " — gebruik het voor kleine aanpassingen, niet voor iets essentieels."
 
-#: includes/admin/settings.php:887
+#: includes/admin/settings.php:903
 msgid "Volunteer Notifications"
 msgstr "Vrijwilligersmeldingen"
 
-#: includes/admin/settings.php:894 includes/admin/settings.php:951
+#: includes/admin/settings.php:910 includes/admin/settings.php:967
 msgid "Email Subject (Sign up)"
 msgstr "E-mailonderwerp (Aanmelden)"
 
-#: includes/admin/settings.php:905 includes/admin/settings.php:962
+#: includes/admin/settings.php:921 includes/admin/settings.php:978
 msgid "Email Text (Sign up)"
 msgstr "E-mailtekst (Aanmelden)"
 
-#: includes/admin/settings.php:918 includes/admin/settings.php:975
+#: includes/admin/settings.php:934 includes/admin/settings.php:991
 msgid "Email Subject (Sign out)"
 msgstr "E-mailonderwerp (Afmelden)"
 
-#: includes/admin/settings.php:929 includes/admin/settings.php:986
+#: includes/admin/settings.php:945 includes/admin/settings.php:1002
 msgid "Email Text (Sign out)"
 msgstr "E-mailtekst (Afmelden)"
 
-#: includes/admin/settings.php:942
+#: includes/admin/settings.php:958
 msgid "Organizer Notifications"
 msgstr "Meldingen aan organisator"
 
-#: includes/admin/settings.php:944
+#: includes/admin/settings.php:960
 msgid ""
 "These go to the shift's organizer (its linked user and/or manual organizer "
 "email, or the notification email above if neither is set) — not to the "
@@ -4030,15 +4057,15 @@ msgstr ""
 "handmatige organisator-e-mail, of anders het meldings-e-mailadres hierboven)"
 " — niet naar de volunteer."
 
-#: includes/admin/settings.php:999
+#: includes/admin/settings.php:1015
 msgid "Shift Reminders"
 msgstr "Dienstherinneringen"
 
-#: includes/admin/settings.php:1006
+#: includes/admin/settings.php:1022
 msgid "Send reminder X days before start"
 msgstr "Herinnering verzenden X dagen voor aanvang"
 
-#: includes/admin/settings.php:1010
+#: includes/admin/settings.php:1026
 msgid ""
 "Comma-separated whole days, e.g. 7, 1. Negative or zero values are ignored. "
 "Leave empty to turn reminder emails off entirely."
@@ -4046,19 +4073,19 @@ msgstr ""
 "Kommagescheiden hele dagen, bijv. 7, 1. Negatieve waarden of nul worden "
 "genegeerd. Laat leeg om herinnerings-e-mails volledig uit te schakelen."
 
-#: includes/admin/settings.php:1018
+#: includes/admin/settings.php:1034
 msgid "Email Subject (Reminder)"
 msgstr "E-mailonderwerp (Herinnering)"
 
-#: includes/admin/settings.php:1029
+#: includes/admin/settings.php:1045
 msgid "Email Text (Reminder)"
 msgstr "E-mailtekst (Herinnering)"
 
-#: includes/admin/settings.php:1055
+#: includes/admin/settings.php:1071
 msgid "Select logo…"
 msgstr "Logo selecteren…"
 
-#: includes/admin/settings.php:1057
+#: includes/admin/settings.php:1073
 msgid ""
 "Shown at the top of every email instead of the site name. Recommended: a "
 "wide image with a transparent background, under 200px tall."
@@ -4068,7 +4095,7 @@ msgstr ""
 "hoog."
 
 #. translators: %s = site name
-#: includes/admin/settings.php:1067 includes/notifications.php:636
+#: includes/admin/settings.php:1083 includes/notifications.php:636
 #: includes/notifications.php:769
 #, php-format
 msgid "This email was sent by %s."
@@ -4076,46 +4103,46 @@ msgstr "Deze e-mail is verzonden door %s."
 
 #. translators: %s is the default footer text that will be used if this field
 #. is left empty
-#: includes/admin/settings.php:1080
+#: includes/admin/settings.php:1096
 #, php-format
 msgid "Shown at the bottom of every email. Leave empty to use the default: \"%s\""
 msgstr ""
 "Wordt onderaan elke e-mail getoond. Laat leeg om de standaard te gebruiken: "
 "\"%s\""
 
-#: includes/admin/settings.php:1116
+#: includes/admin/settings.php:1132
 msgid "Sign up"
 msgstr "Aanmelden"
 
-#: includes/admin/settings.php:1117
+#: includes/admin/settings.php:1133
 msgid "Sign out"
 msgstr "Afmelden"
 
-#: includes/admin/settings.php:1118
+#: includes/admin/settings.php:1134
 msgid "Organizer: Sign up"
 msgstr "Organisator: Aanmelden"
 
-#: includes/admin/settings.php:1119
+#: includes/admin/settings.php:1135
 msgid "Organizer: Sign out"
 msgstr "Organisator: Afmelden"
 
-#: includes/admin/settings.php:1120 includes/admin/user-profile.php:290
+#: includes/admin/settings.php:1136 includes/admin/user-profile.php:290
 msgid "Reminder"
 msgstr "Herinnering"
 
-#: includes/admin/settings.php:1127
+#: includes/admin/settings.php:1143
 msgid "Live preview of emails (with example values):"
 msgstr "Live voorvertoning van e-mails (met voorbeeldwaarden):"
 
-#: includes/admin/settings.php:1133
+#: includes/admin/settings.php:1149
 msgid "Subject:"
 msgstr "Onderwerp:"
 
-#: includes/admin/settings.php:1177
+#: includes/admin/settings.php:1193
 msgid "Select a logo image"
 msgstr "Selecteer een logo-afbeelding"
 
-#: includes/admin/settings.php:1178
+#: includes/admin/settings.php:1194
 msgid "Use this image"
 msgstr "Deze afbeelding gebruiken"
 
@@ -4165,7 +4192,7 @@ msgstr ""
 
 #: includes/admin/shift-details-modal.php:94
 #: includes/admin/user-profile.php:220 includes/admin/volunteer-list.php:814
-#: includes/profile.php:107
+#: includes/profile.php:127
 msgid "Save"
 msgstr "Opslaan"
 
@@ -4542,28 +4569,28 @@ msgstr "Log eerst in."
 msgid "Phone number missing"
 msgstr "Telefoonnummer ontbreekt"
 
-#: includes/cockpit.php:32
+#: includes/cockpit.php:37
 msgid "📋 Shifts"
 msgstr "📋 Diensten"
 
-#: includes/cockpit.php:34
+#: includes/cockpit.php:39
 msgid "👤 Profile"
 msgstr "👤 Profiel"
 
-#: includes/cockpit.php:80 includes/shiftselector.php:341
+#: includes/cockpit.php:85 includes/shiftselector.php:341
 msgid "Assign"
 msgstr "Aanmelden"
 
-#: includes/cockpit.php:81 includes/shiftselector.php:338
+#: includes/cockpit.php:86 includes/shiftselector.php:338
 msgid "Unassign"
 msgstr "Afmelden"
 
-#: includes/cockpit.php:82
+#: includes/cockpit.php:87
 msgid "Unknown error"
 msgstr "Onbekende fout"
 
 #. translators: %d = hours before shift start
-#: includes/cockpit.php:85
+#: includes/cockpit.php:90
 #, php-format
 msgid "Unassignment not possible from %d hours before start"
 msgstr "Afmelden niet meer mogelijk vanaf %d uur voor aanvang"
@@ -4625,6 +4652,56 @@ msgstr "Overig"
 #: includes/open-positions.php:236
 msgid "We still need volunteers in:"
 msgstr "We zoeken nog vrijwilligers voor:"
+
+#. translators: %d = minimum number of characters
+#: includes/password-login.php:64 includes/password-login.php:208
+#, php-format
+msgid "Your password must be at least %d characters long."
+msgstr "Je wachtwoord moet minstens %d tekens lang zijn."
+
+#: includes/password-login.php:90
+msgid ""
+"Tip: once you're logged in, you can set a password in your profile and use "
+"it next time. If you don't, that's fine — you can always request a new login"
+" link like this one."
+msgstr ""
+"Tip: zodra je bent ingelogd, kun je in je profiel een wachtwoord instellen "
+"en dat de volgende keer gebruiken. Doe je dat niet, geen probleem — je kunt "
+"altijd een nieuwe inloglink zoals deze aanvragen."
+
+#: includes/password-login.php:188
+msgid ""
+"Your password is saved. Next time you can log in with your email address and"
+" password — or keep using a login link."
+msgstr ""
+"Je wachtwoord is opgeslagen. De volgende keer kun je inloggen met je "
+"e-mailadres en wachtwoord — of gewoon een inloglink blijven gebruiken."
+
+#: includes/password-login.php:203
+msgid "Want to log in with a password next time?"
+msgstr "Wil je de volgende keer met een wachtwoord inloggen?"
+
+#: includes/password-login.php:204
+msgid "Optional: you can also keep logging in with a link sent by email."
+msgstr ""
+"Optioneel: je kunt ook gewoon blijven inloggen met een link per e-mail."
+
+#: includes/password-login.php:214
+msgid "Choose a password"
+msgstr "Kies een wachtwoord"
+
+#: includes/password-login.php:217
+msgid "Set password"
+msgstr "Wachtwoord instellen"
+
+#: includes/password-login.php:218
+msgid "No thanks"
+msgstr "Nee, bedankt"
+
+#: includes/password-login.php:237 includes/registration.php:450
+#: includes/registration.php:646
+msgid "Invalid form submission."
+msgstr "Ongeldige formulierinzending."
 
 #: includes/post-types.php:17 includes/post-types.php:28
 msgid "Shifts"
@@ -4702,7 +4779,17 @@ msgstr "Nieuwe afdelingsnaam"
 msgid "✅ Your profile was saved successfully."
 msgstr "✅ Je profiel is succesvol opgeslagen."
 
-#: includes/profile.php:51
+#. translators: %d = minimum number of characters
+#: includes/profile.php:53
+#, php-format
+msgid ""
+"Your other changes were saved, but the password was not: it must be at least"
+" %d characters long."
+msgstr ""
+"Je andere wijzigingen zijn opgeslagen, maar het wachtwoord niet: het moet "
+"minstens %d tekens lang zijn."
+
+#: includes/profile.php:61
 msgid ""
 "<strong>Profile incomplete:</strong> Please enter your phone number so we "
 "can reach you in case of last-minute changes."
@@ -4710,27 +4797,39 @@ msgstr ""
 "<strong>Profiel onvolledig:</strong> Voer je telefoonnummer in zodat we je "
 "kunnen bereiken bij last-minutewijzigingen."
 
-#: includes/profile.php:66 includes/registration.php:284
+#: includes/profile.php:76 includes/registration.php:321
 msgid "Phone number"
 msgstr "Telefoonnummer"
 
-#: includes/profile.php:76
+#: includes/profile.php:86
+msgid "New password (leave empty to keep your current one)"
+msgstr "Nieuw wachtwoord (leeg laten om je huidige te behouden)"
+
+#: includes/profile.php:87
+msgid "Password (optional)"
+msgstr "Wachtwoord (optioneel)"
+
+#: includes/profile.php:91
+msgid "You can always log in with a link sent by email instead."
+msgstr "Je kunt in plaats daarvan altijd inloggen met een link per e-mail."
+
+#: includes/profile.php:96
 msgid "Receive announcements about new shifts and events"
 msgstr "Aankondigingen over nieuwe diensten en evenementen ontvangen"
 
-#: includes/profile.php:90
+#: includes/profile.php:110
 msgid "Advanced: notify me about specific departments"
 msgstr "Geavanceerd: meldingen voor specifieke afdelingen"
 
-#: includes/profile.php:91
+#: includes/profile.php:111
 msgid "Also notify me about new shifts in:"
 msgstr "Stuur me ook een melding bij nieuwe diensten in:"
 
-#: includes/profile.php:143
+#: includes/profile.php:163
 msgid "This email address is already used by another user."
 msgstr "Dit e-mailadres is al in gebruik door een andere gebruiker."
 
-#: includes/registration.php:243
+#: includes/registration.php:250
 msgid ""
 "Thank you for your registration. You will receive an email with your login "
 "link shortly."
@@ -4738,20 +4837,28 @@ msgstr ""
 "Bedankt voor je registratie. Je ontvangt binnenkort een e-mail met je "
 "inloglink."
 
-#: includes/registration.php:247
+#: includes/registration.php:254
 msgid "This email is already registered. We have resent your login link."
 msgstr ""
 "Dit e-mailadres is al geregistreerd. We hebben je inloglink opnieuw "
 "verzonden."
 
-#: includes/registration.php:251
+#: includes/registration.php:258
 msgid ""
 "If this email address is registered, we have sent you a new login link."
 msgstr ""
 "Als dit e-mailadres geregistreerd is, hebben we je een nieuwe inloglink "
 "gestuurd."
 
-#: includes/registration.php:255
+#: includes/registration.php:268
+msgid "I'm new"
+msgstr "Ik ben nieuw"
+
+#: includes/registration.php:269
+msgid "I already have an account"
+msgstr "Ik heb al een account"
+
+#: includes/registration.php:274
 msgid ""
 "This login link has expired or was already used. Enter your email address "
 "and we will send you a new one."
@@ -4759,41 +4866,65 @@ msgstr ""
 "Deze inloglink is verlopen of al gebruikt. Vul je e-mailadres in, dan sturen"
 " we je een nieuwe."
 
-#: includes/registration.php:265
-msgid "Send new login link"
-msgstr "Nieuwe inloglink versturen"
+#: includes/registration.php:278
+msgid ""
+"Email or password is incorrect. If you usually log in with a link, we can "
+"email you one."
+msgstr ""
+"E-mailadres of wachtwoord is onjuist. Log je meestal in met een link? Dan "
+"kunnen we je er een mailen."
 
-#: includes/registration.php:268
-msgid "Not registered yet? Sign up here."
-msgstr "Nog niet geregistreerd? Meld je hier aan."
+#: includes/registration.php:282
+msgid ""
+"Too many failed attempts. Please wait 15 minutes, or log in with a link sent"
+" by email."
+msgstr ""
+"Te veel mislukte pogingen. Wacht 15 minuten of log in met een link per "
+"e-mail."
 
-#: includes/registration.php:412 includes/registration.php:606
-msgid "Invalid form submission."
-msgstr "Ongeldige formulierinzending."
+#: includes/registration.php:291
+msgid "Password"
+msgstr "Wachtwoord"
 
-#: includes/registration.php:432 includes/registration.php:618
+#: includes/registration.php:299
+msgid "Log in"
+msgstr "Inloggen"
+
+#: includes/registration.php:301
+msgid "Forgot your password, or don't have one?"
+msgstr "Wachtwoord vergeten of heb je er nog geen?"
+
+#: includes/registration.php:305 includes/registration.php:308
+msgid "Email me a login link"
+msgstr "Mail me een inloglink"
+
+#: includes/registration.php:330
+msgid "Register"
+msgstr "Registreren"
+
+#: includes/registration.php:470 includes/registration.php:658
 msgid "CAPTCHA verification failed. Please try again."
 msgstr "CAPTCHA-verificatie mislukt. Probeer het opnieuw."
 
-#: includes/registration.php:443
+#: includes/registration.php:481
 msgid "Please enter a valid email address."
 msgstr "Voer een geldig e-mailadres in."
 
-#: includes/registration.php:448
+#: includes/registration.php:486
 msgid "Please fill in all required fields."
 msgstr "Vul alle verplichte velden in."
 
-#: includes/registration.php:481
+#: includes/registration.php:519
 msgid "Registration error. Please try again later."
 msgstr "Registratiefout. Probeer het later opnieuw."
 
-#: includes/registration.php:496 includes/registration.php:581
+#: includes/registration.php:534 includes/registration.php:619
 msgid "Your login"
 msgstr "Je inloggegevens"
 
 #. translators: %1$s = first name, %2$s = site name, %3$s = site url, %4$s =
 #. login url
-#: includes/registration.php:499
+#: includes/registration.php:537
 #, php-format
 msgid ""
 "Hello %1$s,<br><br>Thank you for registering at %2$s (%3$s).<br><br>Here is "
@@ -4803,7 +4934,7 @@ msgstr ""
 "is je inloglink:<br>%4$s"
 
 #. translators: %1$s = first name, %2$s = login url
-#: includes/registration.php:584
+#: includes/registration.php:622
 #, php-format
 msgid "Hello %1$s,<br><br>Your login link:<br>%2$s"
 msgstr "Hallo %1$s,<br><br>Je inloglink:<br>%2$s"
@@ -4935,6 +5066,33 @@ msgstr "Je bent succesvol afgemeld."
 #: includes/shiftselector.php:456
 msgid "You are not signed up for this shift."
 msgstr "Je bent niet aangemeld voor deze dienst."
+
+#~ msgid ""
+#~ "Volunteers don't set a password — the registration form and the \"resend "
+#~ "login\" option both email a one-time login link (valid ~24 hours) instead. "
+#~ "It's simpler for occasional volunteers, and it's what powers the "
+#~ "\"Unverified\" badge (see Volunteer List & Badges) for accounts that "
+#~ "registered but haven't clicked their link yet. To invite someone you added "
+#~ "yourself, tick \"Send login link by email\" when creating them, or use "
+#~ "\"Send login link\" in their volunteer profile. If a link has expired or was"
+#~ " already used, the volunteer page offers to email a new one."
+#~ msgstr ""
+#~ "Volunteers stellen geen wachtwoord in — zowel het registratieformulier als "
+#~ "de functie \"login opnieuw versturen\" sturen in plaats daarvan een "
+#~ "eenmalige inloglink (ongeveer 24 uur geldig). Dat is eenvoudiger voor "
+#~ "incidentele volunteers, en het is ook wat achter de badge \"Niet "
+#~ "geverifieerd\" zit (zie Volunteer-lijst & badges) voor accounts die zich "
+#~ "hebben geregistreerd maar hun link nog niet hebben aangeklikt. Om iemand uit"
+#~ " te nodigen die je zelf hebt toegevoegd, vink je bij het aanmaken "
+#~ "\"Inloglink per e-mail versturen\" aan of gebruik je \"Inloglink versturen\""
+#~ " in het vrijwilligersprofiel. Is een link verlopen of al gebruikt, dan biedt"
+#~ " de vrijwilligerspagina aan om een nieuwe te e-mailen."
+
+#~ msgid "Send new login link"
+#~ msgstr "Nieuwe inloglink versturen"
+
+#~ msgid "Not registered yet? Sign up here."
+#~ msgstr "Nog niet geregistreerd? Meld je hier aan."
 
 #~ msgid ""
 #~ "Volunteers don't set a password — the registration form and the \"resend "
