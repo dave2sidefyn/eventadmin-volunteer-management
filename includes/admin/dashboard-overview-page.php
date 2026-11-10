@@ -382,29 +382,36 @@ function eventadmin_render_overview_toolbar(
  */
 function eventadmin_render_overview_heading(string $page_title, string $view): void
 {
+    echo '<div class="eventadmin-page-header">';
     echo '<h1 class="wp-heading-inline">' . esc_html($page_title) . '</h1>';
 
     if ($view !== 'dashboard' && current_user_can('eventadmin_manage_shifts')) {
-        echo '<div class="eventadmin-split-button eventadmin-heading-actions">';
+        // Right-aligned like WordPress's own page actions: the secondary actions as plain
+        // buttons, then the primary "+ Add shift" — whose menu only holds other ways of
+        // creating shifts, not unrelated actions like exporting.
+        echo '<div class="eventadmin-page-actions">';
+        if (current_user_can('eventadmin_manage_departments')) {
+            echo '<a href="' . esc_url(admin_url('edit-tags.php?taxonomy=eventadmin_shift_category&post_type=eventadmin_shift')) . '" class="button">' . esc_html__('Departments', 'eventadmin-volunteer-management') . '</a>';
+        }
+        echo '<button type="submit" form="eventadmin-export-all-form" class="button" title="' . esc_attr__('Export all shifts (CSV)', 'eventadmin-volunteer-management') . '">' . esc_html__('Export CSV', 'eventadmin-volunteer-management') . '</button>';
+        echo '<div class="eventadmin-split-button">';
         echo '<button type="button" id="eventadmin-open-new-shift-modal" class="button button-primary">+ ' . esc_html__('Add shift', 'eventadmin-volunteer-management') . '</button>';
         echo '<button type="button" id="eventadmin-split-button-toggle" class="button button-primary eventadmin-split-button-toggle" aria-haspopup="true" aria-expanded="false" aria-label="' . esc_attr__('More options', 'eventadmin-volunteer-management') . '">';
         echo '<span aria-hidden="true">&#9662;</span>';
         echo '</button>';
         echo '<div id="eventadmin-split-button-menu" class="eventadmin-split-button-menu" style="display:none;">';
         echo '<button type="button" id="eventadmin-open-copy-shifts-modal" class="eventadmin-timeline-menu-item">' . esc_html__('Copy shifts to another day', 'eventadmin-volunteer-management') . '</button>';
-        echo '<button type="submit" form="eventadmin-export-all-form" class="eventadmin-timeline-menu-item">' . esc_html__('Export all shifts (CSV)', 'eventadmin-volunteer-management') . '</button>';
-        if (current_user_can('eventadmin_manage_departments')) {
-            echo '<a href="' . esc_url(admin_url('edit-tags.php?taxonomy=eventadmin_shift_category&post_type=eventadmin_shift')) . '" class="eventadmin-timeline-menu-item">' . esc_html__('Departments', 'eventadmin-volunteer-management') . '</a>';
-        }
+        echo '</div>';
         echo '</div>';
         echo '</div>';
 
-        // Target of the "Export all shifts (CSV)" menu item — kept outside the menu markup.
+        // Target of the "Export CSV" button.
         echo '<form method="post" id="eventadmin-export-all-form" style="display:none;">';
         wp_nonce_field('eventadmin_export_all', 'eventadmin_export_all_nonce');
         echo '<input type="hidden" name="eventadmin_export_all" value="1">';
         echo '</form>';
     }
+    echo '</div>';
 
     echo '<hr class="wp-header-end">';
 }

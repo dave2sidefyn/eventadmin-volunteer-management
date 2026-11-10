@@ -125,18 +125,21 @@ function eventadmin_volunteer_list_page(): void
         : 'volunteers';
 
     echo '<div class="wrap">';
+    echo '<div class="eventadmin-page-header">';
     echo '<h1 class="wp-heading-inline">' . esc_html__('Volunteers', 'eventadmin-volunteer-management') . '</h1>';
     if ($active_tab === 'volunteers') {
-        // One action group next to the title, like the Manager page: the common action one
-        // click away, the rest in its menu.
-        echo '<div class="eventadmin-split-button eventadmin-heading-actions">';
+        // Right-aligned page actions, like the Manager page: export as its own button, the
+        // primary "+ Create new volunteer" with the other way of adding volunteers in its menu.
+        echo '<div class="eventadmin-page-actions">';
+        // Exports the whole roster (every online volunteer), independent of the filters
+        // and the client-side search — see eventadmin_export_volunteers_csv().
+        echo '<button type="submit" form="eventadmin-export-volunteers-form" class="button" title="' . esc_attr__('Export all volunteers (CSV)', 'eventadmin-volunteer-management') . '">' . esc_html__('Export CSV', 'eventadmin-volunteer-management') . '</button>';
+        echo '<div class="eventadmin-split-button">';
         echo '<button type="button" class="button button-primary eventadmin-modal-open" data-target="#eventadmin-create-volunteer-modal">+ ' . esc_html__('Create new volunteer', 'eventadmin-volunteer-management') . '</button>';
         echo '<button type="button" id="eventadmin-vol-actions-toggle" class="button button-primary eventadmin-split-button-toggle" aria-haspopup="true" aria-expanded="false" aria-label="' . esc_attr__('More options', 'eventadmin-volunteer-management') . '"><span aria-hidden="true">&#9662;</span></button>';
         echo '<div id="eventadmin-vol-actions-menu" class="eventadmin-split-button-menu" style="display:none;">';
         echo '<button type="button" class="eventadmin-timeline-menu-item eventadmin-modal-open" data-target="#eventadmin-grant-role-modal">' . esc_html__('Grant volunteer role', 'eventadmin-volunteer-management') . '</button>';
-        // Exports the whole roster (every online volunteer), independent of the filters
-        // and the client-side search — see eventadmin_export_volunteers_csv().
-        echo '<button type="submit" form="eventadmin-export-volunteers-form" class="eventadmin-timeline-menu-item">' . esc_html__('Export all volunteers (CSV)', 'eventadmin-volunteer-management') . '</button>';
+        echo '</div>';
         echo '</div>';
         echo '</div>';
         echo '<form method="post" id="eventadmin-export-volunteers-form" style="display:none;">';
@@ -144,6 +147,7 @@ function eventadmin_volunteer_list_page(): void
         echo '<input type="hidden" name="eventadmin_export_volunteers" value="1">';
         echo '</form>';
     }
+    echo '</div>';
     echo '<hr class="wp-header-end">';
 
     echo '<h2 class="nav-tab-wrapper">';

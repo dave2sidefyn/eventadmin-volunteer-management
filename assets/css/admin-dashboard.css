@@ -56,7 +56,7 @@
     border-radius: 0;
 }
 
-.eventadmin-split-button #eventadmin-open-new-shift-modal {
+.eventadmin-split-button > .button:first-child {
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
 }
@@ -176,12 +176,25 @@
 
 .eventadmin-clear-filters { font-size: 12px; }
 
-/* The one action group next to the page title. */
-.eventadmin-split-button.eventadmin-heading-actions {
-    margin: 0 0 0 8px;
-    vertical-align: top;
-    top: 9px;
+/* Page title left, page actions right (WordPress's own .page-title-action sits next to
+   the title, but with several actions a right-aligned group reads better). */
+.eventadmin-page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+    padding-top: 9px;
 }
+.eventadmin-page-header .wp-heading-inline { padding-top: 0; margin: 0; }
+.eventadmin-page-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+.eventadmin-page-actions .eventadmin-split-button { margin: 0; }
+/* Anchored to the button group's right edge, since it now sits at the edge of the page. */
+.eventadmin-page-actions .eventadmin-split-button-menu { left: auto; right: 0; }
 
 /* Popover: ranges on top of the month grid. */
 .eventadmin-date-ranges {
@@ -246,11 +259,7 @@ button.eventadmin-filters-toggle {
 
     .eventadmin-filter { flex: 1 1 45%; }
 
-    .eventadmin-split-button.eventadmin-heading-actions {
-        display: flex;
-        margin: 8px 0 0;
-        top: 0;
-    }
+    .eventadmin-page-actions { margin-left: 0; width: 100%; flex-wrap: wrap; }
 }
 
 .shift-entry {
