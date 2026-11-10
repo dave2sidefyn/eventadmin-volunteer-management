@@ -68,16 +68,19 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', function (e) {
         e.preventDefault();
 
-        const checked = Array.prototype.slice
-            .call(body.querySelectorAll('.eventadmin-department-checkbox:checked'))
-            .map((el) => el.value);
-
         const params = new URLSearchParams({
             action: 'eventadmin_save_volunteer_departments',
             nonce: cfg.nonce,
             user_id: userIdField.value,
         });
-        checked.forEach((id) => params.append('eventadmin_department[]', id));
+        // The body can hold two lists (notification links and, when "Shifts per
+        // department" is on, sign-up access) — each checkbox submits under its own name.
+        body.querySelectorAll('.eventadmin-department-checkbox:checked').forEach((el) => {
+            params.append(el.name, el.value);
+        });
+        body.querySelectorAll('input[type="hidden"][name="eventadmin_access_departments_present"]').forEach((el) => {
+            params.append(el.name, el.value);
+        });
 
         result.textContent = '';
 

@@ -489,6 +489,23 @@ function eventadmin_volunteer_list_page(): void
                     . esc_html(sprintf('+%d', count($overflow_terms))) . '</span>';
             }
         }
+        if (eventadmin_shifts_restricted_to_departments()) {
+            // "Shifts per department" is on: a lock badge lists the departments this
+            // volunteer may sign up in (kept separate from the notification badges above).
+            $access_names = array_filter(array_map(function ($term_id) {
+                $term = get_term($term_id, 'eventadmin_shift_category');
+                return $term instanceof WP_Term ? $term->name : null;
+            }, eventadmin_get_volunteer_access_department_ids($volunteer->ID)));
+            if (!empty($access_names)) {
+                $access_label = esc_attr(sprintf(
+                    /* translators: %s: comma-separated department names */
+                    __('Can sign up for shifts in: %s', 'eventadmin-volunteer-management'),
+                    implode(', ', $access_names)
+                ));
+                echo '<span class="eventadmin-badge" tabindex="0" data-tooltip="' . $access_label . '" aria-label="' . $access_label . '" style="background:#1d2327;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;flex-shrink:0;">'
+                    . '<span class="dashicons dashicons-lock" style="font-size:11px;width:11px;height:11px;vertical-align:-1px;"></span> ' . esc_html(count($access_names)) . '</span>';
+            }
+        }
         echo '<button type="button" class="button button-small eventadmin-edit-departments" data-user-id="' . esc_attr($volunteer->ID) . '" data-name="' . esc_attr($profile_trigger_name) . '" style="flex-shrink:0;">' . esc_html__('Edit', 'eventadmin-volunteer-management') . '</button>';
         echo '</div></td>';
         $safe_name = esc_attr(trim($volunteer->first_name . ' ' . $volunteer->last_name) ?: $volunteer->user_login);
@@ -851,10 +868,14 @@ function eventadmin_render_edit_departments_modal(): void
  * from assets/js/department-checkboxes.js via the shared .eventadmin-department-checkbox
  * class and data-depth attribute.
  *
- * @param int[] $linked Currently linked department term IDs.
+ * @param int[]  $linked     Currently linked department term IDs.
+ * @param string $field_name POST field the checkboxes submit as (without "[]") —
+ *                           'eventadmin_department' for notification links,
+ *                           'eventadmin_access_department' for "may sign up in" links.
+ * @param bool   $show_hint  Whether to print the cascade hint above the list.
  * @return void
  */
-function eventadmin_render_department_checklist(array $linked): void
+function eventadmin_render_department_checklist(array $linked, string $field_name = 'eventadmin_department', bool $show_hint = true): void
 {
     $categories = eventadmin_get_hierarchical_shift_categories();
     if (empty($categories)) {
@@ -862,7 +883,9 @@ function eventadmin_render_department_checklist(array $linked): void
         return;
     }
 
-    echo '<p class="description" style="margin-top:0;">' . esc_html__('Checking (or unchecking) a department also checks/unchecks every department nested under it.', 'eventadmin-volunteer-management') . '</p>';
+    if ($show_hint) {
+        echo '<p class="description" style="margin-top:0;">' . esc_html__('Checking (or unchecking) a department also checks/unchecks every department nested under it.', 'eventadmin-volunteer-management') . '</p>';
+    }
     echo '<div class="eventadmin-department-checklist">';
     foreach ($categories as $cat) {
         $margin_left = $cat->depth > 0 ? $cat->depth * 20 : 0;
@@ -870,7 +893,7 @@ function eventadmin_render_department_checklist(array $linked): void
             ? ' <em>' . esc_html__('(hidden from volunteers)', 'eventadmin-volunteer-management') . '</em>'
             : '';
         echo '<label style="display:block;margin:4px 0 4px ' . esc_attr($margin_left) . 'px;">';
-        echo '<input type="checkbox" class="eventadmin-department-checkbox" data-depth="' . esc_attr($cat->depth) . '" name="eventadmin_department[]" value="' . esc_attr($cat->term_id) . '"' . checked(in_array($cat->term_id, $linked, true), true, false) . '> ';
+        echo '<input type="checkbox" class="eventadmin-department-checkbox" data-depth="' . esc_attr($cat->depth) . '" name="' . esc_attr($field_name) . '[]" value="' . esc_attr($cat->term_id) . '"' . checked(in_array($cat->term_id, $linked, true), true, false) . '> ';
         echo esc_html($cat->name) . $hidden_suffix;
         echo '</label>';
     }
@@ -913,6 +936,15 @@ function eventadmin_ajax_get_volunteer_departments(): void
     }
 
     ob_start();
+    if (eventadmin_shifts_restricted_to_departments()) {
+        // Two independent lists: what the volunteer is notified about (which they can also
+        // change themselves in their profile) vs. what they may sign up for (admin-only).
+        echo '<h3 style="margin:0 0 4px;">' . esc_html__('Can sign up for shifts in', 'eventadmin-volunteer-management') . '</h3>';
+        echo '<p class="description" style="margin-top:0;">' . esc_html__('Only shifts from these departments are shown to this volunteer. Leave all unchecked to show every shift.', 'eventadmin-volunteer-management') . '</p>';
+        eventadmin_render_department_checklist(eventadmin_get_volunteer_access_department_ids($user->ID), 'eventadmin_access_department', false);
+        echo '<input type="hidden" name="eventadmin_access_departments_present" value="1">';
+        echo '<h3 style="margin:16px 0 4px;">' . esc_html__('Gets notified about new shifts in', 'eventadmin-volunteer-management') . '</h3>';
+    }
     eventadmin_render_department_checklist(eventadmin_get_volunteer_department_ids($user->ID));
     $html = ob_get_clean();
 
@@ -946,6 +978,15 @@ function eventadmin_ajax_save_volunteer_departments(): void
         ? wp_unslash($_POST['eventadmin_department'])
         : [];
     eventadmin_save_volunteer_department_ids($user->ID, $posted);
+
+    // Only touch the access list when the modal actually showed it, so saving notification
+    // links while the setting is off never wipes access departments set earlier.
+    if (!empty($_POST['eventadmin_access_departments_present'])) {
+        $posted_access = (isset($_POST['eventadmin_access_department']) && is_array($_POST['eventadmin_access_department']))
+            ? wp_unslash($_POST['eventadmin_access_department'])
+            : [];
+        eventadmin_save_volunteer_access_department_ids($user->ID, $posted_access);
+    }
 
     wp_send_json_success();
 }

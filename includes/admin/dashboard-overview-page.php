@@ -128,8 +128,25 @@ function eventadmin_render_copy_shifts_notice_and_modal(string $view, array $shi
     }
 
     if (isset($_GET['shifts_copied'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-        $copied_count = absint($_GET['shifts_copied']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-        if ($copied_count > 0) {
+        $copied_count  = absint($_GET['shifts_copied']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $copy_days     = isset($_GET['copy_days']) ? absint($_GET['copy_days']) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $copy_skipped  = isset($_GET['copy_skipped']) ? absint($_GET['copy_skipped']) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if ($copy_days > 0) {
+            $message = sprintf(
+                /* translators: 1: number of shifts created, 2: number of days (weeks) they were spread over */
+                _n('%1$d shift was created across %2$d weeks.', '%1$d shifts were created across %2$d weeks.', $copied_count, 'eventadmin-volunteer-management'),
+                $copied_count,
+                $copy_days
+            );
+            if ($copy_skipped > 0) {
+                $message .= ' ' . sprintf(
+                    /* translators: %d: number of shifts skipped because an identical shift already existed */
+                    _n('%d shift already existed and was skipped.', '%d shifts already existed and were skipped.', $copy_skipped, 'eventadmin-volunteer-management'),
+                    $copy_skipped
+                );
+            }
+            echo '<div class="notice notice-' . ($copied_count > 0 ? 'success' : 'warning') . ' is-dismissible"><p>' . esc_html($message) . '</p></div>';
+        } elseif ($copied_count > 0) {
             echo '<div class="notice notice-success is-dismissible"><p>' . esc_html(sprintf(
                 /* translators: %d: number of shifts copied */
                 _n('%d shift was copied.', '%d shifts were copied.', $copied_count, 'eventadmin-volunteer-management'),
@@ -144,7 +161,7 @@ function eventadmin_render_copy_shifts_notice_and_modal(string $view, array $shi
     eventadmin_render_modal_open('eventadmin-copy-shifts-modal');
     eventadmin_render_modal_close_button('eventadmin-copy-shifts-close');
     echo '<h2 style="margin-top:0;">' . esc_html__('Copy shifts to another day', 'eventadmin-volunteer-management') . '</h2>';
-    echo '<p class="description">' . esc_html__('Recreate every shift from a past (or future) day on a new date, keeping each shift\'s time of day and duration.', 'eventadmin-volunteer-management') . '</p>';
+    echo '<p class="description">' . esc_html__('Recreate every shift from a past (or future) day on a new date, keeping each shift\'s time of day and duration.', 'eventadmin-volunteer-management') . ' ' . esc_html__('Use "Repeat every week" to fill a whole series at once, e.g. every Monday for 12 weeks.', 'eventadmin-volunteer-management') . '</p>';
     echo '<form method="post">';
     wp_nonce_field('eventadmin_copy_shifts', 'eventadmin_copy_shifts_nonce');
     echo '<input type="hidden" name="eventadmin_copy_shifts_day" value="1">';
@@ -156,7 +173,14 @@ function eventadmin_render_copy_shifts_notice_and_modal(string $view, array $shi
     }
     echo '</select></label></p>';
     echo '<p><label>' . esc_html__('to:', 'eventadmin-volunteer-management') . '<br><input type="date" name="copy_target_date" required style="width:100%;"></label></p>';
-    echo '<p><label><input type="checkbox" name="copy_volunteers" value="1"> ' . esc_html__('Also copy the volunteers currently signed up', 'eventadmin-volunteer-management') . '</label></p>';
+    echo '<p><label><input type="checkbox" name="copy_repeat_weekly" value="1" id="eventadmin-copy-repeat-weekly"> ' . esc_html__('Repeat every week', 'eventadmin-volunteer-management') . '</label></p>';
+    echo '<p id="eventadmin-copy-repeat-until-row" style="display:none;"><label>' . esc_html__('until (including):', 'eventadmin-volunteer-management') . '<br><input type="date" name="copy_repeat_until" id="eventadmin-copy-repeat-until" style="width:100%;"></label>';
+    echo '<span class="description">' . esc_html(sprintf(
+        /* translators: %d: maximum number of weeks */
+        __('Creates the shifts on the same weekday every week, up to %d weeks. Shifts that already exist on a day are skipped, and volunteers are not copied.', 'eventadmin-volunteer-management'),
+        EVENTADMIN_MAX_REPEAT_WEEKS
+    )) . '</span></p>';
+    echo '<p id="eventadmin-copy-volunteers-row"><label><input type="checkbox" name="copy_volunteers" value="1"> ' . esc_html__('Also copy the volunteers currently signed up', 'eventadmin-volunteer-management') . '</label></p>';
     echo '<p>';
     submit_button(esc_html__('Copy shifts', 'eventadmin-volunteer-management'), 'primary', '', false);
     echo '</p>';

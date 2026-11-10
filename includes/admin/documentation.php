@@ -628,6 +628,7 @@ function eventadmin_plugin_documentation_page()
             <li>
                 <pre><code>[eventadmin_shiftselector]</code></pre>
                 <?php echo esc_html__('Volunteers can sign up for or cancel shifts.', 'eventadmin-volunteer-management'); ?>
+                <br><?php echo esc_html__('Add department="slug" (several separated by commas) to this shortcode, [eventadmin_cockpit] or [eventadmin] to only offer that department\'s shifts, including its sub-departments — e.g. one page per department. "My shifts" still lists all of the volunteer\'s shifts.', 'eventadmin-volunteer-management'); ?>
             </li>
             <li>
                 <pre><code>[eventadmin_open_positions]</code></pre>
@@ -670,11 +671,20 @@ function eventadmin_plugin_documentation_page()
             <dt><strong><?php echo esc_html__('What\'s the difference between assigning a volunteer to a shift and linking them to a department?', 'eventadmin-volunteer-management'); ?></strong></dt>
             <dd><?php echo esc_html__('Assigning them to a shift is the actual roster — it\'s what they signed up for. Linking them to a department (Volunteers page → Edit) is independent of that: it only controls who receives department-targeted announcements (Send Announcement → "Volunteers linked to a department"), which is useful for reaching people before any shift in that department even exists yet.', 'eventadmin-volunteer-management'); ?></dd>
 
+            <dt><strong><?php echo esc_html__('Can volunteers only see the shifts of their own departments?', 'eventadmin-volunteer-management'); ?></strong></dt>
+            <dd><?php echo esc_html__('Yes. Turn on Settings → General → "Shifts per department", then on the Volunteers page click "Edit" in a volunteer\'s Departments column and tick the departments under "Can sign up for shifts in". That list is separate from the departments they get notified about, and only managers can change it. Volunteers without any such department still see every shift, shifts without a department are visible to everyone, and shifts someone already signed up for always stay under "My shifts".', 'eventadmin-volunteer-management'); ?></dd>
+
             <dt><strong><?php echo esc_html__('Does deleting or deactivating the plugin delete volunteer data?', 'eventadmin-volunteer-management'); ?></strong></dt>
             <dd><?php echo esc_html__('Deactivating only stops the scheduled reminder and cleanup jobs. Uninstalling does not delete anything either — volunteer accounts, shifts, settings, and the "Volunteer" role stay in the database, so nothing is lost if you reinstall. Remove them by hand (or with a cleanup plugin) if you want a clean slate.', 'eventadmin-volunteer-management'); ?></dd>
 
             <dt><strong><?php echo esc_html__('Can I reuse last year\'s shifts for a new event?', 'eventadmin-volunteer-management'); ?></strong></dt>
             <dd><?php echo esc_html__('Yes — on the Manager page\'s Timeline tab, use "Copy shifts to another day" (in the + Add shift dropdown) to recreate every shift from a past day onto a new date, keeping each shift\'s time-of-day and duration. There\'s an option to also copy over the volunteers who were signed up, so a whole day\'s roster can be cloned forward to next year in one go.', 'eventadmin-volunteer-management'); ?></dd>
+
+            <dt><strong><?php echo esc_html__('Can I create weekly recurring shifts?', 'eventadmin-volunteer-management'); ?></strong></dt>
+            <dd><?php echo esc_html__('Yes. Set up one day\'s shifts, then use "Copy shifts to another day", pick the first new date and tick "Repeat every week" with an end date. The shifts are created on the same weekday every week (up to 52 weeks). Running the same repeat again skips shifts that already exist, and volunteers are never copied into a series.', 'eventadmin-volunteer-management'); ?></dd>
+
+            <dt><strong><?php echo esc_html__('A volunteer sees old sign-ups or empty "My shifts" after reopening the page. Why?', 'eventadmin-volunteer-management'); ?></strong></dt>
+            <dd><?php echo esc_html__('That is almost always a cached copy of the page. The plugin tells caching plugins, browsers and CDNs not to cache the volunteer page, but a host or CDN rule that caches every page regardless (e.g. Cloudflare "Cache Everything") overrides that. Exclude the volunteer page from such rules, or make them skip visitors with a WordPress login cookie.', 'eventadmin-volunteer-management'); ?></dd>
         </dl>
 
         <hr style="margin:32px 0;">

@@ -215,6 +215,37 @@ function eventadmin_admin_dashboard_admin_init(): void
             return;
         }
 
+        $repeat_weekly = !empty($_POST['copy_repeat_weekly']);
+        $until_date    = isset($_POST['copy_repeat_until']) ? sanitize_text_field(wp_unslash($_POST['copy_repeat_until'])) : '';
+
+        if ($repeat_weekly) {
+            if (!$until_date || !$is_valid_date($until_date) || $until_date < $target_date) {
+                global $eventadmin_form_error;
+                $eventadmin_form_error = esc_html__('Please choose a "repeat until" date on or after the first target date.', 'eventadmin-volunteer-management');
+                return;
+            }
+
+            // Volunteers are never copied into a whole series — each week gets its own sign-ups.
+            $copied  = 0;
+            $skipped = 0;
+            $days    = 0;
+            foreach (eventadmin_weekly_repeat_dates($target_date, $until_date) as $date) {
+                if ($date === $source_date) {
+                    continue;
+                }
+                $day_skipped = 0;
+                $copied     += eventadmin_copy_shifts_to_day($source_date, $date, false, true, $day_skipped);
+                $skipped    += $day_skipped;
+                $days++;
+            }
+
+            wp_safe_redirect(add_query_arg(
+                ['shifts_copied' => $copied, 'copy_days' => $days, 'copy_skipped' => $skipped],
+                admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-shift-manager')
+            ));
+            exit;
+        }
+
         $copied = eventadmin_copy_shifts_to_day($source_date, $target_date, $copy_volunteers);
 
         wp_safe_redirect(add_query_arg(

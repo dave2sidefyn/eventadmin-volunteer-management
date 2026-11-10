@@ -39,6 +39,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/notifications.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/settings.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/import.php';
 require_once plugin_dir_path(__FILE__) . 'includes/cockpit.php';
+require_once plugin_dir_path(__FILE__) . 'includes/page-cache.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/documentation.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/shift-metaboxes.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/category-manager.php';

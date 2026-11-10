@@ -188,14 +188,14 @@ function eventadmin_verify_captcha_response(): bool
     return !empty($data['success']);
 }
 
-function eventadmin_main_shortcode(): string
+function eventadmin_main_shortcode($atts = []): string
 {
 
     if (is_user_logged_in()) {
         $user = wp_get_current_user();
         if (in_array('eventadmin_volunteer', $user->roles)) {
             // Show cockpit instead of registration
-            return do_shortcode('[eventadmin_cockpit]');
+            return do_shortcode('[eventadmin_cockpit' . eventadmin_department_shortcode_passthrough($atts) . ']');
         }
     }
 
@@ -203,14 +203,14 @@ function eventadmin_main_shortcode(): string
 
 }
 
-function eventadmin_registration_form_shortcode(): bool|string
+function eventadmin_registration_form_shortcode($atts = []): bool|string
 {
 
     if (is_user_logged_in()) {
         $user = wp_get_current_user();
         if (in_array('eventadmin_volunteer', $user->roles)) {
             // Show cockpit instead of registration form
-            return do_shortcode('[eventadmin_cockpit]');
+            return do_shortcode('[eventadmin_cockpit' . eventadmin_department_shortcode_passthrough($atts) . ']');
         }
     }
 

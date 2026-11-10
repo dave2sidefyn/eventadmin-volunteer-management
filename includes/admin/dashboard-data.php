@@ -142,6 +142,53 @@ add_action('trashed_post', 'eventadmin_flush_shifts_cache_for_post_id');
 add_action('untrashed_post', 'eventadmin_flush_shifts_cache_for_post_id');
 add_action('deleted_post', 'eventadmin_flush_shifts_cache_for_post_id');
 
+/** Upper limit for "Copy shifts → repeat every week", so a mistyped year can't create thousands of shifts. */
+const EVENTADMIN_MAX_REPEAT_WEEKS = 52;
+
+/**
+ * All shifts (any status) that start on the given day.
+ *
+ * @param string $date Y-m-d
+ * @return WP_Post[]
+ */
+function eventadmin_get_shifts_starting_on_day(string $date): array
+{
+    return get_posts([
+        'post_type'   => 'eventadmin_shift',
+        'numberposts' => -1,
+        'post_status' => 'any',
+        'meta_query'  => [[
+            'key'     => 'shift_start',
+            'value'   => [$date . 'T00:00', $date . 'T23:59'],
+            'compare' => 'BETWEEN',
+            'type'    => 'DATETIME',
+        ]],
+    ]);
+}
+
+/**
+ * The dates a "repeat weekly" copy lands on: $first_date and every 7 days after it up to
+ * and including $until_date, capped at EVENTADMIN_MAX_REPEAT_WEEKS dates.
+ *
+ * @param string $first_date Y-m-d
+ * @param string $until_date Y-m-d
+ * @return string[] Y-m-d dates
+ */
+function eventadmin_weekly_repeat_dates(string $first_date, string $until_date): array
+{
+    $dates = [];
+    $date  = DateTime::createFromFormat('!Y-m-d', $first_date);
+    $until = DateTime::createFromFormat('!Y-m-d', $until_date);
+    if (!$date || !$until) {
+        return $dates;
+    }
+    while ($date <= $until && count($dates) < EVENTADMIN_MAX_REPEAT_WEEKS) {
+        $dates[] = $date->format('Y-m-d');
+        $date->modify('+7 days');
+    }
+    return $dates;
+}
+
 /**
  * Copies every shift starting on $source_date to $target_date, preserving each shift's
  * time-of-day and duration (including shifts that run past midnight). Used for
@@ -150,21 +197,23 @@ add_action('deleted_post', 'eventadmin_flush_shifts_cache_for_post_id');
  * @param string $source_date Y-m-d
  * @param string $target_date Y-m-d
  * @param bool $copy_volunteers Whether to also copy the volunteers currently assigned
+ * @param bool $skip_existing   Skip a shift when the target day already has one with the
+ *                              same title and start time — used by "repeat weekly" so
+ *                              running the same repeat twice never creates duplicates.
+ * @param int|null $skipped     Set to the number of shifts skipped as already existing.
  * @return int Number of shifts copied
  */
-function eventadmin_copy_shifts_to_day(string $source_date, string $target_date, bool $copy_volunteers): int
+function eventadmin_copy_shifts_to_day(string $source_date, string $target_date, bool $copy_volunteers, bool $skip_existing = false, ?int &$skipped = null): int
 {
-    $shifts = get_posts([
-        'post_type'   => 'eventadmin_shift',
-        'numberposts' => -1,
-        'post_status' => 'any',
-        'meta_query'  => [[
-            'key'     => 'shift_start',
-            'value'   => [$source_date . 'T00:00', $source_date . 'T23:59'],
-            'compare' => 'BETWEEN',
-            'type'    => 'DATETIME',
-        ]],
-    ]);
+    $skipped = 0;
+    $shifts  = eventadmin_get_shifts_starting_on_day($source_date);
+
+    $existing_keys = [];
+    if ($skip_existing) {
+        foreach (eventadmin_get_shifts_starting_on_day($target_date) as $existing) {
+            $existing_keys[$existing->post_title . '|' . eventadmin_wallclock_to_ts((string) get_post_meta($existing->ID, 'shift_start', true))] = true;
+        }
+    }
 
     $copied = 0;
 
@@ -187,6 +236,11 @@ function eventadmin_copy_shifts_to_day(string $source_date, string $target_date,
         $duration_seconds = $end_dt->getTimestamp() - $start_dt->getTimestamp();
         $new_start_dt      = new DateTime($target_date . ' ' . $start_dt->format('H:i:s'));
         $new_end_dt        = (clone $new_start_dt)->modify('+' . $duration_seconds . ' seconds');
+
+        if ($skip_existing && isset($existing_keys[$shift->post_title . '|' . eventadmin_wallclock_to_ts($new_start_dt->format('Y-m-d H:i:s'))])) {
+            $skipped++;
+            continue;
+        }
 
         $new_id = wp_insert_post([
             'post_type'    => 'eventadmin_shift',

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - EventAdmin – Volunteer Management\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
-"POT-Creation-Date: 2026-11-10T08:28:12+00:00\n"
+"POT-Creation-Date: 2026-11-10T19:30:21+00:00\n"
 "PO-Revision-Date: 2026-03-15 20:00:00+0000\n"
 "Language: nl_NL_formal\n"
 "MIME-Version: 1.0\n"
@@ -40,7 +40,7 @@ msgstr "David Wiedmer, sidefyn GmbH"
 msgid "https://profiles.wordpress.org/davesidefyn/"
 msgstr "https://profiles.wordpress.org/davesidefyn/"
 
-#: eventadmin-volunteer-management.php:185
+#: eventadmin-volunteer-management.php:186
 msgid ""
 "EventAdmin – Volunteer Management – developed by <a "
 "href=\"mailto:dave@sidefyn.ch\">David Wiedmer, sidefyn GmbH</a>"
@@ -48,25 +48,25 @@ msgstr ""
 "EventAdmin – Volunteer Management – ontwikkeld door <a "
 "href=\"mailto:dave@sidefyn.ch\">David Wiedmer, sidefyn GmbH</a>"
 
-#: eventadmin-volunteer-management.php:248
-#: eventadmin-volunteer-management.php:277
+#: eventadmin-volunteer-management.php:249
+#: eventadmin-volunteer-management.php:278
 #: includes/admin/getting-started-checklist.php:182
 msgid "Rate 5 stars"
 msgstr "5 sterren geven"
 
-#: eventadmin-volunteer-management.php:249
-#: eventadmin-volunteer-management.php:278
+#: eventadmin-volunteer-management.php:250
+#: eventadmin-volunteer-management.php:279
 #: includes/admin/getting-started-checklist.php:183
 msgid "Donate"
 msgstr "Doneren"
 
 #. translators: %s is the plugin version number, e.g. "0.9.3"
-#: eventadmin-volunteer-management.php:272
+#: eventadmin-volunteer-management.php:273
 #, php-format
 msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s is er!"
 
-#: eventadmin-volunteer-management.php:275
+#: eventadmin-volunteer-management.php:276
 msgid ""
 "Invite volunteers you add yourself with a login link, and optionally let "
 "volunteers log in with a password too (Settings → General). Also an "
@@ -79,16 +79,16 @@ msgstr ""
 "dienstbeheerders die de vrijwilligerspagina hadden bekeken, konden bij hun "
 "volgende login hun rol verliezen."
 
-#: eventadmin-volunteer-management.php:281
+#: eventadmin-volunteer-management.php:282
 msgid "Dismiss"
 msgstr "Sluiten"
 
-#: eventadmin-volunteer-management.php:311 includes/admin/settings.php:48
+#: eventadmin-volunteer-management.php:312 includes/admin/settings.php:48
 #: includes/admin/settings.php:49
 msgid "Settings"
 msgstr "Instellingen"
 
-#: eventadmin-volunteer-management.php:312 includes/admin/documentation.php:60
+#: eventadmin-volunteer-management.php:313 includes/admin/documentation.php:60
 #: includes/admin/documentation.php:61
 msgid "Documentation"
 msgstr "Documentatie"
@@ -119,12 +119,12 @@ msgid "({failed} could not be delivered)"
 msgstr "({failed} kon niet worden afgeleverd)"
 
 #: includes/admin/bulk-email.php:78
-#: includes/admin/dashboard-tab-timeline.php:244
-#: includes/admin/dashboard-tab-timeline.php:445
-#: includes/admin/dashboard-tab-timeline.php:551
+#: includes/admin/dashboard-tab-timeline.php:261
+#: includes/admin/dashboard-tab-timeline.php:462
+#: includes/admin/dashboard-tab-timeline.php:568
 #: includes/admin/shift-details-modal.php:134
 #: includes/admin/user-profile.php:570 includes/admin/volunteer-list.php:199
-#: includes/admin/volunteer-list.php:532 includes/admin/volunteer-list.php:839
+#: includes/admin/volunteer-list.php:549 includes/admin/volunteer-list.php:856
 msgid "An error occurred. Please try again."
 msgstr "Er is een fout opgetreden. Probeer het opnieuw."
 
@@ -218,7 +218,7 @@ msgstr ""
 msgid "— Select department —"
 msgstr "— Afdeling selecteren —"
 
-#: includes/admin/bulk-email.php:199 includes/admin/settings.php:789
+#: includes/admin/bulk-email.php:199 includes/admin/settings.php:805
 msgid "Sender"
 msgstr "Afzender"
 
@@ -244,7 +244,7 @@ msgid "Select PDF…"
 msgstr "PDF selecteren…"
 
 #: includes/admin/bulk-email.php:218
-#: includes/admin/dashboard-tab-cards.php:131 includes/admin/settings.php:1072
+#: includes/admin/dashboard-tab-cards.php:131 includes/admin/settings.php:1088
 msgid "Remove"
 msgstr "Verwijderen"
 
@@ -293,7 +293,7 @@ msgid "Filter…"
 msgstr "Filteren…"
 
 #: includes/admin/bulk-email.php:282
-#: includes/admin/dashboard-overview-page.php:276
+#: includes/admin/dashboard-overview-page.php:300
 #: includes/admin/user-profile.php:347 includes/admin/volunteer-list.php:144
 #: includes/admin/volunteer-list.php:173
 msgid "Date"
@@ -321,7 +321,7 @@ msgstr "Klik om te sorteren"
 
 #: includes/admin/bulk-email.php:304 includes/admin/user-profile.php:225
 #: includes/admin/user-profile.php:477 includes/admin/volunteer-list.php:465
-#: includes/admin/volunteer-list.php:784
+#: includes/admin/volunteer-list.php:801
 msgid "Subscribed"
 msgstr "Aangemeld"
 
@@ -352,11 +352,11 @@ msgid "Department: %s"
 msgstr "Afdeling: %s"
 
 #: includes/admin/bulk-email.php:321
-#: includes/admin/dashboard-overview-page.php:222
-#: includes/admin/dashboard-overview-page.php:230
-#: includes/admin/dashboard-overview-page.php:242
-#: includes/admin/dashboard-overview-page.php:252
-#: includes/admin/dashboard-overview-page.php:264
+#: includes/admin/dashboard-overview-page.php:246
+#: includes/admin/dashboard-overview-page.php:254
+#: includes/admin/dashboard-overview-page.php:266
+#: includes/admin/dashboard-overview-page.php:276
+#: includes/admin/dashboard-overview-page.php:288
 msgid "All"
 msgstr "Alle"
 
@@ -384,24 +384,24 @@ msgstr "Geen aankomende diensten."
 
 #: includes/admin/bulk-email.php:619 includes/admin/bulk-email.php:655
 #: includes/admin/bulk-email.php:763
-#: includes/admin/dashboard-tab-timeline.php:297 includes/admin/import.php:248
+#: includes/admin/dashboard-tab-timeline.php:314 includes/admin/import.php:248
 #: includes/admin/import.php:268 includes/admin/import.php:286
 #: includes/admin/import.php:302 includes/admin/import.php:319
 #: includes/admin/import.php:330 includes/admin/shift-details-modal.php:159
 #: includes/admin/user-profile.php:387 includes/admin/user-profile.php:422
 #: includes/admin/user-profile.php:457 includes/admin/user-profile.php:497
-#: includes/admin/volunteer-list.php:553 includes/admin/volunteer-list.php:583
-#: includes/admin/volunteer-list.php:612 includes/admin/volunteer-list.php:693
-#: includes/admin/volunteer-list.php:903 includes/admin/volunteer-list.php:933
-#: includes/shiftselector.php:359 includes/shiftselector.php:411
+#: includes/admin/volunteer-list.php:570 includes/admin/volunteer-list.php:600
+#: includes/admin/volunteer-list.php:629 includes/admin/volunteer-list.php:710
+#: includes/admin/volunteer-list.php:926 includes/admin/volunteer-list.php:965
+#: includes/shiftselector.php:420 includes/shiftselector.php:475
 msgid "Security check failed."
 msgstr "Beveiligingscontrole mislukt."
 
 #: includes/admin/bulk-email.php:623 includes/admin/bulk-email.php:659
 #: includes/admin/bulk-email.php:767 includes/admin/user-profile.php:426
 #: includes/admin/user-profile.php:461 includes/admin/user-profile.php:501
-#: includes/admin/volunteer-list.php:557 includes/admin/volunteer-list.php:587
-#: includes/admin/volunteer-list.php:616 includes/admin/volunteer-list.php:697
+#: includes/admin/volunteer-list.php:574 includes/admin/volunteer-list.php:604
+#: includes/admin/volunteer-list.php:633 includes/admin/volunteer-list.php:714
 msgid "Insufficient permissions."
 msgstr "Onvoldoende rechten."
 
@@ -521,8 +521,8 @@ msgid "Description"
 msgstr "Beschrijving"
 
 #: includes/admin/dashboard-form-handlers.php:68
-#: includes/admin/dashboard-tab-timeline.php:537
-#: includes/admin/dashboard-tab-timeline.php:633
+#: includes/admin/dashboard-tab-timeline.php:554
+#: includes/admin/dashboard-tab-timeline.php:650
 msgid "This volunteer is not assigned to this shift."
 msgstr "Deze vrijwilliger is niet aangemeld voor deze dienst."
 
@@ -540,10 +540,10 @@ msgid "Invalid volunteer selected."
 msgstr "Ongeldige vrijwilliger geselecteerd."
 
 #: includes/admin/dashboard-form-handlers.php:203
-#: includes/admin/dashboard-tab-timeline.php:428
+#: includes/admin/dashboard-tab-timeline.php:445
 #: includes/admin/shift-details-modal.php:163
 #: includes/admin/shift-metaboxes.php:205 includes/admin/user-profile.php:394
-#: includes/admin/volunteer-list.php:907 includes/admin/volunteer-list.php:937
+#: includes/admin/volunteer-list.php:930 includes/admin/volunteer-list.php:969
 msgid "Not allowed"
 msgstr "Niet toegestaan"
 
@@ -551,64 +551,68 @@ msgstr "Niet toegestaan"
 msgid "Please select both a source and a target date."
 msgstr "Kies zowel een brondatum als een doeldatum."
 
-#: includes/admin/dashboard-form-handlers.php:259
+#: includes/admin/dashboard-form-handlers.php:224
+msgid "Please choose a \"repeat until\" date on or after the first target date."
+msgstr "Kies een \"herhalen tot\"-datum op of na de eerste doeldatum."
+
+#: includes/admin/dashboard-form-handlers.php:290
 #: includes/admin/dashboard-tab-table.php:31
 #: includes/admin/volunteer-list.php:239
 msgid "Category"
 msgstr "Categorie"
 
-#: includes/admin/dashboard-form-handlers.php:260
+#: includes/admin/dashboard-form-handlers.php:291
 #: includes/admin/dashboard-tab-table.php:34
 #: includes/admin/user-profile.php:69 includes/post-types.php:18
 #: includes/post-types.php:29
 msgid "Shift"
 msgstr "Dienst"
 
-#: includes/admin/dashboard-form-handlers.php:261
+#: includes/admin/dashboard-form-handlers.php:292
 #: includes/admin/dashboard-tab-table.php:34 includes/admin/quick-edit.php:133
 #: includes/admin/shift-details-modal.php:35
 #: includes/admin/user-profile.php:70
 msgid "Period"
 msgstr "Periode"
 
-#: includes/admin/dashboard-form-handlers.php:262
-#: includes/admin/dashboard-overview-page.php:277
+#: includes/admin/dashboard-form-handlers.php:293
+#: includes/admin/dashboard-overview-page.php:301
 #: includes/admin/dashboard-tab-cards.php:112
-#: includes/admin/dashboard-tab-table.php:41 includes/admin/settings.php:796
+#: includes/admin/dashboard-tab-table.php:41 includes/admin/settings.php:812
 #: includes/admin/shift-metaboxes.php:268
 #: includes/admin/volunteer-list.php:174 includes/admin/volunteer-list.php:316
-#: includes/admin/volunteer-list.php:744
+#: includes/admin/volunteer-list.php:761
 msgid "Name"
 msgstr "Naam"
 
-#: includes/admin/dashboard-form-handlers.php:263
+#: includes/admin/dashboard-form-handlers.php:294
 #: includes/admin/dashboard-tab-cards.php:112
-#: includes/admin/dashboard-tab-table.php:42 includes/admin/settings.php:806
+#: includes/admin/dashboard-tab-table.php:42 includes/admin/settings.php:822
 #: includes/admin/shift-metaboxes.php:269 includes/admin/user-profile.php:252
 #: includes/admin/volunteer-list.php:145 includes/admin/volunteer-list.php:175
-#: includes/admin/volunteer-list.php:317 includes/admin/volunteer-list.php:745
-#: includes/profile.php:79 includes/registration.php:287
-#: includes/registration.php:324
+#: includes/admin/volunteer-list.php:317 includes/admin/volunteer-list.php:762
+#: includes/profile.php:79 includes/registration.php:305
+#: includes/registration.php:342
 msgid "E-Mail"
 msgstr "E-mailadres"
 
-#: includes/admin/dashboard-form-handlers.php:264
-#: includes/admin/dashboard-overview-page.php:493
+#: includes/admin/dashboard-form-handlers.php:295
+#: includes/admin/dashboard-overview-page.php:517
 #: includes/admin/dashboard-tab-cards.php:103
 #: includes/admin/dashboard-tab-cards.php:112
 #: includes/admin/dashboard-tab-table.php:43
 #: includes/admin/shift-metaboxes.php:270 includes/admin/user-profile.php:253
 #: includes/admin/volunteer-list.php:274 includes/admin/volunteer-list.php:318
-#: includes/admin/volunteer-list.php:746
+#: includes/admin/volunteer-list.php:763
 msgid "Phone"
 msgstr "Telefoon"
 
-#: includes/admin/dashboard-form-handlers.php:265
+#: includes/admin/dashboard-form-handlers.php:296
 #: includes/admin/quick-edit.php:60 includes/admin/shift-details-modal.php:56
 msgid "Start"
 msgstr "Start"
 
-#: includes/admin/dashboard-form-handlers.php:266
+#: includes/admin/dashboard-form-handlers.php:297
 #: includes/admin/quick-edit.php:61 includes/admin/shift-details-modal.php:57
 msgid "End"
 msgstr "Einde"
@@ -618,7 +622,7 @@ msgid "Overview"
 msgstr "Overzicht"
 
 #: includes/admin/dashboard-menu.php:37 includes/admin/dashboard-menu.php:38
-#: includes/admin/dashboard-overview-page.php:597
+#: includes/admin/dashboard-overview-page.php:621
 msgid "Manager"
 msgstr "Manager"
 
@@ -636,7 +640,7 @@ msgid "Open (required)"
 msgstr "Open (verplicht)"
 
 #: includes/admin/dashboard-menu.php:261 includes/admin/user-profile.php:313
-#: includes/admin/volunteer-list.php:320 includes/admin/volunteer-list.php:748
+#: includes/admin/volunteer-list.php:320 includes/admin/volunteer-list.php:765
 msgid "Upcoming shifts"
 msgstr "Aankomende diensten"
 
@@ -666,24 +670,42 @@ msgstr "Onderbezet"
 msgid "Heavily understaffed"
 msgstr "Sterk onderbezet"
 
+#. translators: 1: number of shifts created, 2: number of days (weeks) they
+#. were spread over
+#: includes/admin/dashboard-overview-page.php:137
+#, php-format
+msgid "%1$d shift was created across %2$d weeks."
+msgid_plural "%1$d shifts were created across %2$d weeks."
+msgstr[0] "%1$d dienst is aangemaakt verspreid over %2$d weken."
+msgstr[1] "%1$d diensten zijn aangemaakt verspreid over %2$d weken."
+
+#. translators: %d: number of shifts skipped because an identical shift
+#. already existed
+#: includes/admin/dashboard-overview-page.php:144
+#, php-format
+msgid "%d shift already existed and was skipped."
+msgid_plural "%d shifts already existed and were skipped."
+msgstr[0] "%d dienst bestond al en is overgeslagen."
+msgstr[1] "%d diensten bestonden al en zijn overgeslagen."
+
 #. translators: %d: number of shifts copied
-#: includes/admin/dashboard-overview-page.php:135
+#: includes/admin/dashboard-overview-page.php:152
 #, php-format
 msgid "%d shift was copied."
 msgid_plural "%d shifts were copied."
 msgstr[0] "%d dienst is gekopieerd."
 msgstr[1] "%d diensten zijn gekopieerd."
 
-#: includes/admin/dashboard-overview-page.php:139
+#: includes/admin/dashboard-overview-page.php:156
 msgid "No shifts were found on the selected day to copy."
 msgstr "Er zijn geen diensten gevonden op de gekozen dag om te kopiëren."
 
-#: includes/admin/dashboard-overview-page.php:146
-#: includes/admin/dashboard-overview-page.php:645
+#: includes/admin/dashboard-overview-page.php:163
+#: includes/admin/dashboard-overview-page.php:669
 msgid "Copy shifts to another day"
 msgstr "Diensten naar een andere dag kopiëren"
 
-#: includes/admin/dashboard-overview-page.php:147
+#: includes/admin/dashboard-overview-page.php:164
 msgid ""
 "Recreate every shift from a past (or future) day on a new date, keeping each"
 " shift's time of day and duration."
@@ -691,187 +713,214 @@ msgstr ""
 "Zet alle diensten van een dag in het verleden (of de toekomst) opnieuw op "
 "een nieuwe datum, met behoud van tijdstip en duur van elke dienst."
 
-#: includes/admin/dashboard-overview-page.php:151
+#: includes/admin/dashboard-overview-page.php:164
+msgid ""
+"Use \"Repeat every week\" to fill a whole series at once, e.g. every Monday "
+"for 12 weeks."
+msgstr ""
+"Met \"Elke week herhalen\" vult u in één keer een hele reeks, bijv. elke "
+"maandag gedurende 12 weken."
+
+#: includes/admin/dashboard-overview-page.php:168
 msgid "Copy shifts from:"
 msgstr "Diensten kopiëren van:"
 
-#: includes/admin/dashboard-overview-page.php:152
+#: includes/admin/dashboard-overview-page.php:169
 msgid "Select a day…"
 msgstr "Kies een dag…"
 
-#: includes/admin/dashboard-overview-page.php:158
+#: includes/admin/dashboard-overview-page.php:175
 msgid "to:"
 msgstr "naar:"
 
-#: includes/admin/dashboard-overview-page.php:159
+#: includes/admin/dashboard-overview-page.php:176
+msgid "Repeat every week"
+msgstr "Elke week herhalen"
+
+#: includes/admin/dashboard-overview-page.php:177
+msgid "until (including):"
+msgstr "tot en met:"
+
+#. translators: %d: maximum number of weeks
+#: includes/admin/dashboard-overview-page.php:180
+#, php-format
+msgid ""
+"Creates the shifts on the same weekday every week, up to %d weeks. Shifts "
+"that already exist on a day are skipped, and volunteers are not copied."
+msgstr ""
+"Maakt de diensten elke week op dezelfde weekdag aan, voor maximaal %d weken."
+" Diensten die op een dag al bestaan worden overgeslagen, en vrijwilligers "
+"worden niet meegekopieerd."
+
+#: includes/admin/dashboard-overview-page.php:183
 msgid "Also copy the volunteers currently signed up"
 msgstr "Ook de momenteel aangemelde vrijwilligers meekopiëren"
 
-#: includes/admin/dashboard-overview-page.php:161
+#: includes/admin/dashboard-overview-page.php:185
 msgid "Copy shifts"
 msgstr "Diensten kopiëren"
 
-#: includes/admin/dashboard-overview-page.php:210
+#: includes/admin/dashboard-overview-page.php:234
 msgid "Show filter"
 msgstr "Filter tonen"
 
-#: includes/admin/dashboard-overview-page.php:211
+#: includes/admin/dashboard-overview-page.php:235
 msgid "Hide filter"
 msgstr "Filter verbergen"
 
-#: includes/admin/dashboard-overview-page.php:221
+#: includes/admin/dashboard-overview-page.php:245
 msgid "Department:"
 msgstr "Afdeling"
 
-#: includes/admin/dashboard-overview-page.php:229
+#: includes/admin/dashboard-overview-page.php:253
 msgid "State:"
 msgstr "Status:"
 
-#: includes/admin/dashboard-overview-page.php:241
+#: includes/admin/dashboard-overview-page.php:265
 msgid "Volunteers:"
 msgstr "Volunteers:"
 
-#: includes/admin/dashboard-overview-page.php:251
-#: includes/shiftselector.php:236
+#: includes/admin/dashboard-overview-page.php:275
+#: includes/shiftselector.php:297
 msgid "Date:"
 msgstr "Datum:"
 
-#: includes/admin/dashboard-overview-page.php:260
+#: includes/admin/dashboard-overview-page.php:284
 msgid "Show:"
 msgstr "Weergeven:"
 
-#: includes/admin/dashboard-overview-page.php:262
+#: includes/admin/dashboard-overview-page.php:286
 msgid "Upcoming"
 msgstr "Aankomend"
 
-#: includes/admin/dashboard-overview-page.php:263
+#: includes/admin/dashboard-overview-page.php:287
 msgid "Past"
 msgstr "Verleden"
 
-#: includes/admin/dashboard-overview-page.php:274
+#: includes/admin/dashboard-overview-page.php:298
 msgid "Sort by:"
 msgstr "Sorteren op:"
 
-#: includes/admin/dashboard-overview-page.php:284
+#: includes/admin/dashboard-overview-page.php:308
 msgid "Order:"
 msgstr "Volgorde:"
 
-#: includes/admin/dashboard-overview-page.php:286
+#: includes/admin/dashboard-overview-page.php:310
 msgid "Ascending"
 msgstr "Oplopend"
 
-#: includes/admin/dashboard-overview-page.php:287
+#: includes/admin/dashboard-overview-page.php:311
 msgid "Descending"
 msgstr "Aflopend"
 
-#: includes/admin/dashboard-overview-page.php:302
+#: includes/admin/dashboard-overview-page.php:326
 msgid "Show open slots in timeline"
 msgstr "Open plekken in de tijdlijn tonen"
 
-#: includes/admin/dashboard-overview-page.php:305
+#: includes/admin/dashboard-overview-page.php:329
 msgid "Reset filter"
 msgstr "Filter resetten"
 
-#: includes/admin/dashboard-overview-page.php:306
+#: includes/admin/dashboard-overview-page.php:330
 #: includes/admin/volunteer-list.php:244
 msgid "Filter"
 msgstr "Filteren"
 
 #. translators: %d is the minimum number of volunteers required
-#: includes/admin/dashboard-overview-page.php:382
+#: includes/admin/dashboard-overview-page.php:406
 #: includes/admin/dashboard-tab-timeline.php:65
-#: includes/admin/dashboard-tab-timeline.php:388
+#: includes/admin/dashboard-tab-timeline.php:405
 #, php-format
 msgid "(min %d)"
 msgstr "(min. %d)"
 
-#: includes/admin/dashboard-overview-page.php:477
+#: includes/admin/dashboard-overview-page.php:501
 #: includes/admin/dashboard-tab-cards.php:83
 msgid "Select existing volunteer…"
 msgstr "Bestaande vrijwilliger selecteren…"
 
-#: includes/admin/dashboard-overview-page.php:479
-#: includes/admin/dashboard-overview-page.php:494
+#: includes/admin/dashboard-overview-page.php:503
+#: includes/admin/dashboard-overview-page.php:518
 #: includes/admin/dashboard-tab-cards.php:89
 #: includes/admin/dashboard-tab-cards.php:104
 msgid "Send confirmation email"
 msgstr "Bevestigingsmail verzenden"
 
-#: includes/admin/dashboard-overview-page.php:481
+#: includes/admin/dashboard-overview-page.php:505
 #: includes/admin/dashboard-tab-cards.php:90
 msgid "Add to shift"
 msgstr "Aan dienst toevoegen"
 
-#: includes/admin/dashboard-overview-page.php:484
+#: includes/admin/dashboard-overview-page.php:508
 #: includes/admin/dashboard-tab-cards.php:92
 msgid "or add a new volunteer below"
 msgstr "of voeg hieronder een nieuwe vrijwilliger toe"
 
-#: includes/admin/dashboard-overview-page.php:490
+#: includes/admin/dashboard-overview-page.php:514
 #: includes/admin/dashboard-tab-cards.php:100
 #: includes/admin/volunteer-list.php:269 includes/profile.php:67
-#: includes/registration.php:315
+#: includes/registration.php:333
 msgid "First name"
 msgstr "Voornaam"
 
-#: includes/admin/dashboard-overview-page.php:491
+#: includes/admin/dashboard-overview-page.php:515
 #: includes/admin/dashboard-tab-cards.php:101
 #: includes/admin/volunteer-list.php:270 includes/profile.php:72
-#: includes/registration.php:318
+#: includes/registration.php:336
 msgid "Last name"
 msgstr "Achternaam"
 
-#: includes/admin/dashboard-overview-page.php:492
+#: includes/admin/dashboard-overview-page.php:516
 #: includes/admin/dashboard-tab-cards.php:102
 #: includes/admin/volunteer-list.php:273
 msgid "E-Mail (optional)"
 msgstr "E-mail (optioneel)"
 
-#: includes/admin/dashboard-overview-page.php:492
+#: includes/admin/dashboard-overview-page.php:516
 #: includes/admin/dashboard-tab-cards.php:102
 #: includes/admin/volunteer-list.php:273
 msgid "Leave blank for offline volunteers without an email address"
 msgstr "Leeg laten voor offline vrijwilligers zonder e-mailadres"
 
-#: includes/admin/dashboard-overview-page.php:496
+#: includes/admin/dashboard-overview-page.php:520
 #: includes/admin/dashboard-tab-cards.php:105
 msgid "Add"
 msgstr "Toevoegen"
 
-#: includes/admin/dashboard-overview-page.php:596
+#: includes/admin/dashboard-overview-page.php:620
 #: includes/admin/documentation.php:309
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: includes/admin/dashboard-overview-page.php:598
+#: includes/admin/dashboard-overview-page.php:622
 #: includes/admin/documentation.php:311
 msgid "Table"
 msgstr "Tabel"
 
-#: includes/admin/dashboard-overview-page.php:599
+#: includes/admin/dashboard-overview-page.php:623
 msgid "Cards (old)"
 msgstr "Kaarten (oud)"
 
-#: includes/admin/dashboard-overview-page.php:640
-#: includes/admin/dashboard-tab-timeline.php:249
+#: includes/admin/dashboard-overview-page.php:664
+#: includes/admin/dashboard-tab-timeline.php:266
 #: includes/admin/getting-started-checklist.php:215
 #: includes/admin/shift-details-modal.php:137
 msgid "Add shift"
 msgstr "Dienst toevoegen"
 
-#: includes/admin/dashboard-overview-page.php:641
+#: includes/admin/dashboard-overview-page.php:665
 msgid "More options"
 msgstr "Meer opties"
 
-#: includes/admin/dashboard-overview-page.php:646
+#: includes/admin/dashboard-overview-page.php:670
 #: includes/admin/documentation.php:179 includes/admin/documentation.php:263
 #: includes/admin/user-profile.php:255 includes/admin/volunteer-list.php:330
-#: includes/admin/volunteer-list.php:750 includes/post-types.php:67
+#: includes/admin/volunteer-list.php:767 includes/post-types.php:67
 #: includes/post-types.php:77
 msgid "Departments"
 msgstr "Afdelingen"
 
-#: includes/admin/dashboard-overview-page.php:656
+#: includes/admin/dashboard-overview-page.php:680
 msgid "CSV export all shifts"
 msgstr "CSV-export alle diensten"
 
@@ -907,8 +956,8 @@ msgid "Offline"
 msgstr "Offline"
 
 #: includes/admin/dashboard-tab-cards.php:129
-#: includes/admin/dashboard-tab-timeline.php:199
-#: includes/admin/dashboard-tab-timeline.php:258
+#: includes/admin/dashboard-tab-timeline.php:216
+#: includes/admin/dashboard-tab-timeline.php:275
 msgid "Notify volunteer"
 msgstr "Vrijwilliger op de hoogte stellen"
 
@@ -1035,7 +1084,7 @@ msgid "Open slot — not yet booked"
 msgstr "Open plek — nog niet ingevuld"
 
 #: includes/admin/dashboard-tab-table.php:56
-#: includes/admin/dashboard-tab-timeline.php:261
+#: includes/admin/dashboard-tab-timeline.php:278
 msgid "Add volunteer"
 msgstr "Vrijwilliger toevoegen"
 
@@ -1043,77 +1092,95 @@ msgstr "Vrijwilliger toevoegen"
 msgid "Open slot"
 msgstr "Open plek"
 
-#: includes/admin/dashboard-tab-timeline.php:191
-#: includes/admin/dashboard-tab-timeline.php:260
+#: includes/admin/dashboard-tab-timeline.php:158
+msgid ""
+"Click a shift to edit it. Drag it to move it, or drag one of its edges to "
+"change its times."
+msgstr ""
+"Klik op een dienst om hem te bewerken. Sleep hem om hem te verplaatsen, of "
+"sleep aan een van de randen om de tijden te wijzigen."
+
+#. translators: %d: number of days currently shown in the timeline
+#: includes/admin/dashboard-tab-timeline.php:162
+#, php-format
+msgid ""
+"Showing %d days, so short shifts appear narrow — pick a single day in the "
+"date filter for a closer view."
+msgstr ""
+"Er worden %d dagen getoond, dus korte diensten zijn smal – kies één dag in "
+"het datumfilter voor een betere weergave."
+
+#: includes/admin/dashboard-tab-timeline.php:208
+#: includes/admin/dashboard-tab-timeline.php:277
 msgid "Move to another shift"
 msgstr "Naar een andere dienst verplaatsen"
 
-#: includes/admin/dashboard-tab-timeline.php:198
+#: includes/admin/dashboard-tab-timeline.php:215
 msgid "Move to:"
 msgstr "Verplaatsen naar:"
 
-#: includes/admin/dashboard-tab-timeline.php:201
+#: includes/admin/dashboard-tab-timeline.php:218
 msgid "Move"
 msgstr "Verplaatsen"
 
-#: includes/admin/dashboard-tab-timeline.php:245
+#: includes/admin/dashboard-tab-timeline.php:262
 #: includes/admin/shift-details-modal.php:135
-#: includes/admin/user-profile.php:569 includes/admin/volunteer-list.php:838
+#: includes/admin/user-profile.php:569 includes/admin/volunteer-list.php:855
 msgid "Loading…"
 msgstr "Laden…"
 
-#: includes/admin/dashboard-tab-timeline.php:246
+#: includes/admin/dashboard-tab-timeline.php:263
 msgid "Shift time updated."
 msgstr "Diensttijd bijgewerkt."
 
-#: includes/admin/dashboard-tab-timeline.php:247
+#: includes/admin/dashboard-tab-timeline.php:264
 msgid "Undo"
 msgstr "Ongedaan maken"
 
-#: includes/admin/dashboard-tab-timeline.php:248
+#: includes/admin/dashboard-tab-timeline.php:265
 #: includes/admin/shift-details-modal.php:136
 msgid "Edit shift"
 msgstr "Dienst bewerken"
 
-#: includes/admin/dashboard-tab-timeline.php:252
+#: includes/admin/dashboard-tab-timeline.php:269
 #: includes/admin/shift-metaboxes.php:187
 msgid "Duplicate"
 msgstr "Duplicaat"
 
-#: includes/admin/dashboard-tab-timeline.php:253
+#: includes/admin/dashboard-tab-timeline.php:270
 #: includes/admin/shift-metaboxes.php:212
 msgid " (Copy)"
 msgstr " (Kopie)"
 
-#: includes/admin/dashboard-tab-timeline.php:254
+#: includes/admin/dashboard-tab-timeline.php:271
 #: includes/admin/shift-details-modal.php:138 includes/rest-api.php:159
 msgid "Title, start and end are required."
 msgstr "Titel, start en einde zijn verplicht."
 
-#: includes/admin/dashboard-tab-timeline.php:255
+#: includes/admin/dashboard-tab-timeline.php:272
 msgid "Remove from shift"
 msgstr "Uit dienst verwijderen"
 
 #. translators: %s is the volunteer's name
-#: includes/admin/dashboard-tab-timeline.php:257
+#: includes/admin/dashboard-tab-timeline.php:274
 #, php-format
 msgid "Remove %s from this shift?"
 msgstr "%s uit deze dienst verwijderen?"
 
-#: includes/admin/dashboard-tab-timeline.php:259
+#: includes/admin/dashboard-tab-timeline.php:276
 msgid "View profile"
 msgstr "Profiel bekijken"
 
-#: includes/admin/dashboard-tab-timeline.php:262
+#: includes/admin/dashboard-tab-timeline.php:279
 msgid "Delete shift"
 msgstr "Dienst verwijderen"
 
-#: includes/admin/dashboard-tab-timeline.php:263
+#: includes/admin/dashboard-tab-timeline.php:280
 msgid "Delete this shift?"
 msgstr "Deze dienst verwijderen?"
 
 #. translators: %d is the number of volunteers currently assigned to the shift
-#: includes/admin/dashboard-tab-timeline.php:265
+#: includes/admin/dashboard-tab-timeline.php:282
 #, php-format
 msgid ""
 "Delete this shift? This will also remove %d assigned volunteer(s) from it."
@@ -1121,18 +1188,18 @@ msgstr ""
 "Deze dienst verwijderen? Hierdoor worden ook %d aangemelde vrijwilliger(s) "
 "verwijderd."
 
-#: includes/admin/dashboard-tab-timeline.php:266
+#: includes/admin/dashboard-tab-timeline.php:283
 #: includes/admin/getting-started-checklist.php:338
 #: includes/admin/user-profile.php:221
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: includes/admin/dashboard-tab-timeline.php:267
+#: includes/admin/dashboard-tab-timeline.php:284
 msgid "Confirm"
 msgstr "Bevestigen"
 
 #. translators: %s is the volunteer's name
-#: includes/admin/dashboard-tab-timeline.php:269
+#: includes/admin/dashboard-tab-timeline.php:286
 #, php-format
 msgid ""
 "This shift also has one other person on it. Apply the new time to both, or "
@@ -1143,7 +1210,7 @@ msgstr ""
 
 #. translators: %d is the number of other people on the shift, %s is the
 #. volunteer's name
-#: includes/admin/dashboard-tab-timeline.php:271
+#: includes/admin/dashboard-tab-timeline.php:288
 #, php-format
 msgid ""
 "This shift also has %d other people on it. Apply the new time to everyone, "
@@ -1152,21 +1219,21 @@ msgstr ""
 "Deze dienst heeft nog %d andere personen. Wilt u de nieuwe tijd voor "
 "iedereen toepassen, of alleen voor %s?"
 
-#: includes/admin/dashboard-tab-timeline.php:272
+#: includes/admin/dashboard-tab-timeline.php:289
 msgid "Apply to everyone"
 msgstr "Voor iedereen toepassen"
 
 #. translators: %s is the volunteer's name
-#: includes/admin/dashboard-tab-timeline.php:274
+#: includes/admin/dashboard-tab-timeline.php:291
 #, php-format
 msgid "Only to %s"
 msgstr "Alleen voor %s"
 
-#: includes/admin/dashboard-tab-timeline.php:275
+#: includes/admin/dashboard-tab-timeline.php:292
 msgid "Notify affected volunteers"
 msgstr "Betrokken volunteers informeren"
 
-#: includes/admin/dashboard-tab-timeline.php:307
+#: includes/admin/dashboard-tab-timeline.php:324
 #: includes/admin/shift-details-modal.php:170 includes/rest-api.php:142
 #: includes/rest-api.php:304
 msgid "Shift not found."
@@ -1443,7 +1510,7 @@ msgid "What it can do"
 msgstr "Wat het kan"
 
 #: includes/admin/documentation.php:217 includes/admin/documentation.php:601
-#: includes/admin/settings.php:619
+#: includes/admin/settings.php:635
 msgid "Security"
 msgstr "Beveiliging"
 
@@ -1455,7 +1522,7 @@ msgstr "Referentie"
 msgid "All Shortcodes"
 msgstr "Alle shortcodes"
 
-#: includes/admin/documentation.php:224 includes/admin/documentation.php:638
+#: includes/admin/documentation.php:224 includes/admin/documentation.php:639
 msgid "Frequently Asked Questions (FAQ)"
 msgstr "Veelgestelde vragen (FAQ)"
 
@@ -2588,7 +2655,20 @@ msgstr "Toont het Volunteer­profiel voor ingelogde gebruikers."
 msgid "Volunteers can sign up for or cancel shifts."
 msgstr "Volunteers kunnen zich aanmelden of afmelden voor diensten."
 
-#: includes/admin/documentation.php:634
+#: includes/admin/documentation.php:631
+msgid ""
+"Add department=\"slug\" (several separated by commas) to this shortcode, "
+"[eventadmin_cockpit] or [eventadmin] to only offer that department's shifts,"
+" including its sub-departments — e.g. one page per department. \"My shifts\""
+" still lists all of the volunteer's shifts."
+msgstr ""
+"Voeg department=\"slug\" (meerdere gescheiden door komma's) toe aan deze "
+"shortcode, [eventadmin_cockpit] of [eventadmin] om alleen de diensten van "
+"die afdeling aan te bieden, inclusief subafdelingen – bijv. één pagina per "
+"afdeling. \"Mijn diensten\" toont nog steeds alle diensten van de "
+"vrijwilliger."
+
+#: includes/admin/documentation.php:635
 msgid ""
 "Public, no-login overview of where volunteers are still needed, grouped by "
 "department. Ideal for a recruitment page that points visitors to the "
@@ -2598,20 +2678,20 @@ msgstr ""
 "nodig zijn, gegroepeerd per afdeling. Ideaal voor een wervingspagina die "
 "bezoekers naar het registratieformulier leidt."
 
-#: includes/admin/documentation.php:640
+#: includes/admin/documentation.php:641
 msgid "Do volunteers need an account?"
 msgstr "Hebben Volunteers een account nodig?"
 
-#: includes/admin/documentation.php:641
+#: includes/admin/documentation.php:642
 msgid "Yes, they must be logged in to view and join shifts."
 msgstr ""
 "Ja, u moet ingelogd zijn om diensten te bekijken en eraan deel te nemen."
 
-#: includes/admin/documentation.php:643
+#: includes/admin/documentation.php:644
 msgid "How can I assign volunteers manually?"
 msgstr "Hoe kan ik Volunteers handmatig toewijzen?"
 
-#: includes/admin/documentation.php:644
+#: includes/admin/documentation.php:645
 msgid ""
 "Open Shifts → Overview. In the Table view use the \"Add volunteer\" button "
 "on a shift, or click an open slot in the Timeline view. You can pick an "
@@ -2623,11 +2703,11 @@ msgstr ""
 "\"Tijdlijn\" op een open plek. U kunt een bestaande vrijwilliger kiezen of "
 "ter plekke een nieuw account aanmaken (met of zonder e-mailadres)."
 
-#: includes/admin/documentation.php:646
+#: includes/admin/documentation.php:647
 msgid "What happens when shifts are full?"
 msgstr "Wat gebeurt er als diensten vol zijn?"
 
-#: includes/admin/documentation.php:647
+#: includes/admin/documentation.php:648
 msgid ""
 "By default, full shifts are hidden on the volunteer page. You can optionally"
 " show them in a separate read-only section by enabling \"Show full shifts to"
@@ -2637,11 +2717,11 @@ msgstr ""
 "optioneel weergeven in een aparte alleen-lezen sectie door \"Volle diensten "
 "tonen aan Volunteers\" in te schakelen via Instellingen → Weergave."
 
-#: includes/admin/documentation.php:649
+#: includes/admin/documentation.php:650
 msgid "What is the minimum volunteers field for?"
 msgstr "Waarvoor dient het veld voor het minimum aantal Volunteers?"
 
-#: includes/admin/documentation.php:650
+#: includes/admin/documentation.php:651
 msgid ""
 "You can set a minimum number of volunteers per shift. The admin dashboard "
 "will highlight shifts that have not reached the minimum with an "
@@ -2653,11 +2733,11 @@ msgstr ""
 "een onderbezettingswaarschuwing. Dit is alleen informatief – er worden geen "
 "aanmeldingsregels afgedwongen op basis van het minimum."
 
-#: includes/admin/documentation.php:652
+#: includes/admin/documentation.php:653
 msgid "Can visitors see where help is needed before registering?"
 msgstr "Kunnen bezoekers vóór registratie zien waar hulp nodig is?"
 
-#: includes/admin/documentation.php:653
+#: includes/admin/documentation.php:654
 msgid ""
 "Yes. Put the [eventadmin_open_positions] shortcode on any public page. It "
 "lists every department that still has unfilled slots, needs no login, and by"
@@ -2669,11 +2749,11 @@ msgstr ""
 "vereist geen inloggen en laat standaard een compacte samenvatting zien — "
 "voeg style=\"list\" toe voor de afzonderlijke openstaande diensten."
 
-#: includes/admin/documentation.php:655
+#: includes/admin/documentation.php:656
 msgid "Why can't a volunteer cancel their shift anymore?"
 msgstr "Waarom kan een volunteer zich niet meer afmelden?"
 
-#: includes/admin/documentation.php:656
+#: includes/admin/documentation.php:657
 msgid ""
 "By default they can cancel anytime, right up to the start. Settings → "
 "General → \"Sign out possible up to X hours before start\" lets you require "
@@ -2685,11 +2765,11 @@ msgstr ""
 "u in plaats daarvan een minimale opzegtermijn instellen (bijv. 24 uur) — "
 "daarna verdwijnt de afmeldoptie voor hen."
 
-#: includes/admin/documentation.php:658
+#: includes/admin/documentation.php:659
 msgid "Can a volunteer sign up for two overlapping shifts?"
 msgstr "Kan een volunteer zich aanmelden voor twee overlappende diensten?"
 
-#: includes/admin/documentation.php:659
+#: includes/admin/documentation.php:660
 msgid ""
 "Not by default — Settings → General → \"Allow overlapping shifts\" blocks a "
 "volunteer from signing up for a shift that overlaps one they're already on. "
@@ -2700,11 +2780,11 @@ msgstr ""
 "overlapt met een dienst waarvoor hij al staat ingedeeld. Vink de optie aan "
 "als overlappende diensten wel toegestaan moeten zijn."
 
-#: includes/admin/documentation.php:661
+#: includes/admin/documentation.php:662
 msgid "How do I limit how many shifts one person can take?"
 msgstr "Hoe beperk ik hoeveel diensten iemand kan nemen?"
 
-#: includes/admin/documentation.php:662
+#: includes/admin/documentation.php:663
 msgid ""
 "Settings → General has four separate limits — per day, week, month, and "
 "year. Each is 0 (unlimited) by default; set any of them to cap how many "
@@ -2714,11 +2794,11 @@ msgstr ""
 " jaar. Elk staat standaard op 0 (onbeperkt); stel er een in om te beperken "
 "hoeveel diensten een volunteer in die periode kan nemen."
 
-#: includes/admin/documentation.php:664
+#: includes/admin/documentation.php:665
 msgid "How do I stop spam registrations?"
 msgstr "Hoe voorkom ik spamregistraties?"
 
-#: includes/admin/documentation.php:665
+#: includes/admin/documentation.php:666
 msgid ""
 "Bots occasionally submit fake volunteer registrations through the public "
 "form. Besides the built-in honeypot field (always on), Settings → General "
@@ -2737,11 +2817,11 @@ msgstr ""
 "geblokkeerd, controleer dus ook de instellingen van die plugin nadat u "
 "overschakelt."
 
-#: includes/admin/documentation.php:667
+#: includes/admin/documentation.php:668
 msgid "Why isn't there a password field when volunteers register or log in?"
 msgstr "Waarom is er geen wachtwoordveld bij registratie of aanmelden?"
 
-#: includes/admin/documentation.php:668
+#: includes/admin/documentation.php:669
 msgid ""
 "Volunteers don't set a password — the registration form and the \"resend "
 "login\" option both email a one-time login link (valid ~24 hours) instead. "
@@ -2770,7 +2850,7 @@ msgstr ""
 "vrijwilligerspagina — de inloglink blijft voor iedereen beschikbaar, "
 "bijvoorbeeld als ze het vergeten."
 
-#: includes/admin/documentation.php:670
+#: includes/admin/documentation.php:671
 msgid ""
 "What's the difference between assigning a volunteer to a shift and linking "
 "them to a department?"
@@ -2778,7 +2858,7 @@ msgstr ""
 "Wat is het verschil tussen een volunteer toewijzen aan een dienst en "
 "koppelen aan een afdeling?"
 
-#: includes/admin/documentation.php:671
+#: includes/admin/documentation.php:672
 msgid ""
 "Assigning them to a shift is the actual roster — it's what they signed up "
 "for. Linking them to a department (Volunteers page → Edit) is independent of"
@@ -2793,12 +2873,36 @@ msgstr ""
 "aan een afdeling\"), handig om mensen te bereiken voordat er überhaupt een "
 "dienst in die afdeling bestaat."
 
-#: includes/admin/documentation.php:673
+#: includes/admin/documentation.php:674
+msgid "Can volunteers only see the shifts of their own departments?"
+msgstr ""
+"Kunnen vrijwilligers alleen de diensten van hun eigen afdelingen zien?"
+
+#: includes/admin/documentation.php:675
+msgid ""
+"Yes. Turn on Settings → General → \"Shifts per department\", then on the "
+"Volunteers page click \"Edit\" in a volunteer's Departments column and tick "
+"the departments under \"Can sign up for shifts in\". That list is separate "
+"from the departments they get notified about, and only managers can change "
+"it. Volunteers without any such department still see every shift, shifts "
+"without a department are visible to everyone, and shifts someone already "
+"signed up for always stay under \"My shifts\"."
+msgstr ""
+"Ja. Zet Instellingen → Algemeen → \"Diensten per afdeling\" aan, klik dan op"
+" de pagina \"Volunteers\" op \"Bewerken\" in de kolom Afdelingen van een "
+"vrijwilliger en vink de afdelingen aan onder \"Kan zich aanmelden voor "
+"diensten in\". Die lijst staat los van de afdelingen waarover iemand "
+"meldingen krijgt, en alleen managers kunnen hem wijzigen. Vrijwilligers "
+"zonder zo'n afdeling zien nog steeds alle diensten, diensten zonder afdeling"
+" zijn voor iedereen zichtbaar, en diensten waarvoor iemand zich al heeft "
+"aangemeld blijven altijd onder \"Mijn diensten\" staan."
+
+#: includes/admin/documentation.php:677
 msgid "Does deleting or deactivating the plugin delete volunteer data?"
 msgstr ""
 "Verwijdert het verwijderen of deactiveren van de plugin volunteergegevens?"
 
-#: includes/admin/documentation.php:674
+#: includes/admin/documentation.php:678
 msgid ""
 "Deactivating only stops the scheduled reminder and cleanup jobs. "
 "Uninstalling does not delete anything either — volunteer accounts, shifts, "
@@ -2812,12 +2916,12 @@ msgstr ""
 " dus er gaat niets verloren als u opnieuw installeert. Verwijder ze zelf "
 "handmatig (of met een opschoon-plugin) als u een schone lei wilt."
 
-#: includes/admin/documentation.php:676
+#: includes/admin/documentation.php:680
 msgid "Can I reuse last year's shifts for a new event?"
 msgstr ""
 "Kan ik de diensten van vorig jaar hergebruiken voor een nieuw evenement?"
 
-#: includes/admin/documentation.php:677
+#: includes/admin/documentation.php:681
 msgid ""
 "Yes — on the Manager page's Timeline tab, use \"Copy shifts to another day\""
 " (in the + Add shift dropdown) to recreate every shift from a past day onto "
@@ -2832,11 +2936,53 @@ msgstr ""
 "aangemelde volunteers mee te kopiëren, zodat je het rooster van een hele dag"
 " in één keer naar volgend jaar kunt overzetten."
 
-#: includes/admin/documentation.php:682
+#: includes/admin/documentation.php:683
+msgid "Can I create weekly recurring shifts?"
+msgstr "Kan ik wekelijks terugkerende diensten aanmaken?"
+
+#: includes/admin/documentation.php:684
+msgid ""
+"Yes. Set up one day's shifts, then use \"Copy shifts to another day\", pick "
+"the first new date and tick \"Repeat every week\" with an end date. The "
+"shifts are created on the same weekday every week (up to 52 weeks). Running "
+"the same repeat again skips shifts that already exist, and volunteers are "
+"never copied into a series."
+msgstr ""
+"Ja. Maak de diensten van één dag aan, gebruik dan \"Diensten naar een andere"
+" dag kopiëren\", kies de eerste nieuwe datum en vink \"Elke week herhalen\" "
+"aan met een einddatum. De diensten worden elke week op dezelfde weekdag "
+"aangemaakt (maximaal 52 weken). Voert u dezelfde herhaling nog eens uit, dan"
+" worden bestaande diensten overgeslagen, en vrijwilligers worden nooit in "
+"een reeks meegekopieerd."
+
+#: includes/admin/documentation.php:686
+msgid ""
+"A volunteer sees old sign-ups or empty \"My shifts\" after reopening the "
+"page. Why?"
+msgstr ""
+"Een vrijwilliger ziet na het opnieuw openen van de pagina oude aanmeldingen "
+"of een lege \"Mijn diensten\". Waarom?"
+
+#: includes/admin/documentation.php:687
+msgid ""
+"That is almost always a cached copy of the page. The plugin tells caching "
+"plugins, browsers and CDNs not to cache the volunteer page, but a host or "
+"CDN rule that caches every page regardless (e.g. Cloudflare \"Cache "
+"Everything\") overrides that. Exclude the volunteer page from such rules, or"
+" make them skip visitors with a WordPress login cookie."
+msgstr ""
+"Dat is bijna altijd een gecachte kopie van de pagina. De plugin vraagt "
+"cachingplugins, browsers en CDN's de vrijwilligerspagina niet te cachen, "
+"maar een regel bij de host of het CDN die elke pagina toch cachet (bijv. "
+"Cloudflare \"Cache Everything\") gaat daaroverheen. Sluit de "
+"vrijwilligerspagina uit van zulke regels, of laat ze bezoekers met een "
+"WordPress-inlogcookie overslaan."
+
+#: includes/admin/documentation.php:692
 msgid "Support EventAdmin"
 msgstr "EventAdmin ondersteunen"
 
-#: includes/admin/documentation.php:683
+#: includes/admin/documentation.php:693
 msgid ""
 "EventAdmin is free and open source. If it saves you time, please consider "
 "leaving a review or making a small donation — it helps a lot!"
@@ -2844,11 +2990,11 @@ msgstr ""
 "EventAdmin is gratis en open source. Als het u tijd bespaart, denk dan aan "
 "een beoordeling of een kleine donatie!"
 
-#: includes/admin/documentation.php:685
+#: includes/admin/documentation.php:695
 msgid "Rate 5 stars on WordPress.org"
 msgstr "5 sterren geven op WordPress.org"
 
-#: includes/admin/documentation.php:686
+#: includes/admin/documentation.php:696
 msgid "Donate via Revolut"
 msgstr "Doneren via Revolut"
 
@@ -3598,7 +3744,7 @@ msgstr "Max. Volunteers"
 msgid "Department"
 msgstr "Afdeling"
 
-#: includes/admin/quick-edit.php:316 includes/shiftselector.php:204
+#: includes/admin/quick-edit.php:316 includes/shiftselector.php:265
 msgid "All departments"
 msgstr "Alle afdelingen"
 
@@ -3663,22 +3809,22 @@ msgstr "Eindtijd van de dienst (opgemaakt)"
 msgid "Number of days before the shift starts"
 msgstr "Aantal dagen voor de start van de dienst"
 
-#: includes/admin/settings.php:428
+#: includes/admin/settings.php:432
 msgid "Registration"
 msgstr "Registratie"
 
-#: includes/admin/settings.php:435
+#: includes/admin/settings.php:439
 msgid "Suppress WordPress password email"
 msgstr "WordPress wachtwoord-e-mail onderdrukken"
 
-#: includes/admin/settings.php:438 includes/admin/settings.php:492
-#: includes/admin/settings.php:524 includes/admin/settings.php:540
-#: includes/admin/settings.php:556 includes/admin/settings.php:579
-#: includes/admin/settings.php:703
+#: includes/admin/settings.php:442 includes/admin/settings.php:496
+#: includes/admin/settings.php:540 includes/admin/settings.php:556
+#: includes/admin/settings.php:572 includes/admin/settings.php:595
+#: includes/admin/settings.php:719
 msgid "Yes"
 msgstr "Ja"
 
-#: includes/admin/settings.php:439
+#: includes/admin/settings.php:443
 msgid ""
 "Volunteers log in with a login link, never with a password. The registration"
 " form never sends a password email; WordPress only sends its \"set your "
@@ -3691,15 +3837,15 @@ msgstr ""
 "login of onder Gebruikers → Nieuwe toevoegen zijn aangemaakt. Indien "
 "ingeschakeld ontvangen vrijwilligers die e-mail niet."
 
-#: includes/admin/settings.php:447
+#: includes/admin/settings.php:451
 msgid "Password login"
 msgstr "Inloggen met wachtwoord"
 
-#: includes/admin/settings.php:450
+#: includes/admin/settings.php:454
 msgid "Allow volunteers to also log in with email and password"
 msgstr "Vrijwilligers toestaan om ook met e-mail en wachtwoord in te loggen"
 
-#: includes/admin/settings.php:451
+#: includes/admin/settings.php:455
 msgid ""
 "Volunteers can set a password in their profile and log in with it on the "
 "volunteer page. The login link stays available to everyone — it is still "
@@ -3711,47 +3857,70 @@ msgstr ""
 "beschikbaar — die wordt nog steeds gebruikt voor aanmelden en uitnodigingen,"
 " en wanneer iemand zijn wachtwoord vergeten is."
 
-#: includes/admin/settings.php:459
+#: includes/admin/settings.php:463
 msgid "Rules"
 msgstr "Regels"
 
-#: includes/admin/settings.php:465
+#: includes/admin/settings.php:469
 msgid "Max. shifts per year"
 msgstr "Max. diensten per jaar"
 
-#: includes/admin/settings.php:466
+#: includes/admin/settings.php:470
 msgid "Max. shifts per month"
 msgstr "Max. diensten per maand"
 
-#: includes/admin/settings.php:467
+#: includes/admin/settings.php:471
 msgid "Max. shifts per week"
 msgstr "Max. diensten per week"
 
-#: includes/admin/settings.php:468
+#: includes/admin/settings.php:472
 msgid "Max. shifts per day"
 msgstr "Max. diensten per dag"
 
-#: includes/admin/settings.php:489
+#: includes/admin/settings.php:493
 msgid "Allow overlapping shifts"
 msgstr "Overlappende diensten toestaan"
 
-#: includes/admin/settings.php:500
+#: includes/admin/settings.php:504
+msgid "Shifts per department"
+msgstr "Diensten per afdeling"
+
+#: includes/admin/settings.php:507
+msgid ""
+"Volunteers only see shifts from the departments they are allowed to work in"
+msgstr ""
+"Vrijwilligers zien alleen diensten van de afdelingen waarin ze mogen werken"
+
+#: includes/admin/settings.php:508
+msgid ""
+"Set each volunteer's departments on the Volunteers page: \"Edit\" in the "
+"Departments column → \"Can sign up for shifts in\". This is separate from "
+"the departments a volunteer gets notified about. Volunteers without any such"
+" department, and shifts without a department, are not restricted."
+msgstr ""
+"Stel de afdelingen per vrijwilliger in op de pagina \"Volunteers\": "
+"\"Bewerken\" in de kolom Afdelingen → \"Kan zich aanmelden voor diensten "
+"in\". Dit staat los van de afdelingen waarover een vrijwilliger meldingen "
+"krijgt. Vrijwilligers zonder zo'n afdeling, en diensten zonder afdeling, "
+"zijn niet beperkt."
+
+#: includes/admin/settings.php:516
 msgid "Sign out possible up to X hours before start"
 msgstr "Afmelden mogelijk tot X uur voor aanvang"
 
-#: includes/admin/settings.php:502 includes/shiftselector.php:429
+#: includes/admin/settings.php:518 includes/shiftselector.php:493
 msgid "hours"
 msgstr "uur"
 
-#: includes/admin/settings.php:510
+#: includes/admin/settings.php:526
 msgid "Admin menu"
 msgstr "Beheermenu"
 
-#: includes/admin/settings.php:521
+#: includes/admin/settings.php:537
 msgid "Hide \"All Shifts\" menu item"
 msgstr "Menu-item \"Alle diensten\" verbergen"
 
-#: includes/admin/settings.php:525
+#: includes/admin/settings.php:541
 msgid ""
 "Hides the classic shift list screen from the sidebar — Manager covers the "
 "same day-to-day work. The screen itself still works if you have a direct "
@@ -3761,11 +3930,11 @@ msgstr ""
 "hetzelfde dagelijkse werk. Het scherm zelf werkt nog steeds als u er een "
 "directe link naartoe heeft."
 
-#: includes/admin/settings.php:537
+#: includes/admin/settings.php:553
 msgid "Hide \"Add Shift\" menu item"
 msgstr "Menu-item \"Dienst toevoegen\" verbergen"
 
-#: includes/admin/settings.php:541
+#: includes/admin/settings.php:557
 msgid ""
 "Hides the classic \"Add new shift\" screen from the sidebar — Manager's own "
 "\"+ Add shift\" button covers the same task. The screen itself still works "
@@ -3775,11 +3944,11 @@ msgstr ""
 "de eigen \"+ Dienst toevoegen\"-knop van Manager dekt dezelfde taak. Het "
 "scherm zelf werkt nog steeds als u er een directe link naartoe heeft."
 
-#: includes/admin/settings.php:553
+#: includes/admin/settings.php:569
 msgid "Hide \"Departments\" menu item"
 msgstr "Menu-item \"Afdelingen\" verbergen"
 
-#: includes/admin/settings.php:557
+#: includes/admin/settings.php:573
 msgid ""
 "Hides the department management screen from the sidebar — Manager's own "
 "\"Departments\" link (in the \"Add shift\" dropdown) covers the same task. "
@@ -3790,15 +3959,15 @@ msgstr ""
 "dezelfde taak. Het scherm zelf werkt nog steeds als u er een directe link "
 "naartoe heeft."
 
-#: includes/admin/settings.php:565
+#: includes/admin/settings.php:581
 msgid "API access"
 msgstr "API-toegang"
 
-#: includes/admin/settings.php:576
+#: includes/admin/settings.php:592
 msgid "Allow API access"
 msgstr "API-toegang toestaan"
 
-#: includes/admin/settings.php:580
+#: includes/admin/settings.php:596
 msgid ""
 "Exposes shifts and dashboard data via the WordPress REST API (at /wp-"
 "json/eventadmin/v1/), for use with MCP or other external integrations. Only "
@@ -3811,19 +3980,19 @@ msgstr ""
 "geïdentificeerd met een WordPress-toepassingswachtwoord (Gebruikers → uw "
 "profiel → Toepassingswachtwoorden)."
 
-#: includes/admin/settings.php:588
+#: includes/admin/settings.php:604
 msgid "Connect"
 msgstr "Verbinden"
 
-#: includes/admin/settings.php:626
+#: includes/admin/settings.php:642
 msgid "CAPTCHA provider"
 msgstr "CAPTCHA-aanbieder"
 
-#: includes/admin/settings.php:630
+#: includes/admin/settings.php:646
 msgid "None"
 msgstr "Geen"
 
-#: includes/admin/settings.php:641
+#: includes/admin/settings.php:657
 msgid ""
 "Adds a CAPTCHA challenge to the volunteer registration form to block "
 "automated spam registrations."
@@ -3833,12 +4002,12 @@ msgstr ""
 
 #. translators: %s = link to the Simple Cloudflare Turnstile plugin on
 #. WordPress.org
-#: includes/admin/settings.php:646
+#: includes/admin/settings.php:662
 #, php-format
 msgid "Requires the free %s plugin to be installed and activated."
 msgstr "Vereist dat de gratis plugin %s is geïnstalleerd en geactiveerd."
 
-#: includes/admin/settings.php:650
+#: includes/admin/settings.php:666
 msgid ""
 "The Simple Cloudflare Turnstile plugin is active but has no site key/secret "
 "key configured yet. Until it is configured, registration is blocked for "
@@ -3848,11 +4017,11 @@ msgstr ""
 "sitesleutel/geheime sleutel geconfigureerd. Zolang dit niet is ingesteld, is"
 " registratie voor iedereen geblokkeerd."
 
-#: includes/admin/settings.php:659
+#: includes/admin/settings.php:675
 msgid "CAPTCHA site key"
 msgstr "CAPTCHA-sitesleutel"
 
-#: includes/admin/settings.php:662
+#: includes/admin/settings.php:678
 msgid ""
 "Get your keys from the provider's admin console. Not used for Cloudflare "
 "Turnstile — configure its site key in the Simple Cloudflare Turnstile plugin"
@@ -3862,11 +4031,11 @@ msgstr ""
 "voor Cloudflare Turnstile — configureer de sitesleutel in plaats daarvan in "
 "de instellingen van de Simple Cloudflare Turnstile-plugin."
 
-#: includes/admin/settings.php:670
+#: includes/admin/settings.php:686
 msgid "CAPTCHA secret key"
 msgstr "CAPTCHA-geheime sleutel"
 
-#: includes/admin/settings.php:673
+#: includes/admin/settings.php:689
 msgid ""
 "Not used for Cloudflare Turnstile — configure its secret key in the Simple "
 "Cloudflare Turnstile plugin settings instead."
@@ -3874,11 +4043,11 @@ msgstr ""
 "Niet gebruikt voor Cloudflare Turnstile — configureer de geheime sleutel in "
 "plaats daarvan in de instellingen van de Simple Cloudflare Turnstile-plugin."
 
-#: includes/admin/settings.php:681
+#: includes/admin/settings.php:697
 msgid "reCAPTCHA v3 score threshold"
 msgstr "reCAPTCHA v3 scoredrempel"
 
-#: includes/admin/settings.php:685
+#: includes/admin/settings.php:701
 msgid ""
 "Scores below this value are treated as bots (0.0 = all pass, 1.0 = all "
 "blocked). Default: 0.5. Only applies to reCAPTCHA v3."
@@ -3886,15 +4055,15 @@ msgstr ""
 "Scores onder deze waarde worden als bots beschouwd (0.0 = alles door, 1.0 = "
 "alles geblokkeerd). Standaard: 0.5. Geldt alleen voor reCAPTCHA v3."
 
-#: includes/admin/settings.php:693
+#: includes/admin/settings.php:709
 msgid "Volunteer Shift Selector"
 msgstr "Dienstkiezer voor vrijwilligers"
 
-#: includes/admin/settings.php:700
+#: includes/admin/settings.php:716
 msgid "Show full shifts to volunteers"
 msgstr "Volle diensten tonen aan Volunteers"
 
-#: includes/admin/settings.php:704
+#: includes/admin/settings.php:720
 msgid ""
 "If enabled, a \"Full shifts\" section is shown on the volunteer shift "
 "selector page."
@@ -3902,57 +4071,57 @@ msgstr ""
 "Indien ingeschakeld, wordt op de Volunteer­dienstpagina een sectie \"Volle "
 "diensten\" weergegeven."
 
-#: includes/admin/settings.php:712
+#: includes/admin/settings.php:728
 msgid "Volunteer shift filters"
 msgstr "Dienstfilters voor vrijwilligers"
 
-#: includes/admin/settings.php:716
+#: includes/admin/settings.php:732
 msgid "Text search"
 msgstr "Tekstzoekopdracht"
 
-#: includes/admin/settings.php:717
+#: includes/admin/settings.php:733
 msgid "Date filter"
 msgstr "Datumfilter"
 
-#: includes/admin/settings.php:718
+#: includes/admin/settings.php:734
 msgid "Category filter"
 msgstr "Categoriefilter"
 
-#: includes/admin/settings.php:726
+#: includes/admin/settings.php:742
 msgid "Choose which filter controls appear on the volunteer shift selector."
 msgstr ""
 "Kies welke filteropties worden getoond op de dienstkiezer voor "
 "vrijwilligers."
 
-#: includes/admin/settings.php:734
+#: includes/admin/settings.php:750
 msgid "Formatting"
 msgstr "Opmaak"
 
-#: includes/admin/settings.php:741
+#: includes/admin/settings.php:757
 msgid "Date format (shift start)"
 msgstr "Datumnotatie (begin dienst)"
 
-#: includes/admin/settings.php:747 includes/admin/settings.php:765
+#: includes/admin/settings.php:763 includes/admin/settings.php:781
 msgid "Example:"
 msgstr "Voorbeeld:"
 
-#: includes/admin/settings.php:748 includes/admin/settings.php:766
+#: includes/admin/settings.php:764 includes/admin/settings.php:782
 msgid "Default:"
 msgstr "Standaard:"
 
-#: includes/admin/settings.php:749 includes/admin/settings.php:767
+#: includes/admin/settings.php:765 includes/admin/settings.php:783
 msgid "Common tokens"
 msgstr "Veelgebruikte tokens"
 
-#: includes/admin/settings.php:759
+#: includes/admin/settings.php:775
 msgid "Time format (shift end)"
 msgstr "Tijdnotatie (einde dienst)"
 
-#: includes/admin/settings.php:777 includes/admin/settings.php:891
+#: includes/admin/settings.php:793 includes/admin/settings.php:907
 msgid "Custom CSS"
 msgstr "Aangepaste CSS"
 
-#: includes/admin/settings.php:781
+#: includes/admin/settings.php:797
 msgid ""
 "Additional CSS injected on the frontend. Use this for theme-specific "
 "adjustments without modifying your theme files."
@@ -3960,11 +4129,11 @@ msgstr ""
 "Extra CSS dat op de frontend wordt ingevoegd. Gebruik dit voor thema-"
 "specifieke aanpassingen zonder uw themabestanden te bewerken."
 
-#: includes/admin/settings.php:816
+#: includes/admin/settings.php:832
 msgid "Email Design"
 msgstr "E-mailontwerp"
 
-#: includes/admin/settings.php:818
+#: includes/admin/settings.php:834
 msgid ""
 "These apply to every email the plugin sends — sign-up confirmations, "
 "reminders, and announcements."
@@ -3972,47 +4141,47 @@ msgstr ""
 "Deze gelden voor elke e-mail die de plugin verstuurt — aanmeldbevestigingen,"
 " herinneringen en aankondigingen."
 
-#: includes/admin/settings.php:825
+#: includes/admin/settings.php:841
 msgid "Header color"
 msgstr "Kleur van de kop"
 
-#: includes/admin/settings.php:829
+#: includes/admin/settings.php:845
 msgid "Use a custom color"
 msgstr "Aangepaste kleur gebruiken"
 
-#: includes/admin/settings.php:831
+#: includes/admin/settings.php:847
 msgid "Default is a dark blue gradient."
 msgstr "Standaard is een donkerblauw verloop."
 
-#: includes/admin/settings.php:839
+#: includes/admin/settings.php:855
 msgid "Header text color"
 msgstr "Tekstkleur in de kop"
 
-#: includes/admin/settings.php:843
+#: includes/admin/settings.php:859
 msgid "Choose a color that stays readable against your header color/logo."
 msgstr "Kies een kleur die goed leesbaar blijft tegen uw koptekstkleur/logo."
 
-#: includes/admin/settings.php:851
+#: includes/admin/settings.php:867
 msgid "Header title"
 msgstr "Titel in de kop"
 
-#: includes/admin/settings.php:855 includes/admin/settings.php:867
+#: includes/admin/settings.php:871 includes/admin/settings.php:883
 msgid "Leave empty to hide this line."
 msgstr "Laat leeg om deze regel te verbergen."
 
-#: includes/admin/settings.php:863
+#: includes/admin/settings.php:879
 msgid "Header subtitle"
 msgstr "Ondertitel in de kop"
 
-#: includes/admin/settings.php:875
+#: includes/admin/settings.php:891
 msgid "Header logo"
 msgstr "Logo in de kop"
 
-#: includes/admin/settings.php:883
+#: includes/admin/settings.php:899
 msgid "Footer"
 msgstr "Voettekst"
 
-#: includes/admin/settings.php:895
+#: includes/admin/settings.php:911
 msgid ""
 "Advanced: extra CSS added to every email. Support varies a lot by email "
 "client (e.g. Outlook ignores it entirely) — use it for minor tweaks, not "
@@ -4022,31 +4191,31 @@ msgstr ""
 "verschilt sterk per e-mailclient (Outlook negeert het bijvoorbeeld volledig)"
 " — gebruikt u het voor kleine aanpassingen, niet voor iets essentieels."
 
-#: includes/admin/settings.php:903
+#: includes/admin/settings.php:919
 msgid "Volunteer Notifications"
 msgstr "Vrijwilligersmeldingen"
 
-#: includes/admin/settings.php:910 includes/admin/settings.php:967
+#: includes/admin/settings.php:926 includes/admin/settings.php:983
 msgid "Email Subject (Sign up)"
 msgstr "E-mailonderwerp (Aanmelden)"
 
-#: includes/admin/settings.php:921 includes/admin/settings.php:978
+#: includes/admin/settings.php:937 includes/admin/settings.php:994
 msgid "Email Text (Sign up)"
 msgstr "E-mailtekst (Aanmelden)"
 
-#: includes/admin/settings.php:934 includes/admin/settings.php:991
+#: includes/admin/settings.php:950 includes/admin/settings.php:1007
 msgid "Email Subject (Sign out)"
 msgstr "E-mailonderwerp (Afmelden)"
 
-#: includes/admin/settings.php:945 includes/admin/settings.php:1002
+#: includes/admin/settings.php:961 includes/admin/settings.php:1018
 msgid "Email Text (Sign out)"
 msgstr "E-mailtekst (Afmelden)"
 
-#: includes/admin/settings.php:958
+#: includes/admin/settings.php:974
 msgid "Organizer Notifications"
 msgstr "Meldingen aan organisator"
 
-#: includes/admin/settings.php:960
+#: includes/admin/settings.php:976
 msgid ""
 "These go to the shift's organizer (its linked user and/or manual organizer "
 "email, or the notification email above if neither is set) — not to the "
@@ -4056,15 +4225,15 @@ msgstr ""
 "handmatige organisator-e-mail, of anders het meldings-e-mailadres hierboven)"
 " — niet naar de volunteer."
 
-#: includes/admin/settings.php:1015
+#: includes/admin/settings.php:1031
 msgid "Shift Reminders"
 msgstr "Dienstherinneringen"
 
-#: includes/admin/settings.php:1022
+#: includes/admin/settings.php:1038
 msgid "Send reminder X days before start"
 msgstr "Herinnering verzenden X dagen voor aanvang"
 
-#: includes/admin/settings.php:1026
+#: includes/admin/settings.php:1042
 msgid ""
 "Comma-separated whole days, e.g. 7, 1. Negative or zero values are ignored. "
 "Leave empty to turn reminder emails off entirely."
@@ -4072,19 +4241,19 @@ msgstr ""
 "Kommagescheiden hele dagen, bijv. 7, 1. Negatieve waarden of nul worden "
 "genegeerd. Laat leeg om herinnerings-e-mails volledig uit te schakelen."
 
-#: includes/admin/settings.php:1034
+#: includes/admin/settings.php:1050
 msgid "Email Subject (Reminder)"
 msgstr "E-mailonderwerp (Herinnering)"
 
-#: includes/admin/settings.php:1045
+#: includes/admin/settings.php:1061
 msgid "Email Text (Reminder)"
 msgstr "E-mailtekst (Herinnering)"
 
-#: includes/admin/settings.php:1071
+#: includes/admin/settings.php:1087
 msgid "Select logo…"
 msgstr "Logo selecteren…"
 
-#: includes/admin/settings.php:1073
+#: includes/admin/settings.php:1089
 msgid ""
 "Shown at the top of every email instead of the site name. Recommended: a "
 "wide image with a transparent background, under 200px tall."
@@ -4094,7 +4263,7 @@ msgstr ""
 "hoog."
 
 #. translators: %s = site name
-#: includes/admin/settings.php:1083 includes/notifications.php:636
+#: includes/admin/settings.php:1099 includes/notifications.php:636
 #: includes/notifications.php:769
 #, php-format
 msgid "This email was sent by %s."
@@ -4102,46 +4271,46 @@ msgstr "Deze e-mail is verzonden door %s."
 
 #. translators: %s is the default footer text that will be used if this field
 #. is left empty
-#: includes/admin/settings.php:1096
+#: includes/admin/settings.php:1112
 #, php-format
 msgid "Shown at the bottom of every email. Leave empty to use the default: \"%s\""
 msgstr ""
 "Wordt onderaan elke e-mail getoond. Laat leeg om de standaard te gebruiken: "
 "\"%s\""
 
-#: includes/admin/settings.php:1132
+#: includes/admin/settings.php:1148
 msgid "Sign up"
 msgstr "Aanmelden"
 
-#: includes/admin/settings.php:1133
+#: includes/admin/settings.php:1149
 msgid "Sign out"
 msgstr "Afmelden"
 
-#: includes/admin/settings.php:1134
+#: includes/admin/settings.php:1150
 msgid "Organizer: Sign up"
 msgstr "Organisator: Aanmelden"
 
-#: includes/admin/settings.php:1135
+#: includes/admin/settings.php:1151
 msgid "Organizer: Sign out"
 msgstr "Organisator: Afmelden"
 
-#: includes/admin/settings.php:1136 includes/admin/user-profile.php:290
+#: includes/admin/settings.php:1152 includes/admin/user-profile.php:290
 msgid "Reminder"
 msgstr "Herinnering"
 
-#: includes/admin/settings.php:1143
+#: includes/admin/settings.php:1159
 msgid "Live preview of emails (with example values):"
 msgstr "Live voorvertoning van e-mails (met voorbeeldwaarden):"
 
-#: includes/admin/settings.php:1149
+#: includes/admin/settings.php:1165
 msgid "Subject:"
 msgstr "Onderwerp:"
 
-#: includes/admin/settings.php:1193
+#: includes/admin/settings.php:1209
 msgid "Select a logo image"
 msgstr "Selecteer een logo-afbeelding"
 
-#: includes/admin/settings.php:1194
+#: includes/admin/settings.php:1210
 msgid "Use this image"
 msgstr "Deze afbeelding gebruiken"
 
@@ -4190,7 +4359,7 @@ msgstr ""
 "meldingsafzender te gebruiken."
 
 #: includes/admin/shift-details-modal.php:94
-#: includes/admin/user-profile.php:220 includes/admin/volunteer-list.php:814
+#: includes/admin/user-profile.php:220 includes/admin/volunteer-list.php:831
 #: includes/profile.php:127
 msgid "Save"
 msgstr "Opslaan"
@@ -4241,7 +4410,7 @@ msgid "(none)"
 msgstr "(geen)"
 
 #: includes/admin/user-profile.php:217 includes/admin/user-profile.php:238
-#: includes/admin/volunteer-list.php:492
+#: includes/admin/volunteer-list.php:509
 msgid "Edit"
 msgstr "Bewerken"
 
@@ -4262,12 +4431,12 @@ msgid "Send login link"
 msgstr "Inloglink versturen"
 
 #: includes/admin/user-profile.php:254 includes/admin/volunteer-list.php:321
-#: includes/admin/volunteer-list.php:749
+#: includes/admin/volunteer-list.php:766
 msgid "Registered"
 msgstr "Geregistreerd"
 
 #: includes/admin/user-profile.php:256 includes/admin/volunteer-list.php:319
-#: includes/admin/volunteer-list.php:747
+#: includes/admin/volunteer-list.php:764
 msgid "Announcements"
 msgstr "Aankondigingen"
 
@@ -4287,7 +4456,7 @@ msgstr "Aankondiging"
 msgid "Volunteer details"
 msgstr "Vrijwilligersgegevens"
 
-#: includes/admin/user-profile.php:307 includes/admin/volunteer-list.php:504
+#: includes/admin/user-profile.php:307 includes/admin/volunteer-list.php:521
 msgid "Remove volunteer role"
 msgstr "Vrijwilligersrol verwijderen"
 
@@ -4323,8 +4492,8 @@ msgid "Type"
 msgstr "Type"
 
 #: includes/admin/user-profile.php:433 includes/admin/user-profile.php:468
-#: includes/admin/user-profile.php:510 includes/admin/volunteer-list.php:564
-#: includes/admin/volunteer-list.php:594
+#: includes/admin/user-profile.php:510 includes/admin/volunteer-list.php:581
+#: includes/admin/volunteer-list.php:611
 msgid "User not found."
 msgstr "Gebruiker niet gevonden."
 
@@ -4351,7 +4520,7 @@ msgstr "Volledig profiel openen"
 msgid "Role removed. Reloading…"
 msgstr "Rol verwijderd. Opnieuw laden …"
 
-#: includes/admin/user-profile.php:573 includes/admin/volunteer-list.php:536
+#: includes/admin/user-profile.php:573 includes/admin/volunteer-list.php:553
 msgid ""
 "Remove the volunteer role from {name}? They still have {shifts} upcoming "
 "shift(s)."
@@ -4359,7 +4528,7 @@ msgstr ""
 "De vrijwilligersrol van {name} verwijderen? Deze persoon heeft nog {shifts} "
 "aankomende dienst(en)."
 
-#: includes/admin/user-profile.php:574 includes/admin/volunteer-list.php:537
+#: includes/admin/user-profile.php:574 includes/admin/volunteer-list.php:554
 msgid "Remove the volunteer role from {name}?"
 msgstr "De vrijwilligersrol van {name} verwijderen?"
 
@@ -4482,43 +4651,49 @@ msgstr "E-mailadres kopiëren"
 msgid "Copy phone number"
 msgstr "Telefoonnummer kopiëren"
 
-#: includes/admin/volunteer-list.php:466 includes/admin/volunteer-list.php:784
+#: includes/admin/volunteer-list.php:466 includes/admin/volunteer-list.php:801
 msgid "Opted out"
 msgstr "Afgemeld"
 
-#: includes/admin/volunteer-list.php:500
+#. translators: %s: comma-separated department names
+#: includes/admin/volunteer-list.php:502
+#, php-format
+msgid "Can sign up for shifts in: %s"
+msgstr "Kan zich aanmelden voor diensten in: %s"
+
+#: includes/admin/volunteer-list.php:517
 msgid "Send this volunteer an email"
 msgstr "Deze vrijwilliger een e-mail sturen"
 
-#: includes/admin/volunteer-list.php:531
+#: includes/admin/volunteer-list.php:548
 msgid "volunteers"
 msgstr "vrijwilligers"
 
-#: includes/admin/volunteer-list.php:533
+#: includes/admin/volunteer-list.php:550
 msgid "Role granted. Reloading…"
 msgstr "Rol toegekend. Opnieuw laden…"
 
-#: includes/admin/volunteer-list.php:534 includes/admin/volunteer-list.php:598
+#: includes/admin/volunteer-list.php:551 includes/admin/volunteer-list.php:615
 msgid "Role removed."
 msgstr "Rol verwijderd."
 
-#: includes/admin/volunteer-list.php:535 includes/admin/volunteer-list.php:679
+#: includes/admin/volunteer-list.php:552 includes/admin/volunteer-list.php:696
 msgid "Volunteer created. Reloading…"
 msgstr "Vrijwilliger aangemaakt. Wordt herladen…"
 
-#: includes/admin/volunteer-list.php:569
+#: includes/admin/volunteer-list.php:586
 msgid "Role granted."
 msgstr "Rol toegekend."
 
-#: includes/admin/volunteer-list.php:625
+#: includes/admin/volunteer-list.php:642
 msgid "First name is required."
 msgstr "Voornaam is verplicht."
 
-#: includes/admin/volunteer-list.php:632
+#: includes/admin/volunteer-list.php:649
 msgid "A user with this e-mail already exists."
 msgstr "Er bestaat al een gebruiker met dit e-mailadres."
 
-#: includes/admin/volunteer-list.php:671
+#: includes/admin/volunteer-list.php:688
 msgid ""
 "Volunteer created, but the login link email could not be sent. Please check "
 "your email settings."
@@ -4526,23 +4701,23 @@ msgstr ""
 "Vrijwilliger aangemaakt, maar de e-mail met de inloglink kon niet worden "
 "verzonden. Controleer uw e-mailinstellingen."
 
-#: includes/admin/volunteer-list.php:676
+#: includes/admin/volunteer-list.php:693
 msgid "Volunteer created and login link sent. Reloading…"
 msgstr "Vrijwilliger aangemaakt en inloglink verzonden. Wordt herladen…"
 
-#: includes/admin/volunteer-list.php:701
+#: includes/admin/volunteer-list.php:718
 msgid "Log cleared."
 msgstr "Logboek gewist."
 
-#: includes/admin/volunteer-list.php:840
+#: includes/admin/volunteer-list.php:857
 msgid "Saved. Reloading…"
 msgstr "Opgeslagen. Opnieuw laden…"
 
-#: includes/admin/volunteer-list.php:861
+#: includes/admin/volunteer-list.php:882
 msgid "No departments exist yet."
 msgstr "Er bestaan nog geen afdelingen."
 
-#: includes/admin/volunteer-list.php:865
+#: includes/admin/volunteer-list.php:887
 msgid ""
 "Checking (or unchecking) a department also checks/unchecks every department "
 "nested under it."
@@ -4550,46 +4725,62 @@ msgstr ""
 "Het aan- of uitvinken van een afdeling vinkt ook automatisch alle afdelingen"
 " daaronder aan of uit."
 
-#: includes/admin/volunteer-list.php:870 includes/helpers.php:787
+#: includes/admin/volunteer-list.php:893 includes/helpers.php:924
 msgid "(hidden from volunteers)"
 msgstr "(verborgen voor vrijwilligers)"
 
-#: includes/admin/volunteer-list.php:912 includes/admin/volunteer-list.php:942
+#: includes/admin/volunteer-list.php:935 includes/admin/volunteer-list.php:974
 msgid "Volunteer not found."
 msgstr "Vrijwilliger niet gevonden."
 
-#: includes/cockpit.php:22 includes/profile.php:21
-#: includes/shiftselector.php:130 includes/shiftselector.php:352
-#: includes/shiftselector.php:404
+#: includes/admin/volunteer-list.php:942
+msgid "Can sign up for shifts in"
+msgstr "Kan zich aanmelden voor diensten in"
+
+#: includes/admin/volunteer-list.php:943
+msgid ""
+"Only shifts from these departments are shown to this volunteer. Leave all "
+"unchecked to show every shift."
+msgstr ""
+"Deze vrijwilliger ziet alleen diensten van deze afdelingen. Laat alles leeg "
+"om alle diensten te tonen."
+
+#: includes/admin/volunteer-list.php:946
+msgid "Gets notified about new shifts in"
+msgstr "Krijgt meldingen over nieuwe diensten in"
+
+#: includes/cockpit.php:24 includes/profile.php:21
+#: includes/shiftselector.php:178 includes/shiftselector.php:413
+#: includes/shiftselector.php:468
 msgid "Please log in first."
 msgstr "Log eerst in."
 
-#: includes/cockpit.php:26
+#: includes/cockpit.php:28
 msgid "Phone number missing"
 msgstr "Telefoonnummer ontbreekt"
 
-#: includes/cockpit.php:37
+#: includes/cockpit.php:39
 msgid "📋 Shifts"
 msgstr "📋 Diensten"
 
-#: includes/cockpit.php:39
+#: includes/cockpit.php:41
 msgid "👤 Profile"
 msgstr "👤 Profiel"
 
-#: includes/cockpit.php:85 includes/shiftselector.php:341
+#: includes/cockpit.php:87 includes/shiftselector.php:402
 msgid "Assign"
 msgstr "Aanmelden"
 
-#: includes/cockpit.php:86 includes/shiftselector.php:338
+#: includes/cockpit.php:88 includes/shiftselector.php:399
 msgid "Unassign"
 msgstr "Afmelden"
 
-#: includes/cockpit.php:87
+#: includes/cockpit.php:89
 msgid "Unknown error"
 msgstr "Onbekende fout"
 
 #. translators: %d = hours before shift start
-#: includes/cockpit.php:90
+#: includes/cockpit.php:92
 #, php-format
 msgid "Unassignment not possible from %d hours before start"
 msgstr "Afmelden niet meer mogelijk vanaf %d uur voor aanvang"
@@ -4624,7 +4815,7 @@ msgstr "U mag maar %1$d dienst(en) per %2$s nemen."
 msgid "This shift overlaps with one you have already taken."
 msgstr "Deze dienst overlapt met een dienst waarvoor u al bent aangemeld."
 
-#: includes/helpers.php:823
+#: includes/helpers.php:960
 msgid "Close"
 msgstr "Sluiten"
 
@@ -4697,8 +4888,8 @@ msgstr "Wachtwoord instellen"
 msgid "No thanks"
 msgstr "Nee, bedankt"
 
-#: includes/password-login.php:237 includes/registration.php:450
-#: includes/registration.php:646
+#: includes/password-login.php:237 includes/registration.php:470
+#: includes/registration.php:666
 msgid "Invalid form submission."
 msgstr "Ongeldige formulierinzending."
 
@@ -4796,7 +4987,7 @@ msgstr ""
 "<strong>Profiel onvolledig:</strong> Voer uw telefoonnummer in zodat we u "
 "kunnen bereiken bij last-minutewijzigingen."
 
-#: includes/profile.php:76 includes/registration.php:321
+#: includes/profile.php:76 includes/registration.php:339
 msgid "Phone number"
 msgstr "Telefoonnummer"
 
@@ -4828,7 +5019,7 @@ msgstr "Stuur me ook een melding bij nieuwe diensten in:"
 msgid "This email address is already used by another user."
 msgstr "Dit e-mailadres is al in gebruik door een andere gebruiker."
 
-#: includes/registration.php:250
+#: includes/registration.php:264
 msgid ""
 "Thank you for your registration. You will receive an email with your login "
 "link shortly."
@@ -4836,28 +5027,28 @@ msgstr ""
 "Bedankt voor uw registratie. U ontvangt binnenkort een e-mail met uw "
 "inloglink."
 
-#: includes/registration.php:254
+#: includes/registration.php:268
 msgid "This email is already registered. We have resent your login link."
 msgstr ""
 "Dit e-mailadres is al geregistreerd. We hebben uw inloglink opnieuw "
 "verzonden."
 
-#: includes/registration.php:258
+#: includes/registration.php:272
 msgid ""
 "If this email address is registered, we have sent you a new login link."
 msgstr ""
 "Als dit e-mailadres geregistreerd is, hebben we u een nieuwe inloglink "
 "gestuurd."
 
-#: includes/registration.php:268
+#: includes/registration.php:286
 msgid "I'm new"
 msgstr "Ik ben nieuw"
 
-#: includes/registration.php:269
+#: includes/registration.php:287
 msgid "I already have an account"
 msgstr "Ik heb al een account"
 
-#: includes/registration.php:274
+#: includes/registration.php:292
 msgid ""
 "This login link has expired or was already used. Enter your email address "
 "and we will send you a new one."
@@ -4865,7 +5056,7 @@ msgstr ""
 "Deze inloglink is verlopen of al gebruikt. Vul uw e-mailadres in, dan sturen"
 " we u een nieuwe."
 
-#: includes/registration.php:278
+#: includes/registration.php:296
 msgid ""
 "Email or password is incorrect. If you usually log in with a link, we can "
 "email you one."
@@ -4873,7 +5064,7 @@ msgstr ""
 "E-mailadres of wachtwoord is onjuist. Logt u meestal in met een link? Dan "
 "kunnen we u er een mailen."
 
-#: includes/registration.php:282
+#: includes/registration.php:300
 msgid ""
 "Too many failed attempts. Please wait 15 minutes, or log in with a link sent"
 " by email."
@@ -4881,49 +5072,49 @@ msgstr ""
 "Te veel mislukte pogingen. Wacht 15 minuten of log in met een link per "
 "e-mail."
 
-#: includes/registration.php:291
+#: includes/registration.php:309
 msgid "Password"
 msgstr "Wachtwoord"
 
-#: includes/registration.php:299
+#: includes/registration.php:317
 msgid "Log in"
 msgstr "Inloggen"
 
-#: includes/registration.php:301
+#: includes/registration.php:319
 msgid "Forgot your password, or don't have one?"
 msgstr "Wachtwoord vergeten of heeft u er nog geen?"
 
-#: includes/registration.php:305 includes/registration.php:308
+#: includes/registration.php:323 includes/registration.php:326
 msgid "Email me a login link"
 msgstr "Mail mij een inloglink"
 
-#: includes/registration.php:330
+#: includes/registration.php:348
 msgid "Register"
 msgstr "Registreren"
 
-#: includes/registration.php:470 includes/registration.php:658
+#: includes/registration.php:490 includes/registration.php:678
 msgid "CAPTCHA verification failed. Please try again."
 msgstr "CAPTCHA-verificatie mislukt. Probeer het opnieuw."
 
-#: includes/registration.php:481
+#: includes/registration.php:501
 msgid "Please enter a valid email address."
 msgstr "Voer een geldig e-mailadres in."
 
-#: includes/registration.php:486
+#: includes/registration.php:506
 msgid "Please fill in all required fields."
 msgstr "Vul alle verplichte velden in."
 
-#: includes/registration.php:519
+#: includes/registration.php:539
 msgid "Registration error. Please try again later."
 msgstr "Registratiefout. Probeer het later opnieuw."
 
-#: includes/registration.php:534 includes/registration.php:619
+#: includes/registration.php:554 includes/registration.php:639
 msgid "Your login"
 msgstr "Uw inloggegevens"
 
 #. translators: %1$s = first name, %2$s = site name, %3$s = site url, %4$s =
 #. login url
-#: includes/registration.php:537
+#: includes/registration.php:557
 #, php-format
 msgid ""
 "Hello %1$s,<br><br>Thank you for registering at %2$s (%3$s).<br><br>Here is "
@@ -4933,7 +5124,7 @@ msgstr ""
 "is uw inloglink:<br>%4$s"
 
 #. translators: %1$s = first name, %2$s = login url
-#: includes/registration.php:622
+#: includes/registration.php:642
 #, php-format
 msgid "Hello %1$s,<br><br>Your login link:<br>%2$s"
 msgstr "Beste %1$s,<br><br>Uw inloglink:<br>%2$s"
@@ -5000,56 +5191,60 @@ msgstr "Gekopieerd!"
 msgid "%1$d/%2$d slots open"
 msgstr "%1$d/%2$d plekken vrij"
 
-#: includes/shiftselector.php:169
+#: includes/shiftselector.php:224
 msgid "My shifts"
 msgstr "Mijn diensten"
 
-#: includes/shiftselector.php:172
+#: includes/shiftselector.php:227
 msgid "You have not signed up for any shifts yet."
 msgstr "U heeft zich nog niet aangemeld voor een dienst."
 
-#: includes/shiftselector.php:181
+#: includes/shiftselector.php:236
 msgid "Available shifts"
 msgstr "Beschikbare diensten"
 
-#: includes/shiftselector.php:232
+#: includes/shiftselector.php:293
 msgid "Search shifts…"
 msgstr "Diensten zoeken…"
 
-#: includes/shiftselector.php:246
+#: includes/shiftselector.php:307
 msgid "Currently no open shifts available."
 msgstr "Momenteel geen beschikbare diensten."
 
-#: includes/shiftselector.php:256
+#: includes/shiftselector.php:317
 msgid "Full shifts"
 msgstr "Volle diensten"
 
-#: includes/shiftselector.php:259
+#: includes/shiftselector.php:320
 msgid "No full shifts at the moment."
 msgstr "Momenteel geen volle diensten."
 
-#: includes/shiftselector.php:343
+#: includes/shiftselector.php:404
 msgid "Full"
 msgstr "Vol"
 
-#: includes/shiftselector.php:365 includes/shiftselector.php:417
+#: includes/shiftselector.php:426 includes/shiftselector.php:481
 msgid "Invalid shift ID."
 msgstr "Ongeldige dienst-ID."
 
-#: includes/shiftselector.php:368
+#: includes/shiftselector.php:429
 msgid "This shift has already started."
 msgstr "Deze dienst is al begonnen."
 
-#: includes/shiftselector.php:386
+#: includes/shiftselector.php:432
+msgid "This shift is not available for your departments."
+msgstr "Deze dienst is niet beschikbaar voor uw afdelingen."
+
+#: includes/shiftselector.php:450
 msgid "You have been successfully signed up."
 msgstr "U bent succesvol aangemeld."
 
-#: includes/shiftselector.php:429
+#: includes/shiftselector.php:493
 msgid "hour"
 msgstr "uur"
 
 #. translators: %s is the time span before shift start, e.g. '24 hours'
-#: includes/shiftselector.php:434
+#: includes/shiftselector.php:498
 #, php-format
 msgid ""
 "Cancellation not possible. Cancellation is only allowed up to %s before the "
@@ -5058,11 +5253,11 @@ msgstr ""
 "Afmelden niet mogelijk. Afmelden is alleen toegestaan tot %s voor aanvang "
 "van de dienst."
 
-#: includes/shiftselector.php:450
+#: includes/shiftselector.php:514
 msgid "You have been successfully removed."
 msgstr "U bent succesvol afgemeld."
 
-#: includes/shiftselector.php:456
+#: includes/shiftselector.php:520
 msgid "You are not signed up for this shift."
 msgstr "U bent niet aangemeld voor deze dienst."
 

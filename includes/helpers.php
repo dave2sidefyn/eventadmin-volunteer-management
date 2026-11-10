@@ -760,6 +760,143 @@ function eventadmin_save_volunteer_department_ids(int $user_id, array $term_ids)
 }
 
 /**
+ * Returns the department term IDs a volunteer may sign up for shifts in — admin-assigned
+ * only, via the "Edit departments" modal (includes/admin/volunteer-list.php). Deliberately
+ * stored separately from eventadmin_department (the "notify me about" links a volunteer can
+ * set themselves), so a volunteer can't widen what they see by ticking a notification box.
+ * Only enforced while the "Shifts per department" setting is on, see
+ * eventadmin_volunteer_can_see_shift().
+ *
+ * @param int $user_id
+ * @return int[]
+ */
+function eventadmin_get_volunteer_access_department_ids(int $user_id): array
+{
+    return array_values(array_unique(array_map('absint', get_user_meta($user_id, 'eventadmin_shift_access_department'))));
+}
+
+/**
+ * Replaces a volunteer's "may sign up for shifts in" departments — same validation as
+ * eventadmin_save_volunteer_department_ids().
+ *
+ * @param int   $user_id
+ * @param array $term_ids Raw (but already wp_unslash()ed) values, e.g. from $_POST.
+ * @return void
+ */
+function eventadmin_save_volunteer_access_department_ids(int $user_id, array $term_ids): void
+{
+    delete_user_meta($user_id, 'eventadmin_shift_access_department');
+
+    $valid_terms = wp_list_pluck(eventadmin_get_hierarchical_shift_categories(), 'term_id');
+    foreach (array_unique(array_map('absint', $term_ids)) as $term_id) {
+        if (in_array($term_id, $valid_terms, true)) {
+            add_user_meta($user_id, 'eventadmin_shift_access_department', $term_id);
+        }
+    }
+}
+
+/**
+ * Whether the "Shifts per department" setting (Settings → General → Rules) is on.
+ *
+ * @return bool
+ */
+function eventadmin_shifts_restricted_to_departments(): bool
+{
+    return (bool) get_option('eventadmin_restrict_shifts_to_departments', 0);
+}
+
+/**
+ * Expands department term IDs with all of their descendants, so being allowed in (or
+ * filtering by) a parent department always covers its sub-departments too.
+ *
+ * @param int[] $term_ids
+ * @return int[]
+ */
+function eventadmin_expand_department_ids(array $term_ids): array
+{
+    $expanded = [];
+    foreach ($term_ids as $term_id) {
+        $term_id    = absint($term_id);
+        $expanded[] = $term_id;
+        $children   = get_term_children($term_id, 'eventadmin_shift_category');
+        if (is_array($children)) {
+            $expanded = array_merge($expanded, array_map('absint', $children));
+        }
+    }
+    return array_values(array_unique($expanded));
+}
+
+/**
+ * The departments (with all their sub-departments) a volunteer is limited to under the
+ * "Shifts per department" setting, or null when they're not limited at all — setting off,
+ * a shift manager, or a volunteer with no access departments set (so turning the setting on
+ * never leaves anyone with an empty page).
+ *
+ * @param int $user_id
+ * @return int[]|null
+ */
+function eventadmin_get_volunteer_allowed_department_ids(int $user_id): ?array
+{
+    if (!eventadmin_shifts_restricted_to_departments() || user_can($user_id, 'eventadmin_manage_shifts')) {
+        return null;
+    }
+
+    // No static cache: user meta and the term hierarchy are already cached by WordPress.
+    $access = eventadmin_get_volunteer_access_department_ids($user_id);
+    return empty($access) ? null : eventadmin_expand_department_ids($access);
+}
+
+/**
+ * Whether a volunteer may see (and sign up for) a shift under the "Shifts per department"
+ * setting. Shifts without a department are never restricted.
+ *
+ * @param int $user_id
+ * @param int $shift_id
+ * @return bool
+ */
+function eventadmin_volunteer_can_see_shift(int $user_id, int $shift_id): bool
+{
+    $allowed = eventadmin_get_volunteer_allowed_department_ids($user_id);
+    if ($allowed === null) {
+        return true;
+    }
+
+    $shift_terms = wp_get_post_terms($shift_id, 'eventadmin_shift_category', ['fields' => 'ids']);
+    if (empty($shift_terms) || is_wp_error($shift_terms)) {
+        return true;
+    }
+
+    return (bool) array_intersect(array_map('absint', $shift_terms), $allowed);
+}
+
+/**
+ * Normalizes a shortcode's department="slug,slug" attribute into a safe comma-separated
+ * slug list, for passing it on to a nested shortcode ([eventadmin] → [eventadmin_cockpit]
+ * → [eventadmin_shiftselector]).
+ *
+ * @param array|string $atts
+ * @return string
+ */
+function eventadmin_department_shortcode_attr($atts): string
+{
+    $raw = is_array($atts) && isset($atts['department']) ? (string) $atts['department'] : '';
+    return implode(',', array_filter(array_map('sanitize_title', explode(',', $raw))));
+}
+
+/**
+ * Builds the nested-shortcode attribute string for a department filter, e.g.
+ * ' department="pantry,warehouse"', or '' when there is none.
+ *
+ * @param array|string $atts
+ * @return string
+ */
+function eventadmin_department_shortcode_passthrough($atts): string
+{
+    $slugs = eventadmin_department_shortcode_attr($atts);
+    return $slugs === '' ? '' : ' department="' . $slugs . '"';
+}
+
+/**
  * Builds indented <option> markup for a hierarchical department dropdown. Shared by every
  * admin department filter/select so children are always shown nested under their parent
  * the same way, instead of each screen re-implementing its own flat option loop.

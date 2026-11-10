@@ -125,12 +125,63 @@ function eventadmin_shift_has_started(int $shift_id): bool
     return $start_ts && $start_ts <= eventadmin_wallclock_to_ts(current_time('mysql'));
 }
 
-function eventadmin_shiftselector_shortcode(): bool|string
+/**
+ * Resolves a department="slug,slug" shortcode attribute to term IDs including every
+ * sub-department, or null when the attribute isn't set. Unknown slugs resolve to nothing,
+ * so a typo shows an empty list rather than silently showing every department.
+ *
+ * @param array|string $atts
+ * @return int[]|null
+ */
+function eventadmin_shiftselector_page_department_ids($atts): ?array
+{
+    $slugs = eventadmin_department_shortcode_attr($atts);
+    if ($slugs === '') {
+        return null;
+    }
+
+    $ids = [];
+    foreach (explode(',', $slugs) as $slug) {
+        $term = get_term_by('slug', $slug, 'eventadmin_shift_category');
+        if ($term instanceof WP_Term) {
+            $ids[] = (int) $term->term_id;
+        }
+    }
+    return eventadmin_expand_department_ids($ids);
+}
+
+/**
+ * Whether a shift belongs to one of the given departments.
+ *
+ * @param int   $shift_id
+ * @param int[] $department_ids
+ * @return bool
+ */
+function eventadmin_shift_in_departments(int $shift_id, array $department_ids): bool
+{
+    $shift_terms = wp_get_post_terms($shift_id, 'eventadmin_shift_category', ['fields' => 'ids']);
+    return !is_wp_error($shift_terms) && (bool) array_intersect(array_map('absint', $shift_terms), $department_ids);
+}
+
+/**
+ * Shortcode [eventadmin_shiftselector] — the volunteer's own shifts plus the shifts they
+ * can still sign up for.
+ *
+ * @param array|string $atts Optional department="slug,slug": only offer shifts from these
+ *                           departments (and their sub-departments), e.g. one page per
+ *                           department. "My shifts" always lists all of the volunteer's
+ *                           shifts, so a sign-up never seems to vanish on another page.
+ * @return bool|string
+ */
+function eventadmin_shiftselector_shortcode($atts = []): bool|string
 {
     if (!is_user_logged_in()) return esc_html__('Please log in first.', 'eventadmin-volunteer-management');
 
     $current_user_id = get_current_user_id();
     $shifts = get_posts(['post_type' => 'eventadmin_shift', 'numberposts' => -1]);
+
+    $page_department_ids    = eventadmin_shiftselector_page_department_ids($atts);
+    $allowed_department_ids = eventadmin_get_volunteer_allowed_department_ids($current_user_id);
 
     $my_shifts = [];
     $available_shifts = [];
@@ -153,6 +204,10 @@ function eventadmin_shiftselector_shortcode(): bool|string
             continue; // already running — too late to sign up
         } elseif (eventadmin_shift_is_hidden_from_volunteers($shift->ID)) {
             continue; // not signed up, and every department it's in is hidden — don't offer it
+        } elseif (!eventadmin_volunteer_can_see_shift($current_user_id, $shift->ID)) {
+            continue; // "Shifts per department": not one of this volunteer's departments
+        } elseif ($page_department_ids !== null && !eventadmin_shift_in_departments($shift->ID, $page_department_ids)) {
+            continue; // this page only offers the departments named in its shortcode
         } elseif ($current < $max) {
             $available_shifts[] = $shift;
         } else {
@@ -182,6 +237,12 @@ function eventadmin_shiftselector_shortcode(): bool|string
     if (!empty($available_shifts)) {
         $categories     = get_terms(['taxonomy' => 'eventadmin_shift_category', 'hide_empty' => false]);
         $categories     = array_filter($categories, fn($cat) => !eventadmin_is_shift_category_hidden($cat->term_id));
+        // Only offer departments this page / this volunteer can actually see shifts from.
+        foreach ([$page_department_ids, $allowed_department_ids] as $limit_ids) {
+            if ($limit_ids !== null) {
+                $categories = array_filter($categories, fn($cat) => in_array((int) $cat->term_id, $limit_ids, true));
+            }
+        }
         $categories     = eventadmin_order_categories_hierarchically($categories);
         $enabled_filters = (array) get_option('eventadmin_enabled_filters', ['text_search', 'date_filter', 'category_filter']);
 
@@ -366,6 +427,9 @@ function eventadmin_assign_ajax(): void
     }
     if (eventadmin_shift_has_started($shift_id)) {
         wp_send_json_error(['message' => esc_html__('This shift has already started.', 'eventadmin-volunteer-management')]);
+    }
+    if (!eventadmin_volunteer_can_see_shift($user_id, $shift_id)) {
+        wp_send_json_error(['message' => esc_html__('This shift is not available for your departments.', 'eventadmin-volunteer-management')]);
     }
     $error = eventadmin_check_match_schicht_user($user_id, $shift_id);
 
