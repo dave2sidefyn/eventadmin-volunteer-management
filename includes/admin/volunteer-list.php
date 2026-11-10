@@ -273,6 +273,9 @@ function eventadmin_volunteer_list_page(): void
     echo '<input type="text" name="user_identifier" placeholder="' . esc_attr__('E-Mail (optional)', 'eventadmin-volunteer-management') . '" title="' . esc_attr__('Leave blank for offline volunteers without an email address', 'eventadmin-volunteer-management') . '" style="flex:1;min-width:120px;">';
     echo '<input type="text" name="phone" placeholder="' . esc_attr__('Phone', 'eventadmin-volunteer-management') . '" style="flex:1;min-width:120px;">';
     echo '</p>';
+    echo '<p><label><input type="checkbox" name="send_login_link" value="1" checked> '
+        . esc_html__('Send login link by email', 'eventadmin-volunteer-management')
+        . '</label></p>';
     echo '<p>';
     echo '<button type="submit" class="button button-primary">' . esc_html__('Create volunteer', 'eventadmin-volunteer-management') . '</button>';
     echo ' <span id="eventadmin-create-volunteer-result" style="margin-left:8px;"></span>';
@@ -658,6 +661,19 @@ function eventadmin_create_volunteer_handler(): void
         update_user_meta($user_id, 'eventadmin_offline_volunteer', '1');
     } else {
         update_user_meta($user_id, 'eventadmin_manually_added', '1');
+    }
+
+    // Invite: email the new volunteer a login link straight away, so they can sign in without
+    // going through the registration form (see eventadmin_send_login_link()).
+    if (!$is_offline && !empty($_POST['send_login_link'])) {
+        if (!eventadmin_send_login_link((int) $user_id)) {
+            wp_send_json_success([
+                'message'     => esc_html__('Volunteer created, but the login link email could not be sent. Please check your email settings.', 'eventadmin-volunteer-management'),
+                'mail_failed' => true,
+            ]);
+        }
+
+        wp_send_json_success(['message' => esc_html__('Volunteer created and login link sent. Reloading…', 'eventadmin-volunteer-management')]);
     }
 
     wp_send_json_success(['message' => esc_html__('Volunteer created. Reloading…', 'eventadmin-volunteer-management')]);

@@ -238,8 +238,18 @@ function eventadmin_render_volunteer_summary(WP_User $user): string
         . esc_html__('Edit', 'eventadmin-volunteer-management')
         . '</button>';
 
+    // Lets a manager invite a volunteer they added themselves (or help one who lost their
+    // link) without that person going through the registration form — see
+    // eventadmin_send_login_link(). Hidden for offline volunteers, who have no real address.
+    $email_display = $user->user_email ? esc_html($user->user_email) : '—';
+    if (eventadmin_user_can_receive_email($user->ID)) {
+        $email_display .= ' <button type="button" class="button-link eventadmin-profile-edit-trigger eventadmin-send-login-link" data-user-id="' . esc_attr($user->ID) . '">'
+            . esc_html__('Send login link', 'eventadmin-volunteer-management')
+            . '</button>';
+    }
+
     $rows = [
-        esc_html__('E-Mail', 'eventadmin-volunteer-management')       => $user->user_email ? esc_html($user->user_email) : '—',
+        esc_html__('E-Mail', 'eventadmin-volunteer-management')       => $email_display,
         esc_html__('Phone', 'eventadmin-volunteer-management')        => $phone_display,
         esc_html__('Registered', 'eventadmin-volunteer-management')   => esc_html($registered),
         esc_html__('Departments', 'eventadmin-volunteer-management')  => $departments_display,
@@ -475,6 +485,48 @@ function eventadmin_ajax_toggle_volunteer_announcements(): void
 add_action('wp_ajax_eventadmin_toggle_volunteer_announcements', 'eventadmin_ajax_toggle_volunteer_announcements');
 
 /**
+ * AJAX: emails a volunteer a fresh login link, from the "Send login link" action in the
+ * volunteer profile summary.
+ */
+function eventadmin_ajax_send_login_link(): void
+{
+    if (
+        !isset($_POST['_ajax_nonce']) ||
+        !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_ajax_nonce'])), 'eventadmin_send_login_link')
+    ) {
+        wp_send_json_error(['message' => esc_html__('Security check failed.', 'eventadmin-volunteer-management')]);
+    }
+
+    if (!current_user_can('eventadmin_manage_volunteers')) {
+        wp_send_json_error(['message' => esc_html__('Insufficient permissions.', 'eventadmin-volunteer-management')]);
+    }
+
+    $user_id = isset($_POST['user_id']) ? absint($_POST['user_id']) : 0;
+    $user    = $user_id ? get_userdata($user_id) : false;
+
+    // Only volunteers: this screen must never become a way to mail a login link for, say,
+    // an administrator's account.
+    if (!$user || !in_array('eventadmin_volunteer', (array) $user->roles, true)) {
+        wp_send_json_error(['message' => esc_html__('User not found.', 'eventadmin-volunteer-management')]);
+    }
+
+    if (!eventadmin_user_can_receive_email($user_id)) {
+        wp_send_json_error(['message' => esc_html__('This volunteer has no email address.', 'eventadmin-volunteer-management')]);
+    }
+
+    if (!eventadmin_send_login_link($user_id)) {
+        wp_send_json_error(['message' => esc_html__('The email could not be sent. Please check your email settings.', 'eventadmin-volunteer-management')]);
+    }
+
+    wp_send_json_success([
+        /* translators: %s = email address */
+        'message' => sprintf(esc_html__('Login link sent to %s.', 'eventadmin-volunteer-management'), $user->user_email),
+    ]);
+}
+
+add_action('wp_ajax_eventadmin_send_login_link', 'eventadmin_ajax_send_login_link');
+
+/**
  * Renders the "View profile" modal shell (heading + AJAX-filled body + link to the full
  * user-edit.php profile) — shared by the Timeline view and the Volunteers list page, both
  * of which open it via window.eventadminOpenVolunteerProfileModal() (see
@@ -511,6 +563,7 @@ function eventadmin_enqueue_volunteer_profile_modal_script(): void
         'nonce_phone'          => wp_create_nonce('eventadmin_update_volunteer_phone'),
         'nonce_announcements'  => wp_create_nonce('eventadmin_toggle_volunteer_announcements'),
         'nonce_remove'         => wp_create_nonce('eventadmin_remove_volunteer_role'),
+        'nonce_login_link'     => wp_create_nonce('eventadmin_send_login_link'),
         'user_edit_url_base'   => admin_url('user-edit.php?user_id='),
         'i18n'                 => [
             'loading'                  => esc_html__('Loading…', 'eventadmin-volunteer-management'),
@@ -519,6 +572,7 @@ function eventadmin_enqueue_volunteer_profile_modal_script(): void
             'role_removed'             => esc_html__('Role removed. Reloading…', 'eventadmin-volunteer-management'),
             'remove_confirm'           => esc_html__('Remove the volunteer role from {name}? They still have {shifts} upcoming shift(s).', 'eventadmin-volunteer-management'),
             'remove_confirm_no_shifts' => esc_html__('Remove the volunteer role from {name}?', 'eventadmin-volunteer-management'),
+            'sending'                  => esc_html__('Sending…', 'eventadmin-volunteer-management'),
         ],
     ]);
 }

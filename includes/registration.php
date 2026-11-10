@@ -428,19 +428,8 @@ function eventadmin_handle_registration(): void
     $referer_url = isset($_POST['eventadmin_redirect_to']) ? esc_url_raw(wp_unslash($_POST['eventadmin_redirect_to'])) : site_url();
     if (email_exists($email)) {
         $existing_user = get_user_by('email', $email);
-        $user_id = $existing_user->ID;
 
-        $login_url = eventadmin_create_login_url($user_id, $referer_url);
-
-        eventadmin_send_HTML_e_mail(
-            $email,
-            esc_html__('Your login', 'eventadmin-volunteer-management'),
-            sprintf(
-            /* translators: %1$s = first name, %2$s = login url */
-                wp_kses_post(__('Hello %1$s,<br><br>Your login link:<br>%2$s', 'eventadmin-volunteer-management')),
-                $existing_user->first_name,
-                eventadmin_login_link_html($login_url)
-            ));
+        eventadmin_send_login_link((int) $existing_user->ID, $referer_url);
 
         wp_safe_redirect(add_query_arg([
             'registration' => 'exists',
@@ -546,6 +535,43 @@ function eventadmin_create_login_url(WP_Error|int $user_id, string $referer_url)
 function eventadmin_login_link_html(string $login_url): string
 {
     return '<a href="' . esc_url($login_url) . '">' . esc_html($login_url) . '</a>';
+}
+
+/**
+ * Emails a volunteer a fresh single-use login link — the same "Your login" email the
+ * registration form sends when an address is already registered. Used there and by the
+ * "Send login link" actions on the Volunteers screen, so a manager can invite someone they
+ * added themselves without that person having to go through the registration form first.
+ *
+ * @param int    $user_id
+ * @param string $redirect_to Where the link lands after logging in; defaults to the page
+ *                            carrying the plugin's shortcode (or the home page if none).
+ * @return bool Whether the email was handed to wp_mail() successfully.
+ */
+function eventadmin_send_login_link(int $user_id, string $redirect_to = ''): bool
+{
+    $user = get_userdata($user_id);
+    if (!$user || !eventadmin_user_can_receive_email($user_id)) {
+        return false;
+    }
+
+    if ($redirect_to === '') {
+        $page_id     = eventadmin_get_getting_started_public_page_id();
+        $redirect_to = $page_id ? (string) get_permalink($page_id) : home_url('/');
+    }
+
+    $login_url = eventadmin_create_login_url($user_id, $redirect_to);
+
+    return eventadmin_send_HTML_e_mail(
+        $user->user_email,
+        esc_html__('Your login', 'eventadmin-volunteer-management'),
+        sprintf(
+        /* translators: %1$s = first name, %2$s = login url */
+            wp_kses_post(__('Hello %1$s,<br><br>Your login link:<br>%2$s', 'eventadmin-volunteer-management')),
+            $user->first_name,
+            eventadmin_login_link_html($login_url)
+        )
+    );
 }
 
 add_action('init', 'eventadmin_handle_registration');

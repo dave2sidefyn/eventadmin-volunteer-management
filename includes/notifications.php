@@ -721,14 +721,19 @@ function eventadmin_send_HTML_e_mail(
     };
     add_filter('wp_mail_content_type', $set_html);
     $wrapped_message = eventadmin_wrap_email_template($subject, $message, $template_args);
-    wp_mail(
+    // Return wp_mail()'s own result (it used to return remove_filter()'s, which is always
+    // true), so callers such as the bulk-email "failed" count and "Send login link" can
+    // report a mail server rejection instead of claiming success.
+    $sent = wp_mail(
         $to,
         $subject,
         $wrapped_message,
         $headers ?? eventadmin_get_sender_header(),
         $attachments
     );
-    return remove_filter('wp_mail_content_type', $set_html);
+    remove_filter('wp_mail_content_type', $set_html);
+
+    return $sent;
 }
 
 /**
