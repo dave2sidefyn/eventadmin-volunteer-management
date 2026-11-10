@@ -28,7 +28,7 @@ function eventadmin_render_table_view(array $table_rows, array $filter_query_arg
 {
     echo '<table class="widefat striped" id="eventadmin-roster-table">';
     echo '<thead><tr>';
-    echo '<th>' . esc_html__('Category', 'eventadmin-volunteer-management') . '</th>';
+    echo '<th>' . esc_html__('Department', 'eventadmin-volunteer-management') . '</th>';
     // Shift/Period headers are clickable — sorting by name or date directly on the
     // column removes the need for the separate "Sort by"/"Order" dropdowns.
     foreach (['title' => esc_html__('Shift', 'eventadmin-volunteer-management'), 'date' => esc_html__('Period', 'eventadmin-volunteer-management')] as $sort_key => $col_label) {

@@ -125,7 +125,26 @@ function eventadmin_volunteer_list_page(): void
         : 'volunteers';
 
     echo '<div class="wrap">';
-    echo '<h1>' . esc_html__('Volunteers', 'eventadmin-volunteer-management') . '</h1>';
+    echo '<h1 class="wp-heading-inline">' . esc_html__('Volunteers', 'eventadmin-volunteer-management') . '</h1>';
+    if ($active_tab === 'volunteers') {
+        // One action group next to the title, like the Manager page: the common action one
+        // click away, the rest in its menu.
+        echo '<div class="eventadmin-split-button eventadmin-heading-actions">';
+        echo '<button type="button" class="button button-primary eventadmin-modal-open" data-target="#eventadmin-create-volunteer-modal">+ ' . esc_html__('Create new volunteer', 'eventadmin-volunteer-management') . '</button>';
+        echo '<button type="button" id="eventadmin-vol-actions-toggle" class="button button-primary eventadmin-split-button-toggle" aria-haspopup="true" aria-expanded="false" aria-label="' . esc_attr__('More options', 'eventadmin-volunteer-management') . '"><span aria-hidden="true">&#9662;</span></button>';
+        echo '<div id="eventadmin-vol-actions-menu" class="eventadmin-split-button-menu" style="display:none;">';
+        echo '<button type="button" class="eventadmin-timeline-menu-item eventadmin-modal-open" data-target="#eventadmin-grant-role-modal">' . esc_html__('Grant volunteer role', 'eventadmin-volunteer-management') . '</button>';
+        // Exports the whole roster (every online volunteer), independent of the filters
+        // and the client-side search — see eventadmin_export_volunteers_csv().
+        echo '<button type="submit" form="eventadmin-export-volunteers-form" class="eventadmin-timeline-menu-item">' . esc_html__('Export all volunteers (CSV)', 'eventadmin-volunteer-management') . '</button>';
+        echo '</div>';
+        echo '</div>';
+        echo '<form method="post" id="eventadmin-export-volunteers-form" style="display:none;">';
+        wp_nonce_field('eventadmin_export_volunteers', 'eventadmin_export_volunteers_nonce');
+        echo '<input type="hidden" name="eventadmin_export_volunteers" value="1">';
+        echo '</form>';
+    }
+    echo '<hr class="wp-header-end">';
 
     echo '<h2 class="nav-tab-wrapper">';
     foreach ($tabs as $slug => $label) {
@@ -205,58 +224,97 @@ function eventadmin_volunteer_list_page(): void
         return;
     }
 
-    // Single toolbar row: create/grant buttons, shift+category filters, and search — all
-    // on one line (wrapping only on narrow screens) instead of three stacked full-width rows.
-    echo '<div class="eventadmin-vol-toolbar" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:1rem 0;">';
-
-    echo '<div class="eventadmin-vol-actions" style="display:flex;gap:8px;flex-wrap:wrap;">';
-    echo '<button type="button" class="button button-primary eventadmin-modal-open" data-target="#eventadmin-create-volunteer-modal">' . esc_html__('Create new volunteer', 'eventadmin-volunteer-management') . '</button>';
-    echo '<button type="button" class="button eventadmin-modal-open" data-target="#eventadmin-grant-role-modal">' . esc_html__('Grant volunteer role', 'eventadmin-volunteer-management') . '</button>';
-    // Exports the whole roster (every online volunteer), independent of the on-page shift/
-    // category filter or the client-side search box — see eventadmin_export_volunteers_csv().
-    echo '<form method="post" style="display:inline;margin:0;">';
-    wp_nonce_field('eventadmin_export_volunteers', 'eventadmin_export_volunteers_nonce');
-    echo '<input type="hidden" name="eventadmin_export_volunteers" value="1">';
-    echo '<button type="submit" class="button">' . esc_html__('Export CSV', 'eventadmin-volunteer-management') . '</button>';
-    echo '</form>';
-    echo '</div>';
-
-    echo '<form method="get" action="edit.php" id="eventadmin-volunteers-filters" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0;">';
-    wp_nonce_field('eventadmin_vol_filter', 'eventadmin_vol_nonce');
+    // Toolbar, same structure as the Manager page: Search → Department → Shift, each with a
+    // small label on top; active filters repeated below as removable chips.
+    echo '<form method="get" action="edit.php" id="eventadmin-volunteers-filters" class="eventadmin-toolbar' . ($selected_shift || $selected_category ? ' is-open' : '') . '">';
+    wp_nonce_field('eventadmin_vol_filter', 'eventadmin_vol_nonce', false);
     echo '<input type="hidden" name="post_type" value="eventadmin_shift">';
     echo '<input type="hidden" name="page" value="eventadmin-volunteers">';
-    echo '<select name="filter_shift" aria-label="' . esc_attr__('Filter by shift', 'eventadmin-volunteer-management') . '">';
-    echo '<option value="">' . esc_html__('All volunteers', 'eventadmin-volunteer-management') . '</option>';
+
+    echo '<div class="eventadmin-toolbar-group">';
+    echo '<label class="eventadmin-filter"><span class="eventadmin-filter-label">' . esc_html__('Search', 'eventadmin-volunteer-management') . '</span>';
+    // Client-side only (assets/js/volunteer-list.js) — no name, so it's never submitted.
+    echo '<input type="search" id="eventadmin-vol-search" placeholder="' . esc_attr__('Name, email or phone…', 'eventadmin-volunteer-management') . '" class="regular-text">';
+    echo '</label>';
+    echo '</div>';
+
+    $active_filters = (int) (bool) $selected_category + (int) (bool) $selected_shift;
+    $toggle_label   = $active_filters
+        /* translators: %d: number of active filters */
+        ? sprintf(__('Filters (%d)', 'eventadmin-volunteer-management'), $active_filters)
+        : __('Filters', 'eventadmin-volunteer-management');
+    echo '<button type="button" id="eventadmin-filters-toggle" class="button eventadmin-filters-toggle"'
+        . ' data-show-label="' . esc_attr($toggle_label) . '" data-hide-label="' . esc_attr__('Hide filters', 'eventadmin-volunteer-management') . '">'
+        . esc_html($active_filters ? __('Hide filters', 'eventadmin-volunteer-management') : $toggle_label) . '</button>';
+
+    echo '<div class="eventadmin-toolbar-group eventadmin-toolbar-filters">';
+    if (!empty($all_categories)) {
+        echo '<label class="eventadmin-filter"><span class="eventadmin-filter-label">' . esc_html__('Department', 'eventadmin-volunteer-management') . '</span>';
+        echo '<select name="filter_category"><option value="">' . esc_html__('All departments', 'eventadmin-volunteer-management') . '</option>';
+        echo eventadmin_category_dropdown_options($all_categories, $selected_category, 'term_id'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside
+        echo '</select></label>';
+    }
+    echo '<label class="eventadmin-filter"><span class="eventadmin-filter-label">' . esc_html__('Shift', 'eventadmin-volunteer-management') . '</span>';
+    echo '<select name="filter_shift"><option value="">' . esc_html__('Any shift', 'eventadmin-volunteer-management') . '</option>';
     foreach ($all_shifts as $shift) {
         $start = get_post_meta($shift->ID, 'shift_start', true);
         $end   = get_post_meta($shift->ID, 'shift_end', true);
-        $label = esc_html($shift->post_title) . ($start ? ' (' . esc_html(eventadmin_get_formatted_zeitraum($start, $end)) . ')' : '');
-        $sel   = selected($selected_shift, $shift->ID, false);
-        echo '<option value="' . esc_attr($shift->ID) . '"' . $sel . '>' . $label . '</option>';
+        $label = $shift->post_title . ($start ? ' (' . eventadmin_get_formatted_zeitraum($start, $end) . ')' : '');
+        echo '<option value="' . esc_attr($shift->ID) . '"' . selected($selected_shift, $shift->ID, false) . '>' . esc_html($label) . '</option>';
     }
-    echo '</select>';
-    if (!empty($all_categories)) {
-        echo '<select name="filter_category" aria-label="' . esc_attr__('Category', 'eventadmin-volunteer-management') . '">';
-        echo '<option value="">' . esc_html__('All categories', 'eventadmin-volunteer-management') . '</option>';
-        echo eventadmin_category_dropdown_options($all_categories, $selected_category, 'term_id');
-        echo '</select>';
-    }
+    echo '</select></label>';
+    echo '</div>';
+
+    echo '<div class="eventadmin-toolbar-group eventadmin-toolbar-count"><span id="eventadmin-vol-count"></span></div>';
     echo '<noscript><input type="submit" class="button" value="' . esc_attr__('Filter', 'eventadmin-volunteer-management') . '"></noscript>';
-    if ($selected_shift || $selected_category) {
-        echo '<a href="' . esc_url(admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-volunteers')) . '" class="button">' . esc_html__('Reset', 'eventadmin-volunteer-management') . '</a>';
-    }
     echo '</form>';
 
-    echo '<div class="eventadmin-vol-search" style="display:flex;align-items:center;gap:8px;">';
-    echo '<input type="search" id="eventadmin-vol-search" placeholder="' . esc_attr__('Search volunteers…', 'eventadmin-volunteer-management') . '" class="regular-text">';
-    echo '<span id="eventadmin-vol-count" style="color:#666;font-style:italic;"></span>';
-    echo '</div>';
+    if ($selected_shift || $selected_category) {
+        $base   = admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-volunteers');
+        $nonce  = wp_create_nonce('eventadmin_vol_filter');
+        echo '<div class="eventadmin-active-filters">';
+        if ($selected_category) {
+            $term = get_term($selected_category, 'eventadmin_shift_category');
+            $url  = $selected_shift ? add_query_arg(['filter_shift' => $selected_shift, 'eventadmin_vol_nonce' => $nonce], $base) : $base;
+            echo '<a class="eventadmin-active-filter" href="' . esc_url($url) . '" title="' . esc_attr__('Remove filter', 'eventadmin-volunteer-management') . '"><span class="eventadmin-active-filter-label">' . esc_html__('Department', 'eventadmin-volunteer-management') . ':</span> '
+                . esc_html($term instanceof WP_Term ? $term->name : (string) $selected_category) . ' <span aria-hidden="true">✕</span></a>';
+        }
+        if ($selected_shift) {
+            $url = $selected_category ? add_query_arg(['filter_category' => $selected_category, 'eventadmin_vol_nonce' => $nonce], $base) : $base;
+            echo '<a class="eventadmin-active-filter" href="' . esc_url($url) . '" title="' . esc_attr__('Remove filter', 'eventadmin-volunteer-management') . '"><span class="eventadmin-active-filter-label">' . esc_html__('Shift', 'eventadmin-volunteer-management') . ':</span> '
+                . esc_html(get_the_title($selected_shift)) . ' <span aria-hidden="true">✕</span></a>';
+        }
+        echo '<a class="eventadmin-clear-filters" href="' . esc_url($base) . '">' . esc_html__('Clear filters', 'eventadmin-volunteer-management') . '</a>';
+        echo '</div>';
+    }
 
-    echo '</div>';
     echo '<script>
         document.querySelectorAll("#eventadmin-volunteers-filters select").forEach(function (el) {
             el.addEventListener("change", function () { el.form.submit(); });
         });
+        (function () {
+            var search = document.getElementById("eventadmin-vol-search");
+            if (search) search.addEventListener("keydown", function (e) { if (e.key === "Enter") e.preventDefault(); });
+            var form = document.getElementById("eventadmin-volunteers-filters");
+            var toggle = document.getElementById("eventadmin-filters-toggle");
+            if (form && toggle) toggle.addEventListener("click", function () {
+                var open = form.classList.toggle("is-open");
+                toggle.textContent = open ? toggle.dataset.hideLabel : toggle.dataset.showLabel;
+            });
+            var actionsToggle = document.getElementById("eventadmin-vol-actions-toggle");
+            var actionsMenu = document.getElementById("eventadmin-vol-actions-menu");
+            if (actionsToggle && actionsMenu) {
+                var close = function () { actionsMenu.style.display = "none"; actionsToggle.setAttribute("aria-expanded", "false"); };
+                actionsToggle.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    var isOpen = actionsMenu.style.display !== "none";
+                    if (isOpen) { close(); } else { actionsMenu.style.display = "block"; actionsToggle.setAttribute("aria-expanded", "true"); }
+                });
+                actionsMenu.addEventListener("click", function () { close(); });
+                document.addEventListener("click", function (e) { if (!actionsMenu.contains(e.target) && e.target !== actionsToggle) close(); });
+                document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+            }
+        })();
     </script>';
 
     // "Create new volunteer" modal

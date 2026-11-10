@@ -202,27 +202,35 @@ function eventadmin_render_copy_shifts_notice_and_modal(string $view, array $shi
 }
 
 /**
- * Renders the filter toggle button and the filter form itself (department/state/volunteer/
- * date/time/sort/order — which of those actually appear depends on $view, mirroring
- * eventadmin_overview_parse_filter_state()'s own per-field nonce/view gating).
+ * Renders the toolbar above the Day / Table / Cards content — the same structure on every
+ * tab, left to right:
+ *   1. When: the period control (eventadmin_render_when_control()) — always visible, also
+ *      on mobile, since it's what's changed most.
+ *   2. Filters, always in this order: Department → Volunteer → Status. One that doesn't
+ *      apply to the current tab is left out; the others keep their order.
+ *   3. View options (right): how results are shown, not which — "Open slots" on Day,
+ *      sorting on Cards.
+ * Active filters are repeated below as removable chips with "Clear filters"; on mobile the
+ * filters and view options fold behind a "Filters (n)" toggle.
  *
- * @param string   $page_slug          Registered submenu page slug (hidden form field + reset link).
- * @param string   $view               Current view — controls which fields are shown.
- * @param WP_Term[] $categories        From eventadmin_get_hierarchical_shift_categories().
- * @param string   $selected_cat       Currently selected department slug.
- * @param array<string,string> $states Cards-only "State" filter options, keyed by value.
- * @param string   $selected_state     Currently selected state key (Cards only).
- * @param WP_User[] $volunteers        Non-offline volunteers, for the Volunteers dropdown.
- * @param int      $selected_volunteer Currently selected volunteer ID.
- * @param string[] $shift_dates        Distinct dates with at least one shift.
- * @param string   $selected_date      Currently selected date.
- * @param string   $time_filter        'future'|'past'|'all'.
- * @param string   $sort_by            'date'|'title' (Cards only).
- * @param string   $order              'ASC'|'DESC' (Cards only).
- * @param bool     $show_open          Timeline-only "show open slots" checkbox state.
+ * @param string    $page_slug          Registered submenu page slug.
+ * @param string    $view               Current view.
+ * @param WP_Term[] $categories         From eventadmin_get_hierarchical_shift_categories().
+ * @param string    $selected_cat       Currently selected department slug.
+ * @param array<string,string> $states  Cards-only status options, keyed by value.
+ * @param string    $selected_state     Currently selected status key (Cards only).
+ * @param WP_User[] $volunteers         Non-offline volunteers.
+ * @param int       $selected_volunteer Currently selected volunteer ID.
+ * @param string    $selected_date      Y-m-d or ''.
+ * @param string    $time_filter        'future'|'past'|'all'.
+ * @param string    $sort_by            'date'|'title' (Cards only).
+ * @param string    $order              'ASC'|'DESC' (Cards only).
+ * @param bool      $show_open          Day-only "open slots" option.
+ * @param array<string, mixed> $filter_query_args Current filters as query args.
+ * @param array<string, mixed> $day_stats         From eventadmin_get_shift_day_stats().
  * @return void
  */
-function eventadmin_render_overview_filter_form(
+function eventadmin_render_overview_toolbar(
     string $page_slug,
     string $view,
     array $categories,
@@ -231,118 +239,174 @@ function eventadmin_render_overview_filter_form(
     string $selected_state,
     array $volunteers,
     int $selected_volunteer,
-    array $shift_dates,
     string $selected_date,
     string $time_filter,
     string $sort_by,
     string $order,
-    bool $show_open
+    bool $show_open,
+    array $filter_query_args,
+    array $day_stats
 ): void {
-    // On mobile, the filter row (department/date/volunteer/etc.) is collapsed behind this
-    // toggle by default — showing every dropdown right away crowds out the actual content
-    // on a small screen before the visitor has asked to filter anything. Pre-opened when a
-    // filter is already active, so changing your mind about it doesn't mean hunting for the
-    // toggle first.
-    $filters_active = (bool) ($selected_cat || $selected_state || $selected_volunteer || $time_filter !== 'future');
-    $filters_show_label = esc_html__('Show filter', 'eventadmin-volunteer-management');
-    $filters_hide_label = esc_html__('Hide filter', 'eventadmin-volunteer-management');
-    echo '<button type="button" id="eventadmin-filters-toggle" class="button eventadmin-filters-toggle"'
-        . ' data-show-label="' . esc_attr($filters_show_label) . '" data-hide-label="' . esc_attr($filters_hide_label) . '">'
-        . ($filters_active ? $filters_hide_label : $filters_show_label) . '</button>';
-    echo '<form method="get" action="edit.php" id="eventadmin-overview-filters" class="form-filters' . ($filters_active ? ' is-open' : '') . '" style="margin-top:1rem;">';
-    wp_nonce_field('eventadmin_filter_shifts', 'eventadmin_filter_shifts_nonce');
+    $show_volunteer = $view !== 'timeline'; // Day already shows every volunteer's own row
+    $show_status    = $view === 'cards';    // Table and Day show assignment rows, not shifts
+
+    // Active filters, for the chips row and the mobile "Filters (n)" count.
+    $active = [];
+    $remove_url = static function (string $key) use ($filter_query_args, $view): string {
+        $args = array_merge($filter_query_args, ['filter_view' => $view]);
+        unset($args[$key], $args['paged']);
+        return add_query_arg($args, admin_url('edit.php'));
+    };
+    if ($selected_cat !== '') {
+        $term = get_term_by('slug', $selected_cat, 'eventadmin_shift_category');
+        $active[] = [__('Department', 'eventadmin-volunteer-management'), $term instanceof WP_Term ? $term->name : $selected_cat, $remove_url('filter_cat')];
+    }
+    if ($show_volunteer && $selected_volunteer > 0) {
+        $user = get_userdata($selected_volunteer);
+        $active[] = [__('Volunteer', 'eventadmin-volunteer-management'), $user ? trim($user->first_name . ' ' . $user->last_name) : '#' . $selected_volunteer, $remove_url('filter_volunteer')];
+    }
+    if ($show_status && $selected_state !== '' && isset($states[$selected_state])) {
+        $active[] = [__('Status', 'eventadmin-volunteer-management'), $states[$selected_state], $remove_url('filter_state')];
+    }
+
+    echo '<form method="get" action="edit.php" id="eventadmin-overview-filters" class="eventadmin-toolbar' . (!empty($active) ? ' is-open' : '') . '">';
+    wp_nonce_field('eventadmin_filter_shifts', 'eventadmin_filter_shifts_nonce', false);
     echo '<input type="hidden" name="post_type" value="eventadmin_shift">';
     echo '<input type="hidden" name="page" value="' . esc_attr($page_slug) . '">';
-
-    // Department filter
-    echo '<label>' . esc_html__('Department:', 'eventadmin-volunteer-management') . '<select name="filter_cat">';
-    echo '<option value="">' . esc_html__('All', 'eventadmin-volunteer-management') . '</option>';
-    echo eventadmin_category_dropdown_options($categories, $selected_cat, 'slug');
-    echo '</select></label>';
-
-    // The State filter only makes sense against the Cards view's per-shift grouping — Table
-    // and Timeline both show individual assignment rows, not one card per shift.
-    if ($view === 'cards') {
-        echo '<label>' . esc_html__('State:', 'eventadmin-volunteer-management') . '<select name="filter_state">';
-        echo '<option value="">' . esc_html__('All', 'eventadmin-volunteer-management') . '</option>';
-        foreach ($states as $key => $val) {
-            $sel = $selected_state === $key ? 'selected' : '';
-            echo '<option value="' . esc_attr($key) . '" ' . esc_attr($sel) . '>' . esc_html($val) . '</option>';
-        }
-        echo '</select></label>';
-    }
-
-    // Volunteer filter doesn't apply to the Timeline (it already shows every volunteer's
-    // own row, so scoping to one defeats the point of the view).
-    if ($view !== 'timeline') {
-        echo '<label>' . esc_html__('Volunteers:', 'eventadmin-volunteer-management') . '<select name="filter_volunteer">';
-        echo '<option value="">' . esc_html__('All', 'eventadmin-volunteer-management') . '</option>';
-        foreach ($volunteers as $volunteer) {
-            $sel = $selected_volunteer == $volunteer->ID ? 'selected' : '';
-            echo '<option value="' . esc_attr($volunteer->ID) . '" ' . esc_attr($sel) . '>' . esc_html($volunteer->first_name . ' ' . $volunteer->last_name) . '</option>';
-        }
-        echo '</select></label>';
-    }
-
-    // The day itself is picked in the date bar above the content (date-navigator.php); this
-    // keeps it when another filter is changed.
-    echo '<input type="hidden" name="filter_date" value="' . esc_attr($selected_date) . '">';
-
-    // Time period filter
-    echo '<label>' . esc_html__('Show:', 'eventadmin-volunteer-management') . '<select name="filter_time">';
-    foreach ([
-        'future' => esc_html__('Upcoming', 'eventadmin-volunteer-management'),
-        'past'   => esc_html__('Past', 'eventadmin-volunteer-management'),
-        'all'    => esc_html__('All', 'eventadmin-volunteer-management'),
-    ] as $val => $label) {
-        echo '<option value="' . esc_attr($val) . '"' . selected($time_filter, $val, false) . '>' . esc_html($label) . '</option>';
-    }
-    echo '</select></label>';
-
-    // Sort/Order dropdowns are only needed for Cards — the Timeline positions bars by
-    // actual time regardless, and the Table sorts via its own clickable column headers.
-    if ($view === 'cards') {
-        // Sort by
-        echo '<label>' . esc_html__('Sort by:', 'eventadmin-volunteer-management') . '<select name="sort_by">';
-        foreach ([
-            'date'  => esc_html__('Date', 'eventadmin-volunteer-management'),
-            'title' => esc_html__('Name', 'eventadmin-volunteer-management'),
-        ] as $val => $label) {
-            echo '<option value="' . esc_attr($val) . '"' . selected($sort_by, $val, false) . '>' . esc_html($label) . '</option>';
-        }
-        echo '</select></label>';
-
-        // Order
-        echo '<label>' . esc_html__('Order:', 'eventadmin-volunteer-management') . '<select name="order">';
-        foreach ([
-            'ASC'  => esc_html__('Ascending', 'eventadmin-volunteer-management'),
-            'DESC' => esc_html__('Descending', 'eventadmin-volunteer-management'),
-        ] as $val => $label) {
-            echo '<option value="' . esc_attr($val) . '"' . selected($order, $val, false) . '>' . esc_html($label) . '</option>';
-        }
-        echo '</select></label>';
-    }
-
-    // Preserves the active view tab when submitting other filters (the tabs themselves
-    // are plain links, not part of this form).
+    // Tabs and the "when" control are links, not part of this form — these keep them when
+    // a filter below changes.
     echo '<input type="hidden" name="filter_view" value="' . esc_attr($view) . '">';
+    echo '<input type="hidden" name="filter_date" value="' . esc_attr($selected_date) . '">';
+    echo '<input type="hidden" name="filter_time" value="' . esc_attr($time_filter) . '">';
 
-    // Only meaningful on the Timeline itself.
-    if ($view === 'timeline') {
-        echo '<label style="margin-left:8px;"><input type="hidden" name="show_open" value="0">';
-        echo '<input type="checkbox" name="show_open" value="1"' . checked($show_open, true, false) . '> ';
-        echo esc_html__('Show open slots in timeline', 'eventadmin-volunteer-management') . '</label>';
+    // 1. When
+    echo '<div class="eventadmin-toolbar-group eventadmin-toolbar-when">';
+    echo '<span class="eventadmin-filter-label">' . esc_html__('Date', 'eventadmin-volunteer-management') . '</span>';
+    eventadmin_render_when_control($filter_query_args, $view, $selected_date, $day_stats, $time_filter);
+    echo '</div>';
+
+    // Mobile only: folds groups 2 and 3.
+    $toggle_label = empty($active)
+        ? __('Filters', 'eventadmin-volunteer-management')
+        /* translators: %d: number of active filters */
+        : sprintf(__('Filters (%d)', 'eventadmin-volunteer-management'), count($active));
+    echo '<button type="button" id="eventadmin-filters-toggle" class="button eventadmin-filters-toggle"'
+        . ' data-show-label="' . esc_attr($toggle_label) . '" data-hide-label="' . esc_attr__('Hide filters', 'eventadmin-volunteer-management') . '">'
+        . esc_html(!empty($active) ? __('Hide filters', 'eventadmin-volunteer-management') : $toggle_label) . '</button>';
+
+    // 2. Filters: Department → Volunteer → Status
+    echo '<div class="eventadmin-toolbar-group eventadmin-toolbar-filters">';
+    echo '<label class="eventadmin-filter"><span class="eventadmin-filter-label">' . esc_html__('Department', 'eventadmin-volunteer-management') . '</span>';
+    echo '<select name="filter_cat"><option value="">' . esc_html__('All departments', 'eventadmin-volunteer-management') . '</option>';
+    echo eventadmin_category_dropdown_options($categories, $selected_cat, 'slug'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside
+    echo '</select></label>';
+
+    if ($show_volunteer) {
+        echo '<label class="eventadmin-filter"><span class="eventadmin-filter-label">' . esc_html__('Volunteer', 'eventadmin-volunteer-management') . '</span>';
+        echo '<select name="filter_volunteer"><option value="">' . esc_html__('Anyone', 'eventadmin-volunteer-management') . '</option>';
+        foreach ($volunteers as $volunteer) {
+            echo '<option value="' . esc_attr($volunteer->ID) . '"' . selected($selected_volunteer, $volunteer->ID, false) . '>' . esc_html(trim($volunteer->first_name . ' ' . $volunteer->last_name) ?: $volunteer->user_login) . '</option>';
+        }
+        echo '</select></label>';
     }
 
-    echo '<a href="' . esc_html(admin_url('edit.php?post_type=eventadmin_shift&page=' . $page_slug)) . '" class="button">' . esc_html__('Reset filter', 'eventadmin-volunteer-management') . '</a>';
-    echo '<noscript><input type="submit" class="button" value="' . esc_attr__('Filter', 'eventadmin-volunteer-management') . '"></noscript>';
+    if ($show_status) {
+        echo '<label class="eventadmin-filter"><span class="eventadmin-filter-label">' . esc_html__('Status', 'eventadmin-volunteer-management') . '</span>';
+        echo '<select name="filter_state"><option value="">' . esc_html__('Any status', 'eventadmin-volunteer-management') . '</option>';
+        foreach ($states as $key => $val) {
+            echo '<option value="' . esc_attr($key) . '"' . selected($selected_state, $key, false) . '>' . esc_html($val) . '</option>';
+        }
+        echo '</select></label>';
+    }
+    echo '</div>';
 
+    // 3. View options
+    if ($view === 'timeline' || $view === 'cards') {
+        echo '<div class="eventadmin-toolbar-group eventadmin-toolbar-view">';
+        echo '<span class="eventadmin-filter-label">' . esc_html__('View', 'eventadmin-volunteer-management') . '</span>';
+        echo '<div class="eventadmin-toolbar-view-controls">';
+        if ($view === 'timeline') {
+            echo '<label class="eventadmin-view-option"><input type="hidden" name="show_open" value="0">';
+            echo '<input type="checkbox" name="show_open" value="1"' . checked($show_open, true, false) . '> ';
+            echo esc_html__('Open slots', 'eventadmin-volunteer-management') . '</label>';
+        } else {
+            echo '<select name="sort_by" aria-label="' . esc_attr__('Sort by', 'eventadmin-volunteer-management') . '">';
+            foreach (['date' => __('Sort by date', 'eventadmin-volunteer-management'), 'title' => __('Sort by name', 'eventadmin-volunteer-management')] as $val => $label) {
+                echo '<option value="' . esc_attr($val) . '"' . selected($sort_by, $val, false) . '>' . esc_html($label) . '</option>';
+            }
+            echo '</select>';
+            echo '<select name="order" aria-label="' . esc_attr__('Order', 'eventadmin-volunteer-management') . '">';
+            foreach (['ASC' => __('Ascending', 'eventadmin-volunteer-management'), 'DESC' => __('Descending', 'eventadmin-volunteer-management')] as $val => $label) {
+                echo '<option value="' . esc_attr($val) . '"' . selected($order, $val, false) . '>' . esc_html($label) . '</option>';
+            }
+            echo '</select>';
+        }
+        echo '</div></div>';
+    }
+
+    echo '<noscript><input type="submit" class="button" value="' . esc_attr__('Filter', 'eventadmin-volunteer-management') . '"></noscript>';
     echo '</form>';
+
+    if (!empty($active)) {
+        $clear_url = add_query_arg([
+            'post_type'                      => 'eventadmin_shift',
+            'page'                           => $page_slug,
+            'filter_view'                    => $view,
+            'eventadmin_filter_shifts_nonce' => wp_create_nonce('eventadmin_filter_shifts'),
+        ], admin_url('edit.php'));
+        echo '<div class="eventadmin-active-filters">';
+        foreach ($active as [$label, $value, $url]) {
+            echo '<a class="eventadmin-active-filter" href="' . esc_url($url) . '" title="' . esc_attr__('Remove filter', 'eventadmin-volunteer-management') . '">'
+                . '<span class="eventadmin-active-filter-label">' . esc_html($label) . ':</span> ' . esc_html($value)
+                . ' <span aria-hidden="true">✕</span></a>';
+        }
+        echo '<a class="eventadmin-clear-filters" href="' . esc_url($clear_url) . '">' . esc_html__('Clear filters', 'eventadmin-volunteer-management') . '</a>';
+        echo '</div>';
+    }
+
     echo '<script>
         document.querySelectorAll("#eventadmin-overview-filters select, #eventadmin-overview-filters input[type=checkbox]").forEach(function (el) {
             el.addEventListener("change", function () { el.form.submit(); });
         });
     </script>';
+}
+
+/**
+ * Renders the page heading with its one action group — "+ Add shift" plus a menu with the
+ * less frequent actions — the same on every tab, instead of a different button (or none)
+ * per tab somewhere between the filters and the content.
+ *
+ * @param string $page_title
+ * @param string $view
+ * @return void
+ */
+function eventadmin_render_overview_heading(string $page_title, string $view): void
+{
+    echo '<h1 class="wp-heading-inline">' . esc_html($page_title) . '</h1>';
+
+    if ($view !== 'dashboard' && current_user_can('eventadmin_manage_shifts')) {
+        echo '<div class="eventadmin-split-button eventadmin-heading-actions">';
+        echo '<button type="button" id="eventadmin-open-new-shift-modal" class="button button-primary">+ ' . esc_html__('Add shift', 'eventadmin-volunteer-management') . '</button>';
+        echo '<button type="button" id="eventadmin-split-button-toggle" class="button button-primary eventadmin-split-button-toggle" aria-haspopup="true" aria-expanded="false" aria-label="' . esc_attr__('More options', 'eventadmin-volunteer-management') . '">';
+        echo '<span aria-hidden="true">&#9662;</span>';
+        echo '</button>';
+        echo '<div id="eventadmin-split-button-menu" class="eventadmin-split-button-menu" style="display:none;">';
+        echo '<button type="button" id="eventadmin-open-copy-shifts-modal" class="eventadmin-timeline-menu-item">' . esc_html__('Copy shifts to another day', 'eventadmin-volunteer-management') . '</button>';
+        echo '<button type="submit" form="eventadmin-export-all-form" class="eventadmin-timeline-menu-item">' . esc_html__('Export all shifts (CSV)', 'eventadmin-volunteer-management') . '</button>';
+        if (current_user_can('eventadmin_manage_departments')) {
+            echo '<a href="' . esc_url(admin_url('edit-tags.php?taxonomy=eventadmin_shift_category&post_type=eventadmin_shift')) . '" class="eventadmin-timeline-menu-item">' . esc_html__('Departments', 'eventadmin-volunteer-management') . '</a>';
+        }
+        echo '</div>';
+        echo '</div>';
+
+        // Target of the "Export all shifts (CSV)" menu item — kept outside the menu markup.
+        echo '<form method="post" id="eventadmin-export-all-form" style="display:none;">';
+        wp_nonce_field('eventadmin_export_all', 'eventadmin_export_all_nonce');
+        echo '<input type="hidden" name="eventadmin_export_all" value="1">';
+        echo '</form>';
+    }
+
+    echo '<hr class="wp-header-end">';
 }
 
 /**
@@ -619,7 +683,8 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
 
     eventadmin_render_copy_shifts_notice_and_modal($view, $shift_dates);
 
-    echo '<div class="wrap"><h1>' . esc_html($page_title) . '</h1>';
+    echo '<div class="wrap">';
+    eventadmin_render_overview_heading($page_title, $view);
 
     // View tabs — only shown when this page actually offers more than one view (Overview
     // is dashboard-stats-only now, so it skips the tab row entirely).
@@ -627,7 +692,7 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
         echo '<h2 class="nav-tab-wrapper">';
         $tab_labels = [
             'dashboard' => esc_html__('Dashboard', 'eventadmin-volunteer-management'),
-            'timeline'  => esc_html__('Manager', 'eventadmin-volunteer-management'),
+            'timeline'  => esc_html__('Day', 'eventadmin-volunteer-management'),
             'table'     => esc_html__('Table', 'eventadmin-volunteer-management'),
             'cards'     => esc_html__('Cards (old)', 'eventadmin-volunteer-management'),
         ];
@@ -648,7 +713,7 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
         return;
     }
 
-    eventadmin_render_overview_filter_form(
+    eventadmin_render_overview_toolbar(
         $page_slug,
         $view,
         $categories,
@@ -657,41 +722,14 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
         $selected_state,
         $volunteers,
         $selected_volunteer,
-        $shift_dates,
         $selected_date,
         $time_filter,
         $sort_by,
         $order,
-        $show_open
+        $show_open,
+        $filter_query_args,
+        $day_stats
     );
-
-    if ($view === 'timeline') {
-        // A split button: "+ Add shift" is the common case and stays one click away, while
-        // less-frequent actions ("copy from another day", managing departments) sit behind
-        // the dropdown toggle instead of permanently occupying their own full-width button.
-        echo '<div class="eventadmin-split-button">';
-        echo '<button type="button" id="eventadmin-open-new-shift-modal" class="button button-primary">+ ' . esc_html__('Add shift', 'eventadmin-volunteer-management') . '</button>';
-        echo '<button type="button" id="eventadmin-split-button-toggle" class="button button-primary eventadmin-split-button-toggle" aria-haspopup="true" aria-expanded="false" aria-label="' . esc_attr__('More options', 'eventadmin-volunteer-management') . '">';
-        echo '<span aria-hidden="true">&#9662;</span>';
-        echo '</button>';
-        echo '<div id="eventadmin-split-button-menu" class="eventadmin-split-button-menu" style="display:none;">';
-        echo '<button type="button" id="eventadmin-open-copy-shifts-modal" class="eventadmin-timeline-menu-item">' . esc_html__('Copy shifts to another day', 'eventadmin-volunteer-management') . '</button>';
-        echo '<a href="' . esc_url(admin_url('edit-tags.php?taxonomy=eventadmin_shift_category&post_type=eventadmin_shift')) . '" class="eventadmin-timeline-menu-item">' . esc_html__('Departments', 'eventadmin-volunteer-management') . '</a>';
-        echo '</div>';
-        echo '</div>';
-    }
-
-    if ($view === 'table') {
-        echo '<p>';
-        echo '<form method="post" style="display:inline;">';
-        wp_nonce_field('eventadmin_export_all', 'eventadmin_export_all_nonce');
-        echo '<input type="hidden" name="eventadmin_export_all" value="1">';
-        echo '<button type="submit" class="button">' . esc_html__('CSV export all shifts', 'eventadmin-volunteer-management') . '</button>';
-        echo '</form>';
-        echo '</p>';
-    }
-
-    eventadmin_render_date_navigator($filter_query_args, $view, $selected_date, $day_stats, $time_filter);
 
     $current_page = isset($_GET['paged']) ? absint($_GET['paged']) : 1;
     $per_page     = 200;
@@ -726,6 +764,14 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
     eventadmin_render_add_volunteer_modal($view, $volunteers, $shift_info_map);
 
     eventadmin_render_timeline_shift_modals_and_config($view, $shift_edit_map, $show_open, $selected_date);
+
+    // The Day view renders the shift modal with its own richer config (above); the other
+    // tabs get the shared one, so "+ Add shift" and editing work there too — reloading
+    // afterwards, since only the Day view updates itself in place.
+    if ($view !== 'timeline' && current_user_can('eventadmin_manage_shifts')) {
+        eventadmin_render_shared_volunteer_modals(['default_date' => $selected_date]);
+        echo '<script>window.eventadminOnShiftCreated = window.eventadminOnShiftSaved = function () { window.location.reload(); };</script>';
+    }
 
     eventadmin_render_overview_pagination($total_found, $per_page, $current_page, $filter_query_args, $view);
 

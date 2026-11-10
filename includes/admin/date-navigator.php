@@ -148,117 +148,130 @@ function eventadmin_next_shift_date(array $day_stats): string
 }
 
 /**
- * Renders the date bar above the Table / Cards / Manager content.
+ * Renders the "when" control at the start of the toolbar — the one place that decides which
+ * period is shown, so a range (Upcoming / Past / All) and a single day can never contradict
+ * each other: picking a day replaces the range, picking a range clears the day.
+ *
+ * - Up to EVENTADMIN_DATE_CHIPS_MAX days in the current range (a single event): the range
+ *   button plus one chip per day.
+ * - More (long-running setups): ◀ day ▶, "Today", and the range button.
+ * Either way the range button opens a popover with the three ranges and a month picker
+ * whose days are dotted by staffing (assets/js/date-navigator.js).
  *
  * @param array<string, mixed> $filter_query_args Current filters (from eventadmin_overview_parse_filter_state()).
  * @param string               $view              Current view slug.
- * @param string               $selected_date     Y-m-d or '' for all dates.
+ * @param string               $selected_date     Y-m-d or '' for the whole range.
  * @param array<string, mixed> $day_stats         From eventadmin_get_shift_day_stats().
  * @param string               $time_filter       'future'|'past'|'all'
  * @return void
  */
-function eventadmin_render_date_navigator(array $filter_query_args, string $view, string $selected_date, array $day_stats, string $time_filter): void
+function eventadmin_render_when_control(array $filter_query_args, string $view, string $selected_date, array $day_stats, string $time_filter): void
 {
-    if (empty($day_stats)) {
-        return;
-    }
-
     $base_args = array_merge($filter_query_args, ['filter_view' => $view]);
-    unset($base_args['filter_date'], $base_args['paged']);
-    $date_url = static fn(string $date): string => add_query_arg(array_merge($base_args, ['filter_date' => $date]), admin_url('edit.php'));
+    unset($base_args['filter_date'], $base_args['filter_time'], $base_args['paged']);
+    $range_arg = $time_filter !== 'future' ? ['filter_time' => $time_filter] : [];
+    $date_url  = static fn(string $date): string => add_query_arg(array_merge($base_args, $range_arg, ['filter_date' => $date]), admin_url('edit.php'));
+    $range_url = static fn(string $range): string => add_query_arg(array_merge($base_args, ['filter_time' => $range, 'filter_date' => '']), admin_url('edit.php'));
 
-    $dates = eventadmin_filter_dates_for_time($day_stats, $time_filter);
-    if ($selected_date !== '' && !in_array($selected_date, $dates, true) && isset($day_stats[$selected_date])) {
-        $dates[] = $selected_date;
-        sort($dates);
-    }
-
+    $ranges = [
+        'future' => __('Upcoming', 'eventadmin-volunteer-management'),
+        'past'   => __('Past', 'eventadmin-volunteer-management'),
+        'all'    => __('All dates', 'eventadmin-volunteer-management'),
+    ];
     $status_labels = [
         'under' => __('Below the minimum', 'eventadmin-volunteer-management'),
         'open'  => __('Open slots', 'eventadmin-volunteer-management'),
         'full'  => __('Fully staffed', 'eventadmin-volunteer-management'),
     ];
     $day_label = static fn(string $date, string $format): string => date_i18n($format, strtotime($date . ' 12:00:00'));
-    $all_label = __('All dates', 'eventadmin-volunteer-management');
 
-    echo '<div class="eventadmin-date-nav" role="navigation" aria-label="' . esc_attr__('Choose a day', 'eventadmin-volunteer-management') . '">';
+    $dates = eventadmin_filter_dates_for_time($day_stats, $time_filter);
+    if ($selected_date !== '' && !in_array($selected_date, $dates, true) && isset($day_stats[$selected_date])) {
+        $dates[] = $selected_date;
+        sort($dates);
+    }
+    $chips_mode = count($dates) <= EVENTADMIN_DATE_CHIPS_MAX;
 
-    if (count($dates) <= EVENTADMIN_DATE_CHIPS_MAX) {
-        // A single event: every day is one click away.
-        echo '<a class="eventadmin-date-chip' . ($selected_date === '' ? ' is-active' : '') . '" href="' . esc_url($date_url('')) . '">' . esc_html($all_label) . '</a>';
-        foreach ($dates as $date) {
-            $status = $day_stats[$date]['status'];
-            echo '<a class="eventadmin-date-chip' . ($selected_date === $date ? ' is-active' : '') . '" href="' . esc_url($date_url($date)) . '" title="' . esc_attr($status_labels[$status]) . '">'
-                . '<span class="eventadmin-date-dot is-' . esc_attr($status) . '" aria-hidden="true"></span>'
-                . esc_html($day_label($date, 'D j M')) . '</a>';
+    echo '<div class="eventadmin-date-nav" role="group" aria-label="' . esc_attr__('Choose a day', 'eventadmin-volunteer-management') . '">';
+
+    $nav_button = static function (string $date, string $symbol, string $label) use ($date_url): void {
+        if ($date === '') {
+            echo '<span class="button eventadmin-date-step" aria-disabled="true" title="' . esc_attr($label) . '">' . esc_html($symbol) . '</span>';
+            return;
         }
-    } else {
-        // Long-running: step day by day, jump to today, or pick a day from the month view.
+        echo '<a class="button eventadmin-date-step" href="' . esc_url($date_url($date)) . '" title="' . esc_attr($label) . '" aria-label="' . esc_attr($label) . '">' . esc_html($symbol) . '</a>';
+    };
+
+    if (!$chips_mode) {
         $all_dates = array_keys($day_stats);
         $index     = $selected_date !== '' ? array_search($selected_date, $all_dates, true) : false;
         $prev      = $index !== false && $index > 0 ? $all_dates[$index - 1] : '';
         $next      = $index !== false && $index < count($all_dates) - 1 ? $all_dates[$index + 1] : '';
-        if ($index === false && $selected_date === '') {
+        if ($selected_date === '') {
             $next = eventadmin_next_shift_date($day_stats);
         }
-
-        $nav_button = static function (string $date, string $symbol, string $label) use ($date_url): void {
-            if ($date === '') {
-                echo '<span class="button eventadmin-date-step" aria-disabled="true" title="' . esc_attr($label) . '">' . esc_html($symbol) . '</span>';
-                return;
-            }
-            echo '<a class="button eventadmin-date-step" href="' . esc_url($date_url($date)) . '" title="' . esc_attr($label) . '" aria-label="' . esc_attr($label) . '">' . esc_html($symbol) . '</a>';
-        };
-
         $nav_button($prev, '◀', __('Previous day with shifts', 'eventadmin-volunteer-management'));
+    }
 
-        $current_label = $selected_date !== '' ? $day_label($selected_date, 'l, ' . get_option('date_format')) : $all_label;
-        echo '<button type="button" class="button eventadmin-date-current" id="eventadmin-date-picker-toggle" aria-haspopup="dialog" aria-expanded="false">';
-        if ($selected_date !== '' && isset($day_stats[$selected_date])) {
-            echo '<span class="eventadmin-date-dot is-' . esc_attr($day_stats[$selected_date]['status']) . '" aria-hidden="true"></span>';
+    // The button always says what is shown right now: the chosen day, or the range.
+    echo '<button type="button" class="button eventadmin-date-current" id="eventadmin-date-picker-toggle" aria-haspopup="dialog" aria-expanded="false">';
+    if ($selected_date !== '' && isset($day_stats[$selected_date])) {
+        echo '<span class="eventadmin-date-dot is-' . esc_attr($day_stats[$selected_date]['status']) . '" aria-hidden="true"></span>';
+        echo esc_html($day_label($selected_date, $chips_mode ? 'D j M' : 'l, ' . get_option('date_format')));
+    } else {
+        echo esc_html($ranges[$time_filter] ?? $ranges['future']);
+    }
+    echo ' <span aria-hidden="true">&#9662;</span></button>';
+
+    if ($chips_mode) {
+        foreach ($dates as $date) {
+            if ($date === $selected_date) {
+                continue; // already named on the button
+            }
+            $status = $day_stats[$date]['status'];
+            echo '<a class="eventadmin-date-chip" href="' . esc_url($date_url($date)) . '" title="' . esc_attr($status_labels[$status]) . '">'
+                . '<span class="eventadmin-date-dot is-' . esc_attr($status) . '" aria-hidden="true"></span>'
+                . esc_html($day_label($date, 'D j M')) . '</a>';
         }
-        echo esc_html($current_label) . ' <span aria-hidden="true">&#9662;</span></button>';
-
+    } else {
         $nav_button($next, '▶', __('Next day with shifts', 'eventadmin-volunteer-management'));
-
         $today_target = eventadmin_next_shift_date($day_stats);
         if ($today_target !== '' && $today_target !== $selected_date) {
             echo '<a class="button eventadmin-date-today" href="' . esc_url($date_url($today_target)) . '">' . esc_html__('Today', 'eventadmin-volunteer-management') . '</a>';
         }
-        if ($selected_date !== '') {
-            echo '<a class="eventadmin-date-all" href="' . esc_url($date_url('')) . '">' . esc_html($all_label) . '</a>';
-        }
-
-        if ($selected_date !== '' && isset($day_stats[$selected_date])) {
-            $count = (int) $day_stats[$selected_date]['shifts'];
-            echo '<span class="eventadmin-date-summary">' . esc_html(sprintf(
-                /* translators: %d: number of shifts on the selected day */
-                _n('%d shift', '%d shifts', $count, 'eventadmin-volunteer-management'),
-                $count
-            )) . '</span>';
-        }
-
-        echo '<div class="eventadmin-date-picker" id="eventadmin-date-picker" role="dialog" hidden></div>';
-
-        $picker_days = [];
-        foreach ($day_stats as $date => $info) {
-            $picker_days[$date] = $info['status'];
-        }
-        $locale = str_replace('_', '-', preg_replace('/_(formal|informal)$/', '', get_user_locale()));
-        wp_localize_script('eventadmin-date-navigator', 'EVENTADMIN_DATE_NAV', [
-            'days'        => $picker_days,
-            'selected'    => $selected_date,
-            'today'       => current_time('Y-m-d'),
-            'url'         => esc_url_raw($date_url('__DATE__')),
-            'startOfWeek' => (int) get_option('start_of_week', 1),
-            'locale'      => $locale,
-            'i18n'        => [
-                'prev_month' => __('Previous month', 'eventadmin-volunteer-management'),
-                'next_month' => __('Next month', 'eventadmin-volunteer-management'),
-                'status'     => $status_labels,
-            ],
-        ]);
     }
+
+    // Popover: the three ranges on top, the month picker below.
+    echo '<div class="eventadmin-date-picker" id="eventadmin-date-picker" role="dialog" aria-label="' . esc_attr__('Choose a day', 'eventadmin-volunteer-management') . '" hidden>';
+    echo '<div class="eventadmin-date-ranges">';
+    foreach ($ranges as $key => $label) {
+        $active = $selected_date === '' && $time_filter === $key;
+        echo '<a class="eventadmin-date-range' . ($active ? ' is-active' : '') . '" href="' . esc_url($range_url($key)) . '"' . ($active ? ' aria-current="true"' : '') . '>' . esc_html($label) . '</a>';
+    }
+    echo '</div>';
+    echo '<div class="eventadmin-date-picker-cal"></div>';
+    echo '</div>';
+
+    $picker_days = [];
+    foreach ($day_stats as $date => $info) {
+        $picker_days[$date] = $info['status'];
+    }
+    $locale = str_replace('_', '-', preg_replace('/_(formal|informal)$/', '', get_user_locale()));
+    wp_localize_script('eventadmin-date-navigator', 'EVENTADMIN_DATE_NAV', [
+        'days'        => $picker_days,
+        'selected'    => $selected_date,
+        // Month the picker opens on: the chosen day, else the next day with shifts.
+        'anchor'      => $selected_date !== '' ? $selected_date : (eventadmin_next_shift_date($day_stats) ?: current_time('Y-m-d')),
+        'today'       => current_time('Y-m-d'),
+        'url'         => esc_url_raw($date_url('__DATE__')),
+        'startOfWeek' => (int) get_option('start_of_week', 1),
+        'locale'      => $locale,
+        'i18n'        => [
+            'prev_month' => __('Previous month', 'eventadmin-volunteer-management'),
+            'next_month' => __('Next month', 'eventadmin-volunteer-management'),
+            'status'     => $status_labels,
+        ],
+    ]);
 
     echo '</div>';
 }

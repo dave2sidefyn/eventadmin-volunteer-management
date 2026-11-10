@@ -287,7 +287,7 @@ add_action('admin_init', 'eventadmin_admin_dashboard_admin_init');
     // UTF-8 BOM so Excel (which does not auto-detect CSV encoding) doesn't mangle non-ASCII characters.
     fwrite($out, "\xEF\xBB\xBF");
     fputcsv($out, [
-        esc_html__('Category', 'eventadmin-volunteer-management'),
+        esc_html__('Department', 'eventadmin-volunteer-management'),
         esc_html__('Shift', 'eventadmin-volunteer-management'),
         esc_html__('Period', 'eventadmin-volunteer-management'),
         esc_html__('Name', 'eventadmin-volunteer-management'),

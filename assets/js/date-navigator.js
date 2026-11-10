@@ -7,7 +7,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     const cfg = window.EVENTADMIN_DATE_NAV;
     const toggle = document.getElementById('eventadmin-date-picker-toggle');
-    const picker = document.getElementById('eventadmin-date-picker');
+    const popover = document.getElementById('eventadmin-date-picker');
+    // The popover holds the range links (server-rendered) above this month grid.
+    const picker = popover && popover.querySelector('.eventadmin-date-picker-cal');
     if (!cfg || !toggle || !picker) return;
 
     // wp_localize_script() hands every scalar over as a string.
@@ -17,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let locale = cfg.locale;
     try { new Intl.DateTimeFormat(locale); } catch (e) { locale = undefined; }
 
-    const start = (cfg.selected || cfg.today).split('-').map(Number);
+    const start = (cfg.anchor || cfg.selected || cfg.today).split('-').map(Number);
     let year = start[0];
     let month = start[1] - 1;
 
@@ -90,19 +92,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function open() {
         render();
-        picker.hidden = false;
+        popover.hidden = false;
         toggle.setAttribute('aria-expanded', 'true');
     }
     function close() {
-        picker.hidden = true;
+        popover.hidden = true;
         toggle.setAttribute('aria-expanded', 'false');
     }
 
     toggle.addEventListener('click', (e) => {
         e.stopPropagation();
-        picker.hidden ? open() : close();
+        popover.hidden ? open() : close();
     });
-    picker.addEventListener('click', (e) => e.stopPropagation());
+    popover.addEventListener('click', (e) => e.stopPropagation());
     document.addEventListener('click', close);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
 });

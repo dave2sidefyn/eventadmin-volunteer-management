@@ -248,7 +248,7 @@ function eventadmin_render_getting_started_checklist(): void
         [
             'done'     => $status['drag'],
             'label'    => esc_html__('Drag a shift to reschedule it', 'eventadmin-volunteer-management'),
-            'hint'     => esc_html__('On the Manager page’s Timeline tab, drag a shift bar to move it, or drag its edge to resize it — much quicker than editing the time by hand.', 'eventadmin-volunteer-management'),
+            'hint'     => esc_html__('On the Manager page’s Day tab, drag a shift bar to move it, or drag its edge to resize it — much quicker than editing the time by hand.', 'eventadmin-volunteer-management'),
             'url'      => admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-shift-manager'),
             'cta'      => esc_html__('Open Manager', 'eventadmin-volunteer-management'),
             'optional' => true,

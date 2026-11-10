@@ -140,7 +140,7 @@ function eventadmin_plugin_documentation_page()
                 <li><?php echo esc_html__('Assignment, cancellation, and reminder emails (reminders a configurable number of days before a shift)', 'eventadmin-volunteer-management'); ?></li>
                 <li><?php echo esc_html__('Registration form with honeypot and optional CAPTCHA (reCAPTCHA, hCaptcha, or Cloudflare Turnstile); blocked attempts are logged', 'eventadmin-volunteer-management'); ?></li>
                 <li><?php echo esc_html__('E-mail design settings: header color, header title/subtitle, rich-text templates, and custom CSS', 'eventadmin-volunteer-management'); ?></li>
-                <li><?php echo esc_html__('Shift overview with Dashboard, Cards, Table, and Timeline tabs — drag shifts on the Timeline to reschedule; dashboard stats split open spots into required vs. optional', 'eventadmin-volunteer-management'); ?></li>
+                <li><?php echo esc_html__('Shift overview with Dashboard, Day, Table, and Cards tabs — drag shifts on the Day timeline to reschedule; dashboard stats split open spots into required vs. optional', 'eventadmin-volunteer-management'); ?></li>
                 <li><?php echo esc_html__('Bulk email tool: send announcements to all, opted-in, shift-specific, or individual volunteers; supports HTML formatting; includes progress tracking and send history', 'eventadmin-volunteer-management'); ?></li>
                 <li><?php echo esc_html__('Volunteers can opt out of announcements in their profile', 'eventadmin-volunteer-management'); ?></li>
                 <li><?php echo esc_html__('Integration with Nextend Social Login', 'eventadmin-volunteer-management'); ?></li>
@@ -314,7 +314,7 @@ function eventadmin_plugin_documentation_page()
         <?php
         eventadmin_doc_screenshot(
             'timeline-view.webp',
-            __('The Timeline tab for one day: one row per volunteer, coloured bars for their shifts, and grey/red bars for the slots still open. Drag a bar sideways to reschedule it.', 'eventadmin-volunteer-management'),
+            __('The Day tab: one row per volunteer, coloured bars for their shifts, and grey/red bars for the slots still open. Drag a bar sideways to reschedule it.', 'eventadmin-volunteer-management'),
             $eventadmin_doc_manager_timeline_url,
             __('Open Manager (Timeline)', 'eventadmin-volunteer-management'),
             false
@@ -642,7 +642,7 @@ function eventadmin_plugin_documentation_page()
             <dd><?php echo esc_html__('Yes, they must be logged in to view and join shifts.', 'eventadmin-volunteer-management'); ?></dd>
 
             <dt><strong><?php echo esc_html__('How can I assign volunteers manually?', 'eventadmin-volunteer-management'); ?></strong></dt>
-            <dd><?php echo esc_html__('Open Shifts → Overview. In the Table view use the "Add volunteer" button on a shift, or click an open slot in the Timeline view. You can pick an existing volunteer or create a new account (with or without an email address) on the spot.', 'eventadmin-volunteer-management'); ?></dd>
+            <dd><?php echo esc_html__('Open Shifts → Manager. On the Table tab use the "Add volunteer" button on a shift, or click an open slot on the Day tab. You can pick an existing volunteer or create a new account (with or without an email address) on the spot.', 'eventadmin-volunteer-management'); ?></dd>
 
             <dt><strong><?php echo esc_html__('What happens when shifts are full?', 'eventadmin-volunteer-management'); ?></strong></dt>
             <dd><?php echo esc_html__('By default, full shifts are hidden on the volunteer page. You can optionally show them in a separate read-only section by enabling "Show full shifts to volunteers" under Settings → Display.', 'eventadmin-volunteer-management'); ?></dd>
@@ -678,10 +678,10 @@ function eventadmin_plugin_documentation_page()
             <dd><?php echo esc_html__('Deactivating only stops the scheduled reminder and cleanup jobs. Uninstalling does not delete anything either — volunteer accounts, shifts, settings, and the "Volunteer" role stay in the database, so nothing is lost if you reinstall. Remove them by hand (or with a cleanup plugin) if you want a clean slate.', 'eventadmin-volunteer-management'); ?></dd>
 
             <dt><strong><?php echo esc_html__('Can I reuse last year\'s shifts for a new event?', 'eventadmin-volunteer-management'); ?></strong></dt>
-            <dd><?php echo esc_html__('Yes — on the Manager page\'s Timeline tab, use "Copy shifts to another day" (in the + Add shift dropdown) to recreate every shift from a past day onto a new date, keeping each shift\'s time-of-day and duration. There\'s an option to also copy over the volunteers who were signed up, so a whole day\'s roster can be cloned forward to next year in one go.', 'eventadmin-volunteer-management'); ?></dd>
+            <dd><?php echo esc_html__('Yes — on the Manager page, use "Copy shifts to another day" (in the menu next to + Add shift) to recreate every shift from a past day onto a new date, keeping each shift\'s time-of-day and duration. There\'s an option to also copy over the volunteers who were signed up, so a whole day\'s roster can be cloned forward to next year in one go.', 'eventadmin-volunteer-management'); ?></dd>
 
             <dt><strong><?php echo esc_html__('How do I find a specific day when shifts run over many weeks?', 'eventadmin-volunteer-management'); ?></strong></dt>
-            <dd><?php echo esc_html__('Use the date bar above the Manager, Table and Cards views. For a short event every day is a button; for longer periods step day by day with ◀ ▶, jump back with "Today", or click the date to open a month view where each day with shifts is marked red (below the minimum), grey (open slots) or green (fully staffed). When your shifts span more than a week, the Manager view opens on the next day with shifts; choose "All dates" to see everything at once.', 'eventadmin-volunteer-management'); ?></dd>
+            <dd><?php echo esc_html__('Use the Date control at the start of the toolbar on the Day, Table and Cards tabs. It always shows what you are looking at — Upcoming, Past, All dates or a single day. Click it to switch between those or to pick a day from a month view, where each day with shifts is marked red (below the minimum), grey (open slots) or green (fully staffed). For a short event every day also gets its own button; for longer periods step day by day with ◀ ▶ or jump back with "Today". When your shifts span more than a week, the Day tab opens on the next day with shifts.', 'eventadmin-volunteer-management'); ?></dd>
 
             <dt><strong><?php echo esc_html__('Can I create weekly recurring shifts?', 'eventadmin-volunteer-management'); ?></strong></dt>
             <dd><?php echo esc_html__('Yes. Set up one day\'s shifts, then use "Copy shifts to another day", pick the first new date and tick "Repeat every week" with an end date. The shifts are created on the same weekday every week (up to 52 weeks). Running the same repeat again skips shifts that already exist, and volunteers are never copied into a series.', 'eventadmin-volunteer-management'); ?></dd>
