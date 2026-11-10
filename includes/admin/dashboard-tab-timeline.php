@@ -148,6 +148,23 @@ function eventadmin_render_timeline_chart(array $timeline_rows): void
     $row_height = 28;
     $height     = max(200, count($timeline_rows) * $row_height + 60);
 
+    // Bars are drawn to scale against the whole visible time range, so with several days on
+    // screen a short shift becomes a thin sliver whose label sits beside it instead of inside
+    // — which looks like a different "style" per department but is only the zoom level.
+    // Timestamps are wall-clock-as-UTC (eventadmin_wallclock_to_ts()), hence gmdate().
+    $days_shown = count(array_unique(array_map(fn($row) => gmdate('Y-m-d', (int) $row['start']), $timeline_rows)));
+
+    echo '<p class="description eventadmin-timeline-hint">';
+    echo esc_html__('Click a shift to edit it. Drag it to move it, or drag one of its edges to change its times.', 'eventadmin-volunteer-management');
+    if ($days_shown > 1) {
+        echo ' ' . esc_html(sprintf(
+            /* translators: %d: number of days currently shown in the timeline */
+            __('Showing %d days, so short shifts appear narrow — pick a single day under Date above for a closer view.', 'eventadmin-volunteer-management'),
+            $days_shown
+        ));
+    }
+    echo '</p>';
+
     echo '<div style="overflow-x:auto;">';
     echo '<div style="min-width:700px;height:' . esc_attr($height) . 'px;">';
     echo '<canvas id="eventadmin-timeline-chart"></canvas>';

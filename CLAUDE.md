@@ -26,7 +26,7 @@ This is a traditional WordPress plugin. To develop:
 - **Post type:** `eventadmin_shift` – represents a single shift; not publicly queryable
 - **Taxonomy:** `eventadmin_shift_category` – hierarchical departments with color term meta (`term_color`)
 - **Shift meta keys:** `shift_start`, `shift_end`, `max_volunteers`, `assigned_user_{USER_ID}` (one entry per assigned volunteer)
-- **User meta keys:** `eventadmin_phone`, `magic_login_token`, `magic_login_expire`, `eventadmin_password_set` (volunteer chose their own password — accounts otherwise only hold a random one), `eventadmin_password_prompt_dismissed`, `eventadmin_department` (department term ID, one entry per linked department — admin-assigned via user-edit.php or self-subscribed via `[eventadmin_profile]`; used to target department-specific announcements independent of shift history)
+- **User meta keys:** `eventadmin_phone`, `magic_login_token`, `magic_login_expire`, `eventadmin_password_set` (volunteer chose their own password — accounts otherwise only hold a random one), `eventadmin_password_prompt_dismissed`, `eventadmin_department` (department term ID, one entry per linked department — admin-assigned via user-edit.php or self-subscribed via `[eventadmin_profile]`; used to target department-specific announcements independent of shift history), `eventadmin_shift_access_department` (department term ID, one entry per department the volunteer may sign up in — admin-only via the Volunteers page "Edit departments" modal, deliberately separate from `eventadmin_department` so a volunteer can't widen their access by ticking a notification box; only enforced while `eventadmin_restrict_shifts_to_departments` is on)
 - **Plugin options:** prefixed `eventadmin_*` (limits, notification templates, sender config)
 
 No custom database tables – everything uses WP post meta, user meta, and options.
@@ -42,8 +42,11 @@ No custom database tables – everything uses WP post meta, user meta, and optio
 | `shiftselector.php` | Shortcode `[eventadmin_shiftselector]` – AJAX-driven frontend for signing up/cancelling shifts |
 | `cockpit.php` | Shortcode `[eventadmin_cockpit]` – tabbed volunteer dashboard aggregating shiftselector + profile |
 | `profile.php` | Shortcode `[eventadmin_profile]` – volunteer profile editing (name, phone, email) |
+| `page-cache.php` | Keeps pages with the volunteer shortcodes out of page caches/CDNs: `DONOTCACHEPAGE`, LiteSpeed no-cache hook, no-store headers also for logged-out visitors, reload on back/forward-cache restore. Detected on `template_redirect` via `has_shortcode()`, with a `pre_do_shortcode_tag` fallback. `[eventadmin_open_positions]` stays cacheable |
 | `notifications.php` | Email notifications on signup/cancellation; template placeholders: `{first}`, `{last}`, `{title}`, `{desc}`, `{start}`, `{end}` |
 | `admin/dashboard.php` | Admin overview with shift listing (paginated, filtered), manual assignment, CSV export, Chart.js analytics; results cached via transients (5 min) |
+| `admin/date-navigator.php` | "Date" control at the start of the overview toolbar (Day/Table/Cards tabs): one button that always names what is shown (Upcoming / Past / All dates / a single day) and opens a popover with those ranges plus a month picker (`assets/js/date-navigator.js`) whose days are dotted by staffing (under minimum / open / full, one SQL query in `eventadmin_get_shift_day_stats()`). Up to 7 shift days also get chips; more switch to ◀ day ▶ + "Today". When upcoming shifts span more than 7 days, the Day tab opens on the next shift day; an explicit empty `filter_date` means "All dates". Toolbar order on Overview and Volunteers: Date → Department → Volunteer/Shift → Status, view options right, removable active-filter chips + "Clear filters" below; page actions sit right-aligned in the heading row (secondary buttons like Departments / Export CSV, then the primary split button, whose menu only holds other ways to create — e.g. "Copy shifts to another day", "Grant volunteer role") |
+| `admin/dashboard-tab-calendar.php` | Calendar tab on the Manager page (view slug `calendar`): month/week grid (`cal_mode`, `cal_anchor` query args, kept across tabs) with one WP_Query for exactly the visible days — no list query or pagination. Chips are `.eventadmin-view-shift-details` triggers (shared shift modal); day numbers link to the Day tab. Default tab when upcoming shifts span more than `EVENTADMIN_CALENDAR_DEFAULT_DAYS` (14) days |
 | `admin/settings.php` | Settings page with three tabs (General, Display, Communication); each tab uses its own WP settings group (`eventadmin_plugin_settings_general/display/communication`) to prevent cross-tab data loss on save |
 | `admin/shift-metaboxes.php` | Custom metaboxes on shift edit screen (start/end datetime, max volunteers) |
 | `admin/quick-edit.php` | Inline quick-edit for shifts in post list |
@@ -56,6 +59,7 @@ No custom database tables – everything uses WP post meta, user meta, and optio
 3. Per-period limits: year / month / week / day (configurable, 0 = unlimited)
 4. Optional overlap prevention (if enabled, no two shifts can overlap in time)
 5. Cancellation deadline: `eventadmin_unassign_limit_hours` hours before shift start
+6. Optional "Shifts per department" (`eventadmin_restrict_shifts_to_departments`, off by default): volunteers only see and can sign up for shifts in their `eventadmin_shift_access_department` departments (plus sub-departments) — see `eventadmin_volunteer_can_see_shift()`. Never restricts shift managers, volunteers with no access departments, or shifts without a department; enforced server-side in the assign AJAX handler too. Existing sign-ups always stay under "My shifts"
 
 ### User Roles
 - `eventadmin_volunteer` – custom role; read-only WP access, admin bar hidden
@@ -72,6 +76,7 @@ The Settings → General "hide All Shifts/Add Shift/Departments menu" options (`
 - `[eventadmin_shiftselector]` – shift sign-up UI (also usable standalone)
 - `[eventadmin_profile]` – profile editor
 - `[eventadmin]` – alias
+- `department="slug,slug"` on `[eventadmin]`, `[eventadmin_cockpit]` and `[eventadmin_shiftselector]` limits the offered shifts (and the department dropdown) to those departments and their sub-departments — one page per department. "My shifts" always lists all of the volunteer's shifts; an unknown slug shows no open shifts
 
 ### AJAX Handlers
 All AJAX actions use WP nonce verification and are registered in `shiftselector.php`:

@@ -15,9 +15,11 @@ if (!defined('ABSPATH')) {
  * Shortcode for the EventAdmin Cockpit
  * Shows the tabs for shifts and profile
  *
+ * @param array|string $atts Optional department="slug,slug" — only offer shifts from these
+ *                           departments (and their sub-departments) on this page.
  * @return bool|string HTML output of the cockpit
  */
-function eventadmin_cockpit_shortcode(): bool|string
+function eventadmin_cockpit_shortcode($atts = []): bool|string
 {
     if (!is_user_logged_in()) return esc_html__('Please log in first.', 'eventadmin-volunteer-management');
 
@@ -42,7 +44,7 @@ function eventadmin_cockpit_shortcode(): bool|string
             </div>
         </div>
 
-        <div class="tab-panel" id="einsaetze"><?php echo do_shortcode('[eventadmin_shiftselector]'); ?></div>
+        <div class="tab-panel" id="einsaetze"><?php echo do_shortcode('[eventadmin_shiftselector' . eventadmin_department_shortcode_passthrough($atts) . ']'); ?></div>
         <div class="tab-panel" id="profil"
              style="display: none;"><?php echo do_shortcode('[eventadmin_profile]'); ?></div>
     </div>

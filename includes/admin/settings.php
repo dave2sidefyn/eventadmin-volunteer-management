@@ -309,6 +309,10 @@ function eventadmin_plugin_register_settings(): void
         'sanitize_callback' => 'eventadmin_sanitize_checkbox_setting',
     ]);
 
+    register_setting('eventadmin_plugin_settings_general', 'eventadmin_restrict_shifts_to_departments', [
+        'sanitize_callback' => 'eventadmin_sanitize_checkbox_setting',
+    ]);
+
     register_setting('eventadmin_plugin_settings_display', 'eventadmin_show_full_shifts', [
         'sanitize_callback' => 'eventadmin_sanitize_checkbox_setting',
     ]);
@@ -490,6 +494,18 @@ function eventadmin_plugin_register_settings(): void
         static function () {
             echo '<input type="checkbox" name="eventadmin_allow_overlap" value="1" ' . checked(1, get_option('eventadmin_allow_overlap'), false) . '>';
             echo ' ' . esc_html__('Yes', 'eventadmin-volunteer-management');
+        },
+        'eventadmin-settings-general',
+        'eventadmin_general_rules'
+    );
+
+    add_settings_field(
+        'eventadmin_restrict_shifts_to_departments',
+        esc_html__('Shifts per department', 'eventadmin-volunteer-management'),
+        static function () {
+            echo '<input type="checkbox" name="eventadmin_restrict_shifts_to_departments" value="1" ' . checked(1, get_option('eventadmin_restrict_shifts_to_departments', 0), false) . '>';
+            echo ' ' . esc_html__('Volunteers only see shifts from the departments they are allowed to work in', 'eventadmin-volunteer-management');
+            echo '<p class="description">' . esc_html__('Set each volunteer\'s departments on the Volunteers page: "Edit" in the Departments column → "Can sign up for shifts in". This is separate from the departments a volunteer gets notified about. Volunteers without any such department, and shifts without a department, are not restricted.', 'eventadmin-volunteer-management') . '</p>';
         },
         'eventadmin-settings-general',
         'eventadmin_general_rules'

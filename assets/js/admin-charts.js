@@ -66,6 +66,27 @@ document.addEventListener('DOMContentLoaded', function () {
         copyShiftsModal.addEventListener('click', (e) => {
             if (e.target === copyShiftsModal) closeCopyShiftsModal();
         });
+
+        // "Repeat every week": show the "until" date (required then) and hide "copy
+        // volunteers", which a weekly series never does.
+        const repeatToggle = document.getElementById('eventadmin-copy-repeat-weekly');
+        const repeatUntilRow = document.getElementById('eventadmin-copy-repeat-until-row');
+        const repeatUntil = document.getElementById('eventadmin-copy-repeat-until');
+        const copyVolunteersRow = document.getElementById('eventadmin-copy-volunteers-row');
+        if (repeatToggle && repeatUntilRow && repeatUntil) {
+            const syncRepeat = () => {
+                const on = repeatToggle.checked;
+                repeatUntilRow.style.display = on ? '' : 'none';
+                repeatUntil.required = on;
+                if (copyVolunteersRow) {
+                    copyVolunteersRow.style.display = on ? 'none' : '';
+                    const box = copyVolunteersRow.querySelector('input[type="checkbox"]');
+                    if (box && on) box.checked = false;
+                }
+            };
+            repeatToggle.addEventListener('change', syncRepeat);
+            syncRepeat();
+        }
     }
 
     // Shared "add volunteer" modal for the Table and Timeline views.

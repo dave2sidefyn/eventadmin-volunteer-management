@@ -145,7 +145,7 @@ function eventadmin_admin_overview_page(): void
 }
 
 /**
- * Displays the Manager page — Timeline/Table/Cards, tabbed (the day-to-day shift work
+ * Displays the Manager page — Day/Calendar/Table/Cards, tabbed (the day-to-day shift work
  * that used to share a page, and its own set of tabs, with the dashboard stats).
  *
  * @return void
@@ -154,7 +154,7 @@ function eventadmin_admin_shift_manager_page(): void
 {
     eventadmin_render_overview_page(
         'eventadmin-shift-manager',
-        ['timeline', 'table', 'cards'],
+        ['timeline', 'calendar', 'table', 'cards'],
         'timeline',
         esc_html__('EventAdmin Manager', 'eventadmin-volunteer-management')
     );
@@ -167,8 +167,21 @@ function eventadmin_admin_shift_manager_page(): void
 function eventadmin_admin_enqueue_dashboard_scripts(): void
 {
     $screen = get_current_screen();
+    $admin_dashboard_css_path = plugin_dir_path(__FILE__) . '../../assets/css/admin-dashboard.css';
+
+    // The Volunteers screen shares the toolbar / split-button styles, nothing else.
+    if ($screen && $screen->id === 'eventadmin_shift_page_eventadmin-volunteers') {
+        wp_enqueue_style(
+            'eventadmin-admin-dashboard',
+            plugin_dir_url(__FILE__) . '../../assets/css/admin-dashboard.css',
+            [],
+            file_exists($admin_dashboard_css_path) ? filemtime($admin_dashboard_css_path) : null
+        );
+        return;
+    }
+
     $allowed_screens = ['eventadmin_shift_page_eventadmin-overview', 'eventadmin_shift_page_eventadmin-shift-manager'];
-    if (!in_array($screen->id, $allowed_screens, true)) return;
+    if (!$screen || !in_array($screen->id, $allowed_screens, true)) return;
 
     wp_enqueue_script(
         'chart-js',
@@ -187,7 +200,15 @@ function eventadmin_admin_enqueue_dashboard_scripts(): void
         true
     );
 
-    $admin_dashboard_css_path = plugin_dir_path(__FILE__) . '../../assets/css/admin-dashboard.css';
+    $date_navigator_js_path = plugin_dir_path(__FILE__) . '../../assets/js/date-navigator.js';
+    wp_enqueue_script(
+        'eventadmin-date-navigator',
+        plugin_dir_url(__FILE__) . '../../assets/js/date-navigator.js',
+        [],
+        file_exists($date_navigator_js_path) ? filemtime($date_navigator_js_path) : null,
+        true
+    );
+
     wp_enqueue_style(
         'eventadmin-admin-dashboard',
         plugin_dir_url(__FILE__) . '../../assets/css/admin-dashboard.css',

@@ -110,9 +110,14 @@ function eventadmin_log_blocked_registration(string $email, string $reason): voi
 }
 
 /**
- * Renders the CAPTCHA widget div if a provider is configured.
+ * Renders the CAPTCHA widget div if a provider is configured. The volunteer page renders
+ * both its forms ("I'm new" and "I already have an account") at once, so each call gets
+ * its own $suffix — Turnstile needs a unique widget ID per form, and the reCAPTCHA v3
+ * token field carries no ID at all (captcha-v3.js looks it up inside the submitted form).
+ *
+ * @param string $suffix Unique per form on the page, e.g. '-signup' / '-login'.
  */
-function eventadmin_render_captcha_widget(): void
+function eventadmin_render_captcha_widget(string $suffix = ''): void
 {
     if (!eventadmin_captcha_is_enabled()) {
         return;
@@ -121,10 +126,10 @@ function eventadmin_render_captcha_widget(): void
     $site_key = get_option('eventadmin_captcha_site_key', '');
 
     if ($provider === 'cf_turnstile') {
-        cfturnstile_field_show('', '', 'eventadmin_register', '-eventadmin-register');
+        cfturnstile_field_show('', '', 'eventadmin_register', '-eventadmin-register' . $suffix);
     } elseif ($provider === 'recaptcha_v3') {
         // v3 is invisible — JS populates this hidden field before submit
-        echo '<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response-v3">';
+        echo '<input type="hidden" name="g-recaptcha-response" class="eventadmin-recaptcha-v3-token">';
     } else {
         $class = $provider === 'recaptcha_v2' ? 'g-recaptcha' : 'h-captcha';
         echo '<div class="' . esc_attr($class) . '" data-sitekey="' . esc_attr($site_key) . '"></div>';
@@ -188,14 +193,14 @@ function eventadmin_verify_captcha_response(): bool
     return !empty($data['success']);
 }
 
-function eventadmin_main_shortcode(): string
+function eventadmin_main_shortcode($atts = []): string
 {
 
     if (is_user_logged_in()) {
         $user = wp_get_current_user();
         if (in_array('eventadmin_volunteer', $user->roles)) {
             // Show cockpit instead of registration
-            return do_shortcode('[eventadmin_cockpit]');
+            return do_shortcode('[eventadmin_cockpit' . eventadmin_department_shortcode_passthrough($atts) . ']');
         }
     }
 
@@ -203,14 +208,14 @@ function eventadmin_main_shortcode(): string
 
 }
 
-function eventadmin_registration_form_shortcode(): bool|string
+function eventadmin_registration_form_shortcode($atts = []): bool|string
 {
 
     if (is_user_logged_in()) {
         $user = wp_get_current_user();
         if (in_array('eventadmin_volunteer', $user->roles)) {
             // Show cockpit instead of registration form
-            return do_shortcode('[eventadmin_cockpit]');
+            return do_shortcode('[eventadmin_cockpit' . eventadmin_department_shortcode_passthrough($atts) . ']');
         }
     }
 
@@ -226,6 +231,15 @@ function eventadmin_registration_form_shortcode(): bool|string
     set_transient('eventadmin_token_' . $token, $nonce, HOUR_IN_SECONDS);
 
     eventadmin_enqueue_captcha_script();
+
+    $tabs_js_path = plugin_dir_path(__FILE__) . '../assets/js/registration-tabs.js';
+    wp_enqueue_script(
+        'eventadmin-registration-tabs',
+        plugin_dir_url(__FILE__) . '../assets/js/registration-tabs.js',
+        [],
+        file_exists($tabs_js_path) ? filemtime($tabs_js_path) : null,
+        true
+    );
 
     $registration_nonce_valid = isset($_GET['registration'], $_GET['eventadmin_register_nonce'])
         && wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['eventadmin_register_nonce'])), 'eventadmin_register_action');
@@ -264,11 +278,15 @@ function eventadmin_registration_form_shortcode(): bool|string
                 echo '<hr />';
             }
             ?>
+            <?php // Both views are rendered; the tabs switch between them in the browser without a
+            // reload (assets/js/registration-tabs.js). They stay real links, so without
+            // JavaScript — and for server-chosen views like a login error or an expired link —
+            // the ?eventadmin_view=login URL still decides which one is shown. ?>
             <nav class="eventadmin-view-tabs">
-                <a href="<?php echo esc_url($signup_url); ?>"<?php echo $show_login_view ? '' : ' class="is-active" aria-current="page"'; ?>><?php esc_html_e('I\'m new', 'eventadmin-volunteer-management'); ?></a>
-                <a href="<?php echo esc_url($login_url); ?>"<?php echo $show_login_view ? ' class="is-active" aria-current="page"' : ''; ?>><?php esc_html_e('I already have an account', 'eventadmin-volunteer-management'); ?></a>
+                <a href="<?php echo esc_url($signup_url); ?>" data-eventadmin-view-tab="signup"<?php echo $show_login_view ? '' : ' class="is-active" aria-current="page"'; ?>><?php esc_html_e('I\'m new', 'eventadmin-volunteer-management'); ?></a>
+                <a href="<?php echo esc_url($login_url); ?>" data-eventadmin-view-tab="login"<?php echo $show_login_view ? ' class="is-active" aria-current="page"' : ''; ?>><?php esc_html_e('I already have an account', 'eventadmin-volunteer-management'); ?></a>
             </nav>
-            <?php if ($show_login_view) : ?>
+            <div class="eventadmin-view" data-eventadmin-view="login"<?php echo $show_login_view ? '' : ' hidden'; ?>>
                 <?php if ($login_link_expired) : ?>
                     <div class="eventadmin-info">
                         <?php esc_html_e('This login link has expired or was already used. Enter your email address and we will send you a new one.', 'eventadmin-volunteer-management'); ?>
@@ -293,8 +311,8 @@ function eventadmin_registration_form_shortcode(): bool|string
                         </label>
                     <?php endif; ?>
                     <input type="hidden" name="eventadmin_redirect_to" value="<?php echo esc_url(get_permalink()); ?>"/>
-                    <?php eventadmin_render_captcha_widget(); ?>
-                    <input type="hidden" name="eventadmin_hp" id="eventadmin_hp" value="">
+                    <?php eventadmin_render_captcha_widget('-login'); ?>
+                    <input type="hidden" name="eventadmin_hp" value="">
                     <?php if ($password_enabled) : ?>
                         <button type="submit" name="eventadmin_login_action" value="password"><?php esc_html_e('Log in', 'eventadmin-volunteer-management'); ?></button>
                         <p class="eventadmin-login-alt">
@@ -307,9 +325,9 @@ function eventadmin_registration_form_shortcode(): bool|string
                     <?php else : ?>
                         <button type="submit" name="eventadmin_login_action" value="link"><?php esc_html_e('Email me a login link', 'eventadmin-volunteer-management'); ?></button>
                     <?php endif; ?>
-                    <script>document.getElementById('eventadmin_hp').value='1';</script>
                 </form>
-            <?php else : ?>
+            </div>
+            <div class="eventadmin-view" data-eventadmin-view="signup"<?php echo $show_login_view ? ' hidden' : ''; ?>>
             <form method="post" class="eventadmin-form">
                 <?php wp_nonce_field('eventadmin_register_action', 'eventadmin_register_nonce'); ?>
                 <label><?php esc_html_e('First name', 'eventadmin-volunteer-management'); ?>
@@ -325,12 +343,14 @@ function eventadmin_registration_form_shortcode(): bool|string
                     <input type="email" name="eventadmin_email" required/>
                 </label>
                 <input type="hidden" name="eventadmin_redirect_to" value="<?php echo esc_url(get_permalink()); ?>"/>
-                <?php eventadmin_render_captcha_widget(); ?>
-                <input type="hidden" name="eventadmin_hp" id="eventadmin_hp" value="">
+                <?php eventadmin_render_captcha_widget('-signup'); ?>
+                <input type="hidden" name="eventadmin_hp" value="">
                 <input type="submit" name="eventadmin_register_submit" value="<?php esc_attr_e('Register', 'eventadmin-volunteer-management'); ?>"/>
-                <script>document.getElementById('eventadmin_hp').value='1';</script>
             </form>
-            <?php endif; ?>
+            </div>
+            <?php // Honeypot: bots that don't run JavaScript leave this empty (checked in
+            // eventadmin_handle_registration() / eventadmin_handle_login_link_request()). ?>
+            <script>document.querySelectorAll('.eventadmin-form input[name="eventadmin_hp"]').forEach(function (el) { el.value = '1'; });</script>
         <?php endif; ?>
     </div>
     <?php
