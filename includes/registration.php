@@ -278,6 +278,91 @@ function eventadmin_registration_form_shortcode(): bool|string
 add_shortcode('eventadmin', 'eventadmin_main_shortcode');
 add_shortcode('eventadmin_register', 'eventadmin_registration_form_shortcode');
 
+/**
+ * Whether the current request carries the short-lived cookies the registration form sets
+ * when it is shown — i.e. whether this browser came through the volunteer page. Clears
+ * them once used so they can't apply to a later, unrelated login.
+ *
+ * @return bool
+ */
+function eventadmin_consume_registration_cookie(): bool
+{
+    $token = isset($_COOKIE['eventadmin_register_token']) ? sanitize_text_field(wp_unslash($_COOKIE['eventadmin_register_token'])) : '';
+    $nonce = isset($_COOKIE['eventadmin_register_nonce']) ? sanitize_text_field(wp_unslash($_COOKIE['eventadmin_register_nonce'])) : '';
+
+    if (!$token || !$nonce || !wp_verify_nonce($nonce, 'eventadmin_register_' . $token)) {
+        return false;
+    }
+
+    delete_transient('eventadmin_token_' . $token);
+    setcookie('eventadmin_register_token', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN);
+    setcookie('eventadmin_register_nonce', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN);
+    unset($_COOKIE['eventadmin_register_token'], $_COOKIE['eventadmin_register_nonce']);
+
+    return true;
+}
+
+/**
+ * Social login (Nextend Social Login) started from the volunteer page: a brand-new account
+ * becomes a volunteer, exactly like one created by the registration form.
+ *
+ * Only Nextend's own hooks are used, never the generic wp_login: volunteers sign in on the
+ * page we provide for them, while anyone logging in through wp-login.php / wp-admin is
+ * usually not a volunteer and must never have their role changed. (Before 3.7.4 this ran
+ * on wp_login and replaced the role of e.g. an Editor or Shift Manager who had viewed the
+ * volunteer page and then logged in normally within the hour.)
+ *
+ * Runs before Nextend triggers WordPress's new-user notification, so the "suppress
+ * WordPress password email" setting already sees the volunteer role.
+ *
+ * @param int $user_id
+ * @return void
+ */
+function eventadmin_nsl_register_new_user(int $user_id): void
+{
+    if (!eventadmin_consume_registration_cookie()) {
+        return;
+    }
+
+    $user = get_userdata($user_id);
+    if (!$user) {
+        return;
+    }
+
+    // The account was created a moment ago and only holds WordPress's default role
+    // (normally Subscriber), so replace it. Anything else is only ever added to.
+    $roles = (array) $user->roles;
+    if ($roles === [] || $roles === [get_option('default_role')]) {
+        $user->set_role('eventadmin_volunteer');
+    } elseif (!in_array('eventadmin_volunteer', $roles, true)) {
+        $user->add_role('eventadmin_volunteer');
+    }
+}
+
+add_action('nsl_register_new_user', 'eventadmin_nsl_register_new_user', 10, 1);
+
+/**
+ * Social login of an existing account started from the volunteer page: that person asked
+ * to volunteer, so add the volunteer role — never replacing roles they already have (same
+ * as the magic link does for existing accounts, see eventadmin_magic_login_check()).
+ *
+ * @param int $user_id
+ * @return void
+ */
+function eventadmin_nsl_login(int $user_id): void
+{
+    $user = get_userdata($user_id);
+    if (!$user || in_array('eventadmin_volunteer', (array) $user->roles, true)) {
+        return;
+    }
+
+    if (eventadmin_consume_registration_cookie()) {
+        $user->add_role('eventadmin_volunteer');
+    }
+}
+
+add_action('nsl_login', 'eventadmin_nsl_login', 10, 1);
+
 // Needed for is_plugin_active:
 if (!function_exists('is_plugin_active')) {
     require_once ABSPATH . 'wp-admin/includes/plugin.php';

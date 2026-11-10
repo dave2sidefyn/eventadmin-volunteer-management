@@ -187,37 +187,6 @@ function eventadmin_admin_footer(): void
 add_action('admin_footer', 'eventadmin_admin_footer');
 
 /**
- * Adds a volunteer role when a user registers
- * @param string $user_login The username of the registered user
- * @param WP_User $user The WP_User object of the registered user
- */
-function eventadmin_custom_wp_login(string $user_login, WP_User $user): void
-{
-    $token = isset($_COOKIE['eventadmin_register_token']) ? sanitize_text_field(wp_unslash($_COOKIE['eventadmin_register_token'])) : '';
-    $nonce = isset($_COOKIE['eventadmin_register_nonce']) ? sanitize_text_field(wp_unslash($_COOKIE['eventadmin_register_nonce'])) : '';
-
-    if ($token && $nonce) {
-        // Check nonce
-        if (wp_verify_nonce($nonce, 'eventadmin_register_' . $token)) {
-            if (!in_array('eventadmin_volunteer', $user->roles)) {
-                if (in_array('administrator', $user->roles)) {
-                    $user->add_role('eventadmin_volunteer');
-                } else {
-                    $user->set_role('eventadmin_volunteer');
-                }
-            }
-
-            // Cleanup
-            delete_transient('eventadmin_token_' . $token);
-            setcookie('eventadmin_register_token', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie('eventadmin_register_nonce', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN);
-        }
-    }
-}
-
-add_action('wp_login', 'eventadmin_custom_wp_login', 10, 2);
-
-/**
  * Disables the admin bar for volunteers
  * @return void
  */
