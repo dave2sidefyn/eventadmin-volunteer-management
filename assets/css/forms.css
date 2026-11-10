@@ -126,6 +126,11 @@
 }
 
 /* "I'm new" / "I already have an account" switch on the volunteer page */
+/* Both views are in the page; themes that style divs as display:block must not show the hidden one */
+.eventadmin-form-wrapper .eventadmin-view[hidden] {
+    display: none !important;
+}
+
 .eventadmin-view-tabs {
     display: flex;
     margin-bottom: 1.2rem;
