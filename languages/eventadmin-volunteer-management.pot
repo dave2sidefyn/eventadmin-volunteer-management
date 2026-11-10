@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: EventAdmin – Volunteer Management 3.7.3\n"
+"Project-Id-Version: EventAdmin – Volunteer Management 3.8.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-10T08:23:42+00:00\n"
+"POT-Creation-Date: 2026-11-10T08:28:12+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: eventadmin-volunteer-management\n"
@@ -58,7 +58,7 @@ msgid "EventAdmin %s is here!"
 msgstr ""
 
 #: eventadmin-volunteer-management.php:275
-msgid "Important fix: volunteers who had already confirmed their account could be deleted by the daily cleanup of unconfirmed sign-ups after requesting a new login link — the same could happen to an admin who had registered with their own email. This no longer happens."
+msgid "Invite volunteers you add yourself with a login link, and optionally let volunteers log in with a password too (Settings → General). Also an important fix: Editors and Shift Managers who had looked at the volunteer page could lose their role at their next login."
 msgstr ""
 
 #: eventadmin-volunteer-management.php:281
