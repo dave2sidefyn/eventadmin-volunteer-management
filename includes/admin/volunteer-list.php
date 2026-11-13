@@ -150,13 +150,14 @@ function eventadmin_volunteer_list_page(): void
     echo '</div>';
     echo '<hr class="wp-header-end">';
 
-    echo '<h2 class="nav-tab-wrapper">';
+    echo '<nav class="eventadmin-vol-navigation">';
+    echo '<details' . ($active_tab !== 'volunteers' ? ' open' : '') . '><summary>' . esc_html__('Registration activity', 'eventadmin-volunteer-management') . '</summary>';
     foreach ($tabs as $slug => $label) {
         $url    = admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-volunteers&tab=' . $slug);
         $active = $active_tab === $slug ? ' nav-tab-active' : '';
         echo '<a class="nav-tab' . $active . '" href="' . esc_url($url) . '">' . $label . '</a>';
     }
-    echo '</h2>';
+    echo '</details></nav>';
 
     if ($active_tab === 'blocked') {
         if (empty($blocked_log)) {
@@ -383,10 +384,11 @@ function eventadmin_volunteer_list_page(): void
         'registered'    => esc_html__('Registered', 'eventadmin-volunteer-management'),
         'last_shift'    => esc_html__('Last shift', 'eventadmin-volunteer-management'),
     ];
-    echo '<table id="eventadmin-vol-table" class="widefat striped">';
+    echo '<p><button type="button" id="eventadmin-vol-columns" class="button" aria-pressed="false">' . esc_html__('More details', 'eventadmin-volunteer-management') . '</button></p>';
+    echo '<table id="eventadmin-vol-table" class="widefat striped eventadmin-compact-columns">';
     echo '<thead><tr>';
     foreach ($sortable_cols as $col => $label) {
-        echo '<th data-sort="' . esc_attr($col) . '" style="cursor:pointer;user-select:none;" title="' . esc_attr__('Click to sort', 'eventadmin-volunteer-management') . '">';
+        echo '<th tabindex="0" role="columnheader" aria-sort="none" data-sort="' . esc_attr($col) . '" style="cursor:pointer;user-select:none;" title="' . esc_attr__('Click to sort', 'eventadmin-volunteer-management') . '">';
         echo $label . ' <span class="eventadmin-sort-icon" style="opacity:.4;">↕</span></th>';
     }
     echo '<th>' . esc_html__('Departments', 'eventadmin-volunteer-management') . '</th>';

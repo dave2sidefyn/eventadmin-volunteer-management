@@ -241,11 +241,18 @@ function eventadmin_render_volunteer_summary(WP_User $user): string
     // Lets a manager invite a volunteer they added themselves (or help one who lost their
     // link) without that person going through the registration form — see
     // eventadmin_send_login_link(). Hidden for offline volunteers, who have no real address.
-    $email_display = $user->user_email ? esc_html($user->user_email) : '—';
+    $email_display = eventadmin_user_can_receive_email($user->ID)
+        ? '<a href="' . esc_url('mailto:' . $user->user_email) . '">' . esc_html($user->user_email) . '</a>' : '—';
     if (eventadmin_user_can_receive_email($user->ID)) {
         $email_display .= ' <button type="button" class="button-link eventadmin-profile-edit-trigger eventadmin-send-login-link" data-user-id="' . esc_attr($user->ID) . '">'
             . esc_html__('Send login link', 'eventadmin-volunteer-management')
             . '</button>';
+    }
+
+    if (eventadmin_user_can_receive_email($user->ID) && current_user_can('eventadmin_manage_volunteers')) {
+        $email_display .= ' <a class="eventadmin-profile-edit-trigger" href="' . esc_url(add_query_arg([
+            'post_type' => 'eventadmin_shift', 'page' => 'eventadmin-bulk-email', 'recipient_user_id' => $user->ID,
+        ], admin_url('edit.php'))) . '">' . esc_html__('Send Announcement', 'eventadmin-volunteer-management') . '</a>';
     }
 
     $rows = [

@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const organizerEmailInput = document.getElementById('eventadmin-edit-shift-organizer-email');
     const errorEl             = document.getElementById('eventadmin-edit-shift-error');
     const closeBtn            = document.getElementById('eventadmin-edit-shift-close');
-    const fullLink            = document.getElementById('eventadmin-edit-shift-full-link');
     const form                = document.getElementById('eventadmin-edit-shift-form');
     const headingEl           = document.getElementById('eventadmin-edit-shift-heading');
     const submitBtn           = document.getElementById('eventadmin-edit-shift-submit');
@@ -28,10 +27,114 @@ document.addEventListener('DOMContentLoaded', function () {
     const readonlyDepartment  = document.getElementById('eventadmin-shift-readonly-department');
     const readonlyCapacity    = document.getElementById('eventadmin-shift-readonly-capacity');
     const rosterEl            = document.getElementById('eventadmin-shift-roster');
+    const rosterSection       = document.getElementById('eventadmin-shift-roster-section');
     const saveButtonLabel     = submitBtn ? submitBtn.textContent : '';
     const DESCRIPTION_EDITOR_ID = 'eventadmin_edit_shift_description';
 
     let isCreateMode = false;
+    let rosterBusy = false;
+    let rosterChanged = false;
+    let rosterContext = '';
+    let rosterPicker = null;
+    const removalDialog = document.getElementById('eventadmin-remove-confirm');
+    function confirmRemoval(button) {
+        const name = button.closest('tr').querySelector('.eventadmin-view-volunteer-profile').textContent;
+        const notify = document.getElementById('eventadmin-remove-notify');
+        document.getElementById('eventadmin-remove-confirm-question').textContent = (i18n.confirmRemove || 'Remove %s from this shift?').replace('%s', name);
+        document.getElementById('eventadmin-remove-confirm-context').textContent = rosterContext;
+        document.getElementById('eventadmin-remove-notify-row').hidden = button.dataset.canNotify !== '1';
+        notify.checked = false;
+        removalDialog.returnValue = '';
+        return new Promise(resolve => {
+            removalDialog.addEventListener('close', () => {
+                resolve(removalDialog.returnValue === 'remove' ? {notify: button.dataset.canNotify === '1' && notify.checked} : null);
+                if (button.isConnected) button.focus();
+            }, {once: true});
+            removalDialog.showModal();
+        });
+    }
+    document.getElementById('eventadmin-remove-cancel').addEventListener('click', () => removalDialog.close('cancel'));
+    document.getElementById('eventadmin-remove-submit').addEventListener('click', () => removalDialog.close('remove'));
+
+    function renderRoster(data) {
+        rosterContext = [data.title, data.period].filter(Boolean).join(' — ');
+        rosterEl.innerHTML = data.roster_html;
+        const select = rosterEl.querySelector('.eventadmin-roster-select');
+        rosterPicker = select ? eventadminSearchableSelect(select) : null;
+    }
+    rosterEl.addEventListener('click', async event => {
+        const reveal = event.target.closest('.eventadmin-roster-reveal');
+        const cancel = event.target.closest('.eventadmin-roster-add-cancel');
+        if (reveal || cancel) {
+            if (rosterBusy) return;
+            const panel = rosterEl.querySelector('.eventadmin-roster-add-panel');
+            const trigger = rosterEl.querySelector('.eventadmin-roster-reveal');
+            panel.hidden = Boolean(cancel);
+            trigger.hidden = !cancel;
+            trigger.setAttribute('aria-expanded', String(!cancel));
+            if (cancel) {
+                rosterEl.querySelector('.eventadmin-roster-select').value = '';
+                rosterEl.querySelector('.eventadmin-roster-notify').checked = false;
+                rosterEl.querySelector('.eventadmin-roster-message').textContent = '';
+                rosterPicker.refresh();
+                trigger.focus();
+            } else rosterEl.querySelector('.eventadmin-search-select-trigger')?.focus();
+            return;
+        }
+        const button = event.target.closest('.eventadmin-roster-add, .eventadmin-roster-remove');
+        if (!button || rosterBusy) return;
+        const shiftId = idInput.value;
+        const select = rosterEl.querySelector('.eventadmin-roster-select');
+        const removing = button.classList.contains('eventadmin-roster-remove');
+        const userId = removing ? button.dataset.userId : select?.value;
+        if (!userId) {
+            rosterEl.querySelector('.eventadmin-search-select-trigger')?.click();
+            return;
+        }
+        let notifyVolunteer = false;
+        if (removing) {
+            rosterBusy = true;
+            const confirmation = await confirmRemoval(button);
+            rosterBusy = false;
+            if (!confirmation || idInput.value !== shiftId || editModal.style.display === 'none') return;
+            notifyVolunteer = confirmation.notify;
+        } else {
+            notifyVolunteer = Boolean(rosterEl.querySelector('.eventadmin-roster-notify')?.checked);
+        }
+        const message = rosterEl.querySelector('.eventadmin-roster-message');
+        const buttons = [...rosterEl.querySelectorAll('button')];
+        rosterBusy = true; buttons.forEach(item => { item.disabled = true; });
+        message.textContent = i18n.loading || 'Loading…';
+        try {
+            const response = await fetch(cfg.ajax_url, {
+                method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: new URLSearchParams({action: 'eventadmin_change_shift_roster', nonce: cfg.nonce,
+                    shift_id: shiftId, user_id: userId, operation: removing ? 'unassign' : 'assign',
+                    notify_volunteer: notifyVolunteer ? '1' : '',
+                    show_open: cfg.show_open ? '1' : ''}),
+            }).then(result => result.json());
+            if (!response.success) throw new Error(response.data?.message || i18n.error);
+            rosterChanged = true;
+            if (typeof EVENTADMIN_SHIFT_INFO !== 'undefined' && EVENTADMIN_SHIFT_INFO[shiftId]) {
+                EVENTADMIN_SHIFT_INFO[shiftId].assigned = response.data.assigned;
+            }
+            if (typeof window.eventadminOnShiftRosterChanged === 'function') {
+                // Numeric, like eventadminOnShiftSaved — timeline rows compare shift_id strictly.
+                window.eventadminOnShiftRosterChanged(Number(shiftId), response.data);
+            }
+            const details = await fetchShiftDetails(shiftId);
+            if (!details.success) throw new Error(details.data?.message || i18n.error);
+            if (idInput.value === shiftId && editModal.style.display !== 'none') {
+                renderRoster(details.data);
+                readonlyCapacity.textContent = details.data.capacity;
+                rosterEl.querySelector(removing ? '.eventadmin-roster-reveal' : '.eventadmin-roster-remove')?.focus();
+            }
+        } catch (error) {
+            message.textContent = error.message || i18n.error || 'Error';
+        } finally {
+            rosterBusy = false; buttons.forEach(item => { item.disabled = false; });
+        }
+    });
 
     // The description field is a wp_editor() (TinyMCE) instance — it only syncs to its
     // underlying textarea on blur/save, not on every keystroke, and setting the textarea's
@@ -119,9 +222,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // and always for the roster, the details come from a small AJAX fetch.
     window.eventadminOpenEditShiftModal = function (shiftId) {
         isCreateMode = false;
+        rosterSection.style.display = '';
         errorEl.textContent = '';
         idInput.value = shiftId;
-        fullLink.style.display = 'none';
         rosterEl.innerHTML = '<p class="eventadmin-profile-empty">' + (i18n.loading || 'Loading…') + '</p>';
         editModal.style.display = 'block';
 
@@ -129,8 +232,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (cached) {
             showEditMode(i18n.editShift || 'Edit shift');
             fillForm(cached);
-            fullLink.href = cfg.edit_url_base + shiftId;
-            fullLink.style.display = '';
             setTimeout(repaintDescriptionEditor, 0);
         }
 
@@ -143,7 +244,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
                 const data = res.data;
-                rosterEl.innerHTML = data.roster_html;
+                if (String(shiftId) !== idInput.value || isCreateMode) return;
+                renderRoster(data);
 
                 if (!cached) {
                     if (data.can_edit) {
@@ -168,8 +270,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     } else {
                         showReadonlyMode(data.title, data);
                     }
-                    fullLink.href = data.edit_url || '';
-                    fullLink.style.display = data.can_edit ? '' : 'none';
                 }
             })
             .catch(() => {
@@ -206,6 +306,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         isCreateMode = true;
+        rosterSection.style.display = 'none';
         errorEl.textContent = '';
         idInput.value = '';
         showEditMode((i18n.addShift || 'Add shift'));
@@ -220,7 +321,6 @@ document.addEventListener('DOMContentLoaded', function () {
         organizerUserSelect.value = '';
         organizerNameInput.value = '';
         organizerEmailInput.value = '';
-        fullLink.style.display = 'none';
         rosterEl.innerHTML = '';
 
         editModal.style.display = 'block';
@@ -239,9 +339,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // shift, including its volunteers, is touched until Save is clicked on this new one.
     window.eventadminOpenDuplicateShiftModal = function (shiftId) {
         isCreateMode = true;
+        rosterSection.style.display = 'none';
         errorEl.textContent = '';
         idInput.value = '';
-        fullLink.style.display = 'none';
         rosterEl.innerHTML = '';
         showEditMode(i18n.duplicateShift || 'Duplicate');
         submitBtn.textContent = i18n.duplicateShift || 'Duplicate';
@@ -277,6 +377,17 @@ document.addEventListener('DOMContentLoaded', function () {
         editModal.style.display = 'none';
     };
 
+    // Refresh non-timeline views once all drill-down dialogs are closed. Opening a
+    // volunteer profile from the updated roster must remain possible first.
+    document.addEventListener('click', event => {
+        if (!rosterChanged || typeof window.eventadminOnShiftRosterChanged === 'function') return;
+        if (!event.target.closest('.eventadmin-modal-close') && !event.target.classList.contains('eventadmin-modal-overlay')) return;
+        requestAnimationFrame(() => {
+            const anyOpen = [...document.querySelectorAll('.eventadmin-modal-overlay')]
+                .some(overlay => getComputedStyle(overlay).display !== 'none');
+            if (!anyOpen) window.location.reload();
+        });
+    });
     if (closeBtn) closeBtn.addEventListener('click', window.eventadminCloseShiftDetailsModal);
     editModal.addEventListener('click', (e) => {
         if (e.target === editModal) window.eventadminCloseShiftDetailsModal();
@@ -354,7 +465,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // new shift's open-slot bar to add someone would silently do nothing
                     // until the page was reloaded.
                     if (typeof EVENTADMIN_SHIFT_INFO !== 'undefined') {
-                        EVENTADMIN_SHIFT_INFO[data.shift_id] = {title: data.title, assigned: []};
+                        EVENTADMIN_SHIFT_INFO[data.shift_id] = {title: data.title, period: data.period, capacity: data.capacity, assigned: []};
                     }
                     if (typeof window.eventadminOnShiftCreated === 'function') {
                         window.eventadminOnShiftCreated(data.shift_id, data);
@@ -376,6 +487,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     organizer_name: data.organizer_name,
                     organizer_email: data.organizer_email,
                 };
+                if (typeof EVENTADMIN_SHIFT_INFO !== 'undefined' && EVENTADMIN_SHIFT_INFO[shiftId]) {
+                    Object.assign(EVENTADMIN_SHIFT_INFO[shiftId], {title: data.title, period: data.period, capacity: data.capacity});
+                }
                 if (typeof window.eventadminOnShiftSaved === 'function') {
                     window.eventadminOnShiftSaved(shiftId, data);
                 }

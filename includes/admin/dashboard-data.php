@@ -13,6 +13,46 @@ if (!defined('ABSPATH')) {
 }
 
 /**
+ * Query shifts active on any part of an inclusive range of site-local calendar days.
+ * End times are exclusive: a shift ending at midnight does not occupy the next day.
+ * Keep start-only shifts on their start date for compatibility with existing data.
+ */
+function eventadmin_shift_overlap_meta_query(string $from, string $to): array
+{
+    $until = (new DateTimeImmutable($to . 'T00:00', new DateTimeZone('UTC')))->modify('+1 day')->format('Y-m-d\TH:i');
+    return [
+        'relation' => 'AND',
+        'sort_clause' => ['key' => 'shift_start', 'value' => $until, 'compare' => '<', 'type' => 'DATETIME'],
+        [
+            'relation' => 'OR',
+            ['key' => 'shift_start', 'value' => $from . 'T00:00', 'compare' => '>=', 'type' => 'DATETIME'],
+            ['key' => 'shift_end', 'value' => $from . 'T00:00', 'compare' => '>', 'type' => 'DATETIME'],
+        ],
+    ];
+}
+
+/** Calendar dates occupied by a shift, clipped to the visible range. */
+function eventadmin_shift_occupied_days(string $start, string $end, string $from, string $to): array
+{
+    try {
+        $timezone = new DateTimeZone('UTC'); // Stored times are site-local wall clocks.
+        $first = new DateTimeImmutable($start, $timezone);
+        $last = $end !== '' ? new DateTimeImmutable($end, $timezone) : $first;
+    } catch (Exception $exception) {
+        return [];
+    }
+    if ($start === '') return [];
+    $last = $last > $first ? $last->modify('-1 second') : $first;
+    $day = max($from, $first->format('Y-m-d'));
+    $through = min($to, $last->format('Y-m-d'));
+    $days = [];
+    for ($date = new DateTimeImmutable($day, $timezone); $date->format('Y-m-d') <= $through; $date = $date->modify('+1 day')) {
+        $days[] = $date->format('Y-m-d');
+    }
+    return $days;
+}
+
+/**
  * Gets all shifts with optional filtering by category (including caching)
  *
  * @param string $selected_cat Slug of the selected category
@@ -39,12 +79,7 @@ function eventadmin_get_shifts(
     $meta_query['sort_clause'] = ['key' => 'shift_start', 'compare' => 'EXISTS'];
 
     if ($selected_date) {
-        $meta_query['date_clause'] = [
-            'key'     => 'shift_start',
-            'value'   => [$selected_date . 'T00:00', $selected_date . 'T23:59'],
-            'compare' => 'BETWEEN',
-            'type'    => 'DATETIME',
-        ];
+        $meta_query = eventadmin_shift_overlap_meta_query($selected_date, $selected_date);
     } elseif ($time_filter !== 'all') {
         // "Upcoming" means the shift hasn't ended yet — this intentionally keeps
         // shifts already in progress (started before now, ending after now) visible
@@ -142,7 +177,7 @@ add_action('trashed_post', 'eventadmin_flush_shifts_cache_for_post_id');
 add_action('untrashed_post', 'eventadmin_flush_shifts_cache_for_post_id');
 add_action('deleted_post', 'eventadmin_flush_shifts_cache_for_post_id');
 
-/** Upper limit for "Copy shifts → repeat every week", so a mistyped year can't create thousands of shifts. */
+/** Upper limit for "Copy shifts → Repeat" (dates per series), so a mistyped year can't create thousands of shifts. */
 const EVENTADMIN_MAX_REPEAT_WEEKS = 52;
 
 /**
@@ -167,26 +202,55 @@ function eventadmin_get_shifts_starting_on_day(string $date): array
 }
 
 /**
- * The dates a "repeat weekly" copy lands on: $first_date and every 7 days after it up to
- * and including $until_date, capped at EVENTADMIN_MAX_REPEAT_WEEKS dates.
+ * The dates a repeating copy lands on: $first_date, then every $interval weeks or months,
+ * ending on $until_date (inclusive) or after $count dates — whichever is given — and never
+ * more than EVENTADMIN_MAX_REPEAT_WEEKS dates. Monthly repeats keep the day of the month
+ * and skip months that don't have it (e.g. the 31st), like most calendar apps.
  *
  * @param string $first_date Y-m-d
- * @param string $until_date Y-m-d
+ * @param string $unit       'week' or 'month'
+ * @param int    $interval   Every N weeks/months (min 1)
+ * @param string $until_date Y-m-d, or '' to end by $count
+ * @param int    $count      Number of dates, or 0 to end by $until_date
  * @return string[] Y-m-d dates
  */
-function eventadmin_weekly_repeat_dates(string $first_date, string $until_date): array
+function eventadmin_repeat_dates(string $first_date, string $unit, int $interval, string $until_date = '', int $count = 0): array
 {
-    $dates = [];
-    $date  = DateTime::createFromFormat('!Y-m-d', $first_date);
-    $until = DateTime::createFromFormat('!Y-m-d', $until_date);
-    if (!$date || !$until) {
-        return $dates;
+    $first = DateTimeImmutable::createFromFormat('!Y-m-d', $first_date);
+    $until = $until_date !== '' ? DateTimeImmutable::createFromFormat('!Y-m-d', $until_date) : null;
+    if (!$first || ($until_date !== '' && !$until) || (!$until && $count < 1)) {
+        return [];
     }
-    while ($date <= $until && count($dates) < EVENTADMIN_MAX_REPEAT_WEEKS) {
+    $interval = max(1, $interval);
+    $limit    = $count > 0 ? min($count, EVENTADMIN_MAX_REPEAT_WEEKS) : EVENTADMIN_MAX_REPEAT_WEEKS;
+    $dates    = [];
+    // Step from the first date each time (not from the previous one), so a skipped short
+    // month doesn't shift every later date.
+    for ($step = 0; count($dates) < $limit && $step < EVENTADMIN_MAX_REPEAT_WEEKS * 12; $step++) {
+        if ($unit === 'month') {
+            $year  = (int) $first->format('Y');
+            $month = (int) $first->format('n') - 1 + $step * $interval;
+            $year += intdiv($month, 12);
+            $day   = (int) $first->format('j');
+            if (!checkdate($month % 12 + 1, $day, $year)) {
+                continue;
+            }
+            $date = $first->setDate($year, $month % 12 + 1, $day);
+        } else {
+            $date = $first->modify('+' . ($step * $interval * 7) . ' days');
+        }
+        if ($until && $date > $until) {
+            break;
+        }
         $dates[] = $date->format('Y-m-d');
-        $date->modify('+7 days');
     }
     return $dates;
+}
+
+/** Weekly series ending on a date — kept for callers of the original weekly-only repeat. */
+function eventadmin_weekly_repeat_dates(string $first_date, string $until_date): array
+{
+    return eventadmin_repeat_dates($first_date, 'week', 1, $until_date);
 }
 
 /**

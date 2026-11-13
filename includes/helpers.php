@@ -941,8 +941,9 @@ function eventadmin_category_dropdown_options(array $categories, $selected, stri
  */
 function eventadmin_render_modal_open(string $overlay_id, int $max_width = 480): void
 {
+    wp_enqueue_script('eventadmin-modal-accessibility', plugin_dir_url(__FILE__) . '../assets/js/modal-accessibility.js', [], filemtime(plugin_dir_path(__FILE__) . '../assets/js/modal-accessibility.js'), true);
     echo '<div id="' . esc_attr($overlay_id) . '" class="eventadmin-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100000;">';
-    echo '<div style="position:relative;background:#fff;max-width:' . esc_attr($max_width) . 'px;margin:60px auto;padding:20px;border-radius:6px;max-height:80vh;overflow-y:auto;">';
+    echo '<div role="dialog" aria-modal="true" tabindex="-1" style="position:relative;background:#fff;max-width:' . esc_attr($max_width) . 'px;margin:60px auto;padding:20px;border-radius:6px;max-height:80vh;overflow-y:auto;">';
 }
 
 /**
@@ -968,4 +969,13 @@ function eventadmin_render_modal_close_button(string $id = ''): void
 function eventadmin_render_modal_close(): void
 {
     echo '</div></div>';
+}
+
+/** Shared searchable select for manager assignment controls. */
+function eventadmin_enqueue_searchable_select(): void
+{
+    $base = plugin_dir_path(__FILE__) . '../assets/';
+    $url = plugin_dir_url(__FILE__) . '../assets/';
+    wp_enqueue_script('eventadmin-searchable-select', $url . 'js/searchable-select.js', [], filemtime($base . 'js/searchable-select.js'), true);
+    wp_enqueue_style('eventadmin-searchable-select', $url . 'css/searchable-select.css', [], filemtime($base . 'css/searchable-select.css'));
 }

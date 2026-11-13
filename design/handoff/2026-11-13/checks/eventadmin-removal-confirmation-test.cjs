@@ -1,0 +1,31 @@
+const fs = require('fs');
+const vm = require('vm');
+const assert = require('node:assert/strict');
+const source = fs.readFileSync('assets/js/shift-details-modal.js', 'utf8');
+const start = source.indexOf('    function confirmRemoval(button) {');
+const end = source.indexOf("    document.getElementById('eventadmin-remove-cancel')", start);
+const fields = new Map();
+const document = {getElementById(id) { if (!fields.has(id)) fields.set(id, {}); return fields.get(id); }};
+let closed;
+const removalDialog = {returnValue: '', addEventListener(type, fn) {closed = fn;}, showModal() {this.open=true;}, close(value='') {this.returnValue=value;this.open=false;closed();}};
+const context = {document, removalDialog, i18n: {confirmRemove:'Remove %s from this shift?'}, rosterContext: 'Bar — configured period'};
+vm.createContext(context);
+vm.runInContext(source.slice(start,end),context);
+const button = {dataset:{canNotify:'1'},isConnected:true,focus(){this.focused=true;},closest(){return {querySelector(){return {textContent:'Test Volunteer'};}};}};
+(async () => {
+ let result=context.confirmRemoval(button);
+ assert.equal(document.getElementById('eventadmin-remove-confirm-question').textContent,'Remove Test Volunteer from this shift?');
+ assert.equal(document.getElementById('eventadmin-remove-confirm-context').textContent,'Bar — configured period');
+ assert.equal(document.getElementById('eventadmin-remove-notify').checked,false);
+ removalDialog.close('cancel'); assert.equal(await result,null); assert.equal(button.focused,true);
+ result=context.confirmRemoval(button); document.getElementById('eventadmin-remove-notify').checked=true;
+ removalDialog.close(); assert.equal(await result,null); // Escape/native cancel never confirms.
+ result=context.confirmRemoval(button); removalDialog.close('remove'); assert.equal((await result).notify,false);
+ result=context.confirmRemoval(button); document.getElementById('eventadmin-remove-notify').checked=true;
+ removalDialog.close('remove'); assert.equal((await result).notify,true);
+ button.dataset.canNotify='0';result=context.confirmRemoval(button);
+ assert.equal(document.getElementById('eventadmin-remove-notify-row').hidden,true);
+ document.getElementById('eventadmin-remove-notify').checked=true;
+ removalDialog.close('remove'); assert.equal((await result).notify,false);
+ console.log('11 removal confirmation, cancellation, focus and notification checks passed');
+})().catch(e=>{console.error(e);process.exitCode=1;});

@@ -25,7 +25,6 @@ function eventadmin_cockpit_shortcode($atts = []): bool|string
 
     $user_id = get_current_user_id();
     $has_phone = get_user_meta($user_id, 'eventadmin_phone', true);
-    $phone_warning = empty($has_phone) ? ' <span title="' . esc_html__('Phone number missing', 'eventadmin-volunteer-management') . '">⚠️</span>' : '';
 
     ob_start(); ?>
     <?php
@@ -33,20 +32,14 @@ function eventadmin_cockpit_shortcode($atts = []): bool|string
     // volunteer hasn't set one or declined (see includes/password-login.php).
     echo eventadmin_render_password_prompt(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside
     ?>
+    <?php $tabs_id = wp_unique_id('eventadmin-tabs-'); ?>
     <div class="eventadmin-tabs">
-        <div class="tab-nav">
-            <div class="tab-item active"
-                 data-tab="einsaetze"><?php esc_html_e('📋 Shifts', 'eventadmin-volunteer-management'); ?></div>
-            <div class="tab-item"
-                 data-tab="profil"><?php echo esc_html__('👤 Profile', 'eventadmin-volunteer-management') . wp_kses($phone_warning, [
-                        'span' => ['title' => []],
-                    ]); ?>
-            </div>
+        <div class="tab-nav" role="tablist" aria-label="<?php esc_attr_e('Volunteer dashboard', 'eventadmin-volunteer-management'); ?>">
+            <button type="button" class="tab-item active" role="tab" id="<?php echo esc_attr($tabs_id . 'shifts-tab'); ?>" aria-controls="<?php echo esc_attr($tabs_id . 'shifts'); ?>" aria-selected="true" data-tab="<?php echo esc_attr($tabs_id . 'shifts'); ?>"><?php esc_html_e('Shifts', 'eventadmin-volunteer-management'); ?></button>
+            <button type="button" class="tab-item" role="tab" id="<?php echo esc_attr($tabs_id . 'profile-tab'); ?>" aria-controls="<?php echo esc_attr($tabs_id . 'profile'); ?>" aria-selected="false" tabindex="-1" data-tab="<?php echo esc_attr($tabs_id . 'profile'); ?>"><?php esc_html_e('Profile', 'eventadmin-volunteer-management'); ?><?php if (empty($has_phone)) : ?> <span class="eventadmin-profile-warning"><?php esc_html_e('Phone number missing', 'eventadmin-volunteer-management'); ?></span><?php endif; ?></button>
         </div>
-
-        <div class="tab-panel" id="einsaetze"><?php echo do_shortcode('[eventadmin_shiftselector' . eventadmin_department_shortcode_passthrough($atts) . ']'); ?></div>
-        <div class="tab-panel" id="profil"
-             style="display: none;"><?php echo do_shortcode('[eventadmin_profile]'); ?></div>
+        <div class="tab-panel" role="tabpanel" id="<?php echo esc_attr($tabs_id . 'shifts'); ?>" aria-labelledby="<?php echo esc_attr($tabs_id . 'shifts-tab'); ?>"><?php echo do_shortcode('[eventadmin_shiftselector' . eventadmin_department_shortcode_passthrough($atts) . ']'); ?></div>
+        <div class="tab-panel" role="tabpanel" id="<?php echo esc_attr($tabs_id . 'profile'); ?>" aria-labelledby="<?php echo esc_attr($tabs_id . 'profile-tab'); ?>" hidden><?php echo do_shortcode('[eventadmin_profile]'); ?></div>
     </div>
     <?php
     return ob_get_clean();
@@ -84,8 +77,8 @@ function eventadmin_enqueue_cockpit_scripts(): void
         'nonce' => wp_create_nonce('eventadmin_assign_shift'),
         'unassign_limit' => get_option('eventadmin_unassign_limit_hours', 0),
         'i18n' => [
-            'assign' => esc_html__('Assign', 'eventadmin-volunteer-management'),
-            'unassign' => esc_html__('Unassign', 'eventadmin-volunteer-management'),
+            'assign' => esc_html__('Sign up for this shift', 'eventadmin-volunteer-management'),
+            'unassign' => esc_html__('Cancel my sign-up', 'eventadmin-volunteer-management'),
             'unknown_error' => esc_html__('Unknown error', 'eventadmin-volunteer-management'),
             'unassign_disabled' => sprintf(
                 /* translators: %d = hours before shift start */

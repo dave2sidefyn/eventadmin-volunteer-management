@@ -191,11 +191,12 @@ function eventadmin_admin_enqueue_dashboard_scripts(): void
         true
     );
 
+    eventadmin_enqueue_searchable_select();
     $admin_charts_js_path = plugin_dir_path(__FILE__) . '../../assets/js/admin-charts.js';
     wp_enqueue_script(
         'eventadmin-admin-charts',
         plugin_dir_url(__FILE__) . '../../assets/js/admin-charts.js',
-        ['chart-js'],
+        ['chart-js', 'eventadmin-searchable-select'],
         file_exists($admin_charts_js_path) ? filemtime($admin_charts_js_path) : null,
         true
     );

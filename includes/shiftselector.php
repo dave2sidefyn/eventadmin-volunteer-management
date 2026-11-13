@@ -26,7 +26,7 @@ function eventadmin_sort_shifts_by_start($a, $b): int
 }
 
 /**
- * Formats a "still open" slot count, e.g. "3/7 slots open".
+ * Formats remaining places in volunteer-friendly language, e.g. "3 places left".
  *
  * @param int $open Number of open (unfilled) slots
  * @param int $total Total number of slots
@@ -38,8 +38,8 @@ function eventadmin_format_slots_open(int $open, int $total): string
     // signed up), which would otherwise show a confusing negative count.
     $open = max(0, $open);
 
-    /* translators: 1: number of open volunteer slots remaining, 2: total number of volunteer slots offered */
-    return sprintf(__('%1$d/%2$d slots open', 'eventadmin-volunteer-management'), $open, $total);
+    /* translators: %d: number of volunteer places still open */
+    return sprintf(_n('%d place left', '%d places left', $open, 'eventadmin-volunteer-management'), $open);
 }
 
 /**
@@ -231,6 +231,9 @@ function eventadmin_shiftselector_shortcode($atts = []): bool|string
         }
     }
     echo '</div>';
+    if (empty($my_shifts) && !empty($available_shifts)) {
+        echo '<p><a class="eventadmin-find-shift" href="#section-open-shifts">' . esc_html__('Find a shift', 'eventadmin-volunteer-management') . '</a></p>';
+    }
 
     echo '<div class="shift-section-header">';
     echo '<h2>' . esc_html__('Available shifts', 'eventadmin-volunteer-management') . '</h2>';
@@ -254,7 +257,7 @@ function eventadmin_shiftselector_shortcode($atts = []): bool|string
                 $shift_term_ids[$shift->ID] = wp_get_post_terms($shift->ID, 'eventadmin_shift_category', ['fields' => 'ids']);
             }
 
-            echo '<select id="shift-category-filter">';
+            echo '<select id="shift-category-filter" aria-label="' . esc_attr__('Department', 'eventadmin-volunteer-management') . '">';
 
             $all_open = 0;
             $all_total = 0;
@@ -290,7 +293,7 @@ function eventadmin_shiftselector_shortcode($atts = []): bool|string
         }
 
         if (in_array('text_search', $enabled_filters, true)) {
-            echo '<input type="search" id="shift-text-filter" placeholder="' . esc_attr__('Search shifts…', 'eventadmin-volunteer-management') . '">';
+            echo '<input type="search" id="shift-text-filter" aria-label="' . esc_attr__('Search shifts…', 'eventadmin-volunteer-management') . '" placeholder="' . esc_attr__('Search shifts…', 'eventadmin-volunteer-management') . '">';
         }
 
         if (in_array('date_filter', $enabled_filters, true)) {
@@ -299,10 +302,12 @@ function eventadmin_shiftselector_shortcode($atts = []): bool|string
             echo '</label>';
         }
 
+        echo '<button type="button" class="eventadmin-clear-shift-filters" hidden>' . esc_html__('Clear filters', 'eventadmin-volunteer-management') . '</button>';
         echo '</div>';
     }
     echo '</div>';
-    echo '<div id="section-open-shifts" class="shift-section">';
+    echo '<p id="eventadmin-filter-empty" role="status" hidden>' . esc_html__('No shifts found.', 'eventadmin-volunteer-management') . '</p>';
+    echo '<div id="section-open-shifts" class="shift-section" tabindex="-1">';
     if (empty($available_shifts)) {
         echo '<p class="no-shifts">' . esc_html__('Currently no open shifts available.', 'eventadmin-volunteer-management') . '</p>';
     } else {
@@ -359,7 +364,8 @@ function eventadmin_render_shift($shift, $user_id, $is_full = false): void
     $names = eventadmin_get_user_display_names($shift->ID);
 
     $hours_left = (strtotime($start) - time()) / 3600;
-    echo '<div class="shift-box" data-category="' . esc_attr($data_attr) . '" data-shift-id="' . esc_attr($shift->ID) . '" data-hours-left="' . esc_attr(floor($hours_left)) . '">';
+    $date_label = date_i18n(get_option('date_format'), strtotime($start));
+    echo '<div class="shift-box" data-category="' . esc_attr($data_attr) . '" data-shift-date="' . esc_attr(substr($start, 0, 10)) . '" data-date-label="' . esc_attr($date_label) . '" data-shift-id="' . esc_attr($shift->ID) . '" data-hours-left="' . esc_attr(floor($hours_left)) . '">';
 
     echo '<div class="shift-card-header">';
     echo '<div class="shift-datetime" data-start="' . esc_attr($start) . '">' . esc_html(eventadmin_get_formatted_zeitraum($start, $end)) . '</div>';
@@ -369,6 +375,7 @@ function eventadmin_render_shift($shift, $user_id, $is_full = false): void
     if (!empty($visible_terms)) {
         echo '<div class="shift-categories">';
         foreach ($visible_terms as $term) {
+            if ($term->name === $shift->post_title) continue;
             $color = get_term_meta($term->term_id, 'term_color', true);
 
             // If not set → generate, save and use one
@@ -392,14 +399,16 @@ function eventadmin_render_shift($shift, $user_id, $is_full = false): void
     echo '</div>';
     echo '<div class="shift-description">' . wp_kses_post($shift->post_content) . '</div>';
     echo '</div>';
-    echo '<form class="eventadmin-assign-form">';
+    /* translators: 1: shift title, 2: shift date and time. */
+    $action_label = sprintf(__('%1$s — %2$s', 'eventadmin-volunteer-management'), $shift->post_title, eventadmin_get_formatted_zeitraum($start, $end));
+    echo '<form class="eventadmin-assign-form" data-context="' . esc_attr($action_label) . '">';
     echo '<input type="hidden" name="shift_id" value="' . esc_attr($shift->ID) . '">';
     if ($is_assigned) {
         echo '<input type="hidden" name="action" value="eventadmin_unassign_ajax">';
-        echo '<input type="submit" class="button-red" value="' . esc_html__('Unassign', 'eventadmin-volunteer-management') . '">';
+        echo '<input type="submit" class="button-red" value="' . esc_html__('Cancel my sign-up', 'eventadmin-volunteer-management') . '">';
     } elseif (!$is_full) {
         echo '<input type="hidden" name="action" value="eventadmin_assign_ajax">';
-        echo '<input type="submit" class="button" value="' . esc_html__('Assign', 'eventadmin-volunteer-management') . '">';
+        echo '<input type="submit" class="button" value="' . esc_html__('Sign up for this shift', 'eventadmin-volunteer-management') . '">';
     } else {
         echo '<button disabled>' . esc_html__('Full', 'eventadmin-volunteer-management') . '</button>';
     }

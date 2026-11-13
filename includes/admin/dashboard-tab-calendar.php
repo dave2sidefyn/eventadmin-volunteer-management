@@ -51,6 +51,10 @@ function eventadmin_calendar_parse_state(bool $filter_valid, array $day_stats): 
     $raw_mode   = $filter_valid && isset($_GET['cal_mode']) ? sanitize_key(wp_unslash($_GET['cal_mode'])) : '';
     $raw_anchor = $filter_valid && isset($_GET['cal_anchor']) ? sanitize_text_field(wp_unslash($_GET['cal_anchor'])) : '';
     $mode       = $raw_mode === 'week' ? 'week' : 'month';
+    $selected_date = $filter_valid && isset($_GET['filter_date']) ? sanitize_text_field(wp_unslash($_GET['filter_date'])) : '';
+    if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $selected_date) && strtotime($selected_date . ' 12:00:00') !== false) {
+        return ['mode' => $mode, 'anchor' => $selected_date];
+    }
 
     if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $raw_anchor) && strtotime($raw_anchor . ' 12:00:00') !== false) {
         return ['mode' => $mode, 'anchor' => $raw_anchor];
@@ -98,7 +102,7 @@ function eventadmin_calendar_range(string $mode, string $anchor): array
 }
 
 /**
- * The shifts starting between two days, grouped by day and sorted by start time — with what
+ * The shifts overlapping two days, grouped by each occupied day and sorted by start time — with what
  * a chip needs: title, start, fill, minimum and department colour.
  *
  * @param string $from               Y-m-d
@@ -109,15 +113,7 @@ function eventadmin_calendar_range(string $mode, string $anchor): array
  */
 function eventadmin_get_calendar_shifts(string $from, string $to, string $selected_cat, int $selected_volunteer): array
 {
-    $meta_query = [
-        'relation'    => 'AND',
-        'sort_clause' => [
-            'key'     => 'shift_start',
-            'value'   => [$from . 'T00:00', $to . 'T23:59'],
-            'compare' => 'BETWEEN',
-            'type'    => 'DATETIME',
-        ],
-    ];
+    $meta_query = eventadmin_shift_overlap_meta_query($from, $to);
     if ($selected_volunteer > 0) {
         $meta_query[] = ['key' => 'assigned_user_' . $selected_volunteer, 'compare' => 'EXISTS'];
     }
@@ -176,7 +172,7 @@ function eventadmin_get_calendar_shifts(string $from, string $to, string $select
             $status = 'full';
         }
 
-        $by_day[substr($start, 0, 10)][] = [
+        $chip = [
             'id'       => $shift->ID,
             'title'    => get_the_title($shift),
             'time'     => date_i18n(get_option('time_format'), strtotime($start)),
@@ -187,6 +183,14 @@ function eventadmin_get_calendar_shifts(string $from, string $to, string $select
             'color'    => $color !== '' ? $color : '#8c8f94',
             'dept'     => $dept,
         ];
+        $end = (string) ($meta['shift_end'][0] ?? '');
+        foreach (eventadmin_shift_occupied_days($start, $end, $from, $to) as $date) {
+            $daily_chip = $chip;
+            // Do not repeat the original start time on continuation days.
+            if ($date !== substr($start, 0, 10)) $daily_chip['time'] = '↳';
+            $daily_chip['period'] = eventadmin_get_formatted_zeitraum($start, $end);
+            $by_day[$date][] = $daily_chip;
+        }
     }
 
     return $by_day;
@@ -247,10 +251,22 @@ function eventadmin_render_calendar_nav(array $filter_query_args, string $mode, 
  * @param int                  $selected_volunteer
  * @return void
  */
-function eventadmin_render_calendar_view(array $filter_query_args, string $mode, string $anchor, string $selected_cat, int $selected_volunteer): void
+function eventadmin_render_calendar_view(array $filter_query_args, string $mode, string $anchor, string $selected_cat, int $selected_volunteer, string $selected_state = ''): void
 {
     [$from, $to] = eventadmin_calendar_range($mode, $anchor);
     $by_day      = eventadmin_get_calendar_shifts($from, $to, $selected_cat, $selected_volunteer);
+    if ($selected_state !== '') {
+        foreach ($by_day as $date => $chips) {
+            $by_day[$date] = array_values(array_filter($chips, static fn($chip) => match ($selected_state) {
+                'empty' => $chip['assigned'] === 0,
+                'full' => $chip['assigned'] >= $chip['max'],
+                'understaffed' => $chip['assigned'] < $chip['max'],
+                'heavilyunderstaffed' => $chip['status'] === 'under',
+                default => true,
+            }));
+            if (!$by_day[$date]) unset($by_day[$date]);
+        }
+    }
     $today       = current_time('Y-m-d');
     $month       = substr($anchor, 0, 7);
 
@@ -277,6 +293,8 @@ function eventadmin_render_calendar_view(array $filter_query_args, string $mode,
     for ($ts = strtotime($from . ' 12:00:00'); gmdate('Y-m-d', $ts) <= $to; $ts += DAY_IN_SECONDS) {
         $date   = gmdate('Y-m-d', $ts);
         $chips  = $by_day[$date] ?? [];
+        // Keep chronological order within each status; urgent shifts come first.
+        usort($chips, static fn($a, $b) => ($b['status'] === 'under') <=> ($a['status'] === 'under'));
         $class  = 'eventadmin-cal-day';
         $class .= $date === $today ? ' is-today' : '';
         $class .= $date < $today ? ' is-past' : '';
@@ -293,11 +311,21 @@ function eventadmin_render_calendar_view(array $filter_query_args, string $mode,
             echo '<span class="eventadmin-cal-dayhead">' . $num . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above
         }
 
+        if ($chips) {
+            $under = count(array_filter($chips, static fn($chip) => $chip['status'] === 'under'));
+            $open = array_sum(array_map(static fn($chip) => max(0, $chip['max'] - $chip['assigned']), $chips));
+            echo '<p class="eventadmin-cal-summary">' . esc_html__('Below the minimum', 'eventadmin-volunteer-management') . ': ' . (int) $under . ' · ' . esc_html__('Open slots', 'eventadmin-volunteer-management') . ': ' . (int) $open . '</p>';
+        }
         $limit = $mode === 'month' ? EVENTADMIN_CALENDAR_CHIPS_PER_DAY : PHP_INT_MAX;
-        foreach (array_slice($chips, 0, $limit) as $chip) {
+        foreach ($chips as $index => $chip) {
+            if ($index === $limit) {
+                /* translators: %d: number of further shifts that day */
+                echo '<details class="eventadmin-cal-extra"><summary class="eventadmin-cal-more">' . esc_html(sprintf(__('+%d more', 'eventadmin-volunteer-management'), count($chips) - $limit)) . '</summary>';
+            }
             $fill = $chip['max'] > 0 ? $chip['assigned'] . '/' . $chip['max'] : (string) $chip['assigned'];
             /* translators: 1: shift title, 2: department, 3: assigned volunteers, 4: maximum volunteers */
             $title = sprintf(__('%1$s (%2$s) — %3$d of %4$d volunteers', 'eventadmin-volunteer-management'), $chip['title'], $chip['dept'] ?: '—', $chip['assigned'], $chip['max']);
+            $title .= ' · ' . $chip['period'];
             if ($chip['status'] === 'under') {
                 /* translators: %d: minimum number of volunteers */
                 $title .= ' · ' . sprintf(__('minimum %d', 'eventadmin-volunteer-management'), $chip['min']);
@@ -310,10 +338,7 @@ function eventadmin_render_calendar_view(array $filter_query_args, string $mode,
                 . '<span class="eventadmin-cal-chip-fill">' . esc_html($fill) . '</span>'
                 . '</button>';
         }
-        if (count($chips) > $limit) {
-            /* translators: %d: number of further shifts that day */
-            echo '<a class="eventadmin-cal-more" href="' . esc_url($day_url($date)) . '">' . esc_html(sprintf(__('+%d more', 'eventadmin-volunteer-management'), count($chips) - $limit)) . '</a>';
-        }
+        if (count($chips) > $limit) echo '</details>';
         echo '</div>';
     }
     echo '</div>';

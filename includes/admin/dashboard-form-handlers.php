@@ -215,11 +215,20 @@ function eventadmin_admin_dashboard_admin_init(): void
             return;
         }
 
-        $repeat_weekly = !empty($_POST['copy_repeat_weekly']);
-        $until_date    = isset($_POST['copy_repeat_until']) ? sanitize_text_field(wp_unslash($_POST['copy_repeat_until'])) : '';
+        $repeat     = !empty($_POST['copy_repeat_weekly']);
+        $until_date = isset($_POST['copy_repeat_until']) ? sanitize_text_field(wp_unslash($_POST['copy_repeat_until'])) : '';
+        $unit       = isset($_POST['copy_repeat_unit']) && $_POST['copy_repeat_unit'] === 'month' ? 'month' : 'week';
+        $interval   = isset($_POST['copy_repeat_interval']) ? max(1, min(12, absint($_POST['copy_repeat_interval']))) : 1;
+        $ends_after = isset($_POST['copy_repeat_end']) && $_POST['copy_repeat_end'] === 'after';
+        $count      = $ends_after && isset($_POST['copy_repeat_count']) ? min(EVENTADMIN_MAX_REPEAT_WEEKS, absint($_POST['copy_repeat_count'])) : 0;
 
-        if ($repeat_weekly) {
-            if (!$until_date || !$is_valid_date($until_date) || $until_date < $target_date) {
+        if ($repeat) {
+            if ($ends_after && $count < 1) {
+                global $eventadmin_form_error;
+                $eventadmin_form_error = esc_html__('Please enter how many times the shifts should repeat.', 'eventadmin-volunteer-management');
+                return;
+            }
+            if (!$ends_after && (!$until_date || !$is_valid_date($until_date) || $until_date < $target_date)) {
                 global $eventadmin_form_error;
                 $eventadmin_form_error = esc_html__('Please choose a "repeat until" date on or after the first target date.', 'eventadmin-volunteer-management');
                 return;
@@ -229,7 +238,7 @@ function eventadmin_admin_dashboard_admin_init(): void
             $copied  = 0;
             $skipped = 0;
             $days    = 0;
-            foreach (eventadmin_weekly_repeat_dates($target_date, $until_date) as $date) {
+            foreach (eventadmin_repeat_dates($target_date, $unit, $interval, $ends_after ? '' : $until_date, $count) as $date) {
                 if ($date === $source_date) {
                     continue;
                 }
@@ -264,7 +273,7 @@ add_action('admin_init', 'eventadmin_admin_dashboard_admin_init');
  *
  * @param array|null $shift_ids Array of shift IDs or null for all shifts
  */
-#[NoReturn] function eventadmin_export_shifts_csv(array $shift_ids = null): void
+#[NoReturn] function eventadmin_export_shifts_csv(?array $shift_ids = null): void
 {
     if (!function_exists('get_userdata')) {
         require_once ABSPATH . 'wp-includes/pluggable.php';

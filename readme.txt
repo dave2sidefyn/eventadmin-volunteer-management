@@ -4,7 +4,7 @@ Tags: volunteer, volunteer management, shift scheduling, event management, roste
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.9.0
+Stable tag: 3.10.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,19 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.10.0 =
+* New: Flexible repeats in "Copy shifts to another day" — every N weeks or months, ending on a date or after a number of times (up to 52 dates). Monthly repeats keep the day of the month and skip months without it
+* New: Multi-day shifts appear on every day they cover in the Calendar, the date picker and the Day, Table and Cards views
+* New: Add or remove volunteers directly in the shift window. Removing asks for confirmation, and emailing the volunteer is an explicit, optional choice
+* New: "Full" staffing status, and the Volunteer and Status filters on every Manager tab, including Day. Filters stay applied while you edit on the Day view
+* Improved: Searchable volunteer picker (name or email) with date, time and capacity shown when adding a volunteer
+* Improved: Calendar shows each day's shifts below the minimum and open slots, lists understaffed shifts first, and "+N more" expands in place
+* Improved: Clickable email and phone links in the Table view and volunteer profiles, plus a "Send Announcement" shortcut per volunteer
+* Improved: Compact Volunteers list with a "More details" toggle; registration diagnostics moved under "Registration activity"
+* Improved: Volunteer page — clearer sign-up buttons ("Sign up for this shift" / "Cancel my sign-up"), "places left" wording, shifts grouped by day, "No shifts found" with "Clear filters", and clearer registration hints
+* Improved: Keyboard and screen-reader support for tabs, dialogs and sortable columns
+* Removed: Active-filter chips (the dropdowns already show the selection) and the "Open full editor" link in the shift window
 
 = Version 3.9.0 =
 * New: Calendar tab on the Manager page — a month or week grid with every shift in its department's colour, its start time and how many volunteers it has (red while below the minimum). Click a shift to edit it, or a day to open it on the Day tab. Opens automatically when your shifts span more than two weeks
@@ -438,6 +451,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Shift management, volunteer registration, dashboard, export, rules
 
 == Upgrade Notice ==
+
+= 3.10.0 =
+Adds repeats every N weeks or months, multi-day shifts on every day in the Calendar, Volunteer and Status filters on the Day view, and adding or removing volunteers right from the shift window. No breaking changes.
 
 = 3.9.0 =
 Adds a Calendar tab and date picker for long-running events, weekly repeating shifts, optional per-department sign-up and per-department volunteer pages, and keeps volunteer pages out of page caches. No breaking changes.
