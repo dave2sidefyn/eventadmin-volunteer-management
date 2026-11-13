@@ -36,6 +36,7 @@ function eventadmin_overview_parse_filter_state(string $page_slug, array $allowe
     $categories = eventadmin_get_hierarchical_shift_categories();
     $states = [
         'empty'               => esc_html__('Empty', 'eventadmin-volunteer-management'),
+        'full'                => esc_html__('Full', 'eventadmin-volunteer-management'),
         'understaffed'        => esc_html__('Understaffed', 'eventadmin-volunteer-management'),
         'heavilyunderstaffed' => esc_html__('Heavily understaffed', 'eventadmin-volunteer-management'),
     ];
@@ -115,7 +116,7 @@ function eventadmin_overview_parse_filter_state(string $page_slug, array $allowe
         'cal_mode'                        => $calendar['mode'] === 'week' ? 'week' : null,
         'cal_anchor'                      => $filter_valid && isset($_GET['cal_anchor']) ? $calendar['anchor'] : null,
         'eventadmin_filter_shifts_nonce'  => wp_create_nonce('eventadmin_filter_shifts'),
-    ]);
+    ], static fn($value) => $value !== null);
 
     return [
         'total_users'        => $total_users,
@@ -159,8 +160,8 @@ function eventadmin_render_copy_shifts_notice_and_modal(string $view, array $shi
         $copy_skipped  = isset($_GET['copy_skipped']) ? absint($_GET['copy_skipped']) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if ($copy_days > 0) {
             $message = sprintf(
-                /* translators: 1: number of shifts created, 2: number of days (weeks) they were spread over */
-                _n('%1$d shift was created across %2$d weeks.', '%1$d shifts were created across %2$d weeks.', $copied_count, 'eventadmin-volunteer-management'),
+                /* translators: 1: number of shifts created, 2: number of days they were spread over */
+                _n('%1$d shift was created across %2$d days.', '%1$d shifts were created across %2$d days.', $copied_count, 'eventadmin-volunteer-management'),
                 $copied_count,
                 $copy_days
             );
@@ -187,7 +188,7 @@ function eventadmin_render_copy_shifts_notice_and_modal(string $view, array $shi
     eventadmin_render_modal_open('eventadmin-copy-shifts-modal');
     eventadmin_render_modal_close_button('eventadmin-copy-shifts-close');
     echo '<h2 style="margin-top:0;">' . esc_html__('Copy shifts to another day', 'eventadmin-volunteer-management') . '</h2>';
-    echo '<p class="description">' . esc_html__('Recreate every shift from a past (or future) day on a new date, keeping each shift\'s time of day and duration.', 'eventadmin-volunteer-management') . ' ' . esc_html__('Use "Repeat every week" to fill a whole series at once, e.g. every Monday for 12 weeks.', 'eventadmin-volunteer-management') . '</p>';
+    echo '<p class="description">' . esc_html__('Recreate every shift from a past (or future) day on a new date, keeping each shift\'s time of day and duration.', 'eventadmin-volunteer-management') . ' ' . esc_html__('Use "Repeat" to fill a whole series at once, e.g. every Monday for 12 weeks or every other week.', 'eventadmin-volunteer-management') . '</p>';
     echo '<form method="post">';
     wp_nonce_field('eventadmin_copy_shifts', 'eventadmin_copy_shifts_nonce');
     echo '<input type="hidden" name="eventadmin_copy_shifts_day" value="1">';
@@ -199,13 +200,23 @@ function eventadmin_render_copy_shifts_notice_and_modal(string $view, array $shi
     }
     echo '</select></label></p>';
     echo '<p><label>' . esc_html__('to:', 'eventadmin-volunteer-management') . '<br><input type="date" name="copy_target_date" required style="width:100%;"></label></p>';
-    echo '<p><label><input type="checkbox" name="copy_repeat_weekly" value="1" id="eventadmin-copy-repeat-weekly"> ' . esc_html__('Repeat every week', 'eventadmin-volunteer-management') . '</label></p>';
-    echo '<p id="eventadmin-copy-repeat-until-row" style="display:none;"><label>' . esc_html__('until (including):', 'eventadmin-volunteer-management') . '<br><input type="date" name="copy_repeat_until" id="eventadmin-copy-repeat-until" style="width:100%;"></label>';
+    echo '<p><label><input type="checkbox" name="copy_repeat_weekly" value="1" id="eventadmin-copy-repeat-weekly"> ' . esc_html__('Repeat', 'eventadmin-volunteer-management') . '</label></p>';
+    echo '<fieldset id="eventadmin-copy-repeat-until-row" style="display:none;margin:0 0 1em;">';
+    echo '<p><label>' . esc_html__('Every', 'eventadmin-volunteer-management') . ' <input type="number" name="copy_repeat_interval" value="1" min="1" max="12" style="width:4.5em;"></label> ';
+    echo '<select name="copy_repeat_unit" aria-label="' . esc_attr__('Repeat unit', 'eventadmin-volunteer-management') . '">';
+    echo '<option value="week">' . esc_html__('week(s)', 'eventadmin-volunteer-management') . '</option>';
+    echo '<option value="month">' . esc_html__('month(s)', 'eventadmin-volunteer-management') . '</option>';
+    echo '</select></p>';
+    echo '<p style="margin-bottom:4px;">' . esc_html__('Ends', 'eventadmin-volunteer-management') . '</p>';
+    echo '<p style="margin:0 0 6px;"><label><input type="radio" name="copy_repeat_end" value="on" checked> ' . esc_html__('On', 'eventadmin-volunteer-management') . '</label> ';
+    echo '<input type="date" name="copy_repeat_until" id="eventadmin-copy-repeat-until" aria-label="' . esc_attr__('until (including):', 'eventadmin-volunteer-management') . '"></p>';
+    echo '<p style="margin:0 0 6px;"><label><input type="radio" name="copy_repeat_end" value="after"> ' . esc_html__('After', 'eventadmin-volunteer-management') . '</label> ';
+    echo '<input type="number" name="copy_repeat_count" id="eventadmin-copy-repeat-count" min="1" max="' . esc_attr(EVENTADMIN_MAX_REPEAT_WEEKS) . '" style="width:4.5em;" aria-label="' . esc_attr__('Number of times', 'eventadmin-volunteer-management') . '"> ' . esc_html__('times', 'eventadmin-volunteer-management') . '</p>';
     echo '<span class="description">' . esc_html(sprintf(
-        /* translators: %d: maximum number of weeks */
-        __('Creates the shifts on the same weekday every week, up to %d weeks. Shifts that already exist on a day are skipped, and volunteers are not copied.', 'eventadmin-volunteer-management'),
+        /* translators: %d: maximum number of dates in one series */
+        __('Monthly repeats use the same day of the month and skip months without it. Up to %d dates; shifts that already exist on a day are skipped, and volunteers are not copied.', 'eventadmin-volunteer-management'),
         EVENTADMIN_MAX_REPEAT_WEEKS
-    )) . '</span></p>';
+    )) . '</span></fieldset>';
     echo '<p id="eventadmin-copy-volunteers-row"><label><input type="checkbox" name="copy_volunteers" value="1"> ' . esc_html__('Also copy the volunteers currently signed up', 'eventadmin-volunteer-management') . '</label></p>';
     echo '<p>';
     submit_button(esc_html__('Copy shifts', 'eventadmin-volunteer-management'), 'primary', '', false);
@@ -231,7 +242,7 @@ function eventadmin_render_copy_shifts_notice_and_modal(string $view, array $shi
  * @param WP_Term[] $categories         From eventadmin_get_hierarchical_shift_categories().
  * @param string    $selected_cat       Currently selected department slug.
  * @param array<string,string> $states  Cards-only status options, keyed by value.
- * @param string    $selected_state     Currently selected status key (Cards only).
+ * @param string    $selected_state     Currently selected staffing-status key.
  * @param WP_User[] $volunteers         Non-offline volunteers.
  * @param int       $selected_volunteer Currently selected volunteer ID.
  * @param string    $selected_date      Y-m-d or ''.
@@ -261,27 +272,15 @@ function eventadmin_render_overview_toolbar(
     array $day_stats,
     array $calendar = ['mode' => 'month', 'anchor' => '']
 ): void {
-    $show_volunteer = $view !== 'timeline'; // Day already shows every volunteer's own row
-    $show_status    = $view === 'cards';    // Table and Day show assignment rows, not shifts
+    $show_volunteer = true; // Keep inherited volunteer filters visible and editable on Day too.
+    $show_status    = in_array($view, ['cards', 'calendar', 'table', 'timeline'], true); // Staffing status filters shifts in every manager view.
 
-    // Active filters, for the chips row and the mobile "Filters (n)" count.
-    $active = [];
-    $remove_url = static function (string $key) use ($filter_query_args, $view): string {
-        $args = array_merge($filter_query_args, ['filter_view' => $view]);
-        unset($args[$key], $args['paged']);
-        return add_query_arg($args, admin_url('edit.php'));
-    };
-    if ($selected_cat !== '') {
-        $term = get_term_by('slug', $selected_cat, 'eventadmin_shift_category');
-        $active[] = [__('Department', 'eventadmin-volunteer-management'), $term instanceof WP_Term ? $term->name : $selected_cat, $remove_url('filter_cat')];
-    }
-    if ($show_volunteer && $selected_volunteer > 0) {
-        $user = get_userdata($selected_volunteer);
-        $active[] = [__('Volunteer', 'eventadmin-volunteer-management'), $user ? trim($user->first_name . ' ' . $user->last_name) : '#' . $selected_volunteer, $remove_url('filter_volunteer')];
-    }
-    if ($show_status && $selected_state !== '' && isset($states[$selected_state])) {
-        $active[] = [__('Status', 'eventadmin-volunteer-management'), $states[$selected_state], $remove_url('filter_state')];
-    }
+    // Retain the active-filter count for mobile controls and Clear filters.
+    $active = array_filter([
+        $selected_cat !== '',
+        $show_volunteer && $selected_volunteer > 0,
+        $show_status && $selected_state !== '' && isset($states[$selected_state]),
+    ]);
 
     echo '<form method="get" action="edit.php" id="eventadmin-overview-filters" class="eventadmin-toolbar' . (!empty($active) ? ' is-open' : '') . '">';
     wp_nonce_field('eventadmin_filter_shifts', 'eventadmin_filter_shifts_nonce', false);
@@ -379,11 +378,6 @@ function eventadmin_render_overview_toolbar(
             'cal_anchor'                     => $view === 'calendar' ? $calendar['anchor'] : null,
         ], admin_url('edit.php'));
         echo '<div class="eventadmin-active-filters">';
-        foreach ($active as [$label, $value, $url]) {
-            echo '<a class="eventadmin-active-filter" href="' . esc_url($url) . '" title="' . esc_attr__('Remove filter', 'eventadmin-volunteer-management') . '">'
-                . '<span class="eventadmin-active-filter-label">' . esc_html($label) . ':</span> ' . esc_html($value)
-                . ' <span aria-hidden="true">✕</span></a>';
-        }
         echo '<a class="eventadmin-clear-filters" href="' . esc_url($clear_url) . '">' . esc_html__('Clear filters', 'eventadmin-volunteer-management') . '</a>';
         echo '</div>';
     }
@@ -448,7 +442,7 @@ function eventadmin_render_overview_heading(string $page_title, string $view): v
  *
  * @param WP_Post[] $shifts         From eventadmin_get_shifts().
  * @param string    $view           'table'|'timeline'|'cards' (or the default/legacy branch).
- * @param string    $selected_state Cards-only "State" filter value ('', 'empty', 'understaffed', 'heavilyunderstaffed').
+ * @param string    $selected_state Staffing-status filter value ('', 'empty', 'full', 'understaffed', 'heavilyunderstaffed').
  * @param bool      $show_open      Timeline-only: include open-slot rows.
  * @return array{table_rows: array, timeline_rows: array, shift_info_map: array, shift_edit_map: array}
  */
@@ -486,13 +480,16 @@ function eventadmin_build_overview_rows(array $shifts, string $view, string $sel
 
         if ($view !== 'cards') {
             $shift_info_map[$shift->ID] = [
-                'title'    => $title,
+                'title'    => $shift->post_title,
+                'period'   => eventadmin_get_formatted_zeitraum($start, $end),
+                'capacity' => count($users) . '/' . $max,
                 'assigned' => array_column($users, 'id'),
             ];
         }
 
         if (
             ($selected_state === 'empty'               && !empty($users)) ||
+            ($selected_state === 'full'                && count($users) < $max) ||
             ($selected_state === 'understaffed'        && !(count($users) < $max)) ||
             ($selected_state === 'heavilyunderstaffed' && !($min > 0 && count($users) < $min))
         ) {
@@ -594,13 +591,14 @@ function eventadmin_render_add_volunteer_modal(string $view, array $volunteers, 
     eventadmin_render_modal_open('eventadmin-add-volunteer-modal');
     eventadmin_render_modal_close_button('eventadmin-modal-close');
     echo '<h2 id="eventadmin-modal-shift-title" style="margin-top:0;"></h2>';
+    echo '<p id="eventadmin-modal-shift-context" class="description"></p>';
 
     echo '<form method="post" id="eventadmin-modal-existing-form" style="margin-bottom:12px;">';
     wp_nonce_field('eventadmin_add_user', 'eventadmin_add_user_nonce');
     echo '<input type="hidden" name="eventadmin_admin_add_user" value="1">';
     echo '<input type="hidden" name="shift_id" id="eventadmin-modal-shift-id-existing" value="">';
     echo '<input type="hidden" name="assign_existing" value="1">';
-    echo '<p><select name="existing_user_id" id="eventadmin-modal-existing-select" style="width:100%;">';
+    echo '<p><select name="existing_user_id" id="eventadmin-modal-existing-select" data-search-label="' . esc_attr__('Search volunteers…', 'eventadmin-volunteer-management') . '" data-empty-label="' . esc_attr__('No volunteers found.', 'eventadmin-volunteer-management') . '" required aria-label="' . esc_attr__('Select existing volunteer…', 'eventadmin-volunteer-management') . '" style="width:100%;">';
     echo '<option value="">' . esc_html__('Select existing volunteer…', 'eventadmin-volunteer-management') . '</option>';
     echo '</select></p>';
     echo '<label><input type="checkbox" name="notify_volunteer" value="1"> ' . esc_html__('Send confirmation email', 'eventadmin-volunteer-management') . '</label>';
@@ -608,27 +606,28 @@ function eventadmin_render_add_volunteer_modal(string $view, array $volunteers, 
     submit_button(esc_html__('Add to shift', 'eventadmin-volunteer-management'), 'secondary small', '', false);
     echo '</p></form>';
 
-    echo '<p style="color:#888;font-size:12px;font-style:italic;">— ' . esc_html__('or add a new volunteer below', 'eventadmin-volunteer-management') . ' —</p>';
+    echo '<details class="eventadmin-new-volunteer"><summary>' . esc_html__('Create new volunteer', 'eventadmin-volunteer-management') . '</summary>';
 
     echo '<form method="post" id="eventadmin-modal-new-form">';
     wp_nonce_field('eventadmin_add_user', 'eventadmin_add_user_nonce');
     echo '<input type="hidden" name="eventadmin_admin_add_user" value="1">';
     echo '<input type="hidden" name="shift_id" id="eventadmin-modal-shift-id-new" value="">';
-    echo '<p><input type="text" name="first_name" placeholder="' . esc_attr__('First name', 'eventadmin-volunteer-management') . '" style="width:100%;" required></p>';
-    echo '<p><input type="text" name="last_name" placeholder="' . esc_attr__('Last name', 'eventadmin-volunteer-management') . '" style="width:100%;"></p>';
-    echo '<p><input type="text" name="user_identifier" placeholder="' . esc_attr__('E-Mail (optional)', 'eventadmin-volunteer-management') . '" style="width:100%;" title="' . esc_attr__('Leave blank for offline volunteers without an email address', 'eventadmin-volunteer-management') . '"></p>';
-    echo '<p><input type="text" name="phone" placeholder="' . esc_attr__('Phone', 'eventadmin-volunteer-management') . '" style="width:100%;"></p>';
+    echo '<p><label>' . esc_html__('First name', 'eventadmin-volunteer-management') . '<br><input type="text" name="first_name" placeholder="' . esc_attr__('First name', 'eventadmin-volunteer-management') . '" style="width:100%;" required></label></p>';
+    echo '<p><label>' . esc_html__('Last name', 'eventadmin-volunteer-management') . '<br><input type="text" name="last_name" placeholder="' . esc_attr__('Last name', 'eventadmin-volunteer-management') . '" style="width:100%;"></label></p>';
+    echo '<p><label>' . esc_html__('E-Mail (optional)', 'eventadmin-volunteer-management') . '<br><input type="text" inputmode="email" autocomplete="off" name="user_identifier" placeholder="' . esc_attr__('E-Mail (optional)', 'eventadmin-volunteer-management') . '" style="width:100%;" title="' . esc_attr__('Leave blank for offline volunteers without an email address', 'eventadmin-volunteer-management') . '"></label></p>';
+    echo '<p><label>' . esc_html__('Phone', 'eventadmin-volunteer-management') . '<br><input type="tel" name="phone" placeholder="' . esc_attr__('Phone', 'eventadmin-volunteer-management') . '" style="width:100%;"></label></p>';
     echo '<label><input type="checkbox" name="notify_volunteer" value="1"> ' . esc_html__('Send confirmation email', 'eventadmin-volunteer-management') . '</label>';
     echo '<p>';
-    submit_button(esc_html__('Add', 'eventadmin-volunteer-management'), 'secondary small', '', false);
-    echo '</p></form>';
+    submit_button(esc_html__('Add to shift', 'eventadmin-volunteer-management'), 'primary', '', false);
+    echo '</p></form></details>';
 
     eventadmin_render_modal_close();
 
     $all_volunteer_options = array_map(function ($v) {
         return [
             'id'    => $v->ID,
-            'label' => trim($v->first_name . ' ' . $v->last_name) ?: $v->user_login,
+            'label' => (trim($v->first_name . ' ' . $v->last_name) ?: $v->user_login)
+                . (eventadmin_user_can_receive_email($v->ID) ? ' — ' . $v->user_email : ''),
         ];
     }, $volunteers);
 
@@ -727,7 +726,7 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
             'timeline'  => esc_html__('Day', 'eventadmin-volunteer-management'),
             'calendar'  => esc_html__('Calendar', 'eventadmin-volunteer-management'),
             'table'     => esc_html__('Table', 'eventadmin-volunteer-management'),
-            'cards'     => esc_html__('Cards (old)', 'eventadmin-volunteer-management'),
+            'cards'     => esc_html__('Cards', 'eventadmin-volunteer-management'),
         ];
         foreach ($allowed_views as $slug) {
             $tab_url = add_query_arg(array_merge($filter_query_args, ['filter_view' => $slug]), admin_url('edit.php'));
@@ -767,7 +766,7 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
 
     // The Calendar runs its own query for exactly the days it shows — no list, no paging.
     if ($view === 'calendar') {
-        eventadmin_render_calendar_view($filter_query_args, $calendar['mode'], $calendar['anchor'], $selected_cat, $selected_volunteer);
+        eventadmin_render_calendar_view($filter_query_args, $calendar['mode'], $calendar['anchor'], $selected_cat, $selected_volunteer, $selected_state);
         if (current_user_can('eventadmin_manage_shifts')) {
             eventadmin_render_shared_volunteer_modals(['default_date' => $calendar['anchor']]);
             echo '<script>window.eventadminOnShiftCreated = window.eventadminOnShiftSaved = function () { window.location.reload(); };</script>';
@@ -808,7 +807,7 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
 
     eventadmin_render_add_volunteer_modal($view, $volunteers, $shift_info_map);
 
-    eventadmin_render_timeline_shift_modals_and_config($view, $shift_edit_map, $show_open, $selected_date);
+    eventadmin_render_timeline_shift_modals_and_config($view, $shift_edit_map, $show_open, $selected_date, $selected_state, $selected_volunteer);
 
     // The Day view renders the shift modal with its own richer config (above); the other
     // tabs get the shared one, so "+ Add shift" and editing work there too — reloading

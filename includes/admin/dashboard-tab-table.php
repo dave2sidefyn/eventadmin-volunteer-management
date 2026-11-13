@@ -56,8 +56,8 @@ function eventadmin_render_table_view(array $table_rows, array $filter_query_arg
             echo '<button type="button" class="button button-small eventadmin-open-slot-add" data-shift-id="' . esc_attr($row['shift_id']) . '">' . esc_html__('Add volunteer', 'eventadmin-volunteer-management') . '</button></td>';
         } else {
             echo '<td>' . esc_html($row['name']) . '</td>';
-            echo '<td>' . ($row['email'] === '' ? '<em style="color:#aaa;">—</em>' : esc_html($row['email'])) . '</td>';
-            echo '<td>' . ($row['phone'] === '' ? '<em style="color:#aaa;">—</em>' : esc_html($row['phone'])) . '</td>';
+            echo '<td>' . ($row['email'] === '' ? '<em style="color:#aaa;">—</em>' : '<a href="' . esc_url('mailto:' . $row['email']) . '">' . esc_html($row['email']) . '</a>') . '</td>';
+            echo '<td>' . ($row['phone'] === '' ? '<em style="color:#aaa;">—</em>' : '<a href="tel:' . esc_attr(eventadmin_phone_tel_href($row['phone'])) . '">' . esc_html($row['phone']) . '</a>') . '</td>';
         }
         echo '</tr>';
     }

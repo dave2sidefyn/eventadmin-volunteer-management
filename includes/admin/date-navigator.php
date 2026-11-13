@@ -54,11 +54,13 @@ function eventadmin_get_shift_day_stats(string $selected_cat = ''): array
     $rows = $wpdb->get_results($wpdb->prepare(
         "SELECT DISTINCT p.ID,
                 DATE(s.meta_value) AS shift_date,
+                s.meta_value AS shift_start, e.meta_value AS shift_end,
                 CAST(COALESCE(mx.meta_value, '0') AS UNSIGNED) AS max_v,
                 CAST(COALESCE(mn.meta_value, '0') AS UNSIGNED) AS min_v,
                 (SELECT COUNT(*) FROM {$wpdb->postmeta} a WHERE a.post_id = p.ID AND a.meta_key LIKE %s) AS assigned
          FROM {$wpdb->posts} p
          INNER JOIN {$wpdb->postmeta} s ON s.post_id = p.ID AND s.meta_key = 'shift_start' AND s.meta_value != ''
+         LEFT JOIN {$wpdb->postmeta} e ON e.post_id = p.ID AND e.meta_key = 'shift_end'
          LEFT JOIN {$wpdb->postmeta} mx ON mx.post_id = p.ID AND mx.meta_key = 'max_volunteers'
          LEFT JOIN {$wpdb->postmeta} mn ON mn.post_id = p.ID AND mn.meta_key = 'min_volunteers'
          {$cat_join}
@@ -82,12 +84,14 @@ function eventadmin_get_shift_day_stats(string $selected_cat = ''): array
         } else {
             $status = 'full';
         }
-        if (!isset($stats[$date])) {
-            $stats[$date] = ['shifts' => 0, 'status' => 'full'];
-        }
-        $stats[$date]['shifts']++;
-        if ($rank[$status] > $rank[$stats[$date]['status']]) {
-            $stats[$date]['status'] = $status;
+        foreach (eventadmin_shift_occupied_days((string) $row->shift_start, (string) ($row->shift_end ?? ''), $date, '9999-12-31') as $date) {
+            if (!isset($stats[$date])) {
+                $stats[$date] = ['shifts' => 0, 'status' => 'full'];
+            }
+            $stats[$date]['shifts']++;
+            if ($rank[$status] > $rank[$stats[$date]['status']]) {
+                $stats[$date]['status'] = $status;
+            }
         }
     }
     ksort($stats);
@@ -168,7 +172,7 @@ function eventadmin_next_shift_date(array $day_stats): string
 function eventadmin_render_when_control(array $filter_query_args, string $view, string $selected_date, array $day_stats, string $time_filter): void
 {
     $base_args = array_merge($filter_query_args, ['filter_view' => $view]);
-    unset($base_args['filter_date'], $base_args['filter_time'], $base_args['paged']);
+    unset($base_args['filter_date'], $base_args['filter_time'], $base_args['paged'], $base_args['cal_anchor']);
     $range_arg = $time_filter !== 'future' ? ['filter_time' => $time_filter] : [];
     $date_url  = static fn(string $date): string => add_query_arg(array_merge($base_args, $range_arg, ['filter_date' => $date]), admin_url('edit.php'));
     $range_url = static fn(string $range): string => add_query_arg(array_merge($base_args, ['filter_time' => $range, 'filter_date' => '']), admin_url('edit.php'));
@@ -215,8 +219,8 @@ function eventadmin_render_when_control(array $filter_query_args, string $view, 
 
     // The button always says what is shown right now: the chosen day, or the range.
     echo '<button type="button" class="button eventadmin-date-current" id="eventadmin-date-picker-toggle" aria-haspopup="dialog" aria-expanded="false">';
-    if ($selected_date !== '' && isset($day_stats[$selected_date])) {
-        echo '<span class="eventadmin-date-dot is-' . esc_attr($day_stats[$selected_date]['status']) . '" aria-hidden="true"></span>';
+    if ($selected_date !== '') {
+        echo '<span class="eventadmin-date-dot is-' . esc_attr($day_stats[$selected_date]['status'] ?? 'open') . '" aria-hidden="true"></span>';
         echo esc_html($day_label($selected_date, $chips_mode ? 'D j M' : 'l, ' . get_option('date_format')));
     } else {
         echo esc_html($ranges[$time_filter] ?? $ranges['future']);

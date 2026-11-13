@@ -173,3 +173,27 @@ input.button:hover {
     font-size: 0.9em;
     display: inline-block;
 }
+
+/* Keep tab controls readable under themes with their own button styling. */
+.eventadmin-tabs .tab-nav { gap: 4px; align-items: stretch; }
+.eventadmin-tabs button.tab-item { color: #1d2327; font: inherit; text-align: left; margin: 0; }
+.eventadmin-tabs .tab-item:focus-visible { outline: 3px solid #2271b1; outline-offset: 2px; }
+.eventadmin-tabs [hidden], .shift-section [hidden], .eventadmin-clear-shift-filters[hidden],
+#eventadmin-filter-empty[hidden] { display: none !important; }
+.eventadmin-profile-warning { display: block; font-size: .75em; color: #765000; font-weight: normal; }
+.eventadmin-tabs .shift-section { margin-bottom: 1.5rem; }
+.eventadmin-tabs .shift-box { padding: .85rem; margin-bottom: .65rem; }
+.shift-day-heading { font-size: 1.1rem; margin: 1.25rem 0 .5rem; }
+.shift-box .shift-people { float: none; }
+.shift-box .shift-meta { display: flex; flex-direction: column; gap: .5rem; margin: .5rem 0; }
+.shift-box .shift-names { font-size: .9em; }
+.shift-filter { width: 100%; margin-top: .5rem; }
+.shift-filter input, .shift-filter select { max-width: 100%; }
+.eventadmin-clear-shift-filters { cursor: pointer; }
+@media (max-width: 600px) {
+    .eventadmin-tabs .tab-panel { padding: 10px; }
+    .eventadmin-tabs button.tab-item { padding: 10px 12px; }
+    .shift-filter { align-items: stretch; }
+    .shift-filter > * { flex: 1 1 100%; }
+    .shift-filter-date-label input { flex: 1; min-width: 0; }
+}

@@ -4,7 +4,7 @@ Tags: volunteer, volunteer management, shift scheduling, event management, roste
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.9.0
+Stable tag: 3.10.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -127,6 +127,24 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 
 == Changelog ==
 
+= Version 3.10.0 =
+* New: Flexible repeats in "Copy shifts to another day" — every N weeks or months, ending on a date or after a number of times (up to 52 dates). Monthly repeats keep the day of the month and skip months without it
+* New: Multi-day shifts appear on every day they cover in the Calendar, the date picker and the Day, Table and Cards views
+* New: Add or remove volunteers directly in the shift window. Removing asks for confirmation, and emailing the volunteer is an explicit, optional choice
+* New: "Full" staffing status, and the Volunteer and Status filters on every Manager tab, including Day. Filters stay applied while you edit on the Day view
+* Improved: Searchable volunteer picker (name or email) with date, time and capacity shown when adding a volunteer; creating a new volunteer there is tucked into its own section with labelled fields
+* Improved: Calendar shows each day's shifts below the minimum and open slots, lists understaffed shifts first, and "+N more" expands in place
+* Improved: The selected date carries over when switching between Calendar, Day, Table and Cards, and a day without shifts is still shown by its date. The date and filter bar stays visible while scrolling. "Cards (old)" is now "Cards"
+* Improved: Clickable email and phone links in the Table view and volunteer profiles, plus a "Send Announcement" shortcut per volunteer
+* Improved: Compact Volunteers list with a "More details" toggle; registration diagnostics moved under "Registration activity"
+* Improved: Volunteer page — clearer sign-up buttons ("Sign up for this shift" / "Cancel my sign-up"), "places left" instead of "x/y slots open" (also in [eventadmin_open_positions]), shifts grouped by day, "Find a shift" when you have none yet, "No shifts found" with "Clear filters", and no duplicate department badge when it matches the shift title
+* Improved: Volunteer page — the Profile tab says "Phone number missing" instead of showing only a warning icon, sign-up buttons can't be pressed twice and network errors are shown, and the department setting in the profile explains what it does
+* Improved: Registration form explains the email login link and why a phone number is needed, and supports browser autofill
+* Improved: Keyboard and screen-reader support for tabs, dialogs and sortable columns
+* Removed: Active-filter chips (the dropdowns already show the selection) and the "Open full editor" link in the shift window
+* Fix: Turning off "Open slots" on the Day view is now kept when switching tabs
+* Fix: PHP 8.4+ deprecation notice from the CSV export
+
 = Version 3.9.0 =
 * New: Calendar tab on the Manager page — a month or week grid with every shift in its department's colour, its start time and how many volunteers it has (red while below the minimum). Click a shift to edit it, or a day to open it on the Day tab. Opens automatically when your shifts span more than two weeks
 * New: Date picker on the Manager page — Upcoming / Past / All dates or a single day, with a month view whose days are marked by staffing. Long-running setups step day by day and open on the next day with shifts
@@ -229,215 +247,12 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 * Fix: The plugin's admin footer credit line no longer eats horizontal space on mobile
 * Fix: Historical bulk-announcement sends are now reflected in each volunteer's notification log (applied automatically on update), excluding volunteers with no email address on file
 
-= Version 2.1.1 =
-* Maintenance: refreshed the screenshots and description on WordPress.org. No changes to the plugin itself.
-
-= Version 2.1.0 =
-* New: `[eventadmin_open_positions]` shortcode — a public, no-login overview of where volunteers are still needed, grouped by department, for a recruitment page. Two styles: a compact per-department summary (default) or a full list of individual open shifts (`style="list"`), plus `category`, `show_intro`, `show_full`, and `hide_past` attributes
-* Improvement: In-plugin Documentation page brought up to the 2.x feature set — new sections on departments, the Dashboard/Cards/Table/Timeline overview, reminder & notification emails, and e-mail design settings
-* Improvement: Rewritten readme with a "How it works" overview, an expanded FAQ, and External services / Privacy sections
-* Fix: Formal address ("Sie", "u") had leaked into several strings in the informal German and Dutch translations; the informal locales now use the informal register throughout
-
-= Version 2.0.1 =
-* Fix: The "What's new" admin notice still described the 1.8.0 Cloudflare Turnstile feature instead of what's new in 2.0.0
-
-= Version 2.0.0 =
-* New: Shift categories (departments) — hidden departments now show a badge and their color swatch in the department list, and Quick Edit gained color, hidden, parent, and description fields so all of this can be changed without opening the full edit screen
-* New: Shift list (Shifts → All Shifts) can now be filtered and sorted by department, with the department shown as a colored badge
-* New: Volunteers page reorganized — "Create volunteer" and "Grant role" now open as modals, blocked registration attempts and auto-deleted unverified accounts moved to their own tabs, filters apply instantly without a "Filter" button, and the whole toolbar (buttons, filters, search) fits on one row
-* New: Shift overview reorganized into Dashboard, Cards, Table, and Timeline tabs (previously a single filtered view); each tab only shows the filters relevant to it
-* New: Timeline view supports dragging a shift's bar to move or resize it directly on the chart, with an Undo option after saving and a matching "Edit Shift" modal for precise changes
-* New: Dashboard statistics split each shift's open spots into "required" (below minimum) vs. "optional" (up to maximum)
-* New: Send Announcement redesigned into a two-column layout with a real, live HTML preview of the email, and hovering the recipient count shows who will receive it and which shift(s) they're signed up for
-* New: E-Mail design settings — pick a header color, set a header title/subtitle shown together with the logo, format the e-mail footer with rich text, and (advanced) add custom CSS applied to every e-mail
-* New: All e-mail texts in Settings → Communication (assignment, cancellation, reminder) now use the same rich-text editor as the footer, and the Communication tab is split into General / Shift Confirmations / Reminders sub-tabs
-* New: Every modal in the plugin now closes via a small "×" in the top-right corner instead of a full-width button
-* Fix: Shift categories marked "Hide from volunteers" lost their HTML badge styling in the department list and rendered as plain text
-* Fix: Editing a shift's time via the Timeline (drag or Edit Shift modal) could shift the saved time by a couple of hours on sites where WordPress's timezone setting differs from the server's PHP default
-* Removed: "Empty shifts" and "Understaffed shifts" dashboard counters (redundant with the required/optional open-spot numbers)
-
-= Version 1.10.0 =
-* New: Send Announcement can now attach a PDF from the media library to every email in the batch
-* New: {shifts} placeholder in Send Announcement lists each recipient's own upcoming shifts in the message body
-* New: Shift overview has two additional views alongside Cards — a flat, exportable-looking Table view and a Timeline view showing a per-volunteer Gantt-style chart of shift start/end times
-* New: Timeline view shows open (unfilled) slots as red (below the shift's minimum) or grey (optional, up to maximum) bars, with a toggle to show or hide them, hour-aligned time axis, and the shift name drawn directly on each bar
-* New: Click an open slot in the Timeline, or use the new "Add volunteer" button in the Table view, to assign a volunteer without leaving the page
-* New: Table and Timeline views show each shift's capacity (assigned/max, plus minimum when set)
-* Fix: Shift-selection dropdowns (Send Announcement, Volunteers filter) were sorted as plain strings and could be scrambled by differing date formats between admin-entered and imported shifts; now sorted correctly and by shift name, then time
-* Fix: Those same dropdowns showed a bogus end time (whatever time the page happened to load) instead of the shift's real end time, or none at all
-* Fix: The "Add volunteers manually" dropdown sorted by a WordPress field this plugin never sets, unrelated to the names actually shown; now sorted by the same name
-* Fix: Shift overview no longer paginates at 20 shifts per page — a full event's shift list now renders on one page
-* Fix: A negative value (e.g. "-1") in the reminder-days setting was silently turned into a positive reminder day instead of being ignored; clarified that leaving the field empty disables reminder emails entirely
-
-= Version 1.9.0 =
-* New: Send Announcement now shows a live recipient count for a selected shift or category, not just for "All"/"Subscribed"
-* New: Two more Send Announcement recipient filters — volunteers without any upcoming shift, and volunteers with at least one upcoming shift
-* New: Volunteers list now shows "Registered" and "Last shift" columns, both sortable
-
-= Version 1.8.1 =
-* Tested up to WordPress 7.1
-
-= Version 1.8.0 =
-* New: Cloudflare Turnstile added as a CAPTCHA provider option (Settings → General → Security) — reuses the site key and secret key already configured in the Simple Cloudflare Turnstile plugin, no separate keys needed
-
-= Version 1.7.1 =
-* New: "Clear log" button on the Volunteers page to clear the auto-deleted unverified accounts log
-* Fix: Administrators who also held the Volunteer role could lose access to wp-admin menu items on sites using a non-default database table prefix or in multisite — the previous fix for this wrote to the wrong option name and never actually took effect on those sites
-* Fix: Completed missing and corrected several inaccurate French and Dutch translations
-
-= Version 1.7.0 =
-* New: Selecting a parent department in the volunteer shift filter now also shows shifts tagged only with one of its child departments
-* New: "Hide from volunteers" option on shift categories — hides the department from the frontend filter and labels; shifts are also hidden from volunteers when every department they're assigned to is hidden (shifts a volunteer is already signed up for are never hidden this way)
-* New: Volunteer shift filter dropdown shows open/total slot counts per department and indents child departments under their parent
-* New: "Category filter" toggle under Settings → Display → Volunteer shift filters, to hide the department dropdown if it's not needed
-* New: Tools → EventAdmin Data explains how to use WordPress's native Export/Import to bring over a department & shift setup from another site (volunteer sign-ups are excluded from the export)
-* Fix: Registration form is now hidden after a successful or duplicate registration — only the confirmation message is shown
-* Fix: Assigning/unassigning a shift now updates the open-slots count live, without needing a page reload
-
-= Version 1.6.0 =
-* New: CAPTCHA support on the volunteer registration form — choose between Google reCAPTCHA v2, Google reCAPTCHA v3 (invisible), or hCaptcha via Settings → General → Security
-* New: Honeypot bot detection on the registration form (always active, no configuration needed)
-* New: Blocked registration attempts are logged with timestamp, email, IP, provider, and reason — visible in WP Admin → Volunteers
-* New: State filter on the admin shift overview — filter by Empty, Understaffed, or Heavily understaffed
-* Fix: Registration form handler now guards on the nonce field instead of the submit button, ensuring JavaScript-submitted forms (reCAPTCHA v3) are processed correctly
-* Tested up to WordPress 7.0
-
-= Version 1.5.1 =
-* Fix: Department color picker circle turned black after adding the first department in the same session — it now correctly resets to the default grey after each addition
-* Fix: Department colors were never saved due to a nonce action mismatch (created with one action name, verified with another)
-* Fix: Volunteer names from deleted users showed as invisible entries in the shift selector — non-existent users are now silently skipped in the display name list
-* New: Tools → EventAdmin Data now shows a count of orphaned shift assignments (assignments referencing deleted users) and allows cleaning them up with one click
-
-= Version 1.5.0 =
-* Fix: Shift assignment count shown in the frontend could be higher than in the admin when a WordPress user was deleted without being unassigned first — orphaned meta is now skipped by the count function
-* Fix: Deleting a WordPress user now automatically removes their shift assignments, preventing orphaned data from inflating shift counts in future
-* New: "CSV export all shifts" now includes shifts with no volunteers assigned — previously those shifts were silently omitted from the export
-
-= Version 1.4.2 =
-* Fix: Settings page now shows a confirmation notice after saving
-* Fix: Email placeholders {start} and {end} showed empty in emails when the date/time format setting had been wiped to an empty string
-* Fix: {days} placeholder appeared literally in assign/unassign emails — it is now available in all email template types, not just reminders
-* Fix: Shift times displayed correctly in the frontend and admin even when the date format option is empty
-* Fix: Plugin upgrade routine now restores missing or wiped settings to their defaults on version update, preventing silent data loss after updates
-
-= Version 1.4.1 =
-* Fix: Settings were not saved correctly when using the tabbed settings page — each tab's options are now registered in their own settings group, preventing cross-tab data loss on save
-
-= Version 1.4.0 =
-* New: Reminder emails for assigned Volunteers X days before a shift starts, configurable under Settings → Communication
-* New: Settings cleanup — single Settings menu entry with General, Display, and Communication tabs
-* New: Organizer user link on shifts — use a linked staff-side WordPress user as the email sender fallback, while keeping organizer name/email as manual overrides
-* Improvement: Frontend shift buttons now switch with translated labels instead of hardcoded English text
-* Improvement: Transactional emails use a shared HTML wrapper for a more professional appearance
-* Improvement: Documentation now explains email template customization inline in the admin area
-* Fix: German locale updates for new settings, reminders, organizer-user flow, and communication UI
-
-= Version 1.3.0 =
-* Fix: Confirmation emails now use the date/time format configured in Settings → Display instead of a hardcoded format
-* Fix: Email live preview in settings now reflects the configured date format in real time (AJAX-powered, locale-aware)
-* New: "Create new volunteer" form on the Volunteers page — create online or offline volunteers directly without going via a shift
-* New: Configurable volunteer shift filters — admin can enable a text search and/or date picker on the shift selector (Settings → Display)
-
-= Version 1.2.0 =
-* New: Shift card layout — date/time and category labels now in a stable flex row; multiple or long categories no longer displace the date
-* New: Configurable date format for shift start and end time (Settings → Display)
-* New: Custom CSS field in settings — integrators can store theme-specific overrides directly in the plugin without editing theme files
-* Improvement: Date format fields show a live preview and a collapsible token cheat sheet for easier configuration
-
-= Version 1.1.0 =
-* New: Send Announcement page — send emails to all volunteers, opted-in volunteers, a specific shift, a specific category, or an individual volunteer
-* New: Overridable From name and From email per announcement
-* New: HTML formatting support in announcement emails with live preview (subject, body, sender)
-* New: Send history log — collapsible table with filter and sortable columns; shows subject, recipients, sent/failed counts, and full message body
-* New: Volunteers page — filter by category, text search, and sortable columns
-* New: "Email" button on volunteer rows links directly to Send Announcement with that volunteer pre-selected
-* New: Offline volunteers (no email address) are clearly indicated in the Volunteers list
-* New: Chart labels on the Overview page are now fully translated
-* New: Send Announcement section added to the Documentation page
-* Fix: Settings and Documentation menu items now always appear last in the Shifts submenu
-
-= Version 1.0.1 =
-* Fix: Settings and Documentation menu items now always appear last in the Shifts submenu
-* Improvement: Removed duplicate bulk email form from Volunteers page — use Send Announcement for bulk emails; offline volunteers (no email address) are visually indicated in the table
-
-= Version 1.0.0 =
-* Fix: Social badge now correctly detects Nextend Social Login users via the wp_social_users table instead of wrong meta key
-
-= Version 0.9.9 =
-* Fix: Manually added volunteers (via admin form or role grant) are now protected from auto-deletion and shown with a green Manual badge
-* New: Unverified volunteer accounts (registered but magic link never clicked) are auto-deleted daily after the link expires; deletion log visible on the Volunteers page
-* New: Unverified, Social Login, and Manual badges shown per volunteer in the admin Volunteers list
-* Fix: Admin users who also hold the volunteer role no longer lose access to the WordPress backend (explicit false caps removed from volunteer role definition)
-
-= Version 0.9.7 =
-* New: Admins can grant or remove the volunteer role from existing WordPress users directly on the Volunteers page — includes an upcoming-shift warning before removal
-* Fix: Category filter dropdown no longer overlaps shift cards on themes with non-standard heading sizes (replaced fragile negative margin with a flex layout)
-
-= Version 0.9.5 =
-* Fix: Bundled translations now always take priority over language packs from translate.wordpress.org, preventing incomplete community translations from overriding the plugin's own strings
-
-= Version 0.9.4 =
-* New: Assign existing volunteers directly from a dropdown when adding manually to a shift
-* New: Offline volunteers — add volunteers without an email address; a placeholder is created silently, no notifications sent
-* New: Per-shift organizer name and email — overrides the global notification address for both admin and volunteer emails on that shift
-* Fix: Duplicate assignment no longer possible when the same email is submitted twice (pre-check added)
-
-= Version 0.9.3 =
-* Fix: New strings from 0.9.2 (update notice, support section, plugin row links) now fully translated in all 8 bundled languages
-
-= Version 0.9.2 =
-* New: Donation and review links added to the plugin row in the Plugins list
-* New: "Support EventAdmin" section added to the Documentation page
-* New: Dismissible update notice shown to admins after plugin updates
-
-= Version 0.9.1 =
-* New: Translations added for German (de_DE, de_AT), Dutch (nl_NL, nl_NL_formal), French (fr_FR, fr_BE), and German Switzerland formal (de_CH)
-* Fix: Several translation errors corrected in de_CH and de_DE_formal
-
-= Version 0.9.0 =
-* New: Admin overview defaults to upcoming shifts — add "Show: Upcoming / Past / All" filter to see past or all shifts
-* New: Admin overview sortable by date or name, ascending or descending
-* New: Admin overview stats now include empty shifts and understaffed shifts
-* New: Bulk email tool — send custom announcements to all or opted-in volunteers, with real-time progress bar, batch processing (25 per request), failed delivery tracking, and a confirmation email to the sender
-* New: Email send history log on the announcement page (subject, message preview, recipients, failures, sent by)
-* New: Volunteers can opt out of announcements via their profile page (opted-in by default, existing users unaffected)
-
-= Version 0.8.0 =
-* Fix: Quick edit fields (start time, end time, max. volunteers) now pre-populate correctly when opening the quick edit row
-* Fix: "Period" column in the shift list is now sortable by start date/time
-* New: Optional "Full shifts" section on the volunteer shift selector page (disabled by default, enable under Settings)
-* New: Minimum volunteers field on shifts – admin dashboard shows an understaffed warning when the minimum has not been reached
-
-= Version 0.7.2 =
-* Bugfix release
-
-= Version 0.7.1 =
-* Tested up to WP 7.0
-* 1.6.0: CAPTCHA support, state filter, registration logging
-
-= Version 0.7 =
-* restrict access to shifts and departments for non-logged in users (and SEO)
-
-= Version 0.6 =
-* missing .pot file added to support translations
-
-= Version 0.5 =
-* Review Feedback 2.0
-
-= Version 0.4 =
-* i18n - Support Multilanguage
-
-= Version 0.3 =
-* Extension of admin interface
-
-= Version 0.2 =
-* Notification extensions
-
-= 0.1 =
-* Initial release
-* Shift management, volunteer registration, dashboard, export, rules
+For older versions, see changelog.txt in the plugin folder.
 
 == Upgrade Notice ==
+
+= 3.10.0 =
+Adds repeats every N weeks or months, multi-day shifts on every day in the Calendar, Volunteer and Status filters on the Day view, and adding or removing volunteers right from the shift window. No breaking changes.
 
 = 3.9.0 =
 Adds a Calendar tab and date picker for long-running events, weekly repeating shifts, optional per-department sign-up and per-department volunteer pages, and keeps volunteer pages out of page caches. No breaking changes.

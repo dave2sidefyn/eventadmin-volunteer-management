@@ -198,3 +198,8 @@
     display: block;
     margin: 0.8rem auto 0;
 }
+
+.eventadmin-form-wrapper .eventadmin-field-hint { display: block; font-size: .85rem; line-height: 1.5; font-weight: normal; color: #50575e; margin: 0 0 1rem; }
+@media (max-width: 600px) {
+    .eventadmin-form-wrapper { padding: 1rem; margin: 1rem auto; }
+}

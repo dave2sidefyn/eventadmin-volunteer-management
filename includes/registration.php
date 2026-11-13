@@ -328,24 +328,26 @@ function eventadmin_registration_form_shortcode($atts = []): bool|string
                 </form>
             </div>
             <div class="eventadmin-view" data-eventadmin-view="signup"<?php echo $show_login_view ? ' hidden' : ''; ?>>
+            <p class="eventadmin-field-hint"><?php esc_html_e('Register, then check your email for a login link. No password needed. All fields are required.', 'eventadmin-volunteer-management'); ?></p>
             <form method="post" class="eventadmin-form">
                 <?php wp_nonce_field('eventadmin_register_action', 'eventadmin_register_nonce'); ?>
                 <label><?php esc_html_e('First name', 'eventadmin-volunteer-management'); ?>
-                    <input type="text" name="eventadmin_firstname" required/>
+                    <input type="text" name="eventadmin_firstname" autocomplete="given-name" required/>
                 </label>
                 <label><?php esc_html_e('Last name', 'eventadmin-volunteer-management'); ?>
-                    <input type="text" name="eventadmin_lastname" required/>
+                    <input type="text" name="eventadmin_lastname" autocomplete="family-name" required/>
                 </label>
                 <label><?php esc_html_e('Phone number', 'eventadmin-volunteer-management'); ?>
-                    <input type="tel" name="eventadmin_phone" required/>
+                    <input type="tel" name="eventadmin_phone" autocomplete="tel" required/>
+                    <span class="eventadmin-field-hint"><?php esc_html_e('So we can reach you about last-minute changes.', 'eventadmin-volunteer-management'); ?></span>
                 </label>
                 <label><?php esc_html_e('E-Mail', 'eventadmin-volunteer-management'); ?>
-                    <input type="email" name="eventadmin_email" required/>
+                    <input type="email" name="eventadmin_email" autocomplete="email" required/>
                 </label>
                 <input type="hidden" name="eventadmin_redirect_to" value="<?php echo esc_url(get_permalink()); ?>"/>
                 <?php eventadmin_render_captcha_widget('-signup'); ?>
                 <input type="hidden" name="eventadmin_hp" value="">
-                <input type="submit" name="eventadmin_register_submit" value="<?php esc_attr_e('Register', 'eventadmin-volunteer-management'); ?>"/>
+                <input type="submit" name="eventadmin_register_submit" value="<?php esc_attr_e('Register and email me a login link', 'eventadmin-volunteer-management'); ?>"/>
             </form>
             </div>
             <?php // Honeypot: bots that don't run JavaScript leave this empty (checked in

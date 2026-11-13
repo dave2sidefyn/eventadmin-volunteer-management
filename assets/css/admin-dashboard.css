@@ -147,7 +147,7 @@
     gap: 4px;
 }
 
-/* Active filters as removable chips, plus "Clear filters". */
+/* Clear-filter action below the toolbar. */
 .eventadmin-active-filters {
     display: flex;
     flex-wrap: wrap;
@@ -155,24 +155,6 @@
     gap: 6px 10px;
     margin: 0 0 12px;
 }
-
-.eventadmin-active-filter {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 10px;
-    border-radius: 999px;
-    background: #f0f6fc;
-    border: 1px solid #c5d9ed;
-    color: #1d2327;
-    text-decoration: none;
-    font-size: 12px;
-}
-
-.eventadmin-active-filter:hover,
-.eventadmin-active-filter:focus { border-color: #2271b1; color: #2271b1; }
-
-.eventadmin-active-filter-label { color: #646970; }
 
 .eventadmin-clear-filters { font-size: 12px; }
 
@@ -637,3 +619,39 @@ a.eventadmin-cal-dayhead:focus { background: #f0f6fc; color: #2271b1; }
     .eventadmin-cal-chip { font-size: 13px; padding: 6px 8px; }
     .eventadmin-cal-legend-hint { margin-left: 0; }
 }
+
+/* Calendar summaries and assignment controls. */
+.eventadmin-cal-extra > summary, .eventadmin-new-volunteer > summary { cursor: pointer; }
+.eventadmin-cal-summary { margin: 0 3px 5px; color: #50575e; font-size: 11px; }
+.eventadmin-cal-extra .eventadmin-cal-chip { margin-top: 3px; }
+.eventadmin-cal-more { cursor: pointer; padding: 4px 6px; }
+.eventadmin-vol-navigation details { margin: 10px 0 18px; }
+.eventadmin-vol-navigation summary { cursor: pointer; font-weight: 600; }
+.eventadmin-vol-navigation details::after { content: ''; display: block; clear: both; }
+#eventadmin-vol-table.eventadmin-compact-columns th:nth-child(4),
+#eventadmin-vol-table.eventadmin-compact-columns td:nth-child(4),
+#eventadmin-vol-table.eventadmin-compact-columns th:nth-child(6),
+#eventadmin-vol-table.eventadmin-compact-columns td:nth-child(6),
+#eventadmin-vol-table.eventadmin-compact-columns th:nth-child(7),
+#eventadmin-vol-table.eventadmin-compact-columns td:nth-child(7) { display: none; }
+@media (max-width: 782px) {
+    .eventadmin-cal-chip { min-height: 44px; }
+    .eventadmin-modal-overlay > [role='dialog'] { margin: 16px 8px !important; max-height: calc(100dvh - 32px) !important; }
+    #eventadmin-roster-table { display: block; overflow-x: auto; }
+}
+@media (min-width: 1100px) {
+    #eventadmin-vol-table.eventadmin-compact-columns td:nth-child(2) > span > span,
+    #eventadmin-vol-table.eventadmin-compact-columns td:nth-child(3) a { max-width: none !important; }
+}
+#eventadmin-vol-columns[aria-pressed='true'] { background: #2271b1; color: #fff; }
+
+/* Keep the selected day available while editing a long roster. */
+#eventadmin-overview-filters {
+    position: sticky;
+    top: var(--wp-admin--admin-bar--height, 32px);
+    z-index: 90;
+    background: #f0f0f1;
+    padding-block: 10px;
+    border-bottom: 1px solid #c3c4c7;
+}
+@media (max-width: 600px) { #eventadmin-overview-filters { top: 0; } }

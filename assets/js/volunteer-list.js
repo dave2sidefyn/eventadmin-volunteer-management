@@ -39,6 +39,14 @@ jQuery(function ($) {
         }
     });
 
+    $('#eventadmin-vol-columns').on('click', function () {
+        const expanded = $('#eventadmin-vol-table').toggleClass('eventadmin-compact-columns').hasClass('eventadmin-compact-columns') === false;
+        $(this).attr('aria-pressed', String(expanded));
+    });
+    $(document).on('keydown', '#eventadmin-vol-table th[data-sort]', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); $(this).trigger('click'); }
+    });
+
     // Volunteer table: search
     function updateCount() {
         const visible = $('#eventadmin-vol-table tbody tr:visible').length;
@@ -60,6 +68,8 @@ jQuery(function ($) {
         volSortAsc = volSortCol === col ? !volSortAsc : true;
         volSortCol = col;
         $('#eventadmin-vol-table thead th .eventadmin-sort-icon').text('↕').css('opacity', '.4');
+        $('#eventadmin-vol-table th[data-sort]').attr('aria-sort', 'none');
+        $(this).attr('aria-sort', volSortAsc ? 'ascending' : 'descending');
         $(this).find('.eventadmin-sort-icon').text(volSortAsc ? '↑' : '↓').css('opacity', '1');
         const $tbody = $('#eventadmin-vol-table tbody');
         const rows   = $tbody.find('tr').toArray();

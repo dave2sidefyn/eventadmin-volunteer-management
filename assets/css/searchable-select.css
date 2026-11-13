@@ -1,0 +1,12 @@
+.eventadmin-search-select { position: relative; width: 100%; }
+.eventadmin-search-select-trigger.button { width: 100%; text-align: left; white-space: normal; padding-right: 28px; position: relative; }
+.eventadmin-search-select-trigger::after { content: '▾'; position: absolute; right: 10px; }
+.eventadmin-search-select-popup { position: absolute; z-index: 10; top: 100%; left: 0; right: 0; padding: 8px; background: #fff; border: 1px solid #8c8f94; box-shadow: 0 3px 8px #0002; }
+.eventadmin-search-select-popup[hidden] { display: none; }
+.eventadmin-search-select-popup input { width: 100%; margin-bottom: 6px; }
+.eventadmin-search-select-popup [role='listbox'] { max-height: min(240px, 35dvh); overflow-y: auto; }
+.eventadmin-search-select-popup [role='option'] { padding: 8px; cursor: pointer; overflow-wrap: anywhere; }
+.eventadmin-search-select-popup [aria-selected='true'] { background: #2271b1; color: #fff; }
+.eventadmin-search-select-trigger[aria-invalid='true'] { border-color: #d63638; }
+
+.eventadmin-roster-add-panel[hidden], .eventadmin-roster-reveal[hidden] { display: none !important; }

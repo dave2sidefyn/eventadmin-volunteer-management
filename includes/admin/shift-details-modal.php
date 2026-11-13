@@ -95,10 +95,16 @@ function eventadmin_render_shift_details_modal_markup(): void
     echo '</p>';
     echo '</div>';
 
-    echo '<h3>' . esc_html__('Volunteers on this shift', 'eventadmin-volunteer-management') . '</h3>';
-    echo '<div id="eventadmin-shift-roster"></div>';
+    echo '<section id="eventadmin-shift-roster-section" aria-labelledby="eventadmin-shift-roster-heading" style="display:none;">';
+    echo '<h3 id="eventadmin-shift-roster-heading">' . esc_html__('Volunteers on this shift', 'eventadmin-volunteer-management') . '</h3>';
+    echo '<div id="eventadmin-shift-roster"></div></section>';
 
-    echo '<p style="margin-top:16px;"><a href="#" id="eventadmin-edit-shift-full-link" target="_blank" class="button" style="display:none;">' . esc_html__('Open full editor', 'eventadmin-volunteer-management') . '</a></p>';
+    echo '<dialog id="eventadmin-remove-confirm" aria-labelledby="eventadmin-remove-confirm-heading" aria-describedby="eventadmin-remove-confirm-question eventadmin-remove-confirm-context" style="width:min(440px,calc(100vw - 48px));padding:24px;border:1px solid #c3c4c7;border-radius:8px;box-shadow:0 8px 40px #0004;">';
+    echo '<h3 id="eventadmin-remove-confirm-heading" style="margin-top:0;">' . esc_html__('Remove from shift', 'eventadmin-volunteer-management') . '</h3>';
+    echo '<p id="eventadmin-remove-confirm-question"></p><p id="eventadmin-remove-confirm-context" class="description"></p>';
+    echo '<p id="eventadmin-remove-notify-row"><label><input type="checkbox" id="eventadmin-remove-notify"> ' . esc_html__('Notify volunteer', 'eventadmin-volunteer-management') . '</label></p>';
+    echo '<p><button type="button" class="button" id="eventadmin-remove-cancel" autofocus>' . esc_html__('Cancel', 'eventadmin-volunteer-management') . '</button> ';
+    echo '<button type="button" class="button button-primary" id="eventadmin-remove-submit">' . esc_html__('Remove from shift', 'eventadmin-volunteer-management') . '</button></p></dialog>';
     eventadmin_render_modal_close();
 }
 
@@ -113,11 +119,12 @@ function eventadmin_render_shift_details_modal_markup(): void
  */
 function eventadmin_enqueue_shift_details_modal_script(array $extra = []): void
 {
+    eventadmin_enqueue_searchable_select();
     $shift_details_modal_js_path = plugin_dir_path(__FILE__) . '../../assets/js/shift-details-modal.js';
     wp_enqueue_script(
         'eventadmin-shift-details-modal',
         plugin_dir_url(__FILE__) . '../../assets/js/shift-details-modal.js',
-        [],
+        ['eventadmin-searchable-select'],
         file_exists($shift_details_modal_js_path) ? filemtime($shift_details_modal_js_path) : null,
         true
     );
@@ -135,6 +142,8 @@ function eventadmin_enqueue_shift_details_modal_script(array $extra = []): void
             'loading'        => esc_html__('Loading…', 'eventadmin-volunteer-management'),
             'editShift'      => esc_html__('Edit shift', 'eventadmin-volunteer-management'),
             'addShift'       => esc_html__('Add shift', 'eventadmin-volunteer-management'),
+            /* translators: %s is the volunteer's name. */
+            'confirmRemove' => esc_html__('Remove %s from this shift?', 'eventadmin-volunteer-management'),
             'requiredFields' => esc_html__('Title, start and end are required.', 'eventadmin-volunteer-management'),
         ],
     ], $extra);
@@ -177,6 +186,7 @@ function eventadmin_ajax_get_shift_details(): void
     $terms        = wp_get_post_terms($shift_id, 'eventadmin_shift_category');
     $assigned_ids = eventadmin_get_shift_assigned_user_ids($shift_id);
     $can_edit     = current_user_can('edit_post', $shift_id);
+    $can_manage_roster = $can_edit && current_user_can('eventadmin_manage_shifts');
 
     ob_start();
     if (empty($assigned_ids)) {
@@ -189,9 +199,33 @@ function eventadmin_ajax_get_shift_details(): void
                 continue;
             }
             $name = trim($volunteer->first_name . ' ' . $volunteer->last_name) ?: $volunteer->user_login;
-            echo '<tr><td><button type="button" class="button-link eventadmin-view-volunteer-profile" data-user-id="' . esc_attr($volunteer_id) . '" data-name="' . esc_attr($name) . '">' . esc_html($name) . '</button></td></tr>';
+            echo '<tr><td><button type="button" class="button-link eventadmin-view-volunteer-profile" data-user-id="' . esc_attr($volunteer_id) . '" data-name="' . esc_attr($name) . '">' . esc_html($name) . '</button></td>';
+            if ($can_manage_roster) {
+                echo '<td><button type="button" class="button-link eventadmin-roster-remove" data-can-notify="' . (eventadmin_user_can_receive_email($volunteer_id) ? '1' : '0') . '" data-user-id="' . esc_attr($volunteer_id) . '" aria-label="' . esc_attr__('Remove from shift', 'eventadmin-volunteer-management') . ' — ' . esc_attr($name) . '">' . esc_html__('Remove from shift', 'eventadmin-volunteer-management') . '</button></td>';
+            }
+            echo '</tr>';
         }
         echo '</tbody></table>';
+    }
+    if ($can_manage_roster) {
+        echo '<div class="eventadmin-roster-controls">';
+        if (count($assigned_ids) < $max) {
+            echo '<p><button type="button" class="button eventadmin-roster-reveal" aria-expanded="false" aria-controls="eventadmin-roster-add-panel">' . esc_html__('Add volunteer', 'eventadmin-volunteer-management') . '</button></p>';
+            echo '<div id="eventadmin-roster-add-panel" class="eventadmin-roster-add-panel" hidden>';
+            echo '<p><select class="eventadmin-roster-select" id="eventadmin-roster-select" aria-label="' . esc_attr__('Select existing volunteer…', 'eventadmin-volunteer-management') . '" data-search-label="' . esc_attr__('Search volunteers…', 'eventadmin-volunteer-management') . '" data-empty-label="' . esc_attr__('No volunteers found.', 'eventadmin-volunteer-management') . '">';
+            echo '<option value="">' . esc_html__('Select existing volunteer…', 'eventadmin-volunteer-management') . '</option>';
+            foreach (get_users(['role' => 'eventadmin_volunteer', 'exclude' => $assigned_ids, 'orderby' => 'display_name', 'order' => 'ASC']) as $candidate) {
+                $label = trim($candidate->first_name . ' ' . $candidate->last_name) ?: $candidate->user_login;
+                if (eventadmin_user_can_receive_email($candidate->ID)) $label .= ' — ' . $candidate->user_email;
+                echo '<option value="' . esc_attr($candidate->ID) . '">' . esc_html($label) . '</option>';
+            }
+            echo '</select></p>';
+            echo '<label><input type="checkbox" class="eventadmin-roster-notify"> ' . esc_html__('Send confirmation email', 'eventadmin-volunteer-management') . '</label>';
+            echo '<p><button type="button" class="button button-primary eventadmin-roster-add">' . esc_html__('Add to shift', 'eventadmin-volunteer-management') . '</button> <button type="button" class="button eventadmin-roster-add-cancel">' . esc_html__('Cancel', 'eventadmin-volunteer-management') . '</button></p></div>';
+        } else {
+            echo '<p>' . esc_html__('This shift is already full.', 'eventadmin-volunteer-management') . '</p>';
+        }
+        echo '<p class="eventadmin-roster-message" role="status"></p></div>';
     }
     $roster_html = ob_get_clean();
 
@@ -216,3 +250,47 @@ function eventadmin_ajax_get_shift_details(): void
 }
 
 add_action('wp_ajax_eventadmin_get_shift_details', 'eventadmin_ajax_get_shift_details');
+
+/** Add/remove a roster member using the same authorization and assignment rules as the manager. */
+function eventadmin_ajax_change_shift_roster(): void
+{
+    $shift_id = absint($_POST['shift_id'] ?? 0);
+    $shift = eventadmin_ajax_verify_timeline_nonce($shift_id, 'edit_post');
+    if (!current_user_can('eventadmin_manage_shifts')) {
+        wp_send_json_error(['message' => esc_html__('Not allowed', 'eventadmin-volunteer-management')]);
+    }
+    $user_id = absint($_POST['user_id'] ?? 0);
+    $user = get_userdata($user_id);
+    $operation = sanitize_key(wp_unslash($_POST['operation'] ?? ''));
+    if (!$user || !in_array($operation, ['assign', 'unassign'], true)) {
+        wp_send_json_error(['message' => esc_html__('Invalid volunteer selected.', 'eventadmin-volunteer-management')]);
+    }
+    $key = 'assigned_user_' . $user_id;
+    if ($operation === 'assign') {
+        if (!in_array('eventadmin_volunteer', (array) $user->roles, true)) {
+            wp_send_json_error(['message' => esc_html__('Invalid volunteer selected.', 'eventadmin-volunteer-management')]);
+        }
+        if (eventadmin_count_assignments($shift_id) >= (int) get_post_meta($shift_id, 'max_volunteers', true)) {
+            wp_send_json_error(['message' => esc_html__('This shift is already full.', 'eventadmin-volunteer-management')]);
+        }
+        $error = eventadmin_check_match_schicht_user($user_id, $shift_id);
+        if ($error !== 'ok') wp_send_json_error(['message' => $error]);
+        if (!add_post_meta($shift_id, $key, $user_id, true)) {
+            wp_send_json_error(['message' => esc_html__('This volunteer is already assigned to this shift.', 'eventadmin-volunteer-management')]);
+        }
+    } else {
+        if (!get_post_meta($shift_id, $key, true)) {
+            wp_send_json_error(['message' => esc_html__('This volunteer is not assigned to this shift.', 'eventadmin-volunteer-management')]);
+        }
+        delete_post_meta($shift_id, $key);
+    }
+    eventadmin_log_shift_activity($operation, $user_id, $shift_id, 'admin');
+    if (!empty($_POST['notify_volunteer']) && eventadmin_user_can_receive_email($user_id)) {
+        eventadmin_send_shift_un_assignment_notification($user_id, $shift_id, $operation, false, true);
+    }
+    wp_send_json_success([
+        'rows' => eventadmin_build_timeline_rows_for_shift($shift, !empty($_POST['show_open'])),
+        'assigned' => eventadmin_get_shift_assigned_user_ids($shift_id),
+    ]);
+}
+add_action('wp_ajax_eventadmin_change_shift_roster', 'eventadmin_ajax_change_shift_roster');

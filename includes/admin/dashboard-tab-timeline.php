@@ -75,6 +75,7 @@ function eventadmin_build_timeline_rows_for_shift(WP_Post $shift, bool $show_ope
             'shift_id'     => $shift->ID,
             'period'       => $period,
             'capacity'     => $capacity_label,
+            'staffing'     => ['assigned' => $assigned, 'min' => $min, 'max' => $max],
             'start'        => $start_ts,
             'end'          => $end_ts,
             'color'        => $bar_color,
@@ -97,6 +98,7 @@ function eventadmin_build_timeline_rows_for_shift(WP_Post $shift, bool $show_ope
                 'shift_id'     => $shift->ID,
                 'period'       => $period,
                 'capacity'     => $capacity_label,
+                'staffing'     => ['assigned' => $assigned, 'min' => $min, 'max' => $max],
                 'start'        => $start_ts,
                 'end'          => $end_ts,
                 'color'        => '#e53935',
@@ -111,6 +113,7 @@ function eventadmin_build_timeline_rows_for_shift(WP_Post $shift, bool $show_ope
                 'shift_id'     => $shift->ID,
                 'period'       => $period,
                 'capacity'     => $capacity_label,
+                'staffing'     => ['assigned' => $assigned, 'min' => $min, 'max' => $max],
                 'start'        => $start_ts,
                 'end'          => $end_ts,
                 'color'        => '#9e9e9e',
@@ -193,7 +196,7 @@ function eventadmin_render_timeline_chart(array $timeline_rows): void
  *                                config as the default date for a newly created shift.
  * @return void
  */
-function eventadmin_render_timeline_shift_modals_and_config(string $view, array $shift_edit_map, bool $show_open, string $selected_date): void
+function eventadmin_render_timeline_shift_modals_and_config(string $view, array $shift_edit_map, bool $show_open, string $selected_date, string $selected_state = '', int $selected_volunteer = 0): void
 {
     if ($view !== 'timeline') {
         return;
@@ -257,6 +260,8 @@ function eventadmin_render_timeline_shift_modals_and_config(string $view, array 
         'move_shifts'  => $move_shift_options,
         'show_open'    => $show_open,
         'default_date' => $selected_date,
+        // Lets live row patches (admin-charts.js) keep honoring the active filters.
+        'filters'      => ['state' => $selected_state, 'volunteer' => $selected_volunteer],
         'i18n'         => [
             'error'             => esc_html__('An error occurred. Please try again.', 'eventadmin-volunteer-management'),
             'loading'           => esc_html__('Loading…', 'eventadmin-volunteer-management'),

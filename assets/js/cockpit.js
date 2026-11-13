@@ -1,16 +1,28 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const tabs = document.querySelectorAll('.tab-item');
-    const panels = document.querySelectorAll('.tab-panel');
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const target = tab.dataset.tab;
-
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-
-            panels.forEach(panel => {
-                panel.style.display = panel.id === target ? 'block' : 'none';
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.eventadmin-tabs').forEach(root => {
+        const tabs = [...root.querySelectorAll('[role="tab"]')];
+        const panels = [...root.querySelectorAll('[role="tabpanel"]')];
+        function select(tab) {
+            tabs.forEach(item => {
+                const active = item === tab;
+                item.classList.toggle('active', active);
+                item.setAttribute('aria-selected', String(active));
+                item.tabIndex = active ? 0 : -1;
+            });
+            panels.forEach(panel => { panel.hidden = panel.id !== tab.dataset.tab; });
+        }
+        tabs.forEach((tab, index) => {
+            tab.addEventListener('click', () => select(tab));
+            tab.addEventListener('keydown', event => {
+                let next;
+                if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+                if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
+                if (event.key === 'Home') next = 0;
+                if (event.key === 'End') next = tabs.length - 1;
+                if (next === undefined) return;
+                event.preventDefault();
+                select(tabs[next]);
+                tabs[next].focus();
             });
         });
     });
@@ -48,7 +60,7 @@ jQuery(document).ready(function ($) {
     });
 
     // Message element
-    const $msg = $('<div class="shift-message" style="display:none;"></div>').prependTo('body');
+    const $msg = $('<div class="shift-message" role="status" aria-live="polite" style="display:none;"></div>').prependTo('body');
 
     $eventadmin.on('submit', function (e) {
         e.preventDefault();
@@ -63,6 +75,9 @@ jQuery(document).ready(function ($) {
         // Add nonce
         dataArray.push({name: '_ajax_nonce', value: eventadmin_ajax.nonce});
 
+        if (form.data('pending')) return;
+        form.data('pending', true);
+        form.find(':submit').prop('disabled', true);
         const data = form.serialize();
         $.post(eventadmin_ajax.ajax_url, dataArray, function (response) {
             $msg.removeClass('success error').addClass(response.success ? 'success' : 'error')
@@ -116,11 +131,39 @@ jQuery(document).ready(function ($) {
                         }
 
                         sortShiftsByStart($target);
+                        applyShiftFilters();
+                        labelActions();
                     });
                 });
             }
+        }).fail(function () {
+            $msg.removeClass('success').addClass('error').text(eventadmin_ajax.i18n.unknown_error).show();
+        }).always(function () {
+            form.data('pending', false);
+            form.find(':submit').prop('disabled', false);
         });
     });
+
+    function labelActions() {
+        $('.eventadmin-assign-form').each(function () {
+            const button = $(this).find(':submit');
+            button.attr('aria-label', button.val() + ' — ' + $(this).data('context'));
+        });
+    }
+    function groupDays() {
+        $('.shift-section').each(function () {
+            const section = $(this);
+            section.find('.shift-day-heading').remove();
+            let previous = '';
+            section.find('.shift-box').each(function () {
+                if (this.hidden) return;
+                const date = this.dataset.shiftDate;
+                if (date !== previous) $('<h3 class="shift-day-heading">').text(this.dataset.dateLabel).insertBefore(this);
+                previous = date;
+            });
+        });
+    }
+    labelActions();
 
     // Unified shift filter (applies to available-shifts section only)
     const activeFilters = { category: 'all', text: '', date: '' };
@@ -138,12 +181,25 @@ jQuery(document).ready(function ($) {
             const dateOk = !activeFilters.date || startDate === activeFilters.date;
 
             if (catOk && textOk && dateOk) {
-                $box.slideDown(200);
+                $box.prop('hidden', false).show();
             } else {
-                $box.slideUp(200);
+                $box.prop('hidden', true).hide();
             }
         });
+        const open = $('#section-open-shifts');
+        const anyVisible = open.find('.shift-box').toArray().some(box => !box.hidden);
+        $('#eventadmin-filter-empty').prop('hidden', anyVisible || !open.find('.shift-box').length);
+        $('.eventadmin-clear-shift-filters').prop('hidden', !activeFilters.text && !activeFilters.date && activeFilters.category === 'all');
+        groupDays();
     }
+
+    $('.eventadmin-clear-shift-filters').on('click', function () {
+        activeFilters.category = 'all'; activeFilters.text = ''; activeFilters.date = '';
+        $('#shift-category-filter').val('all'); $('#shift-text-filter, #shift-date-filter').val('');
+        applyShiftFilters();
+        $('#shift-text-filter, #shift-date-filter, #shift-category-filter').first().trigger('focus');
+    });
+    $('.eventadmin-find-shift').on('click', function () { $('#section-open-shifts').trigger('focus'); });
 
     $('#shift-category-filter').on('change', function () {
         activeFilters.category = $(this).val();
@@ -160,4 +216,5 @@ jQuery(document).ready(function ($) {
         applyShiftFilters();
     });
 
+    applyShiftFilters();
 });

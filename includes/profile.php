@@ -107,8 +107,8 @@ function eventadmin_profile_shortcode(): bool|string|null
                 );
                 ?>
                 <details class="eventadmin-departments-toggle eventadmin-department-checklist"<?php echo !empty($linked_departments) ? ' open' : ''; ?>>
-                    <summary><?php esc_html_e('Advanced: notify me about specific departments', 'eventadmin-volunteer-management'); ?></summary>
-                    <p><?php esc_html_e('Also notify me about new shifts in:', 'eventadmin-volunteer-management'); ?></p>
+                    <summary><?php esc_html_e('Departments I want updates about', 'eventadmin-volunteer-management'); ?></summary>
+                    <p><?php esc_html_e('These departments can send you updates independently of general announcements. This does not change which shifts you can sign up for.', 'eventadmin-volunteer-management'); ?></p>
                     <?php foreach ($departments as $department) : ?>
                         <label class="eventadmin-checkbox-label"<?php echo $department->depth > 0 ? ' style="margin-left:' . esc_attr($department->depth * 20) . 'px;"' : ''; ?>>
                             <input type="checkbox" class="eventadmin-department-checkbox" data-depth="<?php echo esc_attr($department->depth); ?>"

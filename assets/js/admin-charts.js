@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (filtersToggle && filtersForm) {
         filtersToggle.addEventListener('click', () => {
             const isOpen = filtersForm.classList.toggle('is-open');
+            filtersToggle.setAttribute('aria-expanded', String(isOpen));
             filtersToggle.textContent = isOpen ? filtersToggle.dataset.hideLabel : filtersToggle.dataset.showLabel;
         });
     }
@@ -67,8 +68,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (e.target === copyShiftsModal) closeCopyShiftsModal();
         });
 
-        // "Repeat every week": show the "until" date (required then) and hide "copy
-        // volunteers", which a weekly series never does.
+        // "Repeat": show the interval/end options and hide "copy volunteers", which a
+        // series never does. The end field that's chosen (date or count) is required.
         const repeatToggle = document.getElementById('eventadmin-copy-repeat-weekly');
         const repeatUntilRow = document.getElementById('eventadmin-copy-repeat-until-row');
         const repeatUntil = document.getElementById('eventadmin-copy-repeat-until');
@@ -77,7 +78,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const syncRepeat = () => {
                 const on = repeatToggle.checked;
                 repeatUntilRow.style.display = on ? '' : 'none';
-                repeatUntil.required = on;
+                const endsAfter = repeatUntilRow.querySelector('input[name="copy_repeat_end"]:checked')?.value === 'after';
+                const repeatCount = document.getElementById('eventadmin-copy-repeat-count');
+                repeatUntil.required = on && !endsAfter;
+                repeatUntil.disabled = endsAfter;
+                if (repeatCount) { repeatCount.required = on && endsAfter; repeatCount.disabled = !endsAfter; }
                 if (copyVolunteersRow) {
                     copyVolunteersRow.style.display = on ? 'none' : '';
                     const box = copyVolunteersRow.querySelector('input[type="checkbox"]');
@@ -85,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             };
             repeatToggle.addEventListener('change', syncRepeat);
+            repeatUntilRow.addEventListener('change', syncRepeat);
             syncRepeat();
         }
     }
@@ -99,6 +105,16 @@ document.addEventListener('DOMContentLoaded', function () {
         const modalCloseBtn      = document.getElementById('eventadmin-modal-close');
         const modalPlaceholderText = modalExistingSelect.options.length ? modalExistingSelect.options[0].textContent : '';
 
+        const volunteerPicker = eventadminSearchableSelect(modalExistingSelect);
+
+        function renderVolunteerOptions(info) {
+            modalExistingSelect.replaceChildren(new Option(modalPlaceholderText, ''));
+            EVENTADMIN_VOLUNTEERS.filter(v => !info.assigned.includes(v.id))
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .forEach(v => modalExistingSelect.add(new Option(v.label, String(v.id))));
+            modalExistingSelect.value = '';
+            volunteerPicker.refresh();
+        }
         window.eventadminOpenAddVolunteerModal = function (shiftId) {
             const info = EVENTADMIN_SHIFT_INFO[shiftId];
             if (!info) return;
@@ -107,21 +123,9 @@ document.addEventListener('DOMContentLoaded', function () {
             modalShiftIdExisting.value = shiftId;
             modalShiftIdNew.value = shiftId;
 
-            modalExistingSelect.innerHTML = '';
-            const placeholder = document.createElement('option');
-            placeholder.value = '';
-            placeholder.textContent = modalPlaceholderText;
-            modalExistingSelect.appendChild(placeholder);
-
-            EVENTADMIN_VOLUNTEERS
-                .filter(v => !info.assigned.includes(v.id))
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .forEach(v => {
-                    const opt = document.createElement('option');
-                    opt.value = v.id;
-                    opt.textContent = v.label;
-                    modalExistingSelect.appendChild(opt);
-                });
+            document.getElementById('eventadmin-modal-shift-context').textContent = [info.period, info.capacity].filter(Boolean).join(' · ');
+            addVolunteerModal.querySelector('.eventadmin-new-volunteer').open = false;
+            renderVolunteerOptions(info);
 
             addVolunteerModal.style.display = 'block';
         };
@@ -1270,7 +1274,25 @@ document.addEventListener('DOMContentLoaded', function () {
         // Swaps every row belonging to shiftId for a freshly computed set (fewer assigned
         // rows, possibly a new open-slot row) and rebuilds the chart's labels/data/colors
         // in lockstep, since the row count itself can change.
-        function replaceShiftRows(shiftId, newRows) {
+        // Whether a shift's fresh rows still match the page's Status/Volunteer filters, so a
+        // live edit can't leave a shift on screen that the server would no longer list.
+        function matchesActiveFilters(newRows) {
+            const filters = (typeof EVENTADMIN_SHIFT_EDIT !== 'undefined' && EVENTADMIN_SHIFT_EDIT.filters) || {};
+            const staffing = newRows[0] && newRows[0].staffing;
+            if (!staffing) return true;
+            const volunteer = Number(filters.volunteer) || 0;
+            if (volunteer && !newRows.some(row => !row.open && Number(row.volunteer_id) === volunteer)) return false;
+            switch (filters.state) {
+                case 'empty': return staffing.assigned === 0;
+                case 'full': return staffing.assigned >= staffing.max;
+                case 'understaffed': return staffing.assigned < staffing.max;
+                case 'heavilyunderstaffed': return staffing.min > 0 && staffing.assigned < staffing.min;
+                default: return true;
+            }
+        }
+
+        function replaceShiftRows(shiftId, newRows, ignoreFilters = false) {
+            const visibleRows = ignoreFilters || matchesActiveFilters(newRows) ? newRows : [];
             let insertAt = rows.length;
             for (let i = rows.length - 1; i >= 0; i--) {
                 if (rows[i].shift_id === shiftId) {
@@ -1278,7 +1300,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     rows.splice(i, 1);
                 }
             }
-            rows.splice(insertAt, 0, ...newRows);
+            rows.splice(insertAt, 0, ...visibleRows);
+            if (typeof EVENTADMIN_SHIFT_INFO !== 'undefined' && newRows.length) {
+                const title = document.createElement('textarea'); title.innerHTML = newRows[0].shift;
+                EVENTADMIN_SHIFT_INFO[shiftId] = {
+                    title: title.value, period: newRows[0].period, capacity: newRows[0].capacity,
+                    assigned: newRows.filter(row => !row.open).map(row => row.volunteer_id),
+                };
+            }
 
             timelineChart.data.labels = rows.map((r) => r.volunteer);
             timelineChart.data.datasets[0].data = rows.map((r) => [r.start * 1000, r.end * 1000]);
@@ -1300,6 +1329,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // no idea a chart even exists; it's reused unchanged on pages that don't have one (a
     // volunteer's profile, the Overview dashboard).
     if (typeof EVENTADMIN_SHIFT_EDIT !== 'undefined') {
+        if (timelineState) {
+            window.eventadminOnShiftRosterChanged = function (shiftId, data) {
+                timelineState.replaceShiftRows(shiftId, data.rows);
+            };
+        }
         window.eventadminOnShiftSaved = function (shiftId, data) {
             if (timelineState) {
                 timelineState.replaceShiftRows(shiftId, data.rows);
@@ -1313,7 +1347,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     const showOpenCheckbox = document.querySelector('#eventadmin-overview-filters input[name="show_open"][type="checkbox"]');
                     if (showOpenCheckbox) showOpenCheckbox.checked = true;
                 }
-                timelineState.replaceShiftRows(shiftId, data.rows);
+                // A shift the manager just created stays visible even if it doesn't match
+                // the current filters — otherwise it would seem to vanish.
+                timelineState.replaceShiftRows(shiftId, data.rows, true);
                 if (typeof window.eventadminCloseShiftDetailsModal === 'function') {
                     window.eventadminCloseShiftDetailsModal();
                 }
