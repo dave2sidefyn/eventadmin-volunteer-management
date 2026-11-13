@@ -2,8 +2,6 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-For the 3.10.0 Manager/volunteer UX decisions (designs the user rejected — don't reintroduce them), read [CLAUDE_HANDOFF.md](CLAUDE_HANDOFF.md).
-
 ## Project Overview
 
 **EventAdmin – Volunteer Management** is a WordPress plugin for managing volunteers at events. It allows organizers to create shifts, volunteers to self-register, and tracks sign-ups/cancellations.
@@ -72,6 +70,19 @@ No custom database tables – everything uses WP post meta, user meta, and optio
 `eventadmin_shift` uses its own capability type (`capability_type => 'eventadmin_shift'`, `map_meta_cap => true`) rather than the default `post` one, so shift permissions are independent of blog-post editing rights. `eventadmin_shift_category` likewise declares its own `capabilities` (`eventadmin_manage_departments` for manage/edit/delete terms, `eventadmin_manage_shifts` for assigning them) instead of falling back to the generic `manage_categories`/`edit_terms`/etc., which are shared with the site's own blog post categories. Both custom roles and their capabilities are registered/synced in `eventadmin_register_management_roles()` in `includes/helpers.php`.
 
 The Settings → General "hide All Shifts/Add Shift/Departments menu" options (`admin/dashboard-menu.php`) hide those items with CSS rather than removing them from `$submenu`. Removing an item from `$submenu` — whether via `array_filter()` or WordPress's own `remove_submenu_page()`, which does the same `unset()` — breaks `get_admin_page_parent()`'s only way of resolving `post-new.php?post_type=eventadmin_shift` back to its parent menu, which for a role without the generic `edit_posts` capability (e.g. `eventadmin_shift_manager`) falls through to an unscoped WordPress core nopriv check keyed on the bare `post-new.php` pagenow and incorrectly denies access. Keep hiding these CSS-only.
+
+### Manager & volunteer UX decisions (3.10.0 — don't reintroduce rejected designs)
+- **Table view** keeps one row per volunteer assignment plus one per open slot. A grouped roster was tried and rejected (looked too much like Cards).
+- **Mobile Day view** keeps the editable timeline. A separate mobile agenda/list was tried and rejected.
+- **Date/time formats**: always use `eventadmin_get_formatted_zeitraum()` and the configured `eventadmin_shift_date_format` / `eventadmin_shift_time_format`. No abbreviated or hard-coded formats.
+- **Release notice** (`eventadmin_update_notice()`) keeps its current size and prominent rating button; a smaller, collapsed version was rejected.
+- **No active-filter chips** — the dropdowns already show the selection; keep the mobile filter count and "Clear filters". (Date-navigator chips and calendar shift chips are something else and stay.)
+- **Filters on every Manager tab**: Volunteer and Status (Empty / Full / Understaffed / Heavily understaffed; Full = assigned ≥ max) show on Day, Calendar, Table and Cards. Switching tabs keeps the volunteer; "Anyone" clears it. Day's live row patches (`replaceShiftRows()` in admin-charts.js, rows carry `staffing`, config `EVENTADMIN_SHIFT_EDIT.filters`) honor them; a just-created shift stays visible. Shift IDs passed to timeline callbacks must be numbers (strict `===`).
+- **"Open slots"** is a Day-only view option (empty timeline rows). The Calendar has one chip per shift, capacity counts and a daily summary instead.
+- **Shift window roster** (`includes/admin/shift-details-modal.php`, AJAX `eventadmin_change_shift_roster`): "Add volunteer" is progressive disclosure (searchable picker → "Send confirmation email" checkbox above "Add to shift" → Cancel resets); hidden when full. Removing always asks for confirmation in a native `<dialog>` naming volunteer and shift, with its own unchecked "Notify volunteer" (hidden for volunteers who can't receive email); Cancel/Escape removes nobody. No "Open full editor" link. The roster section is hidden while creating or duplicating a shift.
+- **Multi-day shifts** show on every day they occupy (an end at exactly midnight doesn't occupy the next day); "Copy shifts" still copies only shifts that *start* on the source day.
+- **Modal focus trap** (`assets/js/modal-accessibility.js`) must leave TinyMCE's link toolbar / WordPress link dialog alone — they render outside the overlay.
+- Regression scripts from this work live in `design/handoff/2026-11-13/checks/` (the two `*-integration.php` ones run via `wp eval-file` against the local plugin-tester site only; they create and remove their own fixtures).
 
 ### Frontend Shortcodes
 - `[eventadmin_cockpit]` – main volunteer-facing page
