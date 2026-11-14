@@ -82,7 +82,6 @@ The Settings → General "hide All Shifts/Add Shift/Departments menu" options (`
 - **Shift window roster** (`includes/admin/shift-details-modal.php`, AJAX `eventadmin_change_shift_roster`): "Add volunteer" is progressive disclosure (searchable picker → "Send confirmation email" checkbox above "Add to shift" → Cancel resets); hidden when full. Removing always asks for confirmation in a native `<dialog>` naming volunteer and shift, with its own unchecked "Notify volunteer" (hidden for volunteers who can't receive email); Cancel/Escape removes nobody. No "Open full editor" link. The roster section is hidden while creating or duplicating a shift.
 - **Multi-day shifts** show on every day they occupy (an end at exactly midnight doesn't occupy the next day); "Copy shifts" still copies only shifts that *start* on the source day.
 - **Modal focus trap** (`assets/js/modal-accessibility.js`) must leave TinyMCE's link toolbar / WordPress link dialog alone — they render outside the overlay.
-- Regression scripts from this work live in `design/handoff/2026-11-13/checks/` (the two `*-integration.php` ones run via `wp eval-file` against the local plugin-tester site only; they create and remove their own fixtures).
 
 ### Frontend Shortcodes
 - `[eventadmin_cockpit]` – main volunteer-facing page
