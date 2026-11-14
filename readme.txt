@@ -4,7 +4,7 @@ Tags: volunteer, volunteer management, shift scheduling, event management, roste
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.10.0
+Stable tag: 3.10.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.10.1 =
+* Fix: With "Shifts per department" on, the "Departments I want updates about" list in a volunteer's profile only shows the departments they may sign up for (and their sub-departments), so volunteers no longer see departments meant for others. Existing subscriptions are kept
 
 = Version 3.10.0 =
 * New: Flexible repeats in "Copy shifts to another day" — every N weeks or months, ending on a date or after a number of times (up to 52 dates). Monthly repeats keep the day of the month and skip months without it
@@ -250,6 +253,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 For older versions, see changelog.txt in the plugin folder.
 
 == Upgrade Notice ==
+
+= 3.10.1 =
+Volunteers limited by "Shifts per department" no longer see other departments in their profile's update settings. No breaking changes.
 
 = 3.10.0 =
 Adds repeats every N weeks or months, multi-day shifts on every day in the Calendar, Volunteer and Status filters on the Day view, and adding or removing volunteers right from the shift window. No breaking changes.

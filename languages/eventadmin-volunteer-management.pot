@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: EventAdmin – Volunteer Management 3.10.0\n"
+"Project-Id-Version: EventAdmin – Volunteer Management 3.10.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eventadmin-volunteer-management\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-13T17:29:45+00:00\n"
+"POT-Creation-Date: 2026-11-14T17:16:27+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: eventadmin-volunteer-management\n"
@@ -58,7 +58,7 @@ msgid "EventAdmin %s is here!"
 msgstr ""
 
 #: eventadmin-volunteer-management.php:278
-msgid "Repeat shifts every N weeks or months, ending on a date or after a number of times. Multi-day shifts now show on every day in the Calendar, the Day view has Volunteer and Status filters (including \"Full\"), and you can add or remove volunteers right from the shift window."
+msgid "Fix: with \"Shifts per department\" on, a volunteer's profile now only lists the departments they can sign up for under \"Departments I want updates about\", so they no longer see departments meant for others."
 msgstr ""
 
 #: eventadmin-volunteer-management.php:284
@@ -3873,7 +3873,7 @@ msgid "Checking (or unchecking) a department also checks/unchecks every departme
 msgstr ""
 
 #: includes/admin/volunteer-list.php:957
-#: includes/helpers.php:924
+#: includes/helpers.php:943
 msgid "(hidden from volunteers)"
 msgstr ""
 
@@ -3966,7 +3966,7 @@ msgstr ""
 msgid "This shift overlaps with one you have already taken."
 msgstr ""
 
-#: includes/helpers.php:961
+#: includes/helpers.php:980
 msgid "Close"
 msgstr ""
 

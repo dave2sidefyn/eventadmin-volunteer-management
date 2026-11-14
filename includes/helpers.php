@@ -847,6 +847,25 @@ function eventadmin_get_volunteer_allowed_department_ids(int $user_id): ?array
 }
 
 /**
+ * Whether the [eventadmin_profile] "Departments I want updates about" list offers a
+ * department to this volunteer: never departments hidden from volunteers, and — while
+ * "Shifts per department" limits them — only their shift-access departments (plus
+ * sub-departments), so they don't learn about departments they can't see.
+ *
+ * @param int $user_id
+ * @param int $term_id
+ * @return bool
+ */
+function eventadmin_profile_department_offered(int $user_id, int $term_id): bool
+{
+    if ($term_id <= 0 || eventadmin_is_shift_category_hidden($term_id)) {
+        return false;
+    }
+    $allowed = eventadmin_get_volunteer_allowed_department_ids($user_id);
+    return $allowed === null || in_array($term_id, $allowed, true);
+}
+
+/**
  * Whether a volunteer may see (and sign up for) a shift under the "Shifts per department"
  * setting. Shifts without a department are never restricted.
  *
