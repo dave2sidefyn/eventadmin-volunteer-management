@@ -59,7 +59,7 @@ No custom database tables – everything uses WP post meta, user meta, and optio
 3. Per-period limits: year / month / week / day (configurable, 0 = unlimited)
 4. Optional overlap prevention (if enabled, no two shifts can overlap in time)
 5. Cancellation deadline: `eventadmin_unassign_limit_hours` hours before shift start
-6. Optional "Shifts per department" (`eventadmin_restrict_shifts_to_departments`, off by default): volunteers only see and can sign up for shifts in their `eventadmin_shift_access_department` departments (plus sub-departments) — see `eventadmin_volunteer_can_see_shift()`. Never restricts shift managers, volunteers with no access departments, or shifts without a department; enforced server-side in the assign AJAX handler too. Existing sign-ups always stay under "My shifts"
+6. Optional "Shifts per department" (`eventadmin_restrict_shifts_to_departments`, off by default): volunteers only see and can sign up for shifts in their `eventadmin_shift_access_department` departments (plus sub-departments) — see `eventadmin_volunteer_can_see_shift()`. Never restricts shift managers, volunteers with no access departments, or shifts without a department; enforced server-side in the assign AJAX handler too. Existing sign-ups always stay under "My shifts". The profile's "Departments I want updates about" list likewise only offers those departments (`eventadmin_profile_department_offered()`, also enforced on save; links to departments not offered are preserved)
 
 ### User Roles
 - `eventadmin_volunteer` – custom role; read-only WP access, admin bar hidden

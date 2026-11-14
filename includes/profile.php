@@ -25,11 +25,11 @@ function eventadmin_profile_shortcode(): bool|string|null
     $announcements = get_user_meta($user->ID, 'eventadmin_announcements', true);
     // Default: opted-in (empty meta = 1)
     $announcements = ($announcements === '0') ? 0 : 1;
-    // Departments hidden from volunteers (Shifts → Departments → "Hide from volunteers")
-    // aren't offered here either — a volunteer can't subscribe to something they can't see.
+    // Only departments this volunteer can see are offered — a volunteer can't subscribe to
+    // something they can't see (hidden departments, or ones outside their shift access).
     $departments = array_values(array_filter(
         eventadmin_get_hierarchical_shift_categories(),
-        fn($term) => !eventadmin_is_shift_category_hidden($term->term_id)
+        fn($term) => eventadmin_profile_department_offered($user->ID, (int) $term->term_id)
     ));
     $linked_departments = eventadmin_get_volunteer_department_ids($user->ID);
 
@@ -179,14 +179,19 @@ function eventadmin_handle_profile_update(): void
     $posted_departments = (isset($_POST['eventadmin_department']) && is_array($_POST['eventadmin_department']))
         ? wp_unslash($_POST['eventadmin_department'])
         : [];
-    // Departments hidden from volunteers aren't rendered as checkboxes above, so preserve
-    // any existing link to one (e.g. set by an admin) instead of this form silently
-    // dropping it just because it wasn't offered as an option to toggle.
-    $preserved_hidden_departments = array_filter(
-        eventadmin_get_volunteer_department_ids($user_id),
-        'eventadmin_is_shift_category_hidden'
+    // Only accept departments the form actually offered (no subscribing to a department
+    // outside the volunteer's shift access by tampering with the POST). Departments that
+    // weren't offered keep any existing link (e.g. set by an admin) instead of this form
+    // silently dropping it just because it wasn't an option to toggle.
+    $posted_departments = array_filter(
+        array_map('absint', $posted_departments),
+        fn($term_id) => eventadmin_profile_department_offered($user_id, $term_id)
     );
-    eventadmin_save_volunteer_department_ids($user_id, array_merge($posted_departments, $preserved_hidden_departments));
+    $preserved_departments = array_filter(
+        eventadmin_get_volunteer_department_ids($user_id),
+        fn($term_id) => !eventadmin_profile_department_offered($user_id, (int) $term_id)
+    );
+    eventadmin_save_volunteer_department_ids($user_id, array_merge($posted_departments, $preserved_departments));
 
     $redirect_args = [
         'update'   => 'success',
