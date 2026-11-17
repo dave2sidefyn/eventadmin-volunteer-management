@@ -554,7 +554,7 @@ function eventadmin_plugin_register_settings(): void
         static function () {
             echo '<input type="checkbox" name="eventadmin_hide_add_shift_menu" value="1" ' . checked(1, get_option('eventadmin_hide_add_shift_menu'), false) . '>';
             echo ' ' . esc_html__('Yes', 'eventadmin-volunteer-management');
-            echo '<p class="description">' . esc_html__('Hides the classic "Add new shift" screen from the sidebar — Manager\'s own "+ Add shift" button covers the same task. The screen itself still works if you have a direct link to it.', 'eventadmin-volunteer-management') . '</p>';
+            echo '<p class="description">' . esc_html__('Hides "Add Shift" from the sidebar. When shown, it opens Manager\'s "+ Add shift" window — the same form as the button there.', 'eventadmin-volunteer-management') . '</p>';
         },
         'eventadmin-settings-general',
         'eventadmin_general_admin_menu'

@@ -4,7 +4,7 @@ Tags: volunteer, volunteer management, shift scheduling, event management, roste
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.10.2
+Stable tag: 3.10.3
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.10.3 =
+* Changed: "Add Shift" in the Shifts menu (also "+ New → Shift" in the admin bar) now opens the Manager with its "+ Add shift" window, the same shift form used everywhere else. The menu item stays hidden by default (Settings → General → "Hide Add Shift menu item")
 
 = Version 3.10.2 =
 * Fix: "Add Shift" in the Shifts menu (and "Edit" in "All Shifts") opens the classic shift form again, with title, description, "Shift details" (start, end, volunteers) and Departments on one screen, instead of the block editor, where the shift fields were tucked away below what looked like a blank new page
@@ -256,6 +259,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 For older versions, see changelog.txt in the plugin folder.
 
 == Upgrade Notice ==
+
+= 3.10.3 =
+"Add Shift" in the Shifts menu opens the Manager's "+ Add shift" window. No breaking changes.
 
 = 3.10.2 =
 "Add Shift" opens the shift form again instead of a blank block-editor page. No breaking changes.

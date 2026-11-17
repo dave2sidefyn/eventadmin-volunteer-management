@@ -109,6 +109,29 @@ function eventadmin_hide_shift_menu_items_css(): void
 add_action('admin_head', 'eventadmin_hide_shift_menu_items_css');
 
 /**
+ * Sends "Add Shift" (post-new.php?post_type=eventadmin_shift — the sidebar item, the admin
+ * bar's "+ New → Shift" and the getting-started checklist) to the Manager page, where the
+ * "+ Add shift" window opens right away (eventadmin_new_shift=1, see shift-details-modal.js).
+ * Manager's window is the one shift form; WordPress's own new-post screen showed a block
+ * editor with the shift fields tucked away below a blank page. Done as a redirect, not by
+ * changing the submenu URL, so $submenu stays intact (see eventadmin_hide_shift_menu_items_css()).
+ *
+ * @return void
+ */
+function eventadmin_redirect_add_shift_to_manager(): void
+{
+    $post_type = isset($_GET['post_type']) ? sanitize_key(wp_unslash($_GET['post_type'])) : '';
+    if ($post_type !== 'eventadmin_shift' || !current_user_can('eventadmin_manage_shifts')) {
+        return;
+    }
+
+    wp_safe_redirect(admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-shift-manager&eventadmin_new_shift=1'));
+    exit;
+}
+
+add_action('load-post-new.php', 'eventadmin_redirect_add_shift_to_manager');
+
+/**
  * Keeps the "Shifts" top-level menu icon (see the 'menu_icon' in eventadmin_register_shift_post_type()
  * / includes/post-types.php) at full opacity at all times. WordPress dims every non-current
  * menu item's <img> icon to opacity:.6 at rest (the same treatment its own dashicon sprites

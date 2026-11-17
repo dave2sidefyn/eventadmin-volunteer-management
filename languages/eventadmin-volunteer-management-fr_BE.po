@@ -68,8 +68,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s est disponible !"
 
 #: eventadmin-volunteer-management.php:278
-msgid "Fix: \"Add Shift\" in the Shifts menu opens the shift form again (start, end, volunteers) instead of the block editor, which looked like a blank new page."
-msgstr "Correctif : « Ajouter un créneau » dans le menu Créneaux ouvre à nouveau le formulaire du créneau (début, fin, bénévoles) au lieu de l’éditeur de blocs, qui ressemblait à une nouvelle page vide."
+msgid "\"Add Shift\" in the Shifts menu now opens the Manager with its \"+ Add shift\" window, the same form as everywhere else, instead of WordPress's own editor, where the shift fields were hard to find."
+msgstr "« Ajouter un créneau » dans le menu Créneaux ouvre désormais Manager avec sa fenêtre « + Ajouter un créneau », le même formulaire que partout ailleurs, au lieu de l’éditeur de WordPress, où les champs du créneau étaient difficiles à trouver."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"
@@ -4200,15 +4200,8 @@ msgid "Hide \"Add Shift\" menu item"
 msgstr "Masquer l'élément de menu « Ajouter un créneau »"
 
 #: includes/admin/settings.php:557
-msgid ""
-"Hides the classic \"Add new shift\" screen from the sidebar — Manager's own "
-"\"+ Add shift\" button covers the same task. The screen itself still works "
-"if you have a direct link to it."
-msgstr ""
-"Masque l'écran classique « Ajouter un nouveau créneau » dans la barre "
-"latérale — le bouton « + Ajouter un créneau » de Manager couvre la même "
-"tâche. L'écran lui-même fonctionne toujours si vous avez un lien direct vers "
-"celui-ci."
+msgid "Hides \"Add Shift\" from the sidebar. When shown, it opens Manager's \"+ Add shift\" window — the same form as the button there."
+msgstr "Masque « Ajouter un créneau » dans la barre latérale. Lorsqu’il est affiché, il ouvre la fenêtre « + Ajouter un créneau » de Manager — le même formulaire que le bouton qui s’y trouve."
 
 #: includes/admin/settings.php:569
 msgid "Hide \"Departments\" menu item"

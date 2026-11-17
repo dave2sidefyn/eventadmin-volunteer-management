@@ -67,8 +67,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s er her!"
 
 #: eventadmin-volunteer-management.php:278
-msgid "Fix: \"Add Shift\" in the Shifts menu opens the shift form again (start, end, volunteers) instead of the block editor, which looked like a blank new page."
-msgstr "Rettelse: «Legg til vakt» i Vakter-menyen åpner igjen vaktskjemaet (start, slutt, frivillige) i stedet for blokkredigereren, som så ut som en ny, tom side."
+msgid "\"Add Shift\" in the Shifts menu now opens the Manager with its \"+ Add shift\" window, the same form as everywhere else, instead of WordPress's own editor, where the shift fields were hard to find."
+msgstr "«Legg til vakt» i Vakter-menyen åpner nå Manager med vinduet «+ Legg til vakt», det samme skjemaet som overalt ellers, i stedet for WordPress sin egen redigerer, der vaktfeltene var vanskelige å finne."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"
@@ -4107,14 +4107,8 @@ msgid "Hide \"Add Shift\" menu item"
 msgstr "Skjul menyvalget «Legg til vakt»"
 
 #: includes/admin/settings.php:557
-msgid ""
-"Hides the classic \"Add new shift\" screen from the sidebar — Manager's own "
-"\"+ Add shift\" button covers the same task. The screen itself still works "
-"if you have a direct link to it."
-msgstr ""
-"Skjuler den klassiske skjermen «Legg til ny vakt» fra sidemenyen — Managers "
-"egen «+ Legg til vakt»-knapp dekker samme oppgave. Selve skjermen fungerer "
-"fortsatt hvis du har en direktelenke til den."
+msgid "Hides \"Add Shift\" from the sidebar. When shown, it opens Manager's \"+ Add shift\" window — the same form as the button there."
+msgstr "Skjuler «Legg til vakt» fra sidemenyen. Når det vises, åpner det Managers «+ Legg til vakt»-vindu — det samme skjemaet som knappen der."
 
 #: includes/admin/settings.php:569
 msgid "Hide \"Departments\" menu item"
