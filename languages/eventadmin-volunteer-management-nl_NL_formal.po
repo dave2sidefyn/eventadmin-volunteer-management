@@ -68,11 +68,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s is er!"
 
 #: eventadmin-volunteer-management.php:278
-msgid ""
-"Fix: with \"Shifts per department\" on, a volunteer's profile now only lists "
-"the departments they can sign up for under \"Departments I want updates "
-"about\", so they no longer see departments meant for others."
-msgstr "Oplossing: als „Diensten per afdeling” aan staat, toont het profiel van een volunteer onder „Afdelingen waarover ik updates wil ontvangen” alleen nog de afdelingen waarvoor die zich kan aanmelden. Afdelingen die voor anderen bedoeld zijn, blijven zo verborgen."
+msgid "Fix: \"Add Shift\" in the Shifts menu opens the shift form again (start, end, volunteers) instead of the block editor, which looked like a blank new page."
+msgstr "Oplossing: „Dienst toevoegen” in het menu Diensten opent weer het dienstformulier (begin, einde, volunteers) in plaats van de blokeditor, die eruitzag als een nieuwe lege pagina."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"
