@@ -332,6 +332,16 @@ document.addEventListener('DOMContentLoaded', function () {
         newShiftBtn.addEventListener('click', () => window.eventadminOpenNewShiftModal());
     }
 
+    // "Add Shift" in the admin menu redirects here with eventadmin_new_shift=1 (see
+    // eventadmin_redirect_add_shift_to_manager()): open the new-shift window straight away
+    // and drop the flag, so a reload or back navigation doesn't open it again.
+    const pageUrl = new URL(window.location.href);
+    if (newShiftBtn && pageUrl.searchParams.get('eventadmin_new_shift') === '1') {
+        pageUrl.searchParams.delete('eventadmin_new_shift');
+        window.history.replaceState(null, '', pageUrl.toString());
+        window.eventadminOpenNewShiftModal();
+    }
+
     // Opens the same modal in "create" mode, pre-filled from an existing shift (used by the
     // Manager/Timeline view's "Duplicate" popover action) — same date/time/department/
     // capacity/organizer as the original, so the common case (nudging it to a different day)

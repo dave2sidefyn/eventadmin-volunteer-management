@@ -69,8 +69,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s ist da!"
 
 #: eventadmin-volunteer-management.php:278
-msgid "Fix: \"Add Shift\" in the Shifts menu opens the shift form again (start, end, volunteers) instead of the block editor, which looked like a blank new page."
-msgstr "Fix: „Schicht hinzufügen“ im Menü „Schichten“ öffnet wieder das Schichtformular (Beginn, Ende, Volunteers) statt des Block-Editors, der wie eine leere neue Seite aussah."
+msgid "\"Add Shift\" in the Shifts menu now opens the Manager with its \"+ Add shift\" window, the same form as everywhere else, instead of WordPress's own editor, where the shift fields were hard to find."
+msgstr "„Schicht hinzufügen“ im Menü „Schichten“ öffnet jetzt den Manager mit seinem Fenster „+ Schicht hinzufügen“ – dasselbe Formular wie überall sonst – statt des WordPress-eigenen Editors, in dem die Schichtfelder schwer zu finden waren."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"
@@ -4199,15 +4199,8 @@ msgid "Hide \"Add Shift\" menu item"
 msgstr "„Schicht hinzufügen\" im Menü verstecken"
 
 #: includes/admin/settings.php:557
-msgid ""
-"Hides the classic \"Add new shift\" screen from the sidebar — Manager's own "
-"\"+ Add shift\" button covers the same task. The screen itself still works "
-"if you have a direct link to it."
-msgstr ""
-"Blendet den klassischen Bildschirm „Neue Schicht hinzufügen\" aus der "
-"Seitenleiste aus — der eigene „+ Schicht hinzufügen\"-Button des Managers "
-"deckt dieselbe Aufgabe ab. Der Bildschirm selbst funktioniert weiterhin, "
-"wenn Sie einen direkten Link dazu haben."
+msgid "Hides \"Add Shift\" from the sidebar. When shown, it opens Manager's \"+ Add shift\" window — the same form as the button there."
+msgstr "Blendet „Schicht hinzufügen“ in der Seitenleiste aus. Wenn sichtbar, öffnet der Menüpunkt das Fenster „+ Schicht hinzufügen“ im Manager – dasselbe Formular wie der Button dort."
 
 #: includes/admin/settings.php:569
 msgid "Hide \"Departments\" menu item"

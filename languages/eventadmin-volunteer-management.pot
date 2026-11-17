@@ -58,7 +58,7 @@ msgid "EventAdmin %s is here!"
 msgstr ""
 
 #: eventadmin-volunteer-management.php:278
-msgid "Fix: \"Add Shift\" in the Shifts menu opens the shift form again (start, end, volunteers) instead of the block editor, which looked like a blank new page."
+msgid "\"Add Shift\" in the Shifts menu now opens the Manager with its \"+ Add shift\" window, the same form as everywhere else, instead of WordPress's own editor, where the shift fields were hard to find."
 msgstr ""
 
 #: eventadmin-volunteer-management.php:284
@@ -3162,7 +3162,7 @@ msgid "Hide \"Add Shift\" menu item"
 msgstr ""
 
 #: includes/admin/settings.php:557
-msgid "Hides the classic \"Add new shift\" screen from the sidebar — Manager's own \"+ Add shift\" button covers the same task. The screen itself still works if you have a direct link to it."
+msgid "Hides \"Add Shift\" from the sidebar. When shown, it opens Manager's \"+ Add shift\" window — the same form as the button there."
 msgstr ""
 
 #: includes/admin/settings.php:569
