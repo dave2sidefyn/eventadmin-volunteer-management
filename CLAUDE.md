@@ -35,7 +35,7 @@ No custom database tables – everything uses WP post meta, user meta, and optio
 
 | File | Purpose |
 |------|---------|
-| `post-types.php` | Registers `eventadmin_shift` CPT and `eventadmin_shift_category` taxonomy |
+| `post-types.php` | Registers `eventadmin_shift` CPT and `eventadmin_shift_category` taxonomy. Shift add/edit screens are forced to the classic editor (`use_block_editor_for_post_type` → false): in the block editor the "Shift details" metabox hid below a blank page canvas and "Add Shift" looked broken (3.10.2). Keep `show_in_rest` on for the REST API |
 | `helpers.php` | Core validation logic: shift limits (year/month/week/day), overlap prevention, magic link auth, role registration |
 | `registration.php` | Public registration form ("I'm new" / "I already have an account" views); creates users with `eventadmin_volunteer` role; supports magic link login and Nextend Social Login (volunteer role only assigned on Nextend's own hooks when started from the volunteer page — never on `wp_login`) |
 | `password-login.php` | Optional email + password login (`eventadmin_allow_password_login`, off by default): login on the volunteer page via `wp_signon()` with per-email/IP lockout, "set a password" banner in the cockpit, password field in the profile; the login link stays the sign-up, invitation and "forgot password" path |

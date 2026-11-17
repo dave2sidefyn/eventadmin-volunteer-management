@@ -58,7 +58,7 @@ function eventadmin_register_post_types(): void
         'supports' => ['title', 'editor'],
         'has_archive' => false,
         'rewrite' => false,             // Disable pretty permalinks
-        'show_in_rest' => true          // Keep available in Gutenberg/REST
+        'show_in_rest' => true          // REST API; the edit screen stays classic, see eventadmin_shift_use_classic_editor()
     ]);
 
 
@@ -102,6 +102,26 @@ function eventadmin_register_post_types(): void
 }
 
 add_action('init', 'eventadmin_register_post_types');
+
+/**
+ * Opens "Add Shift" / "Edit Shift" (post-new.php / post.php) in the classic editor screen
+ * instead of the block editor. A shift is its metabox — start, end, volunteers, organizer —
+ * plus a plain description; in the block editor that metabox ends up in a collapsible pane
+ * below a full-page canvas (with the theme's template), so the screen looked like a generic
+ * "new page" editor and the shift fields were easy to miss entirely. The classic screen
+ * shows title, description, "Shift details" and Departments together, like Manager's own
+ * shift window. show_in_rest stays on (REST API, Manager), only the editor UI changes.
+ *
+ * @param bool   $use_block_editor
+ * @param string $post_type
+ * @return bool
+ */
+function eventadmin_shift_use_classic_editor(bool $use_block_editor, string $post_type): bool
+{
+    return $post_type === 'eventadmin_shift' ? false : $use_block_editor;
+}
+
+add_filter('use_block_editor_for_post_type', 'eventadmin_shift_use_classic_editor', 100, 2);
 
 add_action('template_redirect', function () {
     if (is_singular('eventadmin_shift') && !is_user_logged_in()) {

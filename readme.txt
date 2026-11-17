@@ -4,7 +4,7 @@ Tags: volunteer, volunteer management, shift scheduling, event management, roste
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.10.1
+Stable tag: 3.10.2
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.10.2 =
+* Fix: "Add Shift" in the Shifts menu (and "Edit" in "All Shifts") opens the classic shift form again, with title, description, "Shift details" (start, end, volunteers) and Departments on one screen, instead of the block editor, where the shift fields were tucked away below what looked like a blank new page
 
 = Version 3.10.1 =
 * Fix: With "Shifts per department" on, the "Departments I want updates about" list in a volunteer's profile only shows the departments they may sign up for (and their sub-departments), so volunteers no longer see departments meant for others. Existing subscriptions are kept
@@ -253,6 +256,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 For older versions, see changelog.txt in the plugin folder.
 
 == Upgrade Notice ==
+
+= 3.10.2 =
+"Add Shift" opens the shift form again instead of a blank block-editor page. No breaking changes.
 
 = 3.10.1 =
 Volunteers limited by "Shifts per department" no longer see other departments in their profile's update settings. No breaking changes.

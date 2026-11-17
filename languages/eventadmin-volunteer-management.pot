@@ -58,7 +58,7 @@ msgid "EventAdmin %s is here!"
 msgstr ""
 
 #: eventadmin-volunteer-management.php:278
-msgid "Fix: with \"Shifts per department\" on, a volunteer's profile now only lists the departments they can sign up for under \"Departments I want updates about\", so they no longer see departments meant for others."
+msgid "Fix: \"Add Shift\" in the Shifts menu opens the shift form again (start, end, volunteers) instead of the block editor, which looked like a blank new page."
 msgstr ""
 
 #: eventadmin-volunteer-management.php:284
