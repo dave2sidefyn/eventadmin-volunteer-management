@@ -194,9 +194,12 @@ function eventadmin_render_timeline_chart(array $timeline_rows): void
  * @param bool   $show_open      Whether the Timeline is currently showing open slots.
  * @param string $selected_date  Currently selected date filter, passed through to the JS
  *                                config as the default date for a newly created shift.
+ * @param string $selected_state     Staffing-status filter, for live row patches.
+ * @param int    $selected_volunteer Volunteer filter, for live row patches.
+ * @param string $selected_cat       Department filter slug — pre-selected for a new shift.
  * @return void
  */
-function eventadmin_render_timeline_shift_modals_and_config(string $view, array $shift_edit_map, bool $show_open, string $selected_date, string $selected_state = '', int $selected_volunteer = 0): void
+function eventadmin_render_timeline_shift_modals_and_config(string $view, array $shift_edit_map, bool $show_open, string $selected_date, string $selected_state = '', int $selected_volunteer = 0, string $selected_cat = ''): void
 {
     if ($view !== 'timeline') {
         return;
@@ -260,6 +263,10 @@ function eventadmin_render_timeline_shift_modals_and_config(string $view, array 
         'move_shifts'  => $move_shift_options,
         'show_open'    => $show_open,
         'default_date' => $selected_date,
+        'default_category' => eventadmin_department_id_from_slug($selected_cat),
+        // Only the Day tab patches itself in place after a save (admin-charts.js); the
+        // other tabs reload.
+        'day_view'     => true,
         // Lets live row patches (admin-charts.js) keep honoring the active filters.
         'filters'      => ['state' => $selected_state, 'volunteer' => $selected_volunteer],
         'i18n'         => [
@@ -456,6 +463,26 @@ function eventadmin_ajax_create_shift(): void
 
     $description = isset($_POST['description']) ? wp_kses_post(wp_unslash($_POST['description'])) : '';
 
+    // "Repeat" (optional): same options, limits and messages as "Copy shifts to another
+    // day". Validated before anything is created, so an error never leaves a lone shift.
+    $repeat_dates = [];
+    if (!empty($_POST['repeat']) && $start !== '') {
+        $first_date = substr($start, 0, 10);
+        $unit       = isset($_POST['repeat_unit']) && $_POST['repeat_unit'] === 'month' ? 'month' : 'week';
+        $interval   = isset($_POST['repeat_interval']) ? max(1, min(12, absint($_POST['repeat_interval']))) : 1;
+        $ends_after = isset($_POST['repeat_end']) && $_POST['repeat_end'] === 'after';
+        $count      = $ends_after && isset($_POST['repeat_count']) ? min(EVENTADMIN_MAX_REPEAT_WEEKS, absint($_POST['repeat_count'])) : 0;
+        $until_date = !$ends_after && isset($_POST['repeat_until']) ? sanitize_text_field(wp_unslash($_POST['repeat_until'])) : '';
+        if ($ends_after && $count < 1) {
+            wp_send_json_error(['message' => esc_html__('Please enter how many times the shifts should repeat.', 'eventadmin-volunteer-management')]);
+        }
+        if (!$ends_after && (!DateTime::createFromFormat('Y-m-d', $until_date) || $until_date < $first_date)) {
+            wp_send_json_error(['message' => esc_html__('Please choose a "repeat until" date on or after the first target date.', 'eventadmin-volunteer-management')]);
+        }
+        // The first date is the shift being created right here.
+        $repeat_dates = array_values(array_diff(eventadmin_repeat_dates($first_date, $unit, $interval, $until_date, $count), [$first_date]));
+    }
+
     $shift_id = wp_insert_post([
         'post_type'    => 'eventadmin_shift',
         'post_status'  => 'publish',
@@ -483,6 +510,21 @@ function eventadmin_ajax_create_shift(): void
     $terms = wp_get_post_terms($shift_id, 'eventadmin_shift_category');
     $color = !empty($terms) ? (get_term_meta($terms[0]->term_id, 'term_color', true) ?: '#2271b1') : '#2271b1';
 
+    $repeat = null;
+    if ($repeat_dates) {
+        $repeat = ['created' => 1, 'days' => 1, 'skipped' => 0];
+        foreach ($repeat_dates as $date) {
+            if (eventadmin_shift_exists_on_date($shift, $date)) {
+                $repeat['skipped']++;
+                continue;
+            }
+            if (eventadmin_copy_shift_to_date($shift, $date)) {
+                $repeat['created']++;
+                $repeat['days']++;
+            }
+        }
+    }
+
     // Always built as if "show open slots" were on, regardless of the page's own filter
     // state — a freshly created shift has no volunteers yet, so it would otherwise be
     // completely invisible (zero rows) the moment it's created.
@@ -505,6 +547,8 @@ function eventadmin_ajax_create_shift(): void
         'capacity'    => $rows[0]['capacity'] ?? '',
         'edit_url'    => admin_url('post.php?action=edit&post=' . $shift_id),
         'rows'        => $rows,
+        // Set when "Repeat" created a series — the page reloads with a summary notice.
+        'repeat'      => $repeat,
     ]);
 }
 

@@ -689,6 +689,9 @@ function eventadmin_plugin_documentation_page()
             <dt><strong><?php echo esc_html__('Can I create recurring shifts?', 'eventadmin-volunteer-management'); ?></strong></dt>
             <dd><?php echo esc_html__('Yes. Set up one day\'s shifts, then use "Copy shifts to another day", pick the first new date and tick "Repeat". Choose every N weeks or months and whether the series ends on a date or after a number of times (up to 52 dates). Monthly repeats use the same day of the month and skip months without it. Running the same repeat again skips shifts that already exist, and volunteers are never copied into a series.', 'eventadmin-volunteer-management'); ?></dd>
 
+            <dt><strong><?php echo esc_html__('Can I add a single shift that repeats, or copy just one department?', 'eventadmin-volunteer-management'); ?></strong></dt>
+            <dd><?php echo esc_html__('Yes. In the Calendar, click the + on a day to open "Add shift" on that date, with the filtered department already selected. Tick "Repeat" in the "Add shift" window to create the same shift every N weeks or months, with the same options as above. In "Copy shifts to another day", pick a department to copy only its shifts (sub-departments included).', 'eventadmin-volunteer-management'); ?></dd>
+
             <dt><strong><?php echo esc_html__('A volunteer sees old sign-ups or empty "My shifts" after reopening the page. Why?', 'eventadmin-volunteer-management'); ?></strong></dt>
             <dd><?php echo esc_html__('That is almost always a cached copy of the page. The plugin tells caching plugins, browsers and CDNs not to cache the volunteer page, but a host or CDN rule that caches every page regardless (e.g. Cloudflare "Cache Everything") overrides that. Exclude the volunteer page from such rules, or make them skip visitors with a WordPress login cookie.', 'eventadmin-volunteer-management'); ?></dd>
         </dl>

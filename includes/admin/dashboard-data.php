@@ -186,9 +186,9 @@ const EVENTADMIN_MAX_REPEAT_WEEKS = 52;
  * @param string $date Y-m-d
  * @return WP_Post[]
  */
-function eventadmin_get_shifts_starting_on_day(string $date): array
+function eventadmin_get_shifts_starting_on_day(string $date, int $department_id = 0): array
 {
-    return get_posts([
+    $args = [
         'post_type'   => 'eventadmin_shift',
         'numberposts' => -1,
         'post_status' => 'any',
@@ -198,7 +198,18 @@ function eventadmin_get_shifts_starting_on_day(string $date): array
             'compare' => 'BETWEEN',
             'type'    => 'DATETIME',
         ]],
-    ]);
+    ];
+    // A department includes its sub-departments, like the Manager's own department filter;
+    // shifts without any department only match "all departments" (0).
+    if ($department_id > 0) {
+        $args['tax_query'] = [[
+            'taxonomy'         => 'eventadmin_shift_category',
+            'field'            => 'term_id',
+            'terms'            => [$department_id],
+            'include_children' => true,
+        ]];
+    }
+    return get_posts($args);
 }
 
 /**
@@ -254,6 +265,156 @@ function eventadmin_weekly_repeat_dates(string $first_date, string $until_date):
 }
 
 /**
+ * Distinct shift start dates per department, each department including its
+ * sub-departments — lets the "Copy shifts" window offer only days that have shifts in the
+ * chosen department. One SQL query.
+ *
+ * @return array<int, string[]> term_id => sorted Y-m-d dates
+ */
+function eventadmin_shift_dates_by_department(): array
+{
+    global $wpdb;
+    $rows = $wpdb->get_results($wpdb->prepare(
+        "SELECT DISTINCT DATE(pm.meta_value) AS shift_date, tt.term_id
+         FROM {$wpdb->postmeta} pm
+         INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+         INNER JOIN {$wpdb->term_relationships} tr ON tr.object_id = p.ID
+         INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id AND tt.taxonomy = %s
+         WHERE pm.meta_key = 'shift_start' AND p.post_type = %s AND p.post_status != 'trash' AND pm.meta_value != ''",
+        'eventadmin_shift_category',
+        'eventadmin_shift'
+    ));
+
+    $own = [];
+    foreach ((array) $rows as $row) {
+        $own[(int) $row->term_id][$row->shift_date] = true;
+    }
+
+    $by_department = [];
+    foreach (eventadmin_get_hierarchical_shift_categories() as $term) {
+        $dates    = $own[$term->term_id] ?? [];
+        $children = get_term_children($term->term_id, 'eventadmin_shift_category');
+        foreach (is_array($children) ? $children : [] as $child_id) {
+            $dates += $own[(int) $child_id] ?? [];
+        }
+        $dates = array_keys($dates);
+        sort($dates);
+        $by_department[(int) $term->term_id] = $dates;
+    }
+    return $by_department;
+}
+
+/**
+ * Department term ID for a department filter slug, or 0 for "all" / an unknown slug.
+ * Used to pre-select the filtered department in the "Add shift" window.
+ *
+ * @param string $slug
+ * @return int
+ */
+function eventadmin_department_id_from_slug(string $slug): int
+{
+    if ($slug === '') {
+        return 0;
+    }
+    $term = get_term_by('slug', $slug, 'eventadmin_shift_category');
+    return $term ? (int) $term->term_id : 0;
+}
+
+/**
+ * Recreates one shift on $target_date, keeping its time of day and duration (including
+ * shifts that run past midnight), department, capacity, organizer and description.
+ * Shared by "Copy shifts to another day" and "Repeat" in the "Add shift" window.
+ *
+ * @param WP_Post $shift
+ * @param string  $target_date     Y-m-d
+ * @param bool    $copy_volunteers Whether to also copy the volunteers currently assigned
+ * @return int The new shift's ID, or 0 when nothing was created.
+ */
+function eventadmin_copy_shift_to_date(WP_Post $shift, string $target_date, bool $copy_volunteers = false): int
+{
+    $start = (string) get_post_meta($shift->ID, 'shift_start', true);
+    $end   = (string) get_post_meta($shift->ID, 'shift_end', true);
+    if (!$start || !$end) {
+        return 0;
+    }
+
+    try {
+        $start_dt = new DateTime($start);
+        $end_dt   = new DateTime($end);
+    } catch (Exception $e) {
+        return 0;
+    }
+
+    // Preserve the shift's duration (not just its time-of-day) so shifts that run
+    // past midnight land correctly on the day after the new start date too.
+    $duration_seconds = $end_dt->getTimestamp() - $start_dt->getTimestamp();
+    $new_start_dt     = new DateTime($target_date . ' ' . $start_dt->format('H:i:s'));
+    $new_end_dt       = (clone $new_start_dt)->modify('+' . $duration_seconds . ' seconds');
+
+    $new_id = wp_insert_post([
+        'post_type'    => 'eventadmin_shift',
+        'post_status'  => 'publish',
+        'post_title'   => $shift->post_title,
+        'post_content' => $shift->post_content,
+    ]);
+
+    if (!$new_id || is_wp_error($new_id)) {
+        return 0;
+    }
+
+    update_post_meta($new_id, 'shift_start', $new_start_dt->format('Y-m-d H:i:s'));
+    update_post_meta($new_id, 'shift_end', $new_end_dt->format('Y-m-d H:i:s'));
+
+    foreach (['min_volunteers', 'max_volunteers', 'shift_organizer_user_id', 'shift_organizer_name', 'shift_organizer_email'] as $field) {
+        $value = get_post_meta($shift->ID, $field, true);
+        if ($value !== '') {
+            update_post_meta($new_id, $field, $value);
+        }
+    }
+
+    $terms = wp_get_post_terms($shift->ID, 'eventadmin_shift_category', ['fields' => 'ids']);
+    if (!empty($terms) && !is_wp_error($terms)) {
+        wp_set_object_terms($new_id, $terms, 'eventadmin_shift_category');
+    }
+
+    if ($copy_volunteers) {
+        foreach (get_post_meta($shift->ID) as $key => $val) {
+            if (str_starts_with($key, 'assigned_user_')) {
+                add_post_meta($new_id, $key, (int) $val[0]);
+            }
+        }
+    }
+
+    return (int) $new_id;
+}
+
+/**
+ * Whether $target_date already has a shift with this shift's title and time of day — so
+ * running the same repeat or copy twice never creates duplicates.
+ *
+ * @param WP_Post $shift
+ * @param string  $target_date Y-m-d
+ * @return bool
+ */
+function eventadmin_shift_exists_on_date(WP_Post $shift, string $target_date): bool
+{
+    $start = (string) get_post_meta($shift->ID, 'shift_start', true);
+    $time  = $start !== '' ? substr(eventadmin_normalize_datetime_input($start), 11) : '';
+    if ($time === '') {
+        return false;
+    }
+    $wanted = eventadmin_wallclock_to_ts($target_date . ' ' . $time);
+    foreach (eventadmin_get_shifts_starting_on_day($target_date) as $existing) {
+        if ($existing->ID !== $shift->ID
+            && $existing->post_title === $shift->post_title
+            && eventadmin_wallclock_to_ts((string) get_post_meta($existing->ID, 'shift_start', true)) === $wanted) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
  * Copies every shift starting on $source_date to $target_date, preserving each shift's
  * time-of-day and duration (including shifts that run past midnight). Used for
  * "this new day should look like that past/other day" setups after recurring events.
@@ -265,13 +426,16 @@ function eventadmin_weekly_repeat_dates(string $first_date, string $until_date):
  *                              same title and start time — used by "repeat weekly" so
  *                              running the same repeat twice never creates duplicates.
  * @param int|null $skipped     Set to the number of shifts skipped as already existing.
+ * @param int $department_id    Only copy shifts of this department (and its
+ *                              sub-departments); 0 copies every shift of the day.
  * @return int Number of shifts copied
  */
-function eventadmin_copy_shifts_to_day(string $source_date, string $target_date, bool $copy_volunteers, bool $skip_existing = false, ?int &$skipped = null): int
+function eventadmin_copy_shifts_to_day(string $source_date, string $target_date, bool $copy_volunteers, bool $skip_existing = false, ?int &$skipped = null, int $department_id = 0): int
 {
     $skipped = 0;
-    $shifts  = eventadmin_get_shifts_starting_on_day($source_date);
+    $copied  = 0;
 
+    // One lookup of the target day, not one per shift (a series can hit 52 days).
     $existing_keys = [];
     if ($skip_existing) {
         foreach (eventadmin_get_shifts_starting_on_day($target_date) as $existing) {
@@ -279,68 +443,15 @@ function eventadmin_copy_shifts_to_day(string $source_date, string $target_date,
         }
     }
 
-    $copied = 0;
-
-    foreach ($shifts as $shift) {
-        $start = (string) get_post_meta($shift->ID, 'shift_start', true);
-        $end   = (string) get_post_meta($shift->ID, 'shift_end', true);
-        if (!$start || !$end) {
-            continue;
-        }
-
-        try {
-            $start_dt = new DateTime($start);
-            $end_dt   = new DateTime($end);
-        } catch (Exception $e) {
-            continue;
-        }
-
-        // Preserve the shift's duration (not just its time-of-day) so shifts that run
-        // past midnight land correctly on the day after the new start date too.
-        $duration_seconds = $end_dt->getTimestamp() - $start_dt->getTimestamp();
-        $new_start_dt      = new DateTime($target_date . ' ' . $start_dt->format('H:i:s'));
-        $new_end_dt        = (clone $new_start_dt)->modify('+' . $duration_seconds . ' seconds');
-
-        if ($skip_existing && isset($existing_keys[$shift->post_title . '|' . eventadmin_wallclock_to_ts($new_start_dt->format('Y-m-d H:i:s'))])) {
+    foreach (eventadmin_get_shifts_starting_on_day($source_date, $department_id) as $shift) {
+        $time = substr(eventadmin_normalize_datetime_input((string) get_post_meta($shift->ID, 'shift_start', true)), 11);
+        if ($skip_existing && $time !== '' && isset($existing_keys[$shift->post_title . '|' . eventadmin_wallclock_to_ts($target_date . ' ' . $time)])) {
             $skipped++;
             continue;
         }
-
-        $new_id = wp_insert_post([
-            'post_type'    => 'eventadmin_shift',
-            'post_status'  => 'publish',
-            'post_title'   => $shift->post_title,
-            'post_content' => $shift->post_content,
-        ]);
-
-        if (!$new_id || is_wp_error($new_id)) {
-            continue;
+        if (eventadmin_copy_shift_to_date($shift, $target_date, $copy_volunteers)) {
+            $copied++;
         }
-
-        update_post_meta($new_id, 'shift_start', $new_start_dt->format('Y-m-d H:i:s'));
-        update_post_meta($new_id, 'shift_end', $new_end_dt->format('Y-m-d H:i:s'));
-
-        foreach (['min_volunteers', 'max_volunteers', 'shift_organizer_user_id', 'shift_organizer_name', 'shift_organizer_email'] as $field) {
-            $value = get_post_meta($shift->ID, $field, true);
-            if ($value !== '') {
-                update_post_meta($new_id, $field, $value);
-            }
-        }
-
-        $terms = wp_get_post_terms($shift->ID, 'eventadmin_shift_category', ['fields' => 'ids']);
-        if (!empty($terms) && !is_wp_error($terms)) {
-            wp_set_object_terms($new_id, $terms, 'eventadmin_shift_category');
-        }
-
-        if ($copy_volunteers) {
-            foreach (get_post_meta($shift->ID) as $key => $val) {
-                if (str_starts_with($key, 'assigned_user_')) {
-                    add_post_meta($new_id, $key, (int) $val[0]);
-                }
-            }
-        }
-
-        $copied++;
     }
 
     return $copied;

@@ -68,8 +68,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s is er!"
 
 #: eventadmin-volunteer-management.php:278
-msgid "\"Add Shift\" in the Shifts menu now opens the Manager with its \"+ Add shift\" window, the same form as everywhere else, instead of WordPress's own editor, where the shift fields were hard to find."
-msgstr "„Dienst toevoegen” in het menu Diensten opent nu Manager met het venster „+ Dienst toevoegen”, hetzelfde formulier als overal elders, in plaats van de eigen editor van WordPress, waarin de dienstvelden moeilijk te vinden waren."
+msgid "The Calendar now updates as soon as you save a shift. Click \"+\" on a day to add a shift on that date, let a new shift repeat weekly or monthly, and copy a day's shifts for just one department."
+msgstr "De kalender wordt nu direct bijgewerkt zodra u een dienst opslaat. Met „+” op een dag voegt u daar een dienst toe, nieuwe diensten kunt u wekelijks of maandelijks laten herhalen, en bij het kopiëren van een dag kunt u één afdeling kiezen."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"
@@ -5489,6 +5489,30 @@ msgstr "U bent succesvol afgemeld."
 #: includes/shiftselector.php:529
 msgid "You are not signed up for this shift."
 msgstr "U bent niet aangemeld voor deze dienst."
+
+#. translators: %s: date
+#: includes/admin/dashboard-tab-calendar.php:318
+#, php-format
+msgid "Add a shift on %s"
+msgstr "Dienst toevoegen op %s"
+
+#: includes/admin/dashboard-tab-calendar.php:360
+msgid "Click a shift to edit it, a day to open it on the Day tab, or + to add a shift on that day."
+msgstr "Klik op een dienst om hem te bewerken, op een dag om die op het tabblad Dag te openen, of op + om op die dag een dienst toe te voegen."
+
+#. translators: %d: maximum number of dates in one series
+#: includes/admin/shift-details-modal.php:84
+#, php-format
+msgid "Creates the same shift on every date of the series. Monthly repeats use the same day of the month and skip months without it. Up to %d dates; a day that already has this shift is skipped."
+msgstr "Maakt dezelfde dienst aan op elke datum van de reeks. Maandelijkse herhalingen gebruiken dezelfde dag van de maand en slaan maanden zonder die dag over. Tot %d datums; een dag waarop deze dienst al bestaat, wordt overgeslagen."
+
+#: includes/admin/documentation.php:692
+msgid "Can I add a single shift that repeats, or copy just one department?"
+msgstr "Kan ik één dienst laten herhalen, of maar één afdeling kopiëren?"
+
+#: includes/admin/documentation.php:693
+msgid "Yes. In the Calendar, click the + on a day to open \"Add shift\" on that date, with the filtered department already selected. Tick \"Repeat\" in the \"Add shift\" window to create the same shift every N weeks or months, with the same options as above. In \"Copy shifts to another day\", pick a department to copy only its shifts (sub-departments included)."
+msgstr "Ja. Klik in de kalender op de + bij een dag om „Dienst toevoegen” op die datum te openen, met de gefilterde afdeling al geselecteerd. Vink „Herhalen” aan in het venster „Dienst toevoegen” om dezelfde dienst elke N weken of maanden aan te maken, met dezelfde opties als hierboven. Kies in „Diensten naar een andere dag kopiëren” een afdeling om alleen die diensten te kopiëren (subafdelingen inbegrepen)."
 
 #~ msgid ""
 #~ "Repeat shifts every N weeks or months, ending on a date or after a number "

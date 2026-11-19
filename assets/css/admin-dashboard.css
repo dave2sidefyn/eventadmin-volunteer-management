@@ -552,6 +552,26 @@ a.eventadmin-cal-dayhead:hover,
 a.eventadmin-cal-dayhead:focus { background: #f0f6fc; color: #2271b1; }
 .eventadmin-cal-day.is-today .eventadmin-cal-dayhead { background: #2271b1; color: #fff; }
 .eventadmin-cal-dayname { display: none; }
+.eventadmin-cal-dayrow { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
+.eventadmin-cal-add {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: #2271b1;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+}
+.eventadmin-cal-day:hover .eventadmin-cal-add,
+.eventadmin-cal-add:focus { opacity: 1; }
+.eventadmin-cal-add:hover,
+.eventadmin-cal-add:focus { background: #f0f6fc; border-color: #2271b1; outline: none; }
+/* Touch screens have no hover: keep "+" visible. */
+@media (hover: none) { .eventadmin-cal-add { opacity: 1; } }
 
 .eventadmin-cal-chip {
     display: flex;

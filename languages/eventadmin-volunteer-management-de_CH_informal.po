@@ -69,8 +69,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s ist da!"
 
 #: eventadmin-volunteer-management.php:278
-msgid "\"Add Shift\" in the Shifts menu now opens the Manager with its \"+ Add shift\" window, the same form as everywhere else, instead of WordPress's own editor, where the shift fields were hard to find."
-msgstr "„Schicht hinzufügen“ im Menü „Schichten“ öffnet jetzt den Manager mit seinem Fenster „+ Schicht hinzufügen“ – dasselbe Formular wie überall sonst – statt des WordPress-eigenen Editors, in dem die Schichtfelder schwer zu finden waren."
+msgid "The Calendar now updates as soon as you save a shift. Click \"+\" on a day to add a shift on that date, let a new shift repeat weekly or monthly, and copy a day's shifts for just one department."
+msgstr "Der Kalender aktualisiert sich jetzt sofort, wenn du eine Schicht speicherst. Mit „+“ an einem Tag legst du dort eine Schicht an, neue Schichten lassen sich wöchentlich oder monatlich wiederholen, und beim Kopieren eines Tages kannst du eine einzelne Abteilung wählen."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"
@@ -5532,6 +5532,30 @@ msgstr "Du wurdest erfolgreich abgemeldet."
 #: includes/shiftselector.php:529
 msgid "You are not signed up for this shift."
 msgstr "Du bist für diese Schicht nicht eingeteilt."
+
+#. translators: %s: date
+#: includes/admin/dashboard-tab-calendar.php:318
+#, php-format
+msgid "Add a shift on %s"
+msgstr "Schicht am %s hinzufügen"
+
+#: includes/admin/dashboard-tab-calendar.php:360
+msgid "Click a shift to edit it, a day to open it on the Day tab, or + to add a shift on that day."
+msgstr "Klick auf eine Schicht, um sie zu bearbeiten, auf einen Tag, um ihn im Tab „Tag“ zu öffnen, oder auf +, um an diesem Tag eine Schicht hinzuzufügen."
+
+#. translators: %d: maximum number of dates in one series
+#: includes/admin/shift-details-modal.php:84
+#, php-format
+msgid "Creates the same shift on every date of the series. Monthly repeats use the same day of the month and skip months without it. Up to %d dates; a day that already has this shift is skipped."
+msgstr "Legt dieselbe Schicht an jedem Datum der Serie an. Monatliche Wiederholungen nutzen denselben Tag im Monat und überspringen Monate ohne diesen Tag. Bis zu %d Termine; ein Tag, an dem diese Schicht schon existiert, wird übersprungen."
+
+#: includes/admin/documentation.php:692
+msgid "Can I add a single shift that repeats, or copy just one department?"
+msgstr "Kann ich eine einzelne Schicht wiederholen oder nur eine Abteilung kopieren?"
+
+#: includes/admin/documentation.php:693
+msgid "Yes. In the Calendar, click the + on a day to open \"Add shift\" on that date, with the filtered department already selected. Tick \"Repeat\" in the \"Add shift\" window to create the same shift every N weeks or months, with the same options as above. In \"Copy shifts to another day\", pick a department to copy only its shifts (sub-departments included)."
+msgstr "Ja. Klick im Kalender auf das + an einem Tag, um „Schicht hinzufügen“ für dieses Datum zu öffnen; die gefilterte Abteilung ist schon ausgewählt. Aktiviere im Fenster „Schicht hinzufügen“ „Wiederholen“, um dieselbe Schicht alle N Wochen oder Monate anzulegen, mit denselben Optionen wie oben. Wähle in „Schichten auf einen anderen Tag kopieren“ eine Abteilung, um nur deren Schichten zu kopieren (inklusive Unterabteilungen)."
 
 #~ msgid ""
 #~ "Repeat shifts every N weeks or months, ending on a date or after a number "

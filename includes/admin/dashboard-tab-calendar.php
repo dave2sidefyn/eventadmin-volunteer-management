@@ -269,6 +269,7 @@ function eventadmin_render_calendar_view(array $filter_query_args, string $mode,
     }
     $today       = current_time('Y-m-d');
     $month       = substr($anchor, 0, 7);
+    $can_add     = current_user_can('eventadmin_manage_shifts');
 
     $day_base = array_merge($filter_query_args, ['filter_view' => 'timeline']);
     unset($day_base['cal_mode'], $day_base['cal_anchor'], $day_base['filter_volunteer'], $day_base['paged']);
@@ -304,12 +305,20 @@ function eventadmin_render_calendar_view(array $filter_query_args, string $mode,
         echo '<div class="' . esc_attr($class) . '">';
         $num = '<span class="eventadmin-cal-daynum">' . esc_html(date_i18n('j', $ts)) . '</span>'
             . '<span class="eventadmin-cal-dayname">' . esc_html(date_i18n('l, j F', $ts)) . '</span>';
+        echo '<div class="eventadmin-cal-dayrow">';
         if (!empty($chips)) {
             /* translators: %s: date */
             echo '<a class="eventadmin-cal-dayhead" href="' . esc_url($day_url($date)) . '" title="' . esc_attr(sprintf(__('Open %s on the Day tab', 'eventadmin-volunteer-management'), date_i18n(get_option('date_format'), $ts))) . '">' . $num . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above
         } else {
             echo '<span class="eventadmin-cal-dayhead">' . $num . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above
         }
+        // "+": opens the shared "Add shift" window on exactly this day (shift-details-modal.js).
+        if ($can_add) {
+            /* translators: %s: date */
+            $add_label = sprintf(__('Add a shift on %s', 'eventadmin-volunteer-management'), date_i18n(get_option('date_format'), $ts));
+            echo '<button type="button" class="eventadmin-cal-add eventadmin-new-shift-on-date" data-date="' . esc_attr($date) . '" title="' . esc_attr($add_label) . '" aria-label="' . esc_attr($add_label) . '">+</button>';
+        }
+        echo '</div>';
 
         if ($chips) {
             $under = count(array_filter($chips, static fn($chip) => $chip['status'] === 'under'));
@@ -347,8 +356,41 @@ function eventadmin_render_calendar_view(array $filter_query_args, string $mode,
         . '<span><span class="eventadmin-date-dot is-under" aria-hidden="true"></span>' . esc_html__('Below the minimum', 'eventadmin-volunteer-management') . '</span>'
         . '<span><span class="eventadmin-date-dot is-open" aria-hidden="true"></span>' . esc_html__('Open slots', 'eventadmin-volunteer-management') . '</span>'
         . '<span><span class="eventadmin-date-dot is-full" aria-hidden="true"></span>' . esc_html__('Fully staffed', 'eventadmin-volunteer-management') . '</span>'
-        . '<span class="eventadmin-cal-legend-hint">' . esc_html__('Click a shift to edit it, or a day to open it on the Day tab.', 'eventadmin-volunteer-management') . '</span>'
+        . '<span class="eventadmin-cal-legend-hint">' . esc_html($can_add
+            ? __('Click a shift to edit it, a day to open it on the Day tab, or + to add a shift on that day.', 'eventadmin-volunteer-management')
+            : __('Click a shift to edit it, or a day to open it on the Day tab.', 'eventadmin-volunteer-management')) . '</span>'
         . '</p>';
 
     echo '</div>';
+}
+
+/**
+ * The day "+ Add shift" pre-fills while the Calendar is open: today when it is on screen,
+ * otherwise the first visible day that already has shifts, otherwise the first day of the
+ * month (or week) shown. The anchor alone isn't enough — after ◀ / ▶ it is always the 1st.
+ *
+ * @param string               $mode      'month'|'week'
+ * @param string               $anchor    Y-m-d
+ * @param array<string, mixed> $day_stats From eventadmin_get_shift_day_stats(), keyed by Y-m-d.
+ * @return string Y-m-d
+ */
+function eventadmin_calendar_default_new_shift_date(string $mode, string $anchor, array $day_stats): string
+{
+    [$from, $to] = eventadmin_calendar_range($mode, $anchor);
+    if ($mode === 'month') {
+        $from = substr($anchor, 0, 7) . '-01';
+        $to   = gmdate('Y-m-t', strtotime($from . ' 12:00:00'));
+    }
+    $today = current_time('Y-m-d');
+    if ($today >= $from && $today <= $to) {
+        return $today;
+    }
+    $dates = array_keys($day_stats);
+    sort($dates);
+    foreach ($dates as $date) {
+        if ($date >= $from && $date <= $to) {
+            return $date;
+        }
+    }
+    return $from;
 }

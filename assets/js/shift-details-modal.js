@@ -28,6 +28,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const readonlyCapacity    = document.getElementById('eventadmin-shift-readonly-capacity');
     const rosterEl            = document.getElementById('eventadmin-shift-roster');
     const rosterSection       = document.getElementById('eventadmin-shift-roster-section');
+    const repeatSection       = document.getElementById('eventadmin-edit-shift-repeat-section');
+    const repeatToggle        = document.getElementById('eventadmin-edit-shift-repeat');
+    const repeatOptions       = document.getElementById('eventadmin-edit-shift-repeat-options');
+    const repeatInterval      = document.getElementById('eventadmin-edit-shift-repeat-interval');
+    const repeatUnit          = document.getElementById('eventadmin-edit-shift-repeat-unit');
+    const repeatEnd           = document.getElementById('eventadmin-edit-shift-repeat-end');
+    const repeatUntil         = document.getElementById('eventadmin-edit-shift-repeat-until');
+    const repeatCount         = document.getElementById('eventadmin-edit-shift-repeat-count');
+    const repeatCountWrap     = document.getElementById('eventadmin-edit-shift-repeat-count-wrap');
     const saveButtonLabel     = submitBtn ? submitBtn.textContent : '';
     const DESCRIPTION_EDITOR_ID = 'eventadmin_edit_shift_description';
 
@@ -175,11 +184,56 @@ document.addEventListener('DOMContentLoaded', function () {
             + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes());
     }
 
+    // "Repeat" is offered only while creating or duplicating a shift.
+    function syncRepeat() {
+        if (!repeatSection) return;
+        const after = repeatEnd.value === 'after';
+        repeatOptions.style.display = repeatToggle.checked ? '' : 'none';
+        repeatUntil.style.display = after ? 'none' : '';
+        repeatCountWrap.style.display = after ? '' : 'none';
+    }
+    function resetRepeat(visible) {
+        if (!repeatSection) return;
+        repeatSection.style.display = visible ? '' : 'none';
+        repeatToggle.checked = false;
+        repeatInterval.value = 1;
+        repeatUnit.value = 'week';
+        repeatEnd.value = 'on';
+        repeatUntil.value = '';
+        repeatCount.value = '';
+        syncRepeat();
+    }
+    if (repeatSection) {
+        [repeatToggle, repeatEnd].forEach(el => el.addEventListener('change', syncRepeat));
+    }
+
+    // The end follows the start: moving the start (e.g. to another day) moves the end by
+    // the same amount, so the shift keeps its length instead of ending on the old day.
+    // Editing the end itself just sets a new length.
+    const parseLocal = (value) => {
+        const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(value || '');
+        return m ? Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]) : NaN;
+    };
+    const DEFAULT_DURATION_MS = 2 * 60 * 60000;
+    let lastStartValue = '';
+    startInput.addEventListener('focus', () => { lastStartValue = startInput.value; });
+    startInput.addEventListener('change', () => {
+        const newStart = parseLocal(startInput.value);
+        if (isNaN(newStart)) return;
+        const oldStart = parseLocal(lastStartValue);
+        const oldEnd = parseLocal(endInput.value);
+        let duration = !isNaN(oldStart) && !isNaN(oldEnd) ? oldEnd - oldStart : NaN;
+        if (isNaN(duration) || duration <= 0) duration = DEFAULT_DURATION_MS;
+        endInput.value = tsToLocalInputValue((newStart + duration) / 1000);
+        lastStartValue = startInput.value;
+    });
+
     function fillForm(shift) {
         categorySelect.value = shift.category_id || '0';
         titleInput.value = shift.title;
         startInput.value = tsToLocalInputValue(shift.start);
         endInput.value = tsToLocalInputValue(shift.end);
+        lastStartValue = startInput.value;
         minInput.value = shift.min;
         maxInput.value = shift.max;
         setDescriptionValue(shift.description);
@@ -189,6 +243,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showEditMode(heading) {
+        resetRepeat(isCreateMode);
         readonlyEl.style.display = 'none';
         form.style.display = '';
         headingEl.textContent = heading;
@@ -277,21 +332,22 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     };
 
-    // Opens the same modal empty, defaulting the date to whatever the page's own "Date"
-    // filter is currently scoped to (falling back to today) — the common case is adding a
-    // shift to the day you're already looking at. Only ever triggered from the
-    // Manager/Timeline view's own "+ Add shift" button.
-    window.eventadminOpenNewShiftModal = function () {
+    // Opens the same modal empty, on $date when given (a day's "+" in the Calendar),
+    // otherwise on whatever day the page is scoped to (the "Date" filter, or the Calendar's
+    // visible month), falling back to "starting soon" — the common case is adding a shift
+    // to the day you're already looking at. The filtered department is pre-selected.
+    window.eventadminOpenNewShiftModal = function (date) {
         const pad = (n) => String(n).padStart(2, '0');
         const now = new Date();
-        const hasFilterDate = cfg.default_date && /^\d{4}-\d{2}-\d{2}$/.test(cfg.default_date);
+        const isDay = (value) => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value);
+        const day = isDay(date) ? date : (isDay(cfg.default_date) ? cfg.default_date : '');
 
         let startValue, endValue;
-        if (hasFilterDate) {
-            // A specific day is already selected in the "Date" filter — "now" doesn't mean
-            // anything for a different day, so just default to a plausible time.
-            startValue = cfg.default_date + 'T09:00';
-            endValue = cfg.default_date + 'T11:00';
+        if (day) {
+            // A specific day is chosen — "now" doesn't mean anything for a different day,
+            // so just default to a plausible time.
+            startValue = day + 'T09:00';
+            endValue = day + 'T11:00';
         } else {
             // No date filter active: default to "starting soon" (now, rounded up to the
             // next half hour) rather than a fixed time, so a shift created this afternoon
@@ -311,10 +367,12 @@ document.addEventListener('DOMContentLoaded', function () {
         idInput.value = '';
         showEditMode((i18n.addShift || 'Add shift'));
         submitBtn.textContent = (i18n.addShift || 'Add shift');
-        categorySelect.value = '0';
+        categorySelect.value = String(cfg.default_category || 0);
+        if (categorySelect.selectedIndex < 0) categorySelect.value = '0';
         titleInput.value = '';
         startInput.value = startValue;
         endInput.value = endValue;
+        lastStartValue = startValue;
         minInput.value = 0;
         maxInput.value = 1;
         setDescriptionValue('');
@@ -331,6 +389,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (newShiftBtn) {
         newShiftBtn.addEventListener('click', () => window.eventadminOpenNewShiftModal());
     }
+    // A day's "+" in the Calendar (includes/admin/dashboard-tab-calendar.php).
+    document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.eventadmin-new-shift-on-date');
+        if (trigger) window.eventadminOpenNewShiftModal(trigger.dataset.date);
+    });
 
     // "Add Shift" in the admin menu redirects here with eventadmin_new_shift=1 (see
     // eventadmin_redirect_add_shift_to_manager()): open the new-shift window straight away
@@ -428,6 +491,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const shiftId = isCreateMode ? 0 : parseInt(idInput.value, 10);
+        const repeating = isCreateMode && repeatToggle && repeatToggle.checked;
+        if (repeating) {
+            if (repeatEnd.value === 'after' && !(parseInt(repeatCount.value, 10) >= 1)) {
+                errorEl.textContent = i18n.repeatCount;
+                return;
+            }
+            if (repeatEnd.value === 'on' && (!repeatUntil.value || repeatUntil.value < startInput.value.slice(0, 10))) {
+                errorEl.textContent = i18n.repeatUntil;
+                return;
+            }
+        }
 
         fetch(cfg.ajax_url, {
             method: 'POST',
@@ -447,6 +521,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 shift_organizer_name: organizerNameInput.value,
                 shift_organizer_email: organizerEmailInput.value,
                 show_open: cfg.show_open ? '1' : '0',
+                repeat: repeating ? '1' : '',
+                repeat_interval: repeating ? repeatInterval.value : '',
+                repeat_unit: repeating ? repeatUnit.value : '',
+                repeat_end: repeating ? repeatEnd.value : '',
+                repeat_until: repeating ? repeatUntil.value : '',
+                repeat_count: repeating ? repeatCount.value : '',
             }),
         })
             .then((r) => r.json())
@@ -456,6 +536,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
                 const data = res.data;
+
+                // A whole series: reload with the same summary notice "Copy shifts" shows.
+                if (isCreateMode && data.repeat) {
+                    const url = new URL(window.location.href);
+                    ['eventadmin_new_shift', 'shifts_copied', 'copy_days', 'copy_skipped'].forEach(key => url.searchParams.delete(key));
+                    url.searchParams.set('shifts_copied', data.repeat.created);
+                    url.searchParams.set('copy_days', data.repeat.days);
+                    url.searchParams.set('copy_skipped', data.repeat.skipped);
+                    if (cfg.day_view) url.searchParams.set('show_open', '1');
+                    window.location.href = url.toString();
+                    return;
+                }
 
                 if (isCreateMode) {
                     cfg.shifts[data.shift_id] = {
