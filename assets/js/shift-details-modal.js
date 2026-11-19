@@ -446,6 +446,26 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     };
 
+    // Pages without their own save callback (Overview's activity feed, the Volunteers
+    // page, a volunteer's Edit User screen) would otherwise keep showing the old title
+    // and time. Update what's visible in place, then reload — except on user-edit.php,
+    // where a reload would throw away unsaved changes in WordPress's own profile form.
+    function showSavedShiftOnPage(shiftId, data) {
+        document.querySelectorAll('.eventadmin-view-shift-details[data-shift-id="' + shiftId + '"]').forEach(trigger => {
+            if (trigger.classList.contains('eventadmin-cal-chip')) return;
+            trigger.textContent = data.title;
+            trigger.dataset.title = data.title;
+            const periodCell = trigger.closest('.eventadmin-profile-table tr')?.children[1];
+            if (periodCell && data.period) periodCell.textContent = data.period;
+        });
+        if (document.getElementById('your-profile')) return;
+        requestAnimationFrame(() => {
+            const anyOpen = [...document.querySelectorAll('.eventadmin-modal-overlay')]
+                .some(overlay => getComputedStyle(overlay).display !== 'none');
+            if (!anyOpen) window.location.reload();
+        });
+    }
+
     window.eventadminCloseShiftDetailsModal = function () {
         editModal.style.display = 'none';
     };
@@ -594,6 +614,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 if (typeof window.eventadminOnShiftSaved === 'function') {
                     window.eventadminOnShiftSaved(shiftId, data);
+                } else {
+                    showSavedShiftOnPage(shiftId, data);
                 }
                 window.eventadminCloseShiftDetailsModal();
             })
