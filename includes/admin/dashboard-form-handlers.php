@@ -206,6 +206,17 @@ function eventadmin_admin_dashboard_admin_init(): void
         $source_date     = isset($_POST['copy_source_date']) ? sanitize_text_field(wp_unslash($_POST['copy_source_date'])) : '';
         $target_date     = isset($_POST['copy_target_date']) ? sanitize_text_field(wp_unslash($_POST['copy_target_date'])) : '';
         $copy_volunteers = !empty($_POST['copy_volunteers']);
+        $department_id   = isset($_POST['copy_department']) ? absint($_POST['copy_department']) : 0;
+        if ($department_id && !get_term($department_id, 'eventadmin_shift_category')) {
+            $department_id = 0;
+        }
+        // Back to the same tab, month and filters the copy was started from.
+        // (wp_get_referer() is false here: the form posts back to its own URL.)
+        $return_url = wp_validate_redirect(
+            wp_get_raw_referer(),
+            admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-shift-manager')
+        );
+        $return_url = remove_query_arg(['shifts_copied', 'copy_days', 'copy_skipped', 'eventadmin_new_shift'], $return_url);
 
         $is_valid_date = fn($d) => (bool) DateTime::createFromFormat('Y-m-d', $d);
 
@@ -243,23 +254,24 @@ function eventadmin_admin_dashboard_admin_init(): void
                     continue;
                 }
                 $day_skipped = 0;
-                $copied     += eventadmin_copy_shifts_to_day($source_date, $date, false, true, $day_skipped);
+                $copied     += eventadmin_copy_shifts_to_day($source_date, $date, false, true, $day_skipped, $department_id);
                 $skipped    += $day_skipped;
                 $days++;
             }
 
             wp_safe_redirect(add_query_arg(
                 ['shifts_copied' => $copied, 'copy_days' => $days, 'copy_skipped' => $skipped],
-                admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-shift-manager')
+                $return_url
             ));
             exit;
         }
 
-        $copied = eventadmin_copy_shifts_to_day($source_date, $target_date, $copy_volunteers);
+        $skipped_unused = null;
+        $copied = eventadmin_copy_shifts_to_day($source_date, $target_date, $copy_volunteers, false, $skipped_unused, $department_id);
 
         wp_safe_redirect(add_query_arg(
             ['shifts_copied' => $copied],
-            admin_url('edit.php?post_type=eventadmin_shift&page=eventadmin-shift-manager')
+            $return_url
         ));
         exit;
     }

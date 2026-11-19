@@ -58,7 +58,7 @@ msgid "EventAdmin %s is here!"
 msgstr ""
 
 #: eventadmin-volunteer-management.php:278
-msgid "\"Add Shift\" in the Shifts menu now opens the Manager with its \"+ Add shift\" window, the same form as everywhere else, instead of WordPress's own editor, where the shift fields were hard to find."
+msgid "The Calendar now updates as soon as you save a shift. Click \"+\" on a day to add a shift on that date, let a new shift repeat weekly or monthly, and copy a day's shifts for just one department."
 msgstr ""
 
 #: eventadmin-volunteer-management.php:284
@@ -4361,4 +4361,28 @@ msgstr ""
 
 #: includes/shiftselector.php:529
 msgid "You are not signed up for this shift."
+msgstr ""
+
+#. translators: %s: date
+#: includes/admin/dashboard-tab-calendar.php:318
+#, php-format
+msgid "Add a shift on %s"
+msgstr ""
+
+#: includes/admin/dashboard-tab-calendar.php:360
+msgid "Click a shift to edit it, a day to open it on the Day tab, or + to add a shift on that day."
+msgstr ""
+
+#. translators: %d: maximum number of dates in one series
+#: includes/admin/shift-details-modal.php:84
+#, php-format
+msgid "Creates the same shift on every date of the series. Monthly repeats use the same day of the month and skip months without it. Up to %d dates; a day that already has this shift is skipped."
+msgstr ""
+
+#: includes/admin/documentation.php:692
+msgid "Can I add a single shift that repeats, or copy just one department?"
+msgstr ""
+
+#: includes/admin/documentation.php:693
+msgid "Yes. In the Calendar, click the + on a day to open \"Add shift\" on that date, with the filtered department already selected. Tick \"Repeat\" in the \"Add shift\" window to create the same shift every N weeks or months, with the same options as above. In \"Copy shifts to another day\", pick a department to copy only its shifts (sub-departments included)."
 msgstr ""

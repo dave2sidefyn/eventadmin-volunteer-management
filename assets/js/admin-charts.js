@@ -93,6 +93,25 @@ document.addEventListener('DOMContentLoaded', function () {
             repeatUntilRow.addEventListener('change', syncRepeat);
             syncRepeat();
         }
+
+        // Department: "Copy shifts from" only lists days with shifts in that department.
+        const copyDepartment = document.getElementById('eventadmin-copy-department');
+        const copySource = document.getElementById('eventadmin-copy-source-date');
+        if (copyDepartment && copySource) {
+            const syncSourceDates = () => {
+                const chosen = copyDepartment.selectedOptions[0];
+                const dates = chosen && chosen.dataset.dates ? JSON.parse(chosen.dataset.dates) : null;
+                [...copySource.options].forEach(option => {
+                    if (!option.value) return;
+                    const offered = !dates || dates.includes(option.value);
+                    option.hidden = !offered;
+                    option.disabled = !offered;
+                });
+                if (copySource.selectedOptions[0]?.disabled) copySource.value = '';
+            };
+            copyDepartment.addEventListener('change', syncSourceDates);
+            syncSourceDates();
+        }
     }
 
     // Shared "add volunteer" modal for the Table and Timeline views.
@@ -1328,7 +1347,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // a brand-new shift patches this page's Timeline chart in place — the modal itself has
     // no idea a chart even exists; it's reused unchanged on pages that don't have one (a
     // volunteer's profile, the Overview dashboard).
-    if (typeof EVENTADMIN_SHIFT_EDIT !== 'undefined') {
+    // Only on the Day tab (day_view): Calendar, Table and Cards register their own
+    // reload-after-save callbacks inline, which this file runs after and must not replace —
+    // otherwise saving a shift there changed nothing on screen until a manual reload.
+    if (typeof EVENTADMIN_SHIFT_EDIT !== 'undefined' && EVENTADMIN_SHIFT_EDIT.day_view) {
         if (timelineState) {
             window.eventadminOnShiftRosterChanged = function (shiftId, data) {
                 timelineState.replaceShiftRows(shiftId, data.rows);

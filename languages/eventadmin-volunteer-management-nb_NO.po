@@ -67,8 +67,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s er her!"
 
 #: eventadmin-volunteer-management.php:278
-msgid "\"Add Shift\" in the Shifts menu now opens the Manager with its \"+ Add shift\" window, the same form as everywhere else, instead of WordPress's own editor, where the shift fields were hard to find."
-msgstr "«Legg til vakt» i Vakter-menyen åpner nå Manager med vinduet «+ Legg til vakt», det samme skjemaet som overalt ellers, i stedet for WordPress sin egen redigerer, der vaktfeltene var vanskelige å finne."
+msgid "The Calendar now updates as soon as you save a shift. Click \"+\" on a day to add a shift on that date, let a new shift repeat weekly or monthly, and copy a day's shifts for just one department."
+msgstr "Kalenderen oppdateres nå med en gang du lagrer en vakt. Med «+» på en dag legger du til en vakt den dagen, nye vakter kan gjentas ukentlig eller månedlig, og når du kopierer en dag, kan du velge én avdeling."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"
@@ -5435,6 +5435,30 @@ msgstr "Du har blitt fjernet."
 #: includes/shiftselector.php:529
 msgid "You are not signed up for this shift."
 msgstr "Du er ikke påmeldt denne vakten."
+
+#. translators: %s: date
+#: includes/admin/dashboard-tab-calendar.php:318
+#, php-format
+msgid "Add a shift on %s"
+msgstr "Legg til en vakt %s"
+
+#: includes/admin/dashboard-tab-calendar.php:360
+msgid "Click a shift to edit it, a day to open it on the Day tab, or + to add a shift on that day."
+msgstr "Klikk på en vakt for å redigere den, på en dag for å åpne den i fanen Dag, eller på + for å legge til en vakt den dagen."
+
+#. translators: %d: maximum number of dates in one series
+#: includes/admin/shift-details-modal.php:84
+#, php-format
+msgid "Creates the same shift on every date of the series. Monthly repeats use the same day of the month and skip months without it. Up to %d dates; a day that already has this shift is skipped."
+msgstr "Oppretter den samme vakten på hver dato i serien. Månedlige gjentakelser bruker samme dag i måneden og hopper over måneder uten den. Opptil %d datoer; en dag som allerede har denne vakten, hoppes over."
+
+#: includes/admin/documentation.php:692
+msgid "Can I add a single shift that repeats, or copy just one department?"
+msgstr "Kan jeg gjenta én enkelt vakt, eller kopiere bare én avdeling?"
+
+#: includes/admin/documentation.php:693
+msgid "Yes. In the Calendar, click the + on a day to open \"Add shift\" on that date, with the filtered department already selected. Tick \"Repeat\" in the \"Add shift\" window to create the same shift every N weeks or months, with the same options as above. In \"Copy shifts to another day\", pick a department to copy only its shifts (sub-departments included)."
+msgstr "Ja. Klikk på + på en dag i kalenderen for å åpne «Legg til vakt» på den datoen, med den filtrerte avdelingen allerede valgt. Kryss av for «Gjenta» i vinduet «Legg til vakt» for å opprette den samme vakten hver N. uke eller måned, med de samme valgene som over. I «Kopier vakter til en annen dag» kan du velge en avdeling for å kopiere bare dens vakter (underavdelinger inkludert)."
 
 #~ msgid ""
 #~ "Repeat shifts every N weeks or months, ending on a date or after a number "

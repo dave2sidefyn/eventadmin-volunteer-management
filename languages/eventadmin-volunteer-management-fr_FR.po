@@ -68,8 +68,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s est disponible !"
 
 #: eventadmin-volunteer-management.php:278
-msgid "\"Add Shift\" in the Shifts menu now opens the Manager with its \"+ Add shift\" window, the same form as everywhere else, instead of WordPress's own editor, where the shift fields were hard to find."
-msgstr "« Ajouter un créneau » dans le menu Créneaux ouvre désormais Manager avec sa fenêtre « + Ajouter un créneau », le même formulaire que partout ailleurs, au lieu de l’éditeur de WordPress, où les champs du créneau étaient difficiles à trouver."
+msgid "The Calendar now updates as soon as you save a shift. Click \"+\" on a day to add a shift on that date, let a new shift repeat weekly or monthly, and copy a day's shifts for just one department."
+msgstr "Le calendrier se met désormais à jour dès que vous enregistrez un créneau. Cliquez sur « + » sur un jour pour y ajouter un créneau, répétez un nouveau créneau chaque semaine ou chaque mois, et copiez les créneaux d’un jour pour un seul département."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"
@@ -5552,6 +5552,30 @@ msgstr "Vous avez été désinscrit avec succès."
 #: includes/shiftselector.php:529
 msgid "You are not signed up for this shift."
 msgstr "Vous n'êtes pas inscrit à ce créneau."
+
+#. translators: %s: date
+#: includes/admin/dashboard-tab-calendar.php:318
+#, php-format
+msgid "Add a shift on %s"
+msgstr "Ajouter un créneau le %s"
+
+#: includes/admin/dashboard-tab-calendar.php:360
+msgid "Click a shift to edit it, a day to open it on the Day tab, or + to add a shift on that day."
+msgstr "Cliquez sur un créneau pour le modifier, sur un jour pour l’ouvrir dans l’onglet Jour, ou sur + pour ajouter un créneau ce jour-là."
+
+#. translators: %d: maximum number of dates in one series
+#: includes/admin/shift-details-modal.php:84
+#, php-format
+msgid "Creates the same shift on every date of the series. Monthly repeats use the same day of the month and skip months without it. Up to %d dates; a day that already has this shift is skipped."
+msgstr "Crée le même créneau à chaque date de la série. Les répétitions mensuelles gardent le même jour du mois et sautent les mois qui ne l’ont pas. Jusqu’à %d dates ; un jour qui a déjà ce créneau est ignoré."
+
+#: includes/admin/documentation.php:692
+msgid "Can I add a single shift that repeats, or copy just one department?"
+msgstr "Puis-je répéter un seul créneau, ou copier un seul département ?"
+
+#: includes/admin/documentation.php:693
+msgid "Yes. In the Calendar, click the + on a day to open \"Add shift\" on that date, with the filtered department already selected. Tick \"Repeat\" in the \"Add shift\" window to create the same shift every N weeks or months, with the same options as above. In \"Copy shifts to another day\", pick a department to copy only its shifts (sub-departments included)."
+msgstr "Oui. Dans le calendrier, cliquez sur le + d’un jour pour ouvrir « Ajouter un créneau » à cette date, avec le département filtré déjà sélectionné. Cochez « Répéter » dans la fenêtre « Ajouter un créneau » pour créer le même créneau toutes les N semaines ou tous les N mois, avec les mêmes options que ci-dessus. Dans « Copier les créneaux vers un autre jour », choisissez un département pour ne copier que ses créneaux (sous-départements compris)."
 
 #~ msgid ""
 #~ "Repeat shifts every N weeks or months, ending on a date or after a number "

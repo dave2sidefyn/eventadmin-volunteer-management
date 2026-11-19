@@ -146,9 +146,11 @@ function eventadmin_overview_parse_filter_state(string $page_slug, array $allowe
  *
  * @param string   $view        Current view — no-op on 'dashboard', which has no trigger.
  * @param string[] $shift_dates Distinct dates with at least one shift, for the "from" dropdown.
+ * @param WP_Term[] $categories From eventadmin_get_hierarchical_shift_categories().
+ * @param string    $selected_cat Department filter slug — pre-selected as the department to copy.
  * @return void
  */
-function eventadmin_render_copy_shifts_notice_and_modal(string $view, array $shift_dates): void
+function eventadmin_render_copy_shifts_notice_and_modal(string $view, array $shift_dates, array $categories = [], string $selected_cat = ''): void
 {
     if ($view === 'dashboard') {
         return;
@@ -192,7 +194,20 @@ function eventadmin_render_copy_shifts_notice_and_modal(string $view, array $shi
     echo '<form method="post">';
     wp_nonce_field('eventadmin_copy_shifts', 'eventadmin_copy_shifts_nonce');
     echo '<input type="hidden" name="eventadmin_copy_shifts_day" value="1">';
-    echo '<p><label>' . esc_html__('Copy shifts from:', 'eventadmin-volunteer-management') . '<br><select name="copy_source_date" required style="width:100%;">';
+    // Department: only that department's shifts (sub-departments included) are copied, and
+    // "from" only lists days that have some. Pre-selected from the Manager's own filter.
+    if (!empty($categories)) {
+        $dates_by_department = eventadmin_shift_dates_by_department();
+        $selected_term_id    = eventadmin_department_id_from_slug($selected_cat);
+        echo '<p><label>' . esc_html__('Department', 'eventadmin-volunteer-management') . '<br><select name="copy_department" id="eventadmin-copy-department" style="width:100%;">';
+        echo '<option value="0">' . esc_html__('All departments', 'eventadmin-volunteer-management') . '</option>';
+        foreach ($categories as $cat) {
+            $prefix = $cat->depth > 0 ? str_repeat('&nbsp;&nbsp;&nbsp;', $cat->depth) . '&#8211; ' : '';
+            echo '<option value="' . esc_attr($cat->term_id) . '" data-dates="' . esc_attr(wp_json_encode($dates_by_department[$cat->term_id] ?? [])) . '"' . selected($selected_term_id, $cat->term_id, false) . '>' . $prefix . esc_html($cat->name) . '</option>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $prefix is static markup
+        }
+        echo '</select></label></p>';
+    }
+    echo '<p><label>' . esc_html__('Copy shifts from:', 'eventadmin-volunteer-management') . '<br><select name="copy_source_date" id="eventadmin-copy-source-date" required style="width:100%;">';
     echo '<option value="">' . esc_html__('Select a day…', 'eventadmin-volunteer-management') . '</option>';
     foreach ($shift_dates as $date) {
         $date_label = date_i18n('l, ' . get_option('date_format'), strtotime($date));
@@ -712,7 +727,7 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
     $day_stats          = $filter_state['day_stats'];
     $calendar           = $filter_state['calendar'];
 
-    eventadmin_render_copy_shifts_notice_and_modal($view, $shift_dates);
+    eventadmin_render_copy_shifts_notice_and_modal($view, $shift_dates, $categories, $selected_cat);
 
     echo '<div class="wrap">';
     eventadmin_render_overview_heading($page_title, $view);
@@ -768,7 +783,13 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
     if ($view === 'calendar') {
         eventadmin_render_calendar_view($filter_query_args, $calendar['mode'], $calendar['anchor'], $selected_cat, $selected_volunteer, $selected_state);
         if (current_user_can('eventadmin_manage_shifts')) {
-            eventadmin_render_shared_volunteer_modals(['default_date' => $calendar['anchor']]);
+            $new_shift_date = preg_match('/^\d{4}-\d{2}-\d{2}$/', $selected_date)
+                ? $selected_date
+                : eventadmin_calendar_default_new_shift_date($calendar['mode'], $calendar['anchor'], $day_stats);
+            eventadmin_render_shared_volunteer_modals([
+                'default_date'     => $new_shift_date,
+                'default_category' => eventadmin_department_id_from_slug($selected_cat),
+            ]);
             echo '<script>window.eventadminOnShiftCreated = window.eventadminOnShiftSaved = function () { window.location.reload(); };</script>';
         }
         echo '</div>';
@@ -807,13 +828,16 @@ function eventadmin_render_overview_page(string $page_slug, array $allowed_views
 
     eventadmin_render_add_volunteer_modal($view, $volunteers, $shift_info_map);
 
-    eventadmin_render_timeline_shift_modals_and_config($view, $shift_edit_map, $show_open, $selected_date, $selected_state, $selected_volunteer);
+    eventadmin_render_timeline_shift_modals_and_config($view, $shift_edit_map, $show_open, $selected_date, $selected_state, $selected_volunteer, $selected_cat);
 
     // The Day view renders the shift modal with its own richer config (above); the other
     // tabs get the shared one, so "+ Add shift" and editing work there too — reloading
     // afterwards, since only the Day view updates itself in place.
     if ($view !== 'timeline' && current_user_can('eventadmin_manage_shifts')) {
-        eventadmin_render_shared_volunteer_modals(['default_date' => $selected_date]);
+        eventadmin_render_shared_volunteer_modals([
+            'default_date'     => $selected_date,
+            'default_category' => eventadmin_department_id_from_slug($selected_cat),
+        ]);
         echo '<script>window.eventadminOnShiftCreated = window.eventadminOnShiftSaved = function () { window.location.reload(); };</script>';
     }
 

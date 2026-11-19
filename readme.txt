@@ -4,7 +4,7 @@ Tags: volunteer, volunteer management, shift scheduling, event management, roste
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.10.3
+Stable tag: 3.11.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,13 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.11.0 =
+* Fix: Editing a shift from the Calendar, the Overview's activity feed, the Volunteers page or a volunteer's Edit User screen now shows the change right away; before, the page only updated after reloading it
+* New: "Repeat" in the "Add shift" window (and when duplicating a shift) — every N weeks or months, ending on a date or after a number of times, with the same limits as "Copy shifts to another day"
+* New: A "+" on each Calendar day opens "Add shift" on exactly that date, with the filtered department pre-selected. "+ Add shift" in the Calendar starts on today or the first shift day of the month shown instead of the 1st
+* Changed: In the shift window, moving the start also moves the end, so the shift keeps its length instead of ending on the old day
+* New: "Copy shifts to another day" can copy just one department (sub-departments included), pre-selected from the Manager's department filter, and returns to the same tab and filters afterwards
 
 = Version 3.10.3 =
 * Changed: "Add Shift" in the Shifts menu (also "+ New → Shift" in the admin bar) now opens the Manager with its "+ Add shift" window, the same shift form used everywhere else. The menu item stays hidden by default (Settings → General → "Hide Add Shift menu item")
@@ -259,6 +266,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 For older versions, see changelog.txt in the plugin folder.
 
 == Upgrade Notice ==
+
+= 3.11.0 =
+Calendar updates right after editing a shift, "+" per day, repeating new shifts and copying a single department. No breaking changes.
 
 = 3.10.3 =
 "Add Shift" in the Shifts menu opens the Manager's "+ Add shift" window. No breaking changes.

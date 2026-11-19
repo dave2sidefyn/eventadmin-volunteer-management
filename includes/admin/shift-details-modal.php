@@ -60,6 +60,32 @@ function eventadmin_render_shift_details_modal_markup(): void
     echo '<label style="flex:1;">' . esc_html__('Min. Volunteers', 'eventadmin-volunteer-management') . '<br><input type="number" id="eventadmin-edit-shift-min" min="0" style="width:100%;"></label>';
     echo '<label style="flex:1;">' . esc_html__('Max. Volunteers', 'eventadmin-volunteer-management') . '<br><input type="number" id="eventadmin-edit-shift-max" min="1" style="width:100%;"></label>';
     echo '</p>';
+    // "Repeat" — only while creating or duplicating (shift-details-modal.js shows it), same
+    // options and limits as "Copy shifts to another day". No name attributes: on
+    // user-edit.php this markup sits inside WordPress's own profile <form>.
+    echo '<div id="eventadmin-edit-shift-repeat-section" style="display:none;">';
+    echo '<p><label><input type="checkbox" id="eventadmin-edit-shift-repeat"> ' . esc_html__('Repeat', 'eventadmin-volunteer-management') . '</label></p>';
+    echo '<fieldset id="eventadmin-edit-shift-repeat-options" style="display:none;margin:0 0 1em;">';
+    echo '<p><label>' . esc_html__('Every', 'eventadmin-volunteer-management') . ' <input type="number" id="eventadmin-edit-shift-repeat-interval" value="1" min="1" max="12" style="width:4.5em;"></label> ';
+    echo '<select id="eventadmin-edit-shift-repeat-unit" aria-label="' . esc_attr__('Repeat unit', 'eventadmin-volunteer-management') . '">';
+    echo '<option value="week">' . esc_html__('week(s)', 'eventadmin-volunteer-management') . '</option>';
+    echo '<option value="month">' . esc_html__('month(s)', 'eventadmin-volunteer-management') . '</option>';
+    echo '</select></p>';
+    echo '<p style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">' . esc_html__('Ends', 'eventadmin-volunteer-management') . ' ';
+    echo '<select id="eventadmin-edit-shift-repeat-end" aria-label="' . esc_attr__('Ends', 'eventadmin-volunteer-management') . '">';
+    echo '<option value="on">' . esc_html__('On', 'eventadmin-volunteer-management') . '</option>';
+    echo '<option value="after">' . esc_html__('After', 'eventadmin-volunteer-management') . '</option>';
+    echo '</select> ';
+    echo '<input type="date" id="eventadmin-edit-shift-repeat-until" aria-label="' . esc_attr__('until (including):', 'eventadmin-volunteer-management') . '">';
+    echo '<span id="eventadmin-edit-shift-repeat-count-wrap" style="display:none;"><input type="number" id="eventadmin-edit-shift-repeat-count" min="1" max="' . esc_attr(EVENTADMIN_MAX_REPEAT_WEEKS) . '" style="width:4.5em;" aria-label="' . esc_attr__('Number of times', 'eventadmin-volunteer-management') . '"> ' . esc_html__('times', 'eventadmin-volunteer-management') . '</span>';
+    echo '</p>';
+    echo '<span class="description">' . esc_html(sprintf(
+        /* translators: %d: maximum number of dates in one series */
+        __('Creates the same shift on every date of the series. Monthly repeats use the same day of the month and skip months without it. Up to %d dates; a day that already has this shift is skipped.', 'eventadmin-volunteer-management'),
+        EVENTADMIN_MAX_REPEAT_WEEKS
+    )) . '</span>';
+    echo '</fieldset>';
+    echo '</div>';
     echo '<p><label>' . esc_html__('Description', 'eventadmin-volunteer-management') . '</label></p>';
     wp_editor('', 'eventadmin_edit_shift_description', [
         'textarea_name' => 'description',
@@ -137,6 +163,7 @@ function eventadmin_enqueue_shift_details_modal_script(array $extra = []): void
         'move_shifts'   => [],
         'show_open'     => false,
         'default_date'  => '',
+        'default_category' => 0,
         'i18n'          => [
             'error'          => esc_html__('An error occurred. Please try again.', 'eventadmin-volunteer-management'),
             'loading'        => esc_html__('Loading…', 'eventadmin-volunteer-management'),
@@ -145,8 +172,15 @@ function eventadmin_enqueue_shift_details_modal_script(array $extra = []): void
             /* translators: %s is the volunteer's name. */
             'confirmRemove' => esc_html__('Remove %s from this shift?', 'eventadmin-volunteer-management'),
             'requiredFields' => esc_html__('Title, start and end are required.', 'eventadmin-volunteer-management'),
+            'repeatCount'    => esc_html__('Please enter how many times the shifts should repeat.', 'eventadmin-volunteer-management'),
+            'repeatUntil'    => esc_html__('Please choose a "repeat until" date on or after the first target date.', 'eventadmin-volunteer-management'),
         ],
     ], $extra);
+    // $extra replaces 'i18n' wholesale (array_merge isn't recursive) — keep these.
+    $config['i18n'] += [
+        'repeatCount' => esc_html__('Please enter how many times the shifts should repeat.', 'eventadmin-volunteer-management'),
+        'repeatUntil' => esc_html__('Please choose a "repeat until" date on or after the first target date.', 'eventadmin-volunteer-management'),
+    ];
 
     wp_localize_script('eventadmin-shift-details-modal', 'EVENTADMIN_SHIFT_EDIT', $config);
 }
