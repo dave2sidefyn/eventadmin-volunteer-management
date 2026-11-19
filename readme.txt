@@ -128,7 +128,7 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 == Changelog ==
 
 = Version 3.11.0 =
-* Fix: Editing a shift from the Calendar now shows the change right away; before, the Calendar only updated after reloading the page
+* Fix: Editing a shift from the Calendar, the Overview's activity feed, the Volunteers page or a volunteer's Edit User screen now shows the change right away; before, the page only updated after reloading it
 * New: "Repeat" in the "Add shift" window (and when duplicating a shift) — every N weeks or months, ending on a date or after a number of times, with the same limits as "Copy shifts to another day"
 * New: A "+" on each Calendar day opens "Add shift" on exactly that date, with the filtered department pre-selected. "+ Add shift" in the Calendar starts on today or the first shift day of the month shown instead of the 1st
 * Changed: In the shift window, moving the start also moves the end, so the shift keeps its length instead of ending on the old day
