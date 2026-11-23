@@ -69,8 +69,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s ist da!"
 
 #: eventadmin-volunteer-management.php:278
-msgid "The Calendar now updates as soon as you save a shift. Click \"+\" on a day to add a shift on that date, let a new shift repeat weekly or monthly, and copy a day's shifts for just one department."
-msgstr "Der Kalender aktualisiert sich jetzt sofort, wenn Sie eine Schicht speichern. Mit „+“ an einem Tag legen Sie dort eine Schicht an, neue Schichten lassen sich wöchentlich oder monatlich wiederholen, und beim Kopieren eines Tages können Sie eine einzelne Abteilung wählen."
+msgid "You can now delete a shift in the Calendar, Table and Cards tabs too: open the shift and click \"Delete shift\"."
+msgstr "Sie können Schichten jetzt auch im Kalender, in der Tabelle und in den Karten löschen: Schicht öffnen und auf „Schicht löschen“ klicken."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"

@@ -4,7 +4,7 @@ Tags: volunteer, volunteer management, shift scheduling, event management, roste
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.11.0
+Stable tag: 3.11.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.11.1 =
+* New: "Delete shift" in the shift window, so a shift can be deleted from the Calendar, Table and Cards tabs too, not only from the Day view. Same confirmation and "Notify affected volunteers" option as on the Day view; the view updates right away
 
 = Version 3.11.0 =
 * Fix: Editing a shift from the Calendar, the Overview's activity feed, the Volunteers page or a volunteer's Edit User screen now shows the change right away; before, the page only updated after reloading it
@@ -266,6 +269,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 For older versions, see changelog.txt in the plugin folder.
 
 == Upgrade Notice ==
+
+= 3.11.1 =
+Delete shifts from the Calendar, Table and Cards tabs too. No breaking changes.
 
 = 3.11.0 =
 Calendar updates right after editing a shift, "+" per day, repeating new shifts and copying a single department. No breaking changes.
