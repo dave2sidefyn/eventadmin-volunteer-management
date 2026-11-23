@@ -68,8 +68,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s est disponible !"
 
 #: eventadmin-volunteer-management.php:278
-msgid "The Calendar now updates as soon as you save a shift. Click \"+\" on a day to add a shift on that date, let a new shift repeat weekly or monthly, and copy a day's shifts for just one department."
-msgstr "Le calendrier se met désormais à jour dès que vous enregistrez un créneau. Cliquez sur « + » sur un jour pour y ajouter un créneau, répétez un nouveau créneau chaque semaine ou chaque mois, et copiez les créneaux d’un jour pour un seul département."
+msgid "You can now delete a shift in the Calendar, Table and Cards tabs too: open the shift and click \"Delete shift\"."
+msgstr "Vous pouvez désormais supprimer un créneau aussi depuis le Calendrier, le Tableau et les Cartes : ouvrez le créneau et cliquez sur « Supprimer le créneau »."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"

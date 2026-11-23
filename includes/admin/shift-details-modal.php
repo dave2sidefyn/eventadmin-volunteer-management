@@ -116,8 +116,12 @@ function eventadmin_render_shift_details_modal_markup(): void
     echo '</div>';
     echo '</details>';
     echo '<p id="eventadmin-edit-shift-error" style="color:#d63638;"></p>';
-    echo '<p>';
+    echo '<p style="display:flex;justify-content:space-between;align-items:center;gap:8px;">';
     echo '<button type="button" id="eventadmin-edit-shift-submit" class="button button-primary">' . esc_html__('Save', 'eventadmin-volunteer-management') . '</button> ';
+    // "Delete shift" — same action as the Day view's popover, so the Calendar, Table and
+    // Cards tabs can delete too. Shown by shift-details-modal.js only for an existing shift
+    // the viewer may delete (never while creating or duplicating).
+    echo '<button type="button" id="eventadmin-edit-shift-delete" class="button-link button-link-delete" hidden>' . esc_html__('Delete shift', 'eventadmin-volunteer-management') . '</button>';
     echo '</p>';
     echo '</div>';
 
@@ -131,6 +135,12 @@ function eventadmin_render_shift_details_modal_markup(): void
     echo '<p id="eventadmin-remove-notify-row"><label><input type="checkbox" id="eventadmin-remove-notify"> ' . esc_html__('Notify volunteer', 'eventadmin-volunteer-management') . '</label></p>';
     echo '<p><button type="button" class="button" id="eventadmin-remove-cancel" autofocus>' . esc_html__('Cancel', 'eventadmin-volunteer-management') . '</button> ';
     echo '<button type="button" class="button button-primary" id="eventadmin-remove-submit">' . esc_html__('Remove from shift', 'eventadmin-volunteer-management') . '</button></p></dialog>';
+    echo '<dialog id="eventadmin-delete-shift-confirm" aria-labelledby="eventadmin-delete-shift-confirm-heading" aria-describedby="eventadmin-delete-shift-confirm-question eventadmin-delete-shift-confirm-context" style="width:min(440px,calc(100vw - 48px));padding:24px;border:1px solid #c3c4c7;border-radius:8px;box-shadow:0 8px 40px #0004;">';
+    echo '<h3 id="eventadmin-delete-shift-confirm-heading" style="margin-top:0;">' . esc_html__('Delete shift', 'eventadmin-volunteer-management') . '</h3>';
+    echo '<p id="eventadmin-delete-shift-confirm-question"></p><p id="eventadmin-delete-shift-confirm-context" class="description"></p>';
+    echo '<p id="eventadmin-delete-shift-notify-row"><label><input type="checkbox" id="eventadmin-delete-shift-notify"> ' . esc_html__('Notify affected volunteers', 'eventadmin-volunteer-management') . '</label></p>';
+    echo '<p><button type="button" class="button" id="eventadmin-delete-shift-cancel" autofocus>' . esc_html__('Cancel', 'eventadmin-volunteer-management') . '</button> ';
+    echo '<button type="button" class="button button-primary" id="eventadmin-delete-shift-submit">' . esc_html__('Delete shift', 'eventadmin-volunteer-management') . '</button></p></dialog>';
     eventadmin_render_modal_close();
 }
 
@@ -171,6 +181,9 @@ function eventadmin_enqueue_shift_details_modal_script(array $extra = []): void
             'addShift'       => esc_html__('Add shift', 'eventadmin-volunteer-management'),
             /* translators: %s is the volunteer's name. */
             'confirmRemove' => esc_html__('Remove %s from this shift?', 'eventadmin-volunteer-management'),
+            'confirmDeleteShiftEmpty' => esc_html__('Delete this shift?', 'eventadmin-volunteer-management'),
+            /* translators: %d is the number of volunteers currently assigned to the shift */
+            'confirmDeleteShiftWithVolunteers' => esc_html__('Delete this shift? This will also remove %d assigned volunteer(s) from it.', 'eventadmin-volunteer-management'),
             'requiredFields' => esc_html__('Title, start and end are required.', 'eventadmin-volunteer-management'),
             'repeatCount'    => esc_html__('Please enter how many times the shifts should repeat.', 'eventadmin-volunteer-management'),
             'repeatUntil'    => esc_html__('Please choose a "repeat until" date on or after the first target date.', 'eventadmin-volunteer-management'),
@@ -178,6 +191,9 @@ function eventadmin_enqueue_shift_details_modal_script(array $extra = []): void
     ], $extra);
     // $extra replaces 'i18n' wholesale (array_merge isn't recursive) — keep these.
     $config['i18n'] += [
+        'confirmDeleteShiftEmpty' => esc_html__('Delete this shift?', 'eventadmin-volunteer-management'),
+        /* translators: %d is the number of volunteers currently assigned to the shift */
+        'confirmDeleteShiftWithVolunteers' => esc_html__('Delete this shift? This will also remove %d assigned volunteer(s) from it.', 'eventadmin-volunteer-management'),
         'repeatCount' => esc_html__('Please enter how many times the shifts should repeat.', 'eventadmin-volunteer-management'),
         'repeatUntil' => esc_html__('Please choose a "repeat until" date on or after the first target date.', 'eventadmin-volunteer-management'),
     ];
@@ -279,6 +295,11 @@ function eventadmin_ajax_get_shift_details(): void
         'organizer_email'   => (string) get_post_meta($shift_id, 'shift_organizer_email', true),
         'roster_html'       => $roster_html,
         'can_edit'          => $can_edit,
+        // Drives the window's "Delete shift" button and its confirmation (same wording and
+        // "Notify affected volunteers" option as the Day view's popover).
+        'can_delete'        => $can_edit && current_user_can('delete_post', $shift_id),
+        'assigned_count'    => count($assigned_ids),
+        'notifiable_count'  => count(array_filter($assigned_ids, 'eventadmin_user_can_receive_email')),
         'edit_url'          => $can_edit ? admin_url('post.php?action=edit&post=' . $shift_id) : '',
     ]);
 }

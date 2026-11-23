@@ -37,6 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const repeatUntil         = document.getElementById('eventadmin-edit-shift-repeat-until');
     const repeatCount         = document.getElementById('eventadmin-edit-shift-repeat-count');
     const repeatCountWrap     = document.getElementById('eventadmin-edit-shift-repeat-count-wrap');
+    const deleteBtn           = document.getElementById('eventadmin-edit-shift-delete');
+    const deleteDialog        = document.getElementById('eventadmin-delete-shift-confirm');
     const saveButtonLabel     = submitBtn ? submitBtn.textContent : '';
     const DESCRIPTION_EDITOR_ID = 'eventadmin_edit_shift_description';
 
@@ -65,7 +67,69 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('eventadmin-remove-cancel').addEventListener('click', () => removalDialog.close('cancel'));
     document.getElementById('eventadmin-remove-submit').addEventListener('click', () => removalDialog.close('remove'));
 
+    // "Delete shift" in this window — the same action as the Day view's popover, so the
+    // Calendar, Table and Cards tabs can delete a shift too. Only for an existing shift the
+    // viewer may delete; the counts come with each details fetch (also after roster changes).
+    let deleteInfo = null;
+    function syncDeleteButton(data) {
+        deleteInfo = data && data.can_delete && !isCreateMode
+            ? {assigned: data.assigned_count || 0, notifiable: data.notifiable_count || 0}
+            : null;
+        if (deleteBtn) deleteBtn.hidden = !deleteInfo;
+    }
+    function confirmShiftDeletion() {
+        const notify = document.getElementById('eventadmin-delete-shift-notify');
+        document.getElementById('eventadmin-delete-shift-confirm-question').textContent = deleteInfo.assigned > 0
+            ? (i18n.confirmDeleteShiftWithVolunteers || 'Delete this shift? This will also remove %d assigned volunteer(s) from it.').replace('%d', deleteInfo.assigned)
+            : (i18n.confirmDeleteShiftEmpty || 'Delete this shift?');
+        document.getElementById('eventadmin-delete-shift-confirm-context').textContent = rosterContext;
+        document.getElementById('eventadmin-delete-shift-notify-row').hidden = deleteInfo.notifiable < 1;
+        notify.checked = false;
+        deleteDialog.returnValue = '';
+        return new Promise(resolve => {
+            deleteDialog.addEventListener('close', () => {
+                resolve(deleteDialog.returnValue === 'delete' ? {notify: deleteInfo.notifiable > 0 && notify.checked} : null);
+                if (deleteBtn.isConnected && !deleteBtn.hidden) deleteBtn.focus();
+            }, {once: true});
+            deleteDialog.showModal();
+        });
+    }
+    if (deleteBtn && deleteDialog) {
+        document.getElementById('eventadmin-delete-shift-cancel').addEventListener('click', () => deleteDialog.close('cancel'));
+        document.getElementById('eventadmin-delete-shift-submit').addEventListener('click', () => deleteDialog.close('delete'));
+        deleteBtn.addEventListener('click', async () => {
+            if (!deleteInfo || rosterBusy) return;
+            const shiftId = idInput.value;
+            const confirmation = await confirmShiftDeletion();
+            if (!confirmation || idInput.value !== shiftId || editModal.style.display === 'none') return;
+            errorEl.textContent = '';
+            deleteBtn.disabled = true;
+            try {
+                const response = await fetch(cfg.ajax_url, {
+                    method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: new URLSearchParams({action: 'eventadmin_delete_shift', nonce: cfg.nonce,
+                        shift_id: shiftId, notify_volunteers: confirmation.notify ? '1' : '0'}),
+                }).then(result => result.json());
+                if (!response.success) throw new Error(response.data?.message || i18n.error);
+                delete cfg.shifts[shiftId];
+                if (typeof EVENTADMIN_SHIFT_INFO !== 'undefined') delete EVENTADMIN_SHIFT_INFO[shiftId];
+                window.eventadminCloseShiftDetailsModal();
+                if (typeof window.eventadminOnShiftDeleted === 'function') {
+                    // Numeric, like eventadminOnShiftSaved — timeline rows compare shift_id strictly.
+                    window.eventadminOnShiftDeleted(Number(shiftId));
+                } else {
+                    showDeletedShiftOnPage(shiftId);
+                }
+            } catch (error) {
+                errorEl.textContent = error.message || i18n.error || 'Error';
+            } finally {
+                deleteBtn.disabled = false;
+            }
+        });
+    }
+
     function renderRoster(data) {
+        syncDeleteButton(data);
         rosterContext = [data.title, data.period].filter(Boolean).join(' — ');
         rosterEl.innerHTML = data.roster_html;
         const select = rosterEl.querySelector('.eventadmin-roster-select');
@@ -277,6 +341,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // and always for the roster, the details come from a small AJAX fetch.
     window.eventadminOpenEditShiftModal = function (shiftId) {
         isCreateMode = false;
+        syncDeleteButton(null);
         rosterSection.style.display = '';
         errorEl.textContent = '';
         idInput.value = shiftId;
@@ -362,6 +427,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         isCreateMode = true;
+        syncDeleteButton(null);
         rosterSection.style.display = 'none';
         errorEl.textContent = '';
         idInput.value = '';
@@ -412,6 +478,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // shift, including its volunteers, is touched until Save is clicked on this new one.
     window.eventadminOpenDuplicateShiftModal = function (shiftId) {
         isCreateMode = true;
+        syncDeleteButton(null);
         rosterSection.style.display = 'none';
         errorEl.textContent = '';
         idInput.value = '';
@@ -464,6 +531,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 .some(overlay => getComputedStyle(overlay).display !== 'none');
             if (!anyOpen) window.location.reload();
         });
+    }
+
+    // Same idea for a deleted shift: drop its entries in place, then reload (again not on
+    // user-edit.php, where the entries are simply removed).
+    function showDeletedShiftOnPage(shiftId) {
+        const triggers = document.querySelectorAll('.eventadmin-view-shift-details[data-shift-id="' + shiftId + '"]');
+        if (document.getElementById('your-profile')) {
+            triggers.forEach(trigger => (trigger.closest('.eventadmin-profile-table tr') || trigger).remove());
+            return;
+        }
+        window.location.reload();
     }
 
     window.eventadminCloseShiftDetailsModal = function () {

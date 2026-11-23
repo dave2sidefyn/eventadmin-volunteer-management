@@ -1362,6 +1362,15 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
 
+        // "Delete shift" in the shift window: drop its rows, same as the popover's delete.
+        window.eventadminOnShiftDeleted = function (shiftId) {
+            if (timelineState) {
+                timelineState.replaceShiftRows(shiftId, []);
+            } else {
+                window.location.reload();
+            }
+        };
+
         window.eventadminOnShiftCreated = function (shiftId, data) {
             if (timelineState) {
                 if (!EVENTADMIN_SHIFT_EDIT.show_open) {
