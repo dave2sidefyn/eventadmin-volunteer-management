@@ -58,7 +58,7 @@ msgid "EventAdmin %s is here!"
 msgstr ""
 
 #: eventadmin-volunteer-management.php:278
-msgid "You can now delete a shift in the Calendar, Table and Cards tabs too: open the shift and click \"Delete shift\"."
+msgid "Organizer emails for sign-ups and cancellations can now be switched off separately (Settings → Communication), and \"Copy shifts\" can copy the volunteers into a repeating series too."
 msgstr ""
 
 #: eventadmin-volunteer-management.php:284
@@ -809,7 +809,7 @@ msgstr ""
 #. translators: %d: maximum number of dates in one series
 #: includes/admin/dashboard-overview-page.php:217
 #, php-format
-msgid "Monthly repeats use the same day of the month and skip months without it. Up to %d dates; shifts that already exist on a day are skipped, and volunteers are not copied."
+msgid "Monthly repeats use the same day of the month and skip months without it. Up to %d dates; shifts that already exist on a day are skipped."
 msgstr ""
 
 #: includes/admin/dashboard-overview-page.php:220
@@ -2044,7 +2044,7 @@ msgid "Open Settings → Communication"
 msgstr ""
 
 #: includes/admin/documentation.php:439
-msgid "The shift's organizer is also emailed on every sign-up and cancellation — a separate pair of templates under Settings → Communication → Shift Confirmations → \"Organizer Notifications\", with the same placeholders as above."
+msgid "The shift's organizer is also emailed on every sign-up and cancellation — a separate pair of templates under Settings → Communication → Shift Confirmations → \"Organizer Notifications\", with the same placeholders as above. Each of the two can be switched off there, e.g. to only hear about cancellations."
 msgstr ""
 
 #: includes/admin/documentation.php:443
@@ -2405,7 +2405,7 @@ msgid "Can I create recurring shifts?"
 msgstr ""
 
 #: includes/admin/documentation.php:690
-msgid "Yes. Set up one day's shifts, then use \"Copy shifts to another day\", pick the first new date and tick \"Repeat\". Choose every N weeks or months and whether the series ends on a date or after a number of times (up to 52 dates). Monthly repeats use the same day of the month and skip months without it. Running the same repeat again skips shifts that already exist, and volunteers are never copied into a series."
+msgid "Yes. Set up one day's shifts, then use \"Copy shifts to another day\", pick the first new date and tick \"Repeat\". Choose every N weeks or months and whether the series ends on a date or after a number of times (up to 52 dates). Monthly repeats use the same day of the month and skip months without it. Running the same repeat again skips shifts that already exist. Tick \"Also copy the volunteers currently signed up\" to put the same volunteers on every date, e.g. for regulars."
 msgstr ""
 
 #: includes/admin/documentation.php:692
@@ -4385,4 +4385,20 @@ msgstr ""
 
 #: includes/admin/documentation.php:693
 msgid "Yes. In the Calendar, click the + on a day to open \"Add shift\" on that date, with the filtered department already selected. Tick \"Repeat\" in the \"Add shift\" window to create the same shift every N weeks or months, with the same options as above. In \"Copy shifts to another day\", pick a department to copy only its shifts (sub-departments included)."
+msgstr ""
+
+#: includes/admin/settings.php:993
+msgid "Send email (Sign up)"
+msgstr ""
+
+#: includes/admin/settings.php:1028
+msgid "Send email (Sign out)"
+msgstr ""
+
+#: includes/admin/settings.php:996
+msgid "Email the organizer when a volunteer signs up"
+msgstr ""
+
+#: includes/admin/settings.php:1031
+msgid "Email the organizer when a volunteer cancels"
 msgstr ""

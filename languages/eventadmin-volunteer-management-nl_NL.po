@@ -68,8 +68,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s is er!"
 
 #: eventadmin-volunteer-management.php:278
-msgid "You can now delete a shift in the Calendar, Table and Cards tabs too: open the shift and click \"Delete shift\"."
-msgstr "Je kunt diensten nu ook verwijderen in Kalender, Tabel en Kaarten: open de dienst en klik op „Dienst verwijderen”."
+msgid "Organizer emails for sign-ups and cancellations can now be switched off separately (Settings → Communication), and \"Copy shifts\" can copy the volunteers into a repeating series too."
+msgstr "E-mails aan de organisator bij aanmeldingen en afmeldingen kunnen nu apart worden uitgeschakeld (Instellingen → Communicatie), en \"Diensten kopiëren\" kan de vrijwilligers ook in een herhalende reeks meekopiëren."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"
@@ -779,14 +779,8 @@ msgstr "keer"
 #. translators: %d: maximum number of dates in one series
 #: includes/admin/dashboard-overview-page.php:217
 #, php-format
-msgid ""
-"Monthly repeats use the same day of the month and skip months without it. Up "
-"to %d dates; shifts that already exist on a day are skipped, and volunteers "
-"are not copied."
-msgstr ""
-"Maandelijkse herhalingen gebruiken dezelfde dag van de maand en slaan "
-"maanden zonder die dag over. Maximaal %d datums; diensten die op een dag al "
-"bestaan worden overgeslagen en vrijwilligers worden niet gekopieerd."
+msgid "Monthly repeats use the same day of the month and skip months without it. Up to %d dates; shifts that already exist on a day are skipped."
+msgstr "Maandelijkse herhalingen gebruiken dezelfde dag van de maand en slaan maanden zonder die dag over. Maximaal %d datums; diensten die op een dag al bestaan worden overgeslagen."
 
 #: includes/admin/dashboard-overview-page.php:220
 msgid "Also copy the volunteers currently signed up"
@@ -2392,16 +2386,8 @@ msgid "Open Settings → Communication"
 msgstr "Instellingen → Communicatie openen"
 
 #: includes/admin/documentation.php:439
-msgid ""
-"The shift's organizer is also emailed on every sign-up and cancellation — a "
-"separate pair of templates under Settings → Communication → Shift "
-"Confirmations → \"Organizer Notifications\", with the same placeholders as "
-"above."
-msgstr ""
-"De organisator van de dienst ontvangt ook een e-mail bij elke aanmelding en "
-"afmelding — een apart sjabloonpaar onder Instellingen → Communicatie → "
-"Dienstbevestigingen → \"Meldingen aan organisator\", met dezelfde "
-"placeholders als hierboven."
+msgid "The shift's organizer is also emailed on every sign-up and cancellation — a separate pair of templates under Settings → Communication → Shift Confirmations → \"Organizer Notifications\", with the same placeholders as above. Each of the two can be switched off there, e.g. to only hear about cancellations."
+msgstr "De organisator van de dienst ontvangt ook een e-mail bij elke aanmelding en afmelding — een apart sjabloonpaar onder Instellingen → Communicatie → Dienstbevestigingen → \"Meldingen aan organisator\", met dezelfde placeholders als hierboven. Elk van beide kan daar worden uitgeschakeld, bijvoorbeeld om alleen afmeldingen te ontvangen."
 
 #: includes/admin/documentation.php:443
 msgid ""
@@ -3174,21 +3160,8 @@ msgid "Can I create recurring shifts?"
 msgstr "Kan ik terugkerende diensten aanmaken?"
 
 #: includes/admin/documentation.php:690
-msgid ""
-"Yes. Set up one day's shifts, then use \"Copy shifts to another day\", pick "
-"the first new date and tick \"Repeat\". Choose every N weeks or months and "
-"whether the series ends on a date or after a number of times (up to 52 "
-"dates). Monthly repeats use the same day of the month and skip months "
-"without it. Running the same repeat again skips shifts that already exist, "
-"and volunteers are never copied into a series."
-msgstr ""
-"Ja. Maak de diensten van één dag aan, gebruik dan \"Diensten naar een andere "
-"dag kopiëren\", kies de eerste nieuwe datum en vink \"Herhalen\" aan. Kies "
-"elke N weken of maanden en of de reeks op een datum of na een aantal keer "
-"eindigt (maximaal 52 datums). Maandelijkse herhalingen gebruiken dezelfde "
-"dag van de maand en slaan maanden zonder die dag over. Als je dezelfde "
-"herhaling opnieuw uitvoert, worden bestaande diensten overgeslagen en worden "
-"vrijwilligers nooit in een reeks gekopieerd."
+msgid "Yes. Set up one day's shifts, then use \"Copy shifts to another day\", pick the first new date and tick \"Repeat\". Choose every N weeks or months and whether the series ends on a date or after a number of times (up to 52 dates). Monthly repeats use the same day of the month and skip months without it. Running the same repeat again skips shifts that already exist. Tick \"Also copy the volunteers currently signed up\" to put the same volunteers on every date, e.g. for regulars."
+msgstr "Ja. Maak de diensten van één dag aan, gebruik dan \"Diensten naar een andere dag kopiëren\", kies de eerste nieuwe datum en vink \"Herhalen\" aan. Kies elke N weken of maanden en of de reeks op een datum of na een aantal keer eindigt (maximaal 52 datums). Maandelijkse herhalingen gebruiken dezelfde dag van de maand en slaan maanden zonder die dag over. Als je dezelfde herhaling opnieuw uitvoert, worden bestaande diensten overgeslagen. Vink \"Ook de momenteel aangemelde vrijwilligers meekopiëren\" aan om dezelfde vrijwilligers op elke datum in te plannen, bijvoorbeeld voor vaste vrijwilligers."
 
 #: includes/admin/documentation.php:692
 msgid ""
@@ -5515,6 +5488,22 @@ msgstr "Kan ik één dienst laten herhalen, of maar één afdeling kopiëren?"
 #: includes/admin/documentation.php:693
 msgid "Yes. In the Calendar, click the + on a day to open \"Add shift\" on that date, with the filtered department already selected. Tick \"Repeat\" in the \"Add shift\" window to create the same shift every N weeks or months, with the same options as above. In \"Copy shifts to another day\", pick a department to copy only its shifts (sub-departments included)."
 msgstr "Ja. Klik in de kalender op de + bij een dag om „Dienst toevoegen” op die datum te openen, met de gefilterde afdeling al geselecteerd. Vink „Herhalen” aan in het venster „Dienst toevoegen” om dezelfde dienst elke N weken of maanden aan te maken, met dezelfde opties als hierboven. Kies in „Diensten naar een andere dag kopiëren” een afdeling om alleen die diensten te kopiëren (subafdelingen inbegrepen)."
+
+#: includes/admin/settings.php:993
+msgid "Send email (Sign up)"
+msgstr "E-mail versturen (Aanmelden)"
+
+#: includes/admin/settings.php:1028
+msgid "Send email (Sign out)"
+msgstr "E-mail versturen (Afmelden)"
+
+#: includes/admin/settings.php:996
+msgid "Email the organizer when a volunteer signs up"
+msgstr "De organisator e-mailen wanneer een vrijwilliger zich aanmeldt"
+
+#: includes/admin/settings.php:1031
+msgid "Email the organizer when a volunteer cancels"
+msgstr "De organisator e-mailen wanneer een vrijwilliger afzegt"
 
 #~ msgid ""
 #~ "Repeat shifts every N weeks or months, ending on a date or after a number "

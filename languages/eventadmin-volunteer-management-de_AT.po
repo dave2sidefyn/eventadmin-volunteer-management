@@ -68,8 +68,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s ist da!"
 
 #: eventadmin-volunteer-management.php:278
-msgid "You can now delete a shift in the Calendar, Table and Cards tabs too: open the shift and click \"Delete shift\"."
-msgstr "Du kannst Schichten jetzt auch im Kalender, in der Tabelle und in den Karten löschen: Schicht öffnen und auf „Schicht löschen“ klicken."
+msgid "Organizer emails for sign-ups and cancellations can now be switched off separately (Settings → Communication), and \"Copy shifts\" can copy the volunteers into a repeating series too."
+msgstr "Organisator-E-Mails für Anmeldungen und Abmeldungen lassen sich jetzt einzeln abschalten (Einstellungen → Kommunikation), und „Schichten kopieren“ kann die Freiwilligen auch in eine Wiederholungsserie mitkopieren."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"
@@ -782,14 +782,8 @@ msgstr "Mal"
 #. translators: %d: maximum number of dates in one series
 #: includes/admin/dashboard-overview-page.php:217
 #, php-format
-msgid ""
-"Monthly repeats use the same day of the month and skip months without it. Up "
-"to %d dates; shifts that already exist on a day are skipped, and volunteers "
-"are not copied."
-msgstr ""
-"Monatliche Wiederholungen verwenden denselben Tag im Monat und überspringen "
-"Monate ohne diesen Tag. Bis zu %d Termine; bereits vorhandene Schichten an "
-"einem Tag werden übersprungen, und Volunteers werden nicht kopiert."
+msgid "Monthly repeats use the same day of the month and skip months without it. Up to %d dates; shifts that already exist on a day are skipped."
+msgstr "Monatliche Wiederholungen verwenden denselben Tag im Monat und überspringen Monate ohne diesen Tag. Bis zu %d Termine; bereits vorhandene Schichten an einem Tag werden übersprungen."
 
 #: includes/admin/dashboard-overview-page.php:220
 msgid "Also copy the volunteers currently signed up"
@@ -2394,16 +2388,8 @@ msgid "Open Settings → Communication"
 msgstr "Einstellungen → Kommunikation öffnen"
 
 #: includes/admin/documentation.php:439
-msgid ""
-"The shift's organizer is also emailed on every sign-up and cancellation — a "
-"separate pair of templates under Settings → Communication → Shift "
-"Confirmations → \"Organizer Notifications\", with the same placeholders as "
-"above."
-msgstr ""
-"Der Organisator der Schicht wird ebenfalls bei jeder Anmeldung und Abmeldung "
-"benachrichtigt — ein eigenes Vorlagen-Paar unter Einstellungen → "
-"Kommunikation → Schichtbestätigungen → „Organisator-Benachrichtigungen“, mit "
-"denselben Platzhaltern wie oben."
+msgid "The shift's organizer is also emailed on every sign-up and cancellation — a separate pair of templates under Settings → Communication → Shift Confirmations → \"Organizer Notifications\", with the same placeholders as above. Each of the two can be switched off there, e.g. to only hear about cancellations."
+msgstr "Der Organisator der Schicht wird ebenfalls bei jeder Anmeldung und Abmeldung benachrichtigt — ein eigenes Vorlagen-Paar unter Einstellungen → Kommunikation → Schichtbestätigungen → „Organisator-Benachrichtigungen“, mit denselben Platzhaltern wie oben. Beide lassen sich dort einzeln abschalten, z. B. um nur über Abmeldungen informiert zu werden."
 
 #: includes/admin/documentation.php:443
 msgid ""
@@ -3190,22 +3176,8 @@ msgid "Can I create recurring shifts?"
 msgstr "Kann ich wiederkehrende Schichten erstellen?"
 
 #: includes/admin/documentation.php:690
-msgid ""
-"Yes. Set up one day's shifts, then use \"Copy shifts to another day\", pick "
-"the first new date and tick \"Repeat\". Choose every N weeks or months and "
-"whether the series ends on a date or after a number of times (up to 52 "
-"dates). Monthly repeats use the same day of the month and skip months "
-"without it. Running the same repeat again skips shifts that already exist, "
-"and volunteers are never copied into a series."
-msgstr ""
-"Ja. Lege die Schichten eines Tages an, verwende dann „Schichten auf einen "
-"anderen Tag kopieren“, wähle das erste neue Datum und aktiviere "
-"„Wiederholen“. Wähle alle N Wochen oder Monate und ob die Serie an einem "
-"Datum oder nach einer bestimmten Anzahl endet (bis zu 52 Termine). "
-"Monatliche Wiederholungen verwenden denselben Tag im Monat und überspringen "
-"Monate ohne diesen Tag. Wird dieselbe Wiederholung erneut ausgeführt, werden "
-"bereits vorhandene Schichten übersprungen, und Volunteers werden nie in eine "
-"Serie kopiert."
+msgid "Yes. Set up one day's shifts, then use \"Copy shifts to another day\", pick the first new date and tick \"Repeat\". Choose every N weeks or months and whether the series ends on a date or after a number of times (up to 52 dates). Monthly repeats use the same day of the month and skip months without it. Running the same repeat again skips shifts that already exist. Tick \"Also copy the volunteers currently signed up\" to put the same volunteers on every date, e.g. for regulars."
+msgstr "Ja. Lege die Schichten eines Tages an, verwende dann „Schichten auf einen anderen Tag kopieren“, wähle das erste neue Datum und aktiviere „Wiederholen“. Wähle alle N Wochen oder Monate und ob die Serie an einem Datum oder nach einer bestimmten Anzahl endet (bis zu 52 Termine). Monatliche Wiederholungen verwenden denselben Tag im Monat und überspringen Monate ohne diesen Tag. Wird dieselbe Wiederholung erneut ausgeführt, werden bereits vorhandene Schichten übersprungen. Aktiviere „Auch die aktuell eingeteilten Freiwilligen mitkopieren“, um dieselben Freiwilligen an jedem Termin einzuteilen, z. B. für Stammhelfer."
 
 #: includes/admin/documentation.php:692
 msgid ""
@@ -5555,6 +5527,22 @@ msgstr "Kann ich eine einzelne Schicht wiederholen oder nur eine Abteilung kopie
 #: includes/admin/documentation.php:693
 msgid "Yes. In the Calendar, click the + on a day to open \"Add shift\" on that date, with the filtered department already selected. Tick \"Repeat\" in the \"Add shift\" window to create the same shift every N weeks or months, with the same options as above. In \"Copy shifts to another day\", pick a department to copy only its shifts (sub-departments included)."
 msgstr "Ja. Klick im Kalender auf das + an einem Tag, um „Schicht hinzufügen“ für dieses Datum zu öffnen; die gefilterte Abteilung ist schon ausgewählt. Aktiviere im Fenster „Schicht hinzufügen“ „Wiederholen“, um dieselbe Schicht alle N Wochen oder Monate anzulegen, mit denselben Optionen wie oben. Wähle in „Schichten auf einen anderen Tag kopieren“ eine Abteilung, um nur deren Schichten zu kopieren (inklusive Unterabteilungen)."
+
+#: includes/admin/settings.php:993
+msgid "Send email (Sign up)"
+msgstr "E-Mail senden (Anmeldung)"
+
+#: includes/admin/settings.php:1028
+msgid "Send email (Sign out)"
+msgstr "E-Mail senden (Abmelden)"
+
+#: includes/admin/settings.php:996
+msgid "Email the organizer when a volunteer signs up"
+msgstr "Organisator per E-Mail benachrichtigen, wenn sich ein Freiwilliger anmeldet"
+
+#: includes/admin/settings.php:1031
+msgid "Email the organizer when a volunteer cancels"
+msgstr "Organisator per E-Mail benachrichtigen, wenn ein Freiwilliger absagt"
 
 #~ msgid ""
 #~ "Repeat shifts every N weeks or months, ending on a date or after a number "

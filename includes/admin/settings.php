@@ -289,7 +289,10 @@ function eventadmin_sanitize_reminder_days($value): string
  */
 function eventadmin_sanitize_checkbox_setting($val): int
 {
-    return $val === '1' ? 1 : 0;
+    // Also accept an already-sanitized 1: the first save of an option that doesn't exist yet
+    // runs this callback twice (update_option() → add_option() sanitizes again), and a strict
+    // '1' check turned that second pass into 0 — silently switching the option off.
+    return ($val === '1' || $val === 1) ? 1 : 0;
 }
 
 /**
@@ -378,6 +381,16 @@ function eventadmin_plugin_register_settings(): void
 
     register_setting('eventadmin_plugin_settings_communication', 'eventadmin_email_text_unassign', [
         'sanitize_callback' => 'wp_kses_post',
+    ]);
+
+    // Organizer emails can be switched off separately for sign-ups and cancellations (3.12.0);
+    // both default to on, matching the behavior before these settings existed.
+    register_setting('eventadmin_plugin_settings_communication', 'eventadmin_notify_organizer_assign', [
+        'sanitize_callback' => 'eventadmin_sanitize_checkbox_setting',
+    ]);
+
+    register_setting('eventadmin_plugin_settings_communication', 'eventadmin_notify_organizer_unassign', [
+        'sanitize_callback' => 'eventadmin_sanitize_checkbox_setting',
     ]);
 
     register_setting('eventadmin_plugin_settings_communication', 'eventadmin_email_subject_admin_assign', [
@@ -979,6 +992,17 @@ function eventadmin_plugin_register_settings(): void
     );
 
     add_settings_field(
+        'eventadmin_notify_organizer_assign',
+        esc_html__('Send email (Sign up)', 'eventadmin-volunteer-management'),
+        static function () {
+            echo '<label><input type="checkbox" name="eventadmin_notify_organizer_assign" value="1" ' . checked(1, (int) get_option('eventadmin_notify_organizer_assign', 1), false) . '> ';
+            echo esc_html__('Email the organizer when a volunteer signs up', 'eventadmin-volunteer-management') . '</label>';
+        },
+        'eventadmin-settings-communication',
+        'eventadmin_communication_admin_notifications'
+    );
+
+    add_settings_field(
         'eventadmin_email_subject_admin_assign',
         esc_html__('Email Subject (Sign up)', 'eventadmin-volunteer-management'),
         static function () {
@@ -997,6 +1021,17 @@ function eventadmin_plugin_register_settings(): void
                 'eventadmin_email_text_admin_assign',
                 'The volunteer {first}, {last} was assigned for the shift: {title}'
             );
+        },
+        'eventadmin-settings-communication',
+        'eventadmin_communication_admin_notifications'
+    );
+
+    add_settings_field(
+        'eventadmin_notify_organizer_unassign',
+        esc_html__('Send email (Sign out)', 'eventadmin-volunteer-management'),
+        static function () {
+            echo '<label><input type="checkbox" name="eventadmin_notify_organizer_unassign" value="1" ' . checked(1, (int) get_option('eventadmin_notify_organizer_unassign', 1), false) . '> ';
+            echo esc_html__('Email the organizer when a volunteer cancels', 'eventadmin-volunteer-management') . '</label>';
         },
         'eventadmin-settings-communication',
         'eventadmin_communication_admin_notifications'
