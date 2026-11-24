@@ -68,8 +68,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s est disponible !"
 
 #: eventadmin-volunteer-management.php:278
-msgid "You can now delete a shift in the Calendar, Table and Cards tabs too: open the shift and click \"Delete shift\"."
-msgstr "Vous pouvez désormais supprimer un créneau aussi depuis le Calendrier, le Tableau et les Cartes : ouvrez le créneau et cliquez sur « Supprimer le créneau »."
+msgid "Organizer emails for sign-ups and cancellations can now be switched off separately (Settings → Communication), and \"Copy shifts\" can copy the volunteers into a repeating series too."
+msgstr "Les e-mails à l'organisateur pour les inscriptions et les désinscriptions peuvent désormais être désactivés séparément (Paramètres → Communication), et « Copier les créneaux » peut aussi copier les bénévoles dans une série répétée."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"
@@ -781,14 +781,8 @@ msgstr "fois"
 #. translators: %d: maximum number of dates in one series
 #: includes/admin/dashboard-overview-page.php:217
 #, php-format
-msgid ""
-"Monthly repeats use the same day of the month and skip months without it. Up "
-"to %d dates; shifts that already exist on a day are skipped, and volunteers "
-"are not copied."
-msgstr ""
-"Les répétitions mensuelles utilisent le même jour du mois et ignorent les "
-"mois qui n’ont pas ce jour. Jusqu’à %d dates ; les créneaux qui existent "
-"déjà un jour donné sont ignorés et les bénévoles ne sont pas copiés."
+msgid "Monthly repeats use the same day of the month and skip months without it. Up to %d dates; shifts that already exist on a day are skipped."
+msgstr "Les répétitions mensuelles utilisent le même jour du mois et ignorent les mois qui n’ont pas ce jour. Jusqu’à %d dates ; les créneaux qui existent déjà un jour donné sont ignorés."
 
 #: includes/admin/dashboard-overview-page.php:220
 msgid "Also copy the volunteers currently signed up"
@@ -2400,16 +2394,8 @@ msgid "Open Settings → Communication"
 msgstr "Ouvrir Paramètres → Communication"
 
 #: includes/admin/documentation.php:439
-msgid ""
-"The shift's organizer is also emailed on every sign-up and cancellation — a "
-"separate pair of templates under Settings → Communication → Shift "
-"Confirmations → \"Organizer Notifications\", with the same placeholders as "
-"above."
-msgstr ""
-"L'organisateur du créneau reçoit également un e-mail à chaque inscription et "
-"désinscription — une paire de modèles distincte sous Paramètres → "
-"Communication → Confirmations de plage → « Notifications à l'organisateur », "
-"avec les mêmes variables que ci-dessus."
+msgid "The shift's organizer is also emailed on every sign-up and cancellation — a separate pair of templates under Settings → Communication → Shift Confirmations → \"Organizer Notifications\", with the same placeholders as above. Each of the two can be switched off there, e.g. to only hear about cancellations."
+msgstr "L'organisateur du créneau reçoit également un e-mail à chaque inscription et désinscription — une paire de modèles distincte sous Paramètres → Communication → Confirmations de plage → « Notifications à l'organisateur », avec les mêmes variables que ci-dessus. Chacun des deux peut y être désactivé, par exemple pour n'être prévenu que des désinscriptions."
 
 #: includes/admin/documentation.php:443
 msgid ""
@@ -3202,21 +3188,8 @@ msgid "Can I create recurring shifts?"
 msgstr "Puis-je créer des créneaux récurrents ?"
 
 #: includes/admin/documentation.php:690
-msgid ""
-"Yes. Set up one day's shifts, then use \"Copy shifts to another day\", pick "
-"the first new date and tick \"Repeat\". Choose every N weeks or months and "
-"whether the series ends on a date or after a number of times (up to 52 "
-"dates). Monthly repeats use the same day of the month and skip months "
-"without it. Running the same repeat again skips shifts that already exist, "
-"and volunteers are never copied into a series."
-msgstr ""
-"Oui. Créez les créneaux d’une journée, puis utilisez « Copier les créneaux "
-"vers un autre jour », choisissez la première nouvelle date et cochez "
-"« Répéter ». Choisissez toutes les N semaines ou N mois et si la série se "
-"termine à une date ou après un certain nombre de fois (jusqu’à 52 dates). "
-"Les répétitions mensuelles utilisent le même jour du mois et ignorent les "
-"mois qui n’ont pas ce jour. Relancer la même répétition ignore les créneaux "
-"qui existent déjà, et les bénévoles ne sont jamais copiés dans une série."
+msgid "Yes. Set up one day's shifts, then use \"Copy shifts to another day\", pick the first new date and tick \"Repeat\". Choose every N weeks or months and whether the series ends on a date or after a number of times (up to 52 dates). Monthly repeats use the same day of the month and skip months without it. Running the same repeat again skips shifts that already exist. Tick \"Also copy the volunteers currently signed up\" to put the same volunteers on every date, e.g. for regulars."
+msgstr "Oui. Créez les créneaux d’une journée, puis utilisez « Copier les créneaux vers un autre jour », choisissez la première nouvelle date et cochez « Répéter ». Choisissez toutes les N semaines ou N mois et si la série se termine à une date ou après un certain nombre de fois (jusqu’à 52 dates). Les répétitions mensuelles utilisent le même jour du mois et ignorent les mois qui n’ont pas ce jour. Relancer la même répétition ignore les créneaux qui existent déjà. Cochez « Copier aussi les bénévoles actuellement inscrits » pour inscrire les mêmes bénévoles à chaque date, par exemple pour les habitués."
 
 #: includes/admin/documentation.php:692
 msgid ""
@@ -5576,6 +5549,22 @@ msgstr "Puis-je répéter un seul créneau, ou copier un seul département ?"
 #: includes/admin/documentation.php:693
 msgid "Yes. In the Calendar, click the + on a day to open \"Add shift\" on that date, with the filtered department already selected. Tick \"Repeat\" in the \"Add shift\" window to create the same shift every N weeks or months, with the same options as above. In \"Copy shifts to another day\", pick a department to copy only its shifts (sub-departments included)."
 msgstr "Oui. Dans le calendrier, cliquez sur le + d’un jour pour ouvrir « Ajouter un créneau » à cette date, avec le département filtré déjà sélectionné. Cochez « Répéter » dans la fenêtre « Ajouter un créneau » pour créer le même créneau toutes les N semaines ou tous les N mois, avec les mêmes options que ci-dessus. Dans « Copier les créneaux vers un autre jour », choisissez un département pour ne copier que ses créneaux (sous-départements compris)."
+
+#: includes/admin/settings.php:993
+msgid "Send email (Sign up)"
+msgstr "Envoyer l'e-mail (Inscription)"
+
+#: includes/admin/settings.php:1028
+msgid "Send email (Sign out)"
+msgstr "Envoyer l'e-mail (Désinscription)"
+
+#: includes/admin/settings.php:996
+msgid "Email the organizer when a volunteer signs up"
+msgstr "Prévenir l'organisateur par e-mail lorsqu'un bénévole s'inscrit"
+
+#: includes/admin/settings.php:1031
+msgid "Email the organizer when a volunteer cancels"
+msgstr "Prévenir l'organisateur par e-mail lorsqu'un bénévole se désinscrit"
 
 #~ msgid ""
 #~ "Repeat shifts every N weeks or months, ending on a date or after a number "

@@ -229,7 +229,7 @@ function eventadmin_render_copy_shifts_notice_and_modal(string $view, array $shi
     echo '<input type="number" name="copy_repeat_count" id="eventadmin-copy-repeat-count" min="1" max="' . esc_attr(EVENTADMIN_MAX_REPEAT_WEEKS) . '" style="width:4.5em;" aria-label="' . esc_attr__('Number of times', 'eventadmin-volunteer-management') . '"> ' . esc_html__('times', 'eventadmin-volunteer-management') . '</p>';
     echo '<span class="description">' . esc_html(sprintf(
         /* translators: %d: maximum number of dates in one series */
-        __('Monthly repeats use the same day of the month and skip months without it. Up to %d dates; shifts that already exist on a day are skipped, and volunteers are not copied.', 'eventadmin-volunteer-management'),
+        __('Monthly repeats use the same day of the month and skip months without it. Up to %d dates; shifts that already exist on a day are skipped.', 'eventadmin-volunteer-management'),
         EVENTADMIN_MAX_REPEAT_WEEKS
     )) . '</span></fieldset>';
     echo '<p id="eventadmin-copy-volunteers-row"><label><input type="checkbox" name="copy_volunteers" value="1"> ' . esc_html__('Also copy the volunteers currently signed up', 'eventadmin-volunteer-management') . '</label></p>';

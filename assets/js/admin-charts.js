@@ -68,12 +68,11 @@ document.addEventListener('DOMContentLoaded', function () {
             if (e.target === copyShiftsModal) closeCopyShiftsModal();
         });
 
-        // "Repeat": show the interval/end options and hide "copy volunteers", which a
-        // series never does. The end field that's chosen (date or count) is required.
+        // "Repeat": show the interval/end options. The end field that's chosen (date or
+        // count) is required. "Copy volunteers" stays available and applies to every date.
         const repeatToggle = document.getElementById('eventadmin-copy-repeat-weekly');
         const repeatUntilRow = document.getElementById('eventadmin-copy-repeat-until-row');
         const repeatUntil = document.getElementById('eventadmin-copy-repeat-until');
-        const copyVolunteersRow = document.getElementById('eventadmin-copy-volunteers-row');
         if (repeatToggle && repeatUntilRow && repeatUntil) {
             const syncRepeat = () => {
                 const on = repeatToggle.checked;
@@ -83,11 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 repeatUntil.required = on && !endsAfter;
                 repeatUntil.disabled = endsAfter;
                 if (repeatCount) { repeatCount.required = on && endsAfter; repeatCount.disabled = !endsAfter; }
-                if (copyVolunteersRow) {
-                    copyVolunteersRow.style.display = on ? 'none' : '';
-                    const box = copyVolunteersRow.querySelector('input[type="checkbox"]');
-                    if (box && on) box.checked = false;
-                }
             };
             repeatToggle.addEventListener('change', syncRepeat);
             repeatUntilRow.addEventListener('change', syncRepeat);

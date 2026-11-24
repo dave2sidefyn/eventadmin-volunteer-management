@@ -436,7 +436,7 @@ function eventadmin_plugin_documentation_page()
             false
         );
         ?>
-        <p><?php echo esc_html__('The shift\'s organizer is also emailed on every sign-up and cancellation — a separate pair of templates under Settings → Communication → Shift Confirmations → "Organizer Notifications", with the same placeholders as above.', 'eventadmin-volunteer-management'); ?></p>
+        <p><?php echo esc_html__('The shift\'s organizer is also emailed on every sign-up and cancellation — a separate pair of templates under Settings → Communication → Shift Confirmations → "Organizer Notifications", with the same placeholders as above. Each of the two can be switched off there, e.g. to only hear about cancellations.', 'eventadmin-volunteer-management'); ?></p>
         <?php
         eventadmin_doc_screenshot(
             'organizer-notifications.webp',
@@ -687,7 +687,7 @@ function eventadmin_plugin_documentation_page()
             <dd><?php echo esc_html__('Yes — the Calendar tab on the Manager page shows a month (or a week) at a time. Each shift is a chip in its department\'s colour with its start time and how many volunteers it has ("3/5"); the count turns red while a shift is below its minimum. Click a shift to edit it or a day to open it on the Day tab; the Department and Volunteer filters apply here too. When your upcoming shifts span more than two weeks, the Manager page opens on the Calendar.', 'eventadmin-volunteer-management'); ?></dd>
 
             <dt><strong><?php echo esc_html__('Can I create recurring shifts?', 'eventadmin-volunteer-management'); ?></strong></dt>
-            <dd><?php echo esc_html__('Yes. Set up one day\'s shifts, then use "Copy shifts to another day", pick the first new date and tick "Repeat". Choose every N weeks or months and whether the series ends on a date or after a number of times (up to 52 dates). Monthly repeats use the same day of the month and skip months without it. Running the same repeat again skips shifts that already exist, and volunteers are never copied into a series.', 'eventadmin-volunteer-management'); ?></dd>
+            <dd><?php echo esc_html__('Yes. Set up one day\'s shifts, then use "Copy shifts to another day", pick the first new date and tick "Repeat". Choose every N weeks or months and whether the series ends on a date or after a number of times (up to 52 dates). Monthly repeats use the same day of the month and skip months without it. Running the same repeat again skips shifts that already exist. Tick "Also copy the volunteers currently signed up" to put the same volunteers on every date, e.g. for regulars.', 'eventadmin-volunteer-management'); ?></dd>
 
             <dt><strong><?php echo esc_html__('Can I add a single shift that repeats, or copy just one department?', 'eventadmin-volunteer-management'); ?></strong></dt>
             <dd><?php echo esc_html__('Yes. In the Calendar, click the + on a day to open "Add shift" on that date, with the filtered department already selected. Tick "Repeat" in the "Add shift" window to create the same shift every N weeks or months, with the same options as above. In "Copy shifts to another day", pick a department to copy only its shifts (sub-departments included).', 'eventadmin-volunteer-management'); ?></dd>

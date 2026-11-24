@@ -245,7 +245,8 @@ function eventadmin_admin_dashboard_admin_init(): void
                 return;
             }
 
-            // Volunteers are never copied into a whole series — each week gets its own sign-ups.
+            // "Also copy the volunteers" applies to every date of the series when ticked (3.12.0),
+            // e.g. regulars who do the same shift every week.
             $copied  = 0;
             $skipped = 0;
             $days    = 0;
@@ -254,7 +255,7 @@ function eventadmin_admin_dashboard_admin_init(): void
                     continue;
                 }
                 $day_skipped = 0;
-                $copied     += eventadmin_copy_shifts_to_day($source_date, $date, false, true, $day_skipped, $department_id);
+                $copied     += eventadmin_copy_shifts_to_day($source_date, $date, $copy_volunteers, true, $day_skipped, $department_id);
                 $skipped    += $day_skipped;
                 $days++;
             }

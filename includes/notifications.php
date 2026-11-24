@@ -343,6 +343,14 @@ function eventadmin_send_shift_un_assignment_notification(
     $replacements = $context['replacements'];
     $defaults     = eventadmin_get_option_defaults();
 
+    // Each organizer email can be switched off under Settings → Communication (both on by default).
+    if ($send_admin) {
+        $send_admin = (bool) get_option(
+            $action === 'assign' ? 'eventadmin_notify_organizer_assign' : 'eventadmin_notify_organizer_unassign',
+            1
+        );
+    }
+
     if ($send_admin) {
         if ($action === 'assign') {
             $admin_subject_template = get_option('eventadmin_email_subject_admin_assign') ?: $defaults['eventadmin_email_subject_admin_assign'];

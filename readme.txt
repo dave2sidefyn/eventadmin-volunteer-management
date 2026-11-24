@@ -4,7 +4,7 @@ Tags: volunteer, volunteer management, shift scheduling, event management, roste
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.11.1
+Stable tag: 3.12.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,11 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.12.0 =
+* New: The organizer emails for sign-ups and cancellations can each be switched off under Settings → Communication → Shift Confirmations → Organizer Notifications, e.g. to only hear about cancellations. Both stay on by default
+* New: "Also copy the volunteers currently signed up" in "Copy shifts to another day" now works together with "Repeat", so regular volunteers can be put on every date of a series. As with a single copy, they are added without an email
+* Fix: A settings checkbox that is on by default could switch itself off the first time its settings tab was saved
 
 = Version 3.11.1 =
 * New: "Delete shift" in the shift window, so a shift can be deleted from the Calendar, Table and Cards tabs too, not only from the Day view. Same confirmation and "Notify affected volunteers" option as on the Day view; the view updates right away
@@ -269,6 +274,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 For older versions, see changelog.txt in the plugin folder.
 
 == Upgrade Notice ==
+
+= 3.12.0 =
+Switch organizer emails off separately for sign-ups and cancellations, and copy volunteers into a repeating series. No breaking changes.
 
 = 3.11.1 =
 Delete shifts from the Calendar, Table and Cards tabs too. No breaking changes.
