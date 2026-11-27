@@ -2,9 +2,9 @@
 Contributors: davesidefyn
 Tags: volunteer, volunteer management, shift scheduling, event management, roster
 Requires at least: 5.8
-Tested up to: 7.1
+Tested up to: 7.2
 Requires PHP: 8.0
-Stable tag: 3.12.0
+Stable tag: 3.13.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Donate link: https://revolut.me/davidwiedmer
@@ -126,6 +126,11 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 9. Registration page — one-click sign-in via Google, Facebook, or X through the free Nextend Social Login plugin, or a password-free magic email link for everyone else
 
 == Changelog ==
+
+= Version 3.13.0 =
+* New: EventAdmin registers its API operations as WordPress abilities (Abilities API, WordPress 6.9 and later): list, view and create shifts, dashboard numbers, departments, sign-up rules, documentation, and emailing a shift's volunteers. AI assistants and MCP clients that use WordPress abilities can work with EventAdmin without the separate eventadmin-mcp-server package. Same "Allow API access" switch and the same permissions as the REST API
+* Fix: Opening "Add shift" straight from the Shifts menu no longer logs a TinyMCE error in the browser console
+* Tested with WordPress 7.2
 
 = Version 3.12.0 =
 * New: The organizer emails for sign-ups and cancellations can each be switched off under Settings → Communication → Shift Confirmations → Organizer Notifications, e.g. to only hear about cancellations. Both stay on by default
@@ -274,6 +279,9 @@ The plugin does not yet integrate with WordPress's personal-data export and eras
 For older versions, see changelog.txt in the plugin folder.
 
 == Upgrade Notice ==
+
+= 3.13.0 =
+Tested with WordPress 7.2. EventAdmin's API is now also available as WordPress abilities for AI assistants. No breaking changes.
 
 = 3.12.0 =
 Switch organizer emails off separately for sign-ups and cancellations, and copy volunteers into a repeating series. No breaking changes.

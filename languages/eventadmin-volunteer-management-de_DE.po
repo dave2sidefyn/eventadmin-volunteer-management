@@ -68,8 +68,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s ist da!"
 
 #: eventadmin-volunteer-management.php:278
-msgid "Organizer emails for sign-ups and cancellations can now be switched off separately (Settings → Communication), and \"Copy shifts\" can copy the volunteers into a repeating series too."
-msgstr "Organisator-E-Mails für Anmeldungen und Abmeldungen lassen sich jetzt einzeln abschalten (Einstellungen → Kommunikation), und „Schichten kopieren“ kann die Freiwilligen auch in eine Wiederholungsserie mitkopieren."
+msgid "Ready for WordPress 7.2: with \"Allow API access\" on, AI assistants can now find and use EventAdmin directly through WordPress (Abilities API, WordPress 6.9 and later)."
+msgstr "Bereit für WordPress 7.2: Mit „API-Zugriff erlauben“ finden und nutzen KI-Assistenten EventAdmin jetzt direkt über WordPress (Abilities API, ab WordPress 6.9)."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"
@@ -4183,17 +4183,8 @@ msgid "Allow API access"
 msgstr "API-Zugriff erlauben"
 
 #: includes/admin/settings.php:596
-msgid ""
-"Exposes shifts and dashboard data via the WordPress REST API (at /wp-json/"
-"eventadmin/v1/), for use with MCP or other external integrations. Only "
-"Administrators and Shift Managers can use it, authenticated with a WordPress "
-"Application Password (Users → your profile → Application Passwords)."
-msgstr ""
-"Macht Schichten und Dashboard-Daten über die WordPress-REST-API (unter /wp-"
-"json/eventadmin/v1/) zugänglich – zur Nutzung mit MCP oder anderen externen "
-"Integrationen. Nur Administratoren und Schicht-Manager können sie nutzen, "
-"authentifiziert mit einem WordPress-Anwendungspasswort (Benutzer → dein "
-"Profil → Anwendungspasswörter)."
+msgid "Exposes shifts and dashboard data via the WordPress REST API (at /wp-json/eventadmin/v1/) and as WordPress abilities (WordPress 6.9 and later), for use with MCP, AI assistants or other external integrations. Only Administrators and Shift Managers can use it, authenticated with a WordPress Application Password (Users → your profile → Application Passwords)."
+msgstr "Macht Schichten und Dashboard-Daten über die WordPress-REST-API (unter /wp-json/eventadmin/v1/) und als WordPress-Abilities (ab WordPress 6.9) zugänglich – zur Nutzung mit MCP, KI-Assistenten oder anderen externen Integrationen. Nur Administratoren und Schicht-Manager können sie nutzen, authentifiziert mit einem WordPress-Anwendungspasswort (Benutzer → dein Profil → Anwendungspasswörter)."
 
 #: includes/admin/settings.php:604
 msgid "Connect"
@@ -6253,6 +6244,82 @@ msgstr "Organisator per E-Mail benachrichtigen, wenn ein Freiwilliger absagt"
 #~ msgid_plural "Send History (%d entries)"
 #~ msgstr[0] "Sendeverlauf (%d Eintrag)"
 #~ msgstr[1] "Sendeverlauf (%d Einträge)"
+
+#: includes/admin/documentation.php
+msgid "WordPress abilities (WordPress 6.9 and later)"
+msgstr "WordPress-Abilities (ab WordPress 6.9)"
+
+#: includes/admin/documentation.php
+msgid "With \"Allow API access\" on, EventAdmin also registers the same actions as WordPress abilities, named eventadmin/list-shifts, eventadmin/get-shift, eventadmin/create-shift, eventadmin/get-dashboard, eventadmin/list-departments, eventadmin/notify-shift-volunteers, eventadmin/get-settings and eventadmin/get-documentation. AI assistants and MCP clients that work with WordPress abilities (for example through the WordPress MCP Adapter) find them on their own, without the eventadmin-mcp-server package above. They are listed at /wp-json/wp-abilities/v1/abilities and follow the same permissions as described below."
+msgstr "Mit „API-Zugriff erlauben“ meldet EventAdmin dieselben Aktionen zusätzlich als WordPress-Abilities an: eventadmin/list-shifts, eventadmin/get-shift, eventadmin/create-shift, eventadmin/get-dashboard, eventadmin/list-departments, eventadmin/notify-shift-volunteers, eventadmin/get-settings und eventadmin/get-documentation. KI-Assistenten und MCP-Clients, die mit WordPress-Abilities arbeiten (zum Beispiel über den WordPress MCP Adapter), finden sie von selbst – ohne das oben beschriebene Paket eventadmin-mcp-server. Sie sind unter /wp-json/wp-abilities/v1/abilities aufgelistet; es gelten dieselben Berechtigungen wie unten beschrieben."
+
+#: includes/abilities.php
+msgid "Volunteer shifts, departments and sign-ups managed with EventAdmin."
+msgstr "Freiwilligen-Schichten, Abteilungen und Anmeldungen, verwaltet mit EventAdmin."
+
+#: includes/abilities.php
+msgid "List shifts"
+msgstr "Schichten auflisten"
+
+#: includes/abilities.php
+msgid "Lists volunteer shifts, optionally filtered by department, date or time period. Each shift includes who is signed up and whether it is full."
+msgstr "Listet Freiwilligen-Schichten auf, optional gefiltert nach Abteilung, Datum oder Zeitraum. Jede Schicht enthält, wer angemeldet ist und ob sie voll ist."
+
+#: includes/abilities.php
+msgid "Get shift"
+msgstr "Schicht abrufen"
+
+#: includes/abilities.php
+msgid "Gets the full details of one shift, including who is signed up."
+msgstr "Ruft alle Details einer Schicht ab, einschließlich der angemeldeten Personen."
+
+#: includes/abilities.php
+msgid "Create shift"
+msgstr "Schicht erstellen"
+
+#: includes/abilities.php
+msgid "Creates a new volunteer shift. Use List departments first to find the department ID."
+msgstr "Erstellt eine neue Freiwilligen-Schicht. Zuerst „Abteilungen auflisten“ verwenden, um die Abteilungs-ID zu finden."
+
+#: includes/abilities.php
+msgid "Get dashboard numbers"
+msgstr "Dashboard-Zahlen abrufen"
+
+#: includes/abilities.php
+msgid "Gets the numbers shown on the EventAdmin Overview: open, understaffed and full shifts, volunteers and sign-ups."
+msgstr "Ruft die Zahlen der EventAdmin-Übersicht ab: offene, unterbesetzte und volle Schichten, Freiwillige und Anmeldungen."
+
+#: includes/abilities.php
+msgid "List departments"
+msgstr "Abteilungen auflisten"
+
+#: includes/abilities.php
+msgid "Lists every department with its ID, parent and colour, so a shift can be created or filtered by department name."
+msgstr "Listet alle Abteilungen mit ID, übergeordneter Abteilung und Farbe auf, damit eine Schicht nach Abteilungsname erstellt oder gefiltert werden kann."
+
+#: includes/abilities.php
+msgid "Email a shift's volunteers"
+msgstr "Freiwillige einer Schicht anschreiben"
+
+#: includes/abilities.php
+msgid "Sends an email to everyone signed up for one shift. The message may use {first_name}, {last_name} and {shifts}. Volunteers without an email address are skipped."
+msgstr "Sendet eine E-Mail an alle, die für eine Schicht angemeldet sind. Die Nachricht kann {first_name}, {last_name} und {shifts} enthalten. Freiwillige ohne E-Mail-Adresse werden übersprungen."
+
+#: includes/abilities.php
+msgid "Get sign-up rules"
+msgstr "Anmelderegeln abrufen"
+
+#: includes/abilities.php
+msgid "Gets the active sign-up rules: shift limits per volunteer, overlap policy and cancellation deadline."
+msgstr "Ruft die aktiven Anmelderegeln ab: Schichtlimits pro Person, Überschneidungsregel und Abmeldefrist."
+
+#: includes/abilities.php
+msgid "Get EventAdmin documentation"
+msgstr "EventAdmin-Dokumentation abrufen"
+
+#: includes/abilities.php
+msgid "Gets the EventAdmin Documentation page as plain text, to answer questions about how a feature works."
+msgstr "Ruft die EventAdmin-Dokumentationsseite als reinen Text ab, um Fragen zur Funktionsweise zu beantworten."
 
 #~ msgid "Open"
 #~ msgstr "Offen"

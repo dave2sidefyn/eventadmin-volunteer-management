@@ -67,8 +67,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s er her!"
 
 #: eventadmin-volunteer-management.php:278
-msgid "Organizer emails for sign-ups and cancellations can now be switched off separately (Settings → Communication), and \"Copy shifts\" can copy the volunteers into a repeating series too."
-msgstr "E-post til arrangøren ved påmelding og avmelding kan nå slås av hver for seg (Innstillinger → Kommunikasjon), og «Kopier vakter» kan også kopiere de frivillige inn i en gjentakende serie."
+msgid "Ready for WordPress 7.2: with \"Allow API access\" on, AI assistants can now find and use EventAdmin directly through WordPress (Abilities API, WordPress 6.9 and later)."
+msgstr "Klar for WordPress 7.2: Med «Tillat API-tilgang» slått på kan KI-assistenter nå finne og bruke EventAdmin direkte via WordPress (Abilities API, WordPress 6.9 og nyere)."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"
@@ -4107,16 +4107,8 @@ msgid "Allow API access"
 msgstr "Tillat API-tilgang"
 
 #: includes/admin/settings.php:596
-msgid ""
-"Exposes shifts and dashboard data via the WordPress REST API (at /wp-json/"
-"eventadmin/v1/), for use with MCP or other external integrations. Only "
-"Administrators and Shift Managers can use it, authenticated with a WordPress "
-"Application Password (Users → your profile → Application Passwords)."
-msgstr ""
-"Gjør vakter og dashbord-data tilgjengelig via WordPress REST API (på /wp-"
-"json/eventadmin/v1/), for bruk med MCP eller andre eksterne integrasjoner. "
-"Bare administratorer og vaktansvarlige kan bruke dette, autentisert med et "
-"WordPress-applikasjonspassord (Brukere → din profil → Applikasjonspassord)."
+msgid "Exposes shifts and dashboard data via the WordPress REST API (at /wp-json/eventadmin/v1/) and as WordPress abilities (WordPress 6.9 and later), for use with MCP, AI assistants or other external integrations. Only Administrators and Shift Managers can use it, authenticated with a WordPress Application Password (Users → your profile → Application Passwords)."
+msgstr "Gjør vakter og dashbord-data tilgjengelig via WordPress REST API (på /wp-json/eventadmin/v1/) og som WordPress-abilities (WordPress 6.9 og nyere), for bruk med MCP, KI-assistenter eller andre eksterne integrasjoner. Bare administratorer og vaktansvarlige kan bruke dette, autentisert med et WordPress-applikasjonspassord (Brukere → din profil → Applikasjonspassord)."
 
 #: includes/admin/settings.php:604
 msgid "Connect"
@@ -5897,6 +5889,82 @@ msgstr "Send e-post til arrangøren når en frivillig melder seg av"
 #, php-format
 #~ msgid "The volunteer %1$s, %2$s was %3$s for the shift: %4$s"
 #~ msgstr "Den frivillige %1$s, %2$s ble %3$s for vakten: %4$s"
+
+#: includes/admin/documentation.php
+msgid "WordPress abilities (WordPress 6.9 and later)"
+msgstr "WordPress-abilities (WordPress 6.9 og nyere)"
+
+#: includes/admin/documentation.php
+msgid "With \"Allow API access\" on, EventAdmin also registers the same actions as WordPress abilities, named eventadmin/list-shifts, eventadmin/get-shift, eventadmin/create-shift, eventadmin/get-dashboard, eventadmin/list-departments, eventadmin/notify-shift-volunteers, eventadmin/get-settings and eventadmin/get-documentation. AI assistants and MCP clients that work with WordPress abilities (for example through the WordPress MCP Adapter) find them on their own, without the eventadmin-mcp-server package above. They are listed at /wp-json/wp-abilities/v1/abilities and follow the same permissions as described below."
+msgstr "Med «Tillat API-tilgang» slått på registrerer EventAdmin også de samme handlingene som WordPress-abilities: eventadmin/list-shifts, eventadmin/get-shift, eventadmin/create-shift, eventadmin/get-dashboard, eventadmin/list-departments, eventadmin/notify-shift-volunteers, eventadmin/get-settings og eventadmin/get-documentation. KI-assistenter og MCP-klienter som bruker WordPress-abilities (for eksempel via WordPress MCP Adapter), finner dem selv, uten pakken eventadmin-mcp-server ovenfor. De er oppført på /wp-json/wp-abilities/v1/abilities og følger de samme tillatelsene som beskrevet nedenfor."
+
+#: includes/abilities.php
+msgid "Volunteer shifts, departments and sign-ups managed with EventAdmin."
+msgstr "Vakter for frivillige, avdelinger og påmeldinger administrert med EventAdmin."
+
+#: includes/abilities.php
+msgid "List shifts"
+msgstr "List vakter"
+
+#: includes/abilities.php
+msgid "Lists volunteer shifts, optionally filtered by department, date or time period. Each shift includes who is signed up and whether it is full."
+msgstr "Lister vakter for frivillige, eventuelt filtrert etter avdeling, dato eller tidsrom. Hver vakt viser hvem som er påmeldt og om den er full."
+
+#: includes/abilities.php
+msgid "Get shift"
+msgstr "Hent vakt"
+
+#: includes/abilities.php
+msgid "Gets the full details of one shift, including who is signed up."
+msgstr "Henter alle detaljer om én vakt, inkludert hvem som er påmeldt."
+
+#: includes/abilities.php
+msgid "Create shift"
+msgstr "Opprett vakt"
+
+#: includes/abilities.php
+msgid "Creates a new volunteer shift. Use List departments first to find the department ID."
+msgstr "Oppretter en ny vakt for frivillige. Bruk «List avdelinger» først for å finne avdelings-ID-en."
+
+#: includes/abilities.php
+msgid "Get dashboard numbers"
+msgstr "Hent dashbord-tall"
+
+#: includes/abilities.php
+msgid "Gets the numbers shown on the EventAdmin Overview: open, understaffed and full shifts, volunteers and sign-ups."
+msgstr "Henter tallene som vises i EventAdmin-oversikten: åpne, underbemannede og fulle vakter, frivillige og påmeldinger."
+
+#: includes/abilities.php
+msgid "List departments"
+msgstr "List avdelinger"
+
+#: includes/abilities.php
+msgid "Lists every department with its ID, parent and colour, so a shift can be created or filtered by department name."
+msgstr "Lister alle avdelinger med ID, overordnet avdeling og farge, slik at en vakt kan opprettes eller filtreres etter avdelingsnavn."
+
+#: includes/abilities.php
+msgid "Email a shift's volunteers"
+msgstr "Send e-post til frivillige på en vakt"
+
+#: includes/abilities.php
+msgid "Sends an email to everyone signed up for one shift. The message may use {first_name}, {last_name} and {shifts}. Volunteers without an email address are skipped."
+msgstr "Sender en e-post til alle som er påmeldt én vakt. Meldingen kan bruke {first_name}, {last_name} og {shifts}. Frivillige uten e-postadresse hoppes over."
+
+#: includes/abilities.php
+msgid "Get sign-up rules"
+msgstr "Hent påmeldingsregler"
+
+#: includes/abilities.php
+msgid "Gets the active sign-up rules: shift limits per volunteer, overlap policy and cancellation deadline."
+msgstr "Henter de aktive påmeldingsreglene: vaktgrenser per frivillig, regel for overlapp og frist for avmelding."
+
+#: includes/abilities.php
+msgid "Get EventAdmin documentation"
+msgstr "Hent EventAdmin-dokumentasjon"
+
+#: includes/abilities.php
+msgid "Gets the EventAdmin Documentation page as plain text, to answer questions about how a feature works."
+msgstr "Henter EventAdmin-dokumentasjonssiden som ren tekst, for å svare på spørsmål om hvordan en funksjon virker."
 
 #~ msgid "📘 EventAdmin Plugin – Documentation"
 #~ msgstr "📘 EventAdmin-utvidelse – Dokumentasjon"
