@@ -598,6 +598,9 @@ function eventadmin_plugin_documentation_page()
             </tbody>
         </table>
 
+        <h3 id="eventadmin-doc-mcp-abilities"><?php echo esc_html__('WordPress abilities (WordPress 6.9 and later)', 'eventadmin-volunteer-management'); ?></h3>
+        <p><?php echo esc_html__('With "Allow API access" on, EventAdmin also registers the same actions as WordPress abilities, named eventadmin/list-shifts, eventadmin/get-shift, eventadmin/create-shift, eventadmin/get-dashboard, eventadmin/list-departments, eventadmin/notify-shift-volunteers, eventadmin/get-settings and eventadmin/get-documentation. AI assistants and MCP clients that work with WordPress abilities (for example through the WordPress MCP Adapter) find them on their own, without the eventadmin-mcp-server package above. They are listed at /wp-json/wp-abilities/v1/abilities and follow the same permissions as described below.', 'eventadmin-volunteer-management'); ?></p>
+
         <h3 id="eventadmin-doc-mcp-security"><?php echo esc_html__('Security', 'eventadmin-volunteer-management'); ?></h3>
         <p><?php echo esc_html__('Most of this requires an Administrator or Shift Manager account — the same permission level already required for these actions in wp-admin. Two exceptions: emailing a shift\'s roster only needs volunteer-management access (so a Volunteer Manager account can do that one thing, the same as "Send Announcement" in wp-admin), and reading settings requires a full Administrator account (Shift Managers can\'t see the Settings page in wp-admin either).', 'eventadmin-volunteer-management'); ?></p>
         <p><?php echo esc_html__('To disconnect it again, turn "Allow API access" back off, and/or remove the "EventAdmin MCP" entry under Users → your profile → Application Passwords.', 'eventadmin-volunteer-management'); ?></p>

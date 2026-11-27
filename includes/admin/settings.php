@@ -606,7 +606,7 @@ function eventadmin_plugin_register_settings(): void
         static function () {
             echo '<input type="checkbox" name="eventadmin_enable_rest_api" value="1" ' . checked(1, get_option('eventadmin_enable_rest_api'), false) . '>';
             echo ' ' . esc_html__('Yes', 'eventadmin-volunteer-management');
-            echo '<p class="description">' . esc_html__('Exposes shifts and dashboard data via the WordPress REST API (at /wp-json/eventadmin/v1/), for use with MCP or other external integrations. Only Administrators and Shift Managers can use it, authenticated with a WordPress Application Password (Users → your profile → Application Passwords).', 'eventadmin-volunteer-management') . '</p>';
+            echo '<p class="description">' . esc_html__('Exposes shifts and dashboard data via the WordPress REST API (at /wp-json/eventadmin/v1/) and as WordPress abilities (WordPress 6.9 and later), for use with MCP, AI assistants or other external integrations. Only Administrators and Shift Managers can use it, authenticated with a WordPress Application Password (Users → your profile → Application Passwords).', 'eventadmin-volunteer-management') . '</p>';
         },
         'eventadmin-settings-general',
         'eventadmin_general_api'

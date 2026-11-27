@@ -68,8 +68,8 @@ msgid "EventAdmin %s is here!"
 msgstr "EventAdmin %s est disponible !"
 
 #: eventadmin-volunteer-management.php:278
-msgid "Organizer emails for sign-ups and cancellations can now be switched off separately (Settings → Communication), and \"Copy shifts\" can copy the volunteers into a repeating series too."
-msgstr "Les e-mails à l'organisateur pour les inscriptions et les désinscriptions peuvent désormais être désactivés séparément (Paramètres → Communication), et « Copier les créneaux » peut aussi copier les bénévoles dans une série répétée."
+msgid "Ready for WordPress 7.2: with \"Allow API access\" on, AI assistants can now find and use EventAdmin directly through WordPress (Abilities API, WordPress 6.9 and later)."
+msgstr "Prêt pour WordPress 7.2 : avec « Autoriser l’accès à l’API » activé, les assistants IA peuvent désormais trouver et utiliser EventAdmin directement via WordPress (Abilities API, WordPress 6.9 et versions ultérieures)."
 
 #: eventadmin-volunteer-management.php:284
 msgid "Dismiss"
@@ -4200,18 +4200,8 @@ msgid "Allow API access"
 msgstr "Autoriser l’accès à l’API"
 
 #: includes/admin/settings.php:596
-msgid ""
-"Exposes shifts and dashboard data via the WordPress REST API (at /wp-json/"
-"eventadmin/v1/), for use with MCP or other external integrations. Only "
-"Administrators and Shift Managers can use it, authenticated with a WordPress "
-"Application Password (Users → your profile → Application Passwords)."
-msgstr ""
-"Expose les créneaux et les données du tableau de bord via l’API REST de "
-"WordPress (à /wp-json/eventadmin/v1/), pour une utilisation avec MCP ou "
-"d’autres intégrations externes. Seuls les administrateurs et les "
-"gestionnaires des créneaux peuvent l’utiliser, authentifiés avec un mot de "
-"passe d’application WordPress (Utilisateurs → votre profil → Mots de passe "
-"d’application)."
+msgid "Exposes shifts and dashboard data via the WordPress REST API (at /wp-json/eventadmin/v1/) and as WordPress abilities (WordPress 6.9 and later), for use with MCP, AI assistants or other external integrations. Only Administrators and Shift Managers can use it, authenticated with a WordPress Application Password (Users → your profile → Application Passwords)."
+msgstr "Expose les créneaux et les données du tableau de bord via l’API REST de WordPress (à /wp-json/eventadmin/v1/) et sous forme d’abilities WordPress (WordPress 6.9 et versions ultérieures), pour une utilisation avec MCP, des assistants IA ou d’autres intégrations externes. Seuls les administrateurs et les gestionnaires des créneaux peuvent l’utiliser, authentifiés avec un mot de passe d’application WordPress (Utilisateurs → votre profil → Mots de passe d’application)."
 
 #: includes/admin/settings.php:604
 msgid "Connect"
@@ -6285,6 +6275,82 @@ msgstr "Prévenir l'organisateur par e-mail lorsqu'un bénévole se désinscrit"
 #~ msgid_plural "Send History (%d entries)"
 #~ msgstr[0] "Historique d'envoi (%d entrée)"
 #~ msgstr[1] "Historique d'envoi (%d entrées)"
+
+#: includes/admin/documentation.php
+msgid "WordPress abilities (WordPress 6.9 and later)"
+msgstr "Abilities WordPress (WordPress 6.9 et versions ultérieures)"
+
+#: includes/admin/documentation.php
+msgid "With \"Allow API access\" on, EventAdmin also registers the same actions as WordPress abilities, named eventadmin/list-shifts, eventadmin/get-shift, eventadmin/create-shift, eventadmin/get-dashboard, eventadmin/list-departments, eventadmin/notify-shift-volunteers, eventadmin/get-settings and eventadmin/get-documentation. AI assistants and MCP clients that work with WordPress abilities (for example through the WordPress MCP Adapter) find them on their own, without the eventadmin-mcp-server package above. They are listed at /wp-json/wp-abilities/v1/abilities and follow the same permissions as described below."
+msgstr "Avec « Autoriser l’accès à l’API » activé, EventAdmin enregistre aussi les mêmes actions comme abilities WordPress : eventadmin/list-shifts, eventadmin/get-shift, eventadmin/create-shift, eventadmin/get-dashboard, eventadmin/list-departments, eventadmin/notify-shift-volunteers, eventadmin/get-settings et eventadmin/get-documentation. Les assistants IA et les clients MCP qui utilisent les abilities WordPress (par exemple via le WordPress MCP Adapter) les trouvent d’eux-mêmes, sans le paquet eventadmin-mcp-server décrit ci-dessus. Elles sont listées à /wp-json/wp-abilities/v1/abilities et suivent les mêmes autorisations que celles décrites ci-dessous."
+
+#: includes/abilities.php
+msgid "Volunteer shifts, departments and sign-ups managed with EventAdmin."
+msgstr "Créneaux de bénévoles, départements et inscriptions gérés avec EventAdmin."
+
+#: includes/abilities.php
+msgid "List shifts"
+msgstr "Lister les créneaux"
+
+#: includes/abilities.php
+msgid "Lists volunteer shifts, optionally filtered by department, date or time period. Each shift includes who is signed up and whether it is full."
+msgstr "Liste les créneaux de bénévoles, éventuellement filtrés par département, date ou période. Chaque créneau indique qui est inscrit et s’il est complet."
+
+#: includes/abilities.php
+msgid "Get shift"
+msgstr "Afficher un créneau"
+
+#: includes/abilities.php
+msgid "Gets the full details of one shift, including who is signed up."
+msgstr "Affiche tous les détails d’un créneau, y compris les personnes inscrites."
+
+#: includes/abilities.php
+msgid "Create shift"
+msgstr "Créer un créneau"
+
+#: includes/abilities.php
+msgid "Creates a new volunteer shift. Use List departments first to find the department ID."
+msgstr "Crée un nouveau créneau de bénévoles. Utilisez d’abord « Lister les départements » pour trouver l’ID du département."
+
+#: includes/abilities.php
+msgid "Get dashboard numbers"
+msgstr "Afficher les chiffres du tableau de bord"
+
+#: includes/abilities.php
+msgid "Gets the numbers shown on the EventAdmin Overview: open, understaffed and full shifts, volunteers and sign-ups."
+msgstr "Affiche les chiffres de la vue d’ensemble EventAdmin : créneaux ouverts, en sous-effectif et complets, bénévoles et inscriptions."
+
+#: includes/abilities.php
+msgid "List departments"
+msgstr "Lister les départements"
+
+#: includes/abilities.php
+msgid "Lists every department with its ID, parent and colour, so a shift can be created or filtered by department name."
+msgstr "Liste tous les départements avec leur ID, leur parent et leur couleur, afin de créer ou filtrer un créneau par nom de département."
+
+#: includes/abilities.php
+msgid "Email a shift's volunteers"
+msgstr "Écrire aux bénévoles d’un créneau"
+
+#: includes/abilities.php
+msgid "Sends an email to everyone signed up for one shift. The message may use {first_name}, {last_name} and {shifts}. Volunteers without an email address are skipped."
+msgstr "Envoie un e-mail à toutes les personnes inscrites à un créneau. Le message peut utiliser {first_name}, {last_name} et {shifts}. Les bénévoles sans adresse e-mail sont ignorés."
+
+#: includes/abilities.php
+msgid "Get sign-up rules"
+msgstr "Afficher les règles d’inscription"
+
+#: includes/abilities.php
+msgid "Gets the active sign-up rules: shift limits per volunteer, overlap policy and cancellation deadline."
+msgstr "Affiche les règles d’inscription actives : limites de créneaux par bénévole, règle de chevauchement et délai d’annulation."
+
+#: includes/abilities.php
+msgid "Get EventAdmin documentation"
+msgstr "Afficher la documentation EventAdmin"
+
+#: includes/abilities.php
+msgid "Gets the EventAdmin Documentation page as plain text, to answer questions about how a feature works."
+msgstr "Affiche la page de documentation EventAdmin en texte brut, pour répondre aux questions sur le fonctionnement d’une fonctionnalité."
 
 #~ msgid "Open"
 #~ msgstr "Libre"
