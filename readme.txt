@@ -2,7 +2,7 @@
 Contributors: davesidefyn
 Tags: volunteer, volunteer management, shift scheduling, event management, roster
 Requires at least: 5.8
-Tested up to: 7.1
+Tested up to: 7.2
 Requires PHP: 8.0
 Stable tag: 3.12.0
 License: GPLv3 or later

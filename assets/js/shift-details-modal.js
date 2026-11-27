@@ -233,9 +233,18 @@ document.addEventListener('DOMContentLoaded', function () {
     // TinyMCE sizes its iframe from the container's layout at init time — since this modal
     // starts (and returns to) display:none, the editor would otherwise be measured as
     // 0-width. Repainting once the modal is actually visible fixes that.
+    // Skipped until TinyMCE has finished initializing: opening "Add shift" straight from the
+    // menu (eventadmin_new_shift=1) runs this before the editor has a selection, and
+    // mceRepaint then throws "Node cannot be null or undefined". The editor still renders
+    // fine, so a failed repaint is never worth an uncaught error.
     function repaintDescriptionEditor() {
         const editor = window.tinymce && window.tinymce.get(DESCRIPTION_EDITOR_ID);
-        if (editor) editor.execCommand('mceRepaint');
+        if (!editor || !editor.initialized) return;
+        try {
+            editor.execCommand('mceRepaint');
+        } catch (e) {
+            // Nothing to do: see above.
+        }
     }
 
     // "start"/"end" are wall-clock times encoded as UTC (see eventadmin_wallclock_to_ts())
